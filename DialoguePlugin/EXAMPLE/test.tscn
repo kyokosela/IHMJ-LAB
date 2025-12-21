@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://d1rf20ean4s0g"]
+
+[sub_resource type="GDScript" id="GDScript_mf4mk"]
+resource_name = "test"
+script/source = "extends Node2D
+
+func _ready() -> void:
+	TranslationServer.set_locale(\"en\")
+	DialogueManager.show_example_dialogue_balloon(load(\"res://DialoguePlugin/EXAMPLE/example.dialogue\"))
+"
+
+[node name="Node2D" type="Node2D"]
+script = SubResource("GDScript_mf4mk")

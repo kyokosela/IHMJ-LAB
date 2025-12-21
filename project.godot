@@ -12,3 +12,11 @@ config_version=5
 
 config/name="I Hate My Job"
 config/features=PackedStringArray("4.5")
+
+[autoload]
+
+DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg")

@@ -55,7 +55,6 @@ func _ready() -> void:
 		if shape != null : 
 			label.position.y -= shape.size.y / 4
 			label.position.x -= shape.size.x / 2
-
 		add_child(label)
 		elements.append(label)
 

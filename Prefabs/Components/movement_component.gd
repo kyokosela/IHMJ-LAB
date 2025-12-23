@@ -27,8 +27,14 @@ func _ready() -> void:
 	assert(tile_destination != null,"Tile destination should not be NULL")
 
 func _physics_process(delta: float):
-	if not entity or not is_enabled or not can_move:
+	#movement valitations
+	if not entity:
 		return
+	if not is_enabled:
+		return
+	if not can_move:
+		return
+		
 	apply_movement(delta)
 #endregion
 

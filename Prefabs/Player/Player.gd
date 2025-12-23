@@ -4,5 +4,5 @@ class_name Player
 @export var tile_map : TileMapLayer
 
 func _ready() -> void:
-	await super()
+	super()
 	add_to_group("Player")

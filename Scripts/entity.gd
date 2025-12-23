@@ -6,6 +6,7 @@ signal entity_removed
 signal entity_ready
 
 var components : Dictionary[String,Component]
+var world : World
 
 func _init() -> void:
 	entity_created.emit()

@@ -6,7 +6,7 @@ class_name Interactable
 #region SETUP
 
 signal executed ## Se emite cuando el jugador realiza la [b]interacción[/b]
-
+enum SIGNAL_TYPE {AREA, BODY}
 enum TOGGLE_MODE {TOGGLE,SHOW,HIDE}
 var collshape : CollisionShape2D
 
@@ -18,6 +18,7 @@ var collshape : CollisionShape2D
 @export var retoggable_inside : bool = true ## La acción se podra realizar varias veces si es verdadera, en caso contrario la interacción solo se ejecutara una unica vez
 @export var show_again_at_end : bool = false ## Mostrar elementos despues de acabar la ejecucion si es necesario
 @export var destroy_at_end : bool = false ## Destruir al final de la ejecución
+@export var signal_type : SIGNAL_TYPE = SIGNAL_TYPE.BODY ## Tipo de señal que utilizara el Interactable
 
 @export_group("Dialog Interactions")
 @export var dialog : DialogueResource ## Recurso de dialogo
@@ -37,6 +38,8 @@ func _ready() -> void:
 	add_to_group("Interactable")
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
+	area_entered.connect(_on_area_entered)
+	area_exited.connect(_on_area_exited)
 	
 	collshape = CollisionShape2D.new()
 	collshape.shape = shape
@@ -63,15 +66,25 @@ func _input(event: InputEvent) -> void:
 		execute()
 
 func _on_body_entered(_body : CharacterBody2D) -> void :
-	if _body and !is_inside:
+	if _body and !is_inside and signal_type == SIGNAL_TYPE.BODY:
 		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
 
 func _on_body_exited(_body : CharacterBody2D) -> void :
-	if _body and is_inside:
+	if _body and is_inside and signal_type == SIGNAL_TYPE.BODY:
 		toggle_visible(TOGGLE_MODE.HIDE)
 		is_inside = false
-	
+
+func _on_area_entered(_area : Area2D) -> void :
+	if _area and !is_inside and signal_type == SIGNAL_TYPE.AREA:
+		toggle_visible(TOGGLE_MODE.SHOW)
+		is_inside = true
+
+func _on_area_exited(_area: Area2D) -> void :
+	if _area and is_inside and signal_type == SIGNAL_TYPE.AREA:
+		toggle_visible(TOGGLE_MODE.HIDE)
+		is_inside = false
+
 func toggle_visible(_custom_mode : TOGGLE_MODE = TOGGLE_MODE.TOGGLE) -> void :
 	var all_elements = elements.duplicate()
 	if custom_visible_node != null : all_elements.append(custom_visible_node)

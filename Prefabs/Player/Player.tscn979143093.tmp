@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://tcey4tkkfvd8"]
+
+[ext_resource type="Script" uid="uid://76eoxychonuw" path="res://Prefabs/Player/Player.gd" id="1_t5con"]
+[ext_resource type="Script" uid="uid://cx06pj7isyhot" path="res://Prefabs/Components/movement_component.gd" id="2_1cl7s"]
+[ext_resource type="Script" uid="uid://dghcs7x1a73jn" path="res://Prefabs/Components/state_machine_component.gd" id="3_c4lgr"]
+[ext_resource type="Script" uid="uid://ducauixn8n82c" path="res://Prefabs/Player/States/player_idle.gd" id="4_hnr8y"]
+[ext_resource type="Script" uid="uid://cgylbrtu8pte4" path="res://Prefabs/Player/States/player_walk.gd" id="5_5virf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rj4gf"]
+
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
+script = ExtResource("1_t5con")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_rj4gf")
+
+[node name="MovementComponent" type="Node2D" parent="."]
+script = ExtResource("2_1cl7s")
+tile_size = Vector2(16, 16)
+metadata/_custom_type_script = "uid://cx06pj7isyhot"
+
+[node name="FSMComponent" type="Node2D" parent="."]
+script = ExtResource("3_c4lgr")
+metadata/_custom_type_script = "uid://dghcs7x1a73jn"
+
+[node name="PlayerIdleState" type="Node" parent="FSMComponent" node_paths=PackedStringArray("movement_component")]
+script = ExtResource("4_hnr8y")
+movement_component = NodePath("../../MovementComponent")
+metadata/_custom_type_script = "uid://ducauixn8n82c"
+
+[node name="PlayerWalkState" type="Node" parent="FSMComponent" node_paths=PackedStringArray("movement_component")]
+script = ExtResource("5_5virf")
+movement_component = NodePath("../../MovementComponent")
+metadata/_custom_type_script = "uid://cgylbrtu8pte4"

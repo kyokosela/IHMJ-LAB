@@ -1,12 +1,17 @@
-[gd_scene load_steps=7 format=3 uid="uid://tcey4tkkfvd8"]
+[gd_scene load_steps=9 format=3 uid="uid://tcey4tkkfvd8"]
 
 [ext_resource type="Script" uid="uid://76eoxychonuw" path="res://Prefabs/Player/Player.gd" id="1_t5con"]
 [ext_resource type="Script" uid="uid://cx06pj7isyhot" path="res://Prefabs/Components/movement_component.gd" id="2_1cl7s"]
+[ext_resource type="Script" uid="uid://crlr2he6ydrsf" path="res://Prefabs/Components/interaction_component.gd" id="2_5virf"]
 [ext_resource type="Script" uid="uid://dghcs7x1a73jn" path="res://Prefabs/Components/state_machine_component.gd" id="3_c4lgr"]
 [ext_resource type="Script" uid="uid://ducauixn8n82c" path="res://Prefabs/Player/States/player_idle.gd" id="4_hnr8y"]
 [ext_resource type="Script" uid="uid://cgylbrtu8pte4" path="res://Prefabs/Player/States/player_walk.gd" id="5_5virf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rj4gf"]
+size = Vector2(31, 31)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5virf"]
+radius = 3.0
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 script = ExtResource("1_t5con")
@@ -16,13 +21,28 @@ script = ExtResource("1_t5con")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_rj4gf")
 
-[node name="MovementComponent" type="Node2D" parent="."]
+[node name="InteractionComponent" type="Node2D" parent="." node_paths=PackedStringArray("interactor")]
+script = ExtResource("2_5virf")
+interactor = NodePath("Area2D")
+metadata/_custom_type_script = "uid://crlr2he6ydrsf"
+
+[node name="Area2D" type="Area2D" parent="InteractionComponent"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionComponent/Area2D"]
+shape = SubResource("CircleShape2D_5virf")
+
+[node name="MovementComponent" type="Node2D" parent="." node_paths=PackedStringArray("collision_raycast")]
 script = ExtResource("2_1cl7s")
-tile_size = Vector2(16, 16)
+tile_size = Vector2(32, 32)
+collision_raycast = NodePath("RayCast2D")
 metadata/_custom_type_script = "uid://cx06pj7isyhot"
 
-[node name="FSMComponent" type="Node2D" parent="."]
+[node name="RayCast2D" type="RayCast2D" parent="MovementComponent"]
+target_position = Vector2(0, 32)
+
+[node name="FSMComponent" type="Node2D" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("3_c4lgr")
+initial_state = NodePath("PlayerIdleState")
 metadata/_custom_type_script = "uid://dghcs7x1a73jn"
 
 [node name="PlayerIdleState" type="Node" parent="FSMComponent" node_paths=PackedStringArray("movement_component")]

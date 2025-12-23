@@ -1,8 +1,11 @@
 extends Entity
 class_name Player
 
-@export var tile_map : TileMapLayer
+@export var tile_size: Vector2
 
 func _ready() -> void:
-	await super()
+	super()
 	add_to_group("Player")
+	
+func _process(delta: float) -> void:
+	print(get_component("MovementComponent").last_facing_dir)

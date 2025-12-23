@@ -4,3 +4,4 @@
 
 [node name="Interactable" type="Area2D" groups=["Interactable"]]
 script = ExtResource("1_046on")
+signal_type = 0

@@ -1,0 +1,99 @@
+[gd_scene load_steps=4 format=3 uid="uid://b3gndi1tcb5on"]
+
+[ext_resource type="Script" uid="uid://besu0tunykqr2" path="res://Prefabs/Workspace/Computer/base_window.gd" id="1_lyl7k"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lyl7k"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_lyl7k"]
+
+[node name="BaseWindow" type="PanelContainer"]
+custom_minimum_size = Vector2(640, 360)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_lyl7k")
+script = ExtResource("1_lyl7k")
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Titlebar" type="MarginContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 2
+
+[node name="TitlebarBg" type="ColorRect" parent="VBoxContainer/Titlebar"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Titlebar"]
+layout_mode = 2
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 7
+theme_override_constants/margin_bottom = 7
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Titlebar/MarginContainer"]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_lyl7k")
+expand_mode = 2
+
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="Title" type="Label" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+mouse_filter = 1
+text = "title coso"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="Minimize" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-"
+
+[node name="Maximize" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+"
+
+[node name="Close" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "x"
+
+[node name="Content" type="Panel" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3

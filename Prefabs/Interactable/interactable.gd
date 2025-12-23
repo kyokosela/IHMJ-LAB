@@ -116,8 +116,8 @@ func execute() -> void :
 	if dialog != null : 
 		DialogueManager.show_dialogue_balloon(dialog, dialog_title, extra_game_states)
 		is_inside = false
-		if reusable : 
-			DialogueManager.dialogue_ended.connect(func (_r) : is_inside = true, CONNECT_ONE_SHOT)
+		if !reusable : 
+			DialogueManager.dialogue_ended.connect(func (_r) : is_inside = false, CONNECT_ONE_SHOT)
 	custom_execute()
 	
 	executed.emit()

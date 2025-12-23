@@ -35,8 +35,8 @@ func custom_execute() : return ## [b]Funcion personalizada[/b] que se ejecutara 
 
 func _ready() -> void:
 	add_to_group("Interactable")
-	body_entered.connect(_on_body_entered)
-	body_exited.connect(_on_body_exited)
+	area_entered.connect(_on_area_entered)
+	area_entered.connect(_on_area_exited)
 	
 	collshape = CollisionShape2D.new()
 	collshape.shape = shape
@@ -62,13 +62,13 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Interact") and is_inside:
 		execute()
 
-func _on_body_entered(_body : CharacterBody2D) -> void :
-	if _body and !is_inside:
+func _on_area_entered(_area : CharacterBody2D) -> void :
+	if _area and !is_inside: # and is_inside
 		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
 
-func _on_body_exited(_body : CharacterBody2D) -> void :
-	if _body and is_inside:
+func _on_area_exited(_area : CharacterBody2D) -> void :
+	if _area and is_inside: # if _body is Interactor and is_inside
 		toggle_visible(TOGGLE_MODE.HIDE)
 		is_inside = false
 	

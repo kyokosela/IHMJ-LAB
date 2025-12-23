@@ -1,6 +1,7 @@
 extends Component
 class_name MovementComponent
 
+#movement base signals
 signal movement_started
 signal movement_stopped
 signal velocity_changed(new_velocity: Vector2)
@@ -9,9 +10,7 @@ signal velocity_changed(new_velocity: Vector2)
 @export var can_move : bool = true
 @export_subgroup("Tile Movement")
 @export var tile_based: bool = true
-@export var tile_size: Vector2:
-	get: return tile_size * 1.5
-
+@export var tile_size: Vector2
 
 var tile_map : TileMapLayer
 var x_direction : int = 0
@@ -27,8 +26,14 @@ func _ready() -> void:
 	
 
 func _physics_process(delta: float):
-	if not entity or not is_enabled or not can_move:
+	#movement valitations
+	if not entity:
 		return
+	if not is_enabled:
+		return
+	if not can_move:
+		return
+		
 	apply_movement(delta)
 
 func apply_movement(delta : float): 

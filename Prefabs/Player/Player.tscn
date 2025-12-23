@@ -18,7 +18,7 @@ shape = SubResource("RectangleShape2D_rj4gf")
 
 [node name="MovementComponent" type="Node2D" parent="."]
 script = ExtResource("2_1cl7s")
-tile_size = Vector2(16, 16)
+tile_size = Vector2(32, 32)
 metadata/_custom_type_script = "uid://cx06pj7isyhot"
 
 [node name="FSMComponent" type="Node2D" parent="."]

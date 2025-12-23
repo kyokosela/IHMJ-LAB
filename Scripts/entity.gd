@@ -24,8 +24,15 @@ func get_component(component_name : String) -> Component:
 func add_component(component: Component) -> void:
 	if !components.has(component.name):
 		components[component.name] = component
+		if !find_child(component.name): add_child(component)
 
 func remove_component(component: Component) -> void:
 	if component.has(component.name):
 		components.erase(component.name)
-	
+		component.queue_free()
+
+func kill_entity() -> void:
+	if world.entities.has(self):
+		world.entities.erase(self)
+		entity_removed.emit()
+	queue_free()

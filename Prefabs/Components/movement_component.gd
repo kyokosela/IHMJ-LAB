@@ -6,28 +6,44 @@ signal movement_started
 signal movement_stopped
 signal velocity_changed(new_velocity: Vector2)
 
-@export var speed : int = 200
-@export var can_move : bool = true
+@export var speed : int = 200 ## Velocidad de movimiento
+@export var can_move : bool = true ## Determina si la entidad puede moverse o no
 @export_subgroup("Tile Movement")
-@export var tile_based: bool = true
-@export var tile_size: Vector2
-@export var collision_raycast : RayCast2D
+@export var tile_based: bool = true ## Determina el tipo de movimiento, si es falso el movimiento sera libre/vectorial
+@export var tile_size: Vector2 ## Determina que tanto se va a mover el jugador dependiendo del tamaño de los tiles. [b]Es probable que esta variable sea obsoleta pronto por una constante global[/b]
+@export_custom(PROPERTY_HINT_LAYERS_2D_PHYSICS, "Collision Mask") var raycast_mask : int = 1
 
-var x_direction : int = 0
-var y_direction : int = 0
-var last_facing_dir : Vector2 = Vector2.ZERO
-var tile_destination : Vector2 = Vector2.ZERO
-var is_moving : bool = false
+var collision_raycast : RayCast2D ## Permite la colision
+var x_direction : int = 0 ## Direccion en X | -1 , 0 , 1 |
+var y_direction : int = 0 ## Direccion en Y | -1 , 0 , 1 |
+var last_input_axis : Vector2 = Vector2.ZERO ## El eje del ultimo input recibido | (1,0), (0,1) |
+var last_facing_dir : Vector2 = Vector2.ZERO ## Ultima direccion en la que la entidad quedo
+var tile_destination : Vector2 = Vector2.ZERO ## Posicion a la que el entity interpola para movimiento suave
+var is_moving : bool = false ## Determina si la entidad esta en movimiento o no
 #endregion
 
 #region DEFAULTS
+func _initialize_raycast():
+	if collision_raycast: return
+	collision_raycast = RayCast2D.new()
+	collision_raycast.enabled = true
+	collision_raycast.exclude_parent = true
+	collision_raycast.target_position = Vector2.ONE
+	collision_raycast.collision_mask = raycast_mask
+	collision_raycast.hit_from_inside = false
+	add_child(collision_raycast)
+
+func _init() -> void:
+	_initialize_raycast()
+
 func _ready() -> void:
 	await super()
 	tile_destination = entity.global_position
+	_initialize_raycast()
 	assert(tile_destination != null,"Tile destination should not be NULL")
 
 func _physics_process(delta: float):
-	#movement valitations
+	#movement validations
 	if not entity:
 		return
 	if not is_enabled:
@@ -39,7 +55,7 @@ func _physics_process(delta: float):
 #endregion
 
 #region HANDLERS
-func apply_movement(delta : float): 
+func apply_movement(delta : float): ## Determina que tipo de movimiento se usara y maneja las señales
 	var was_moving = is_moving
 	var old_velocity = entity.velocity
 	if tile_based:
@@ -52,42 +68,16 @@ func apply_movement(delta : float):
 	if was_moving and not is_moving:
 		movement_stopped.emit()
 	entity.move_and_slide()
-	
-func tile_movement(_delta: float):
-	var distance_to_target = entity.global_position.distance_to(tile_destination)
-	if distance_to_target <= 3.0:
-		entity.global_position = tile_destination
-		entity.velocity = Vector2.ZERO
-		var input_dir = Vector2(x_direction, y_direction)
-		if input_dir != Vector2.ZERO:
-			var next_step = Vector2.ZERO
-			if input_dir.x != 0:
-				next_step = Vector2(input_dir.x, 0)
-			else:
-				next_step = Vector2(0, input_dir.y)
-			var target_pos = entity.global_position + (next_step * tile_size)
-			if not is_tile_blocked(next_step):
-				tile_destination = target_pos
-				is_moving = true
-			else:
-				last_facing_dir = next_step
-				is_moving = false
-		else:
-			is_moving = false
+
+func tile_movement(_delta: float) -> void: ## Maneja el movimiento basado por tiles
+	var distance := entity.global_position.distance_to(tile_destination)
+	if distance <= 3.0:
+		_snap_to_tile()
+		_try_start_next_move()
 	else:
-		var move_dir = entity.global_position.direction_to(tile_destination)
-		last_facing_dir = move_dir
-		entity.velocity = move_dir * speed
-		is_moving = true
+		_move_towards_tile()
 
-func is_tile_blocked(next_step : Vector2) -> bool:
-	collision_raycast.target_position = next_step * (tile_size)
-	collision_raycast.force_raycast_update()
-	if collision_raycast.is_colliding():
-		return true
-	return false
-
-func dynamic_movement(delta:float):
+func dynamic_movement(delta:float): ## Maneja el movimiento libre/vectorial 
 	var desired_direction = Vector2(x_direction,y_direction)
 	if desired_direction.length() > 0:
 		entity.velocity = lerp(entity.velocity, desired_direction * speed, delta)
@@ -97,24 +87,52 @@ func dynamic_movement(delta:float):
 		is_moving = entity.velocity.length() > 1.0
 #endregion
 
-#region API
-func get_next_step(direction : Vector2) -> Vector2:
+#region Util
+func _snap_to_tile() -> void: ## Ajusta con un margen la posicion del player para que quede justo con el tilemap
+	entity.global_position = tile_destination
+	entity.velocity = Vector2.ZERO
+	is_moving = false
+
+func _try_start_next_move() -> void: ## Intenta empezar el siguiente movimiento en la direccion actual del componente
+	var input_dir := Vector2(x_direction, y_direction)
+	if input_dir == Vector2.ZERO: return
+	var next_step := _get_priority_step(input_dir)
+	last_facing_dir = next_step
+	if is_tile_blocked(next_step): return
+	tile_destination = entity.global_position + next_step * tile_size
+	is_moving = true
+
+func _get_priority_step(direction: Vector2) -> Vector2: ## Retorna la direccion por prioridad. La prioridad es determinada por el eje del ultimo input
+	if last_input_axis == Vector2(1, 0) and direction.x != 0:
+		return Vector2(sign(direction.x), 0)
+	if last_input_axis == Vector2(0, 1) and direction.y != 0:
+		return Vector2(0, sign(direction.y))
 	if direction.x != 0:
-		return Vector2(direction.x, 0)
-	else:
-		return Vector2(0, direction.y)
+		return Vector2(sign(direction.x), 0)
+	return Vector2(0, sign(direction.y))
+
+func _move_towards_tile() -> void:
+	var move_dir := entity.global_position.direction_to(tile_destination)
+	last_facing_dir = move_dir
+	entity.velocity = move_dir * speed
+	is_moving = true
+
+func is_tile_blocked(next_step : Vector2) -> bool:
+	collision_raycast.target_position = next_step * (tile_size)
+	collision_raycast.force_raycast_update()
+	if collision_raycast.is_colliding():
+		return true
+	return false
 
 func set_direction(x_dir : int, y_dir: int):
+	if x_dir != x_direction and x_dir != 0:
+		last_input_axis = Vector2(1, 0)
+	if y_dir != y_direction and y_dir != 0:
+		last_input_axis = Vector2(0, 1)
 	x_direction = x_dir
 	y_direction = y_dir
 
 func stop():
 	x_direction = 0
 	y_direction = 0
-
-func get_current_speed() -> float:
-	return entity.velocity.length()
-
-func moving() -> bool:
-	return is_moving
 #endregion

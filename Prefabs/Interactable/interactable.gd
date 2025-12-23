@@ -14,11 +14,11 @@ var collshape : CollisionShape2D
 @export var shape : Shape2D : 
 	set(value) : shape = value; if Engine.is_editor_hint() : collshape.shape = shape
 @export var display_text : String = "_INTERACT_BASE_MESSAGE_" ## Texto que se mostrara en pantalla al entrar en el rango del area, si esta vacio no mostrara nada
-@export var toggle_childrens_visible : bool = true ## Si es [b]verdadero[/b] ocultara a todos los nodos de tipo [b]control[/b] que se encuentren como hijos
-@export var retoggable_inside : bool = true ## La acción se podra realizar varias veces si es verdadera, en caso contrario la interacción solo se ejecutara una unica vez
+@export var children_visible : bool = true ## Si es [b]verdadero[/b] ocultara a todos los nodos de tipo [b]control[/b] que se encuentren como hijos
+@export var reusable : bool = true ## La acción se podra realizar varias veces si es verdadera, en caso contrario la interacción solo se ejecutara una unica vez
 @export var show_again_at_end : bool = false ## Mostrar elementos despues de acabar la ejecucion si es necesario
 @export var destroy_at_end : bool = false ## Destruir al final de la ejecución
-@export var signal_type : SIGNAL_TYPE = SIGNAL_TYPE.BODY ## Tipo de señal que utilizara el Interactable
+@export var signal_type : SIGNAL_TYPE = SIGNAL_TYPE.AREA ## Tipo de señal que utilizara el Interactable
 
 @export_group("Dialog Interactions")
 @export var dialog : DialogueResource ## Recurso de dialogo
@@ -45,7 +45,7 @@ func _ready() -> void:
 	collshape.shape = shape
 	add_child(collshape)
 	
-	if toggle_childrens_visible :
+	if children_visible :
 		for x in get_children() :
 			if x == collshape : continue
 			elements.append(x)
@@ -102,7 +102,7 @@ func execute() -> void :
 	if dialog != null : 
 		DialogueManager.show_dialogue_balloon(dialog, dialog_title, extra_game_states)
 		is_inside = false
-		if retoggable_inside : 
+		if reusable : 
 			DialogueManager.dialogue_ended.connect(func (_r) : is_inside = true, CONNECT_ONE_SHOT)
 	custom_execute()
 	

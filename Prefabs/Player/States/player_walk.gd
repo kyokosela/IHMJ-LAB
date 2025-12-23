@@ -6,7 +6,6 @@ class_name PlayerWalkState
 func _ready():
 	pass
 
-# Métodos que se sobrescriben en estados específicos
 func enter():
 	pass
 

@@ -10,7 +10,6 @@ func _ready():
 		fsm = get_parent()
 		entity = fsm.entity
 
-# Métodos que se sobrescriben en estados específicos
 func enter():
 	pass
 

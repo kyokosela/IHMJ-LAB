@@ -45,7 +45,7 @@ func apply_movement(delta : float):
 		movement_stopped.emit()
 	entity.move_and_slide()
 
-func tile_movement(delta: float):
+func tile_movement(_delta: float):
 	var distance_to_target = entity.global_position.distance_to(tile_destination)
 	if distance_to_target <= 2.0:
 		entity.global_position = tile_destination

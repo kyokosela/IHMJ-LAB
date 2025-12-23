@@ -1,6 +1,7 @@
 extends CharacterBody2D
 class_name Entity
 
+#region SETUP
 signal entity_created
 signal entity_removed
 signal entity_ready
@@ -15,7 +16,9 @@ func _ready() -> void:
 	for component : Component in find_children("*", "Component"):
 		add_component(component)
 	entity_ready.emit()
+#endregion
 
+#region API
 func get_component(component_name : String) -> Component:
 	if components.has(component_name):
 		return components[component_name]
@@ -36,3 +39,4 @@ func kill_entity() -> void:
 		world.entities.erase(self)
 		entity_removed.emit()
 	queue_free()
+#endregion

@@ -4,6 +4,7 @@ class_name MovementComponent
 #region VARIABLES
 signal movement_started
 signal movement_stopped
+signal direction_changed(previous_direction : Vector2, new_direction : Vector2)
 signal velocity_changed(new_velocity: Vector2)
 
 @export var speed : int = 200 ## Velocidad de movimiento
@@ -38,6 +39,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	await super()
+	direction_changed.connect(func (): print("velocity changed"))
 	tile_destination = entity.global_position
 	_initialize_raycast()
 	assert(tile_destination != null,"Tile destination should not be NULL")
@@ -128,8 +130,11 @@ func set_direction(x_dir : int, y_dir: int):
 		last_input_axis = Vector2(1, 0)
 	if y_dir != y_direction and y_dir != 0:
 		last_input_axis = Vector2(0, 1)
+	if x_direction != x_dir or y_direction != y_dir: 
+		velocity_changed.emit(Vector2(x_direction, y_direction),Vector2(x_dir, y_dir))
 	x_direction = x_dir
 	y_direction = y_dir
+	
 
 func stop():
 	x_direction = 0

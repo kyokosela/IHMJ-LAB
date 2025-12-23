@@ -120,7 +120,6 @@ func execute() -> void :
 		if !reusable : 
 			DialogueManager.dialogue_ended.connect(func (_r) : is_inside = false, CONNECT_ONE_SHOT)
 	custom_execute()
-	
 	executed.emit()
 	
 	if !show_again_at_end : toggle_visible(TOGGLE_MODE.HIDE)

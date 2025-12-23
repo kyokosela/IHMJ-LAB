@@ -65,23 +65,37 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Interact") and is_inside:
 		execute()
 
-func _on_body_entered(_body : CharacterBody2D) -> void :
-	if _body and !is_inside and signal_type == SIGNAL_TYPE.BODY:
+#Esta comprobación causa error al solo detectar cuerpos físicos e ignorar el resto de elementos que entran el en área
+#E 0:00:01:001   emit_signalp: Error calling from signal 'body_entered' to callable: 'Area2D(interactable.gd)::_on_body_entered': Cannot convert argument 1 from Object to Object.
+
+#func _on_body_entered(_body : CharacterBody2D) -> void :
+	#if _body and !is_inside and signal_type == SIGNAL_TYPE.BODY:
+		#toggle_visible(TOGGLE_MODE.SHOW)
+		#is_inside = true
+
+#func _on_body_exited(_body : CharacterBody2D) -> void :
+	#if _body and is_inside and signal_type == SIGNAL_TYPE.BODY:
+		#toggle_visible(TOGGLE_MODE.HIDE)
+		#is_inside = false
+		
+func _on_body_entered(_body : Node2D) -> void :
+	#mejor se comprueba dentro del if para evitar errores con el motor
+	if _body is Player and !is_inside and signal_type == SIGNAL_TYPE.BODY:
 		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
 
-func _on_body_exited(_body : CharacterBody2D) -> void :
-	if _body and is_inside and signal_type == SIGNAL_TYPE.BODY:
+func _on_body_exited(_body : Node2D) -> void :
+	if _body is Player and is_inside and signal_type == SIGNAL_TYPE.BODY:
 		toggle_visible(TOGGLE_MODE.HIDE)
 		is_inside = false
 
 func _on_area_entered(_area : Area2D) -> void :
-	if _area and !is_inside and signal_type == SIGNAL_TYPE.AREA:
+	if _area.is_in_group("Interactor") and !is_inside and signal_type == SIGNAL_TYPE.AREA:
 		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
 
 func _on_area_exited(_area: Area2D) -> void :
-	if _area and is_inside and signal_type == SIGNAL_TYPE.AREA:
+	if _area.is_in_group("Interactor") and is_inside and signal_type == SIGNAL_TYPE.AREA:
 		toggle_visible(TOGGLE_MODE.HIDE)
 		is_inside = false
 

@@ -48,7 +48,7 @@ func is_time_lower(_query_time : String) -> bool :
 	var times : int = get_minutes(_query_time)
 	return times < minutes
 
-## Comprueba si el tiempo actual del juego esta dentro del rango start y end
+	## Comprueba si el tiempo actual del juego esta dentro del rango start y end
 func is_time_between(_query_start_time : String, _query_end_time : String) -> bool :
 	var start_query_minutes : int = get_minutes(_query_start_time)
 	var end_query_minutes : int = get_minutes(_query_end_time)
@@ -59,6 +59,7 @@ func is_time_between(_query_start_time : String, _query_end_time : String) -> bo
 
 #region tools
 
+## Valida si el formato "HH:MM" es correcto
 func is_valid_time(time_formated : String) -> bool :
 	var splitted : PackedStringArray = time_formated.split(":")
 	if splitted.size() < 1 : return false

@@ -119,3 +119,10 @@ script = ExtResource("4_ssidd")
 shape = SubResource("RectangleShape2D_8172k")
 dialog = ExtResource("5_8172k")
 metadata/_custom_type_script = "uid://dc2fbamjb8ktv"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0

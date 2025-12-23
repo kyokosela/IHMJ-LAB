@@ -18,6 +18,8 @@ config/icon="uid://bjv6sibxm861c"
 [autoload]
 
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
+TimeManager="*res://Scripts/time_manager.gd"
+GameManager="*res://Scripts/game_manager.gd"
 
 [display]
 

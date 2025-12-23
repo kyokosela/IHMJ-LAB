@@ -32,7 +32,8 @@ var is_inside : bool
 var interact_label : Label
 var elements : Array
 
-func custom_execute() : return ## [b]Funcion personalizada[/b] que se ejecutara al realizar la [b]interacción[/b]
+func custom_execute(): ## [b]Funcion personalizada[/b] que se ejecutara al realizar la [b]interacción[/b]
+	TimeManager.add_to_current_time("00:10")
 
 func _ready() -> void:
 	add_to_group("Interactable")

@@ -48,6 +48,7 @@ folder_colors={
 
 Interactable="Nodos de interacción con el jugador"
 Player=""
+Interactor=""
 
 [input]
 

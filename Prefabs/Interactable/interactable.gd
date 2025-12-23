@@ -80,22 +80,22 @@ func _input(event: InputEvent) -> void:
 		
 func _on_body_entered(_body : Node2D) -> void :
 	#mejor se comprueba dentro del if para evitar errores con el motor
-	if _body is CharacterBody2D and !is_inside and signal_type == SIGNAL_TYPE.BODY:
+	if _body is Player and !is_inside and signal_type == SIGNAL_TYPE.BODY:
 		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
 
 func _on_body_exited(_body : Node2D) -> void :
-	if _body is CharacterBody2D and is_inside and signal_type == SIGNAL_TYPE.BODY:
+	if _body is Player and is_inside and signal_type == SIGNAL_TYPE.BODY:
 		toggle_visible(TOGGLE_MODE.HIDE)
 		is_inside = false
 
 func _on_area_entered(_area : Area2D) -> void :
-	if _area and !is_inside and signal_type == SIGNAL_TYPE.AREA:
+	if _area.is_in_group("Interactor") and !is_inside and signal_type == SIGNAL_TYPE.AREA:
 		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
 
 func _on_area_exited(_area: Area2D) -> void :
-	if _area and is_inside and signal_type == SIGNAL_TYPE.AREA:
+	if _area.is_in_group("Interactor") and is_inside and signal_type == SIGNAL_TYPE.AREA:
 		toggle_visible(TOGGLE_MODE.HIDE)
 		is_inside = false
 

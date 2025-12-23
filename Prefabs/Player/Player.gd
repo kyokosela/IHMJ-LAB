@@ -7,5 +7,5 @@ func _ready() -> void:
 	super()
 	add_to_group("Player")
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	print(get_component("MovementComponent").last_facing_dir)

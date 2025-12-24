@@ -1,6 +1,6 @@
 [gd_scene load_steps=48 format=3 uid="uid://tcey4tkkfvd8"]
 
-[ext_resource type="Script" uid="uid://76eoxychonuw" path="res://Prefabs/Player/player.gd" id="1_t5con"]
+[ext_resource type="Script" uid="uid://76eoxychonuw" path="res://Prefabs/Player/Player.gd" id="1_t5con"]
 [ext_resource type="Script" uid="uid://cx06pj7isyhot" path="res://Prefabs/Components/movement_component.gd" id="2_1cl7s"]
 [ext_resource type="Script" uid="uid://crlr2he6ydrsf" path="res://Prefabs/Components/interaction_component.gd" id="2_5virf"]
 [ext_resource type="Script" uid="uid://dxbbffiau4vqt" path="res://Prefabs/Components/sprite_stack_component.gd" id="2_8ipit"]

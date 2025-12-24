@@ -55,6 +55,7 @@ func _physics_process(delta: float):
 
 #region HANDLERS
 func apply_movement(delta : float): ## Determina que tipo de movimiento se usara y maneja las señales
+	var player = entity as Player
 	var was_moving = is_moving
 	var old_velocity = entity.velocity
 	var direction = last_facing_dir
@@ -68,6 +69,7 @@ func apply_movement(delta : float): ## Determina que tipo de movimiento se usara
 		movement_started.emit()
 	if was_moving and not is_moving:
 		movement_stopped.emit()
+	player.set_animation_direction(last_facing_dir)
 	entity.move_and_slide()
 	
 func tile_movement(_delta: float) -> void: ## Maneja el movimiento basado por tiles

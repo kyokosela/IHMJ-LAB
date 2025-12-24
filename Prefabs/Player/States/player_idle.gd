@@ -6,7 +6,6 @@ func _ready():
 
 func enter():
 	player.stop_move()
-	player.set_animation_frame(0)
 	player.play_animation("idle")
 
 func exit():

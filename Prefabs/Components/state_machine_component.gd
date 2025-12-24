@@ -15,9 +15,11 @@ func _ready() -> void:
 	super()
 	_collect_states()
 	if initial_state: 
-		change_state(initial_state.name)
+		current_state = initial_state
+		current_state_name = initial_state.name
 	else: 
-		change_state(states.keys()[0])
+		current_state = states.keys()[0]
+		current_state_name = states.keys()[0].name
 
 func _collect_states() -> void:
 	for state in find_children("*", "State"):
@@ -38,8 +40,6 @@ func change_state(new_state_name: String) -> void:
 	current_state_name = new_state_name
 	current_state = states[new_state_name]
 	
-	if !current_state.entity: current_state.entity = entity
-	current_state.call_deferred("enter")
 	state_entered.emit(new_state_name)
 	state_changed.emit(old_state_name, new_state_name)
 

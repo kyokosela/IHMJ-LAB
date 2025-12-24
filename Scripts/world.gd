@@ -12,7 +12,7 @@ func _ready() -> void:
 	
 
 func _process(_delta: float) -> void:
-	label.text = TimeManager.get_current_time()
+	label.text = str(Engine.get_frames_per_second())
 
 func _test():
 	TimeManager.set_current_time("04:00")

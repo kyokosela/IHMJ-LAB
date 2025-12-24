@@ -38,7 +38,8 @@ func change_state(new_state_name: String) -> void:
 	current_state_name = new_state_name
 	current_state = states[new_state_name]
 	
-	current_state.enter()
+	if !current_state.entity: current_state.entity = entity
+	current_state.call_deferred("enter")
 	state_entered.emit(new_state_name)
 	state_changed.emit(old_state_name, new_state_name)
 

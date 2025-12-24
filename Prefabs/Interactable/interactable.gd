@@ -29,11 +29,11 @@ var collshape : CollisionShape2D
 @export var custom_visible_node : Node ## [b]Intercambia[/b] el estado de visibilidad del nodo asignado en este campo
 
 var is_inside : bool
+var can_interact : bool = true
 var interact_label : Label
 var elements : Array
 
-func custom_execute(): ## [b]Funcion personalizada[/b] que se ejecutara al realizar la [b]interacción[/b]
-	TimeManager.add_to_current_time("00:10")
+func custom_execute(): pass ## [b]Funcion personalizada[/b] que se ejecutara al realizar la [b]interacción[/b]
 
 func _ready() -> void:
 	add_to_group("Interactable")
@@ -63,7 +63,7 @@ func _ready() -> void:
 		elements.append(label)
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("Interact") and is_inside:
+	if event.is_action_pressed("Interact") and is_inside and can_interact:
 		execute()
 
 #Esta comprobación causa error al solo detectar cuerpos físicos e ignorar el resto de elementos que entran el en área
@@ -114,11 +114,11 @@ func toggle_visible(_custom_mode : TOGGLE_MODE = TOGGLE_MODE.TOGGLE) -> void :
 				_ : node.visible = !node.visible
 
 func execute() -> void :
+	can_interact = false
 	if dialog != null : 
 		DialogueManager.show_dialogue_balloon(dialog, dialog_title, extra_game_states)
-		is_inside = false
-		if !reusable : 
-			DialogueManager.dialogue_ended.connect(func (_r) : is_inside = false, CONNECT_ONE_SHOT)
+		if reusable: 
+			DialogueManager.dialogue_ended.connect(func (_r): can_interact = true, CONNECT_ONE_SHOT)
 	custom_execute()
 	executed.emit()
 	

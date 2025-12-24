@@ -1,21 +1,22 @@
-extends State
-class_name PlayerIdleState
-
-@export var movement_component: MovementComponent
+extends PlayerState
+class_name PlayerIdle
 
 func _ready():
-	pass
+	super()
 
 func enter():
-	movement_component.stop()
+	player.stop_move()
+	player.set_animation_frame(0)
+	player.play_animation("idle")
 
 func exit():
 	pass
 
 func update(_delta: float):
-	var direction = Input.get_vector("move_left","move_right","move_up","move_down")
-	if direction and movement_component.can_move:
-		fsm.change_state("PlayerWalkState")
+	if player._has_movement():
+		var direction = Input.get_vector("move_left","move_right","move_up","move_down")
+		if direction and player.can_move():
+			fsm.change_state("PlayerWalk")
 
 func physics_update(_delta: float):
 	pass

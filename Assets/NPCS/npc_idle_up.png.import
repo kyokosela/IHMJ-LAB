@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvcikpvpigxpo"
-path="res://.godot/imported/TorsoIdle4.png-c3bcf42d3dfc087213db88db7a69ff09.ctex"
+uid="uid://curbu5sfq0py3"
+path="res://.godot/imported/npc_idle_up.png-020ef65220b4003442d7caf99e37e58b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Torsos/TorsoIdle4.png"
-dest_files=["res://.godot/imported/TorsoIdle4.png-c3bcf42d3dfc087213db88db7a69ff09.ctex"]
+source_file="res://Assets/NPCS/npc_idle_up.png"
+dest_files=["res://.godot/imported/npc_idle_up.png-020ef65220b4003442d7caf99e37e58b.ctex"]
 
 [params]
 

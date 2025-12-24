@@ -9,6 +9,10 @@ func _ready():
 	if not fsm and get_parent() is FSMComponent:
 		fsm = get_parent()
 		entity = fsm.entity
+	call_deferred("_initialize")
+
+func _initialize():
+	pass
 
 func enter():
 	pass

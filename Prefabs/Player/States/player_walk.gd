@@ -1,9 +1,10 @@
-extends State
-class_name PlayerWalkState
-
-@export var movement_component: MovementComponent
+extends PlayerState
+class_name PlayerWalk
 
 func _ready():
+	super()
+
+func _initialize():
 	pass
 
 func enter():
@@ -20,7 +21,9 @@ func physics_update(_delta: float):
 	var vertical_axis = Input.get_axis("move_up","move_down")
 	var direction = Vector2(horizontal_axis,vertical_axis)
 	if direction:
-		movement_component.set_direction(horizontal_axis,vertical_axis)
+		player.set_direction(horizontal_axis,vertical_axis)
+		player.play_animation("idle")
 	else:
-		movement_component.stop()
-		fsm.change_state("PlayerIdleState")
+		player.stop_move()
+		fsm.change_state("PlayerIdle")
+	

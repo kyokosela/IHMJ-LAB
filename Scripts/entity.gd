@@ -27,7 +27,8 @@ func get_component(component_name : String) -> Component:
 func add_component(component: Component) -> void:
 	if !components.has(component.name):
 		components[component.name] = component
-		if !find_child(component.name): add_child(component)
+		component.entity = self
+		if component.get_parent() != self: add_child(component)
 
 func remove_component(component: Component) -> void:
 	if component.has(component.name):

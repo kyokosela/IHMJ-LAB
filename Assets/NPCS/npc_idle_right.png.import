@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c76tr105wdghg"
-path="res://.godot/imported/TorsoIdle3.png-ea8751d18e96a9ae85959b47d0580557.ctex"
+uid="uid://621ahvudno68"
+path="res://.godot/imported/npc_idle_right.png-2e33c8d04f19660e83deb0224e6f4bbd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Torsos/TorsoIdle3.png"
-dest_files=["res://.godot/imported/TorsoIdle3.png-ea8751d18e96a9ae85959b47d0580557.ctex"]
+source_file="res://Assets/NPCS/npc_idle_right.png"
+dest_files=["res://.godot/imported/npc_idle_right.png-2e33c8d04f19660e83deb0224e6f4bbd.ctex"]
 
 [params]
 

@@ -4,9 +4,9 @@ class_name InteractionComponent
 
 var collshape : CollisionShape2D
 var interactor : Area2D
-var movement : MovementComponent
+var player : Player:
+	get: return entity as Player if !Engine.is_editor_hint() else entity
 
-var enabled : bool
 @export var shape : Shape2D:
 	set(value) : shape = value; if Engine.is_editor_hint() : collshape.shape = shape
 @export_custom(PROPERTY_HINT_LAYERS_2D_PHYSICS, "Collision Mask") var collision_layer : int = 1
@@ -14,7 +14,6 @@ var enabled : bool
 
 
 func _initialize() -> void:
-	movement = entity.get_component("MovementComponent")
 	if !interactor:
 		interactor = Area2D.new()
 		interactor.collision_layer = collision_layer
@@ -24,14 +23,13 @@ func _initialize() -> void:
 	interactor.add_to_group("Interactor")
 	add_child(interactor)
 	interactor.add_child(collshape)
-
-func _ready() -> void:
-	await super()
-	_initialize()
+	player.move_component().direction_changed.connect(update)
 	assert(interactor != null, "Interactor should never be NULL")
 
-func _process(_delta: float) -> void:
+func _ready() -> void:
+	super()
+	call_deferred("_initialize")
+
+func update(_prev_dir,new_direction):
 	if Engine.is_editor_hint(): return
-	
-	interactor.position = movement.last_facing_dir * movement.tile_size
-		
+	interactor.position = new_direction * GameManager.tile_size

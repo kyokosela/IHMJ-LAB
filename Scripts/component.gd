@@ -9,7 +9,6 @@ var entity : Entity
 var is_enabled : bool = true
 
 func _ready() -> void:
-	await get_tree().process_frame
 	if not entity and get_parent() is Entity:
 		entity = get_parent()
 	assert(entity != null, "Entity should never be NULL")

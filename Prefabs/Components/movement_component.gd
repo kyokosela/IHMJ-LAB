@@ -4,16 +4,17 @@ class_name MovementComponent
 #region VARIABLES
 signal movement_started
 signal movement_stopped
-signal direction_changed(previous_direction : Vector2, new_direction : Vector2)
+signal direction_changed(new_direction : Vector2, prev_direction : Vector2)
 signal velocity_changed(new_velocity: Vector2)
 
 @export var speed : int = 200 ## Velocidad de movimiento
 @export var can_move : bool = true ## Determina si la entidad puede moverse o no
 @export_subgroup("Tile Movement")
 @export var tile_based: bool = true ## Determina el tipo de movimiento, si es falso el movimiento sera libre/vectorial
-@export var tile_size: Vector2 ## Determina que tanto se va a mover el jugador dependiendo del tamaño de los tiles. [b]Es probable que esta variable sea obsoleta pronto por una constante global[/b]
 @export_custom(PROPERTY_HINT_LAYERS_2D_PHYSICS, "Collision Mask") var raycast_mask : int = 1
 
+var tile_size: Vector2: ## Determina que tanto se va a mover el jugador dependiendo del tamaño de los tiles.
+	get: return GameManager.tile_size #Para acortar, en caso de que no lo quieran tener como una global solo quitar esto jasdj
 var collision_raycast : RayCast2D ## Permite la colision
 var x_direction : int = 0 ## Direccion en X | -1 , 0 , 1 |
 var y_direction : int = 0 ## Direccion en Y | -1 , 0 , 1 |
@@ -24,7 +25,9 @@ var is_moving : bool = false ## Determina si la entidad esta en movimiento o no
 #endregion
 
 #region DEFAULTS
-func _initialize_raycast():
+func _initialize():
+	tile_destination = entity.global_position
+	assert(tile_destination != null,"Tile destination should not be NULL")
 	if collision_raycast: return
 	collision_raycast = RayCast2D.new()
 	collision_raycast.enabled = true
@@ -34,15 +37,10 @@ func _initialize_raycast():
 	collision_raycast.hit_from_inside = false
 	add_child(collision_raycast)
 
-func _init() -> void:
-	_initialize_raycast()
-
 func _ready() -> void:
-	await super()
-	direction_changed.connect(func (): print("velocity changed"))
-	tile_destination = entity.global_position
-	_initialize_raycast()
-	assert(tile_destination != null,"Tile destination should not be NULL")
+	super()
+	direction_changed.connect(func (x,y): print("direction changed: %s, %s" % [x,y]))
+	call_deferred("_initialize")
 
 func _physics_process(delta: float):
 	if not entity:
@@ -59,17 +57,19 @@ func _physics_process(delta: float):
 func apply_movement(delta : float): ## Determina que tipo de movimiento se usara y maneja las señales
 	var was_moving = is_moving
 	var old_velocity = entity.velocity
+	var direction = last_facing_dir
 	if tile_based:
 		tile_movement(delta)
 	else:
 		dynamic_movement(delta)
 	if entity.velocity != old_velocity: velocity_changed.emit(entity.velocity)
+	if direction != last_facing_dir: direction_changed.emit(direction, last_facing_dir)
 	if is_moving and not was_moving:
 		movement_started.emit()
 	if was_moving and not is_moving:
 		movement_stopped.emit()
 	entity.move_and_slide()
-
+	
 func tile_movement(_delta: float) -> void: ## Maneja el movimiento basado por tiles
 	var distance := entity.global_position.distance_to(tile_destination)
 	if distance <= 3.0:
@@ -94,7 +94,7 @@ func _snap_to_tile() -> void: ## Ajusta con un margen la posicion del player par
 	entity.velocity = Vector2.ZERO
 	is_moving = false
 
-func _try_start_next_move() -> void: ## Intenta empezar el siguiente movimiento en la direccion actual del componente
+func _try_start_next_move() -> void: ## Intenta empezar el siguiente movimiento verificando las colisiones
 	var input_dir := Vector2(x_direction, y_direction)
 	if input_dir == Vector2.ZERO: return
 	var next_step := _get_priority_step(input_dir)
@@ -104,16 +104,16 @@ func _try_start_next_move() -> void: ## Intenta empezar el siguiente movimiento 
 	is_moving = true
 
 func _get_priority_step(direction: Vector2) -> Vector2: ## Retorna la direccion por prioridad. La prioridad es determinada por el eje del ultimo input
-	if last_input_axis == Vector2(1, 0) and direction.x != 0:
+	if last_input_axis == Vector2.RIGHT and direction.x != 0:
 		return Vector2(sign(direction.x), 0)
-	if last_input_axis == Vector2(0, 1) and direction.y != 0:
+	if last_input_axis == Vector2.UP and direction.y != 0:
 		return Vector2(0, sign(direction.y))
 	if direction.x != 0:
 		return Vector2(sign(direction.x), 0)
 	return Vector2(0, sign(direction.y))
 
 func _move_towards_tile() -> void:
-	var move_dir := entity.global_position.direction_to(tile_destination)
+	var move_dir : Vector2 = entity.global_position.direction_to(tile_destination)
 	last_facing_dir = move_dir
 	entity.velocity = move_dir * speed
 	is_moving = true
@@ -130,11 +130,8 @@ func set_direction(x_dir : int, y_dir: int):
 		last_input_axis = Vector2(1, 0)
 	if y_dir != y_direction and y_dir != 0:
 		last_input_axis = Vector2(0, 1)
-	if x_direction != x_dir or y_direction != y_dir: 
-		velocity_changed.emit(Vector2(x_direction, y_direction),Vector2(x_dir, y_dir))
-	x_direction = x_dir
-	y_direction = y_dir
-	
+	x_direction = clamp(x_dir, -1,1)
+	y_direction = clamp(y_dir, -1,1)
 
 func stop():
 	x_direction = 0

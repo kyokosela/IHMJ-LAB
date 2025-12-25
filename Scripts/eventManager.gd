@@ -24,7 +24,8 @@ func check_events(_new_time : int) -> void : ## revisa con el cambio del tiempo 
 
 func check_daily_events(_new_day : int) -> void :
 	for event in events :
-		if event is not EventDaily : return
+		if event is not EventDaily : 
+			return
 		event.checked = false
 
 #endregion
@@ -53,7 +54,8 @@ func remove_event(event : Event, trigger_end : bool = false) -> void :
 ## Ejecuta algo al dar inicio un evento
 func connect_to_event(event_unique_name : String, callable_to_enter : Callable = func() : return, callable_to_exit : Callable = func () : return) -> void :
 	var event = get_event(event_unique_name)
-	if event == null : return
+	if event == null : 
+		return
 	event.event_executed.connect(callable_to_enter)
 	event.event_finished.connect(callable_to_exit)
 

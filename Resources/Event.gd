@@ -10,9 +10,11 @@ signal event_finished
 
 #region API
 
-@export var is_enabled : bool
+@export var is_enabled : bool = true
 @export var is_active : bool
+@export var can_multiple_active : bool
 @export var checked : bool
+@export var destroy_at_end : bool
 
 func activate() -> void :
 	is_enabled = true
@@ -21,12 +23,15 @@ func disable() -> void :
 	is_enabled = false
 
 func execute() -> void :
+	if !is_enabled or (is_active and !can_multiple_active): return
+	is_active = true
 	EventManager.stack_active_events.append(self)
-	if !is_enabled : return
 	event_executed.emit()
 
 func finished() -> void :
-	if !is_enabled : return
+	if !is_enabled or (!is_active and !can_multiple_active): return
+	is_active = false
+	EventManager.stack_active_events.erase(self)
 	event_finished.emit()
 
 #endregion

@@ -14,12 +14,12 @@ func check_events(_new_time : int) -> void : ## revisa con el cambio del tiempo 
 		if event.is_enabled == false : return
 		
 		if event is EventScheduled :
-			if event.end_hour == -1 and TimeManager.day == event.day and TimeManager.month == event.month:
-				if TimeManager.is_time_higher(event.hour):
+			if TimeManager.day == event.day and TimeManager.month == event.month:
+				if TimeManager.is_time_between(event.get_formated_start(), event.get_formated_end()):
 					event.execute()
-				elif TimeManager.is_time_between(event.hour, event.end_hour) :
-					TimeManager.connect_to_time(event.end_hour, event.finished)
-					event.execute()
+
+					if event.end_hour != -1 or event.end_minute != -1:
+						TimeManager.connect_to_time(event.get_formated_end(), event.finished)
 
 func check_daily_events(_new_day : int) -> void :
 	for event in events :
@@ -33,10 +33,11 @@ func check_daily_events(_new_day : int) -> void :
 ## Carga un evento, usa trigger para disparar su acciones
 func load_event(event : Event, trigger : bool = false) -> void :
 	events.append(event)
+	if event.destroy_at_end : event.event_finished.connect(remove_event.bind(event))
 	if trigger :
 		event.execute()
-		if event is EventScheduled :
-			TimeManager.connect_to_time(event.end_hour, event.finished)
+	if event is EventScheduled :
+		TimeManager.connect_to_time(event.get_formated_end(), event.finished)
 
 ## remueve un evento, usa end_trigger para disparar su acciones inversas/finales
 func remove_event(event : Event, trigger_end : bool = false) -> void :

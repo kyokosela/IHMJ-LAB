@@ -4,4 +4,7 @@
 
 [resource]
 script = ExtResource("1_q7057")
+event_name = "TEST"
+event_unique_name = "TEST"
+is_enabled = true
 metadata/_custom_type_script = "uid://dlsp48thbofcf"

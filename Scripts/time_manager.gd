@@ -36,12 +36,13 @@ var month : int = 0 :
 #region logic
 
 func _ready() -> void:
-	time_changed.connect(check_shceduled_times)
+	time_changed.connect(check_scheduled_times)
 
-func check_shceduled_times(_new_time) -> void :
+func check_scheduled_times(_new_time) -> void :
 	for x in scheduled_times :
-		if is_time_higher(x) :
+		if is_time_lower(x) or is_equal_time(x):
 			scheduled_times[x].call()
+			scheduled_times.erase(x)
 
 #endregion
 
@@ -65,6 +66,7 @@ func set_current_time(_target_time : String) -> void :
 ## Comprueba con el parametro si el tiempo establecido es superior al tiempo actual del juego
 func is_time_higher(_query_time : String) -> bool :
 	var times : int = get_minutes(_query_time)
+	print("comparando ", minutes, " con ", times, " da ", times > minutes)
 	return times > minutes
 
 ## Comprueba con el parametro si el tiempo establecido es el mismo al tiempo actual del juego
@@ -101,7 +103,7 @@ func time_left_to(_query_time : String) -> String :
 ## Valida si el formato "HH:MM" es correcto
 func is_valid_time(time_formated : String) -> bool :
 	var splitted : PackedStringArray = time_formated.split(":")
-	if splitted.size() < 1 : return false
+	if splitted.size() <= 1 : return false
 	if splitted[TIMES.HOUR].length() != 2 or splitted[TIMES.MINUTE].length() != 2 : return false
 	return true
 

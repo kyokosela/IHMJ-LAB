@@ -1,0 +1,101 @@
+[gd_scene load_steps=2 format=3 uid="uid://5ldxs58tuofb"]
+
+[ext_resource type="Script" uid="uid://yrrqtf82bla1" path="res://Prefabs/Debug/debug.gd" id="1_0gw8d"]
+
+[node name="DebugPanel" type="Window"]
+oversampling_override = 1.0
+title = "Debug"
+position = Vector2i(100, 50)
+size = Vector2i(305, 260)
+script = ExtResource("1_0gw8d")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 0
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer"]
+layout_mode = 2
+current_tab = 0
+
+[node name="TimeManager" type="MarginContainer" parent="MarginContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+metadata/_tab_index = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/TimeManager"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/TimeManager/ScrollContainer"]
+layout_mode = 2
+
+[node name="CurrentTime" type="RichTextLabel" parent="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "CURRENT TIME: "
+fit_content = true
+
+[node name="CurrentDay" type="RichTextLabel" parent="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "CURRENT DAY: "
+fit_content = true
+
+[node name="TimeChanger" type="RichTextLabel" parent="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "TIME CHANGER:"
+fit_content = true
+vertical_alignment = 2
+
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="Add Time" type="Button" parent="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ADD TIME"
+
+[node name="Remove Time" type="Button" parent="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "REMOVE TIME"
+
+[node name="Set Time" type="Button" parent="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET TIME"
+
+[node name="TimeChanger2" type="RichTextLabel" parent="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "TIME CHECKER:"
+fit_content = true
+vertical_alignment = 2
+
+[node name="EventManager" type="MarginContainer" parent="MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[connection signal="pressed" from="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer/HBoxContainer/Add Time" to="." method="_on_add_time_pressed"]
+[connection signal="pressed" from="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer/HBoxContainer/Remove Time" to="." method="_on_remove_time_pressed"]
+[connection signal="pressed" from="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer/HBoxContainer/Set Time" to="." method="_on_set_time_pressed"]

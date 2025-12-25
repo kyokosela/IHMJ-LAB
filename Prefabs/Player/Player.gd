@@ -76,8 +76,7 @@ func stop_move() -> void:
 	if _has_movement(): movement.stop()
 
 func set_direction(x_direction : int, y_direction : int) -> void:
-	if _has_movement(): 
-		movement.set_direction(x_direction,y_direction)
+	if _has_movement(): movement.set_direction(x_direction,y_direction)
 
 func set_facing_direction(direction : Vector2) -> void: ## Usar Vector2.UP, Vector2.LEFT etc... para mas facilidad
 	if Utils.valid_single_dir_vector(direction):

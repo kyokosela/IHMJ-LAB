@@ -7,14 +7,14 @@ enum TIMES {HOUR,MINUTE}
 signal day_changed(day_value : int) ## se emite cuando el dia cambia
 signal time_changed(time_value : int) ## se emite cuando el tiempo cambia
 
-var day : int = 0 :
+var day : int = 1 :
 	set(_value) : 
 		day = _value
 		day_changed.emit(day)
 		
-var minutes : int = 0 :
+var minutes : int = 0:
 	set(_value) :
-		minutes = _value
+		minutes = clamp(_value, 0 , DAY_MINUTES)
 		time_changed.emit(minutes)
 		if minutes >= DAY_MINUTES:
 			day +=1
@@ -32,11 +32,6 @@ func get_current_time() -> String :
 func set_current_time(_target_time : String) -> void : 
 	var times : int = get_minutes(_target_time)
 	minutes = times
-
-## [b]Suma[/b] el tiempo establecido al tiempo actual del juego
-func add_to_current_time(_nest_time : String) -> void :
-	var times : int = get_minutes(_nest_time)
-	minutes += times
 
 ## Comprueba con el parametro si el tiempo establecido es superior al tiempo actual del juego
 func is_time_higher(_query_time : String) -> bool :
@@ -80,8 +75,12 @@ func get_minutes(_query_time : String = get_current_time()) -> int :
 	times[0] = times[0] * 60
 	return times[0] + times[1]
 
-func substract_to_current_time(_nest_time : String) -> void :
-	var times : Array[int] = get_time_values(_nest_time)
-	minutes -= (times[TIMES.HOUR] + times[TIMES.MINUTE])
+## [b]Suma[/b] el tiempo establecido al tiempo actual del juego
+func add_to_current_time(_nest_time : String) -> void :
+	var times : int = get_minutes(_nest_time)
+	minutes += times
 
+func substract_to_current_time(_nest_time : String) -> void :
+	var times : int = get_minutes(_nest_time)
+	minutes -= times
 #endregion

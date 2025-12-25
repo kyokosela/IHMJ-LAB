@@ -1,6 +1,6 @@
 [gd_scene load_steps=48 format=3 uid="uid://tcey4tkkfvd8"]
 
-[ext_resource type="Script" uid="uid://76eoxychonuw" path="res://Prefabs/Player/Player.gd" id="1_t5con"]
+[ext_resource type="Script" uid="uid://76eoxychonuw" path="res://Prefabs/Player/player.gd" id="1_t5con"]
 [ext_resource type="Script" uid="uid://cx06pj7isyhot" path="res://Prefabs/Components/movement_component.gd" id="2_1cl7s"]
 [ext_resource type="Script" uid="uid://crlr2he6ydrsf" path="res://Prefabs/Components/interaction_component.gd" id="2_5virf"]
 [ext_resource type="Script" uid="uid://dxbbffiau4vqt" path="res://Prefabs/Components/sprite_stack_component.gd" id="2_8ipit"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://curbu5sfq0py3" path="res://Assets/NPCS/npc_idle_up.png" id="5_xo5gc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rj4gf"]
+size = Vector2(8, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ae6jo"]
 atlas = ExtResource("3_4rw4d")
@@ -319,17 +320,17 @@ metadata/_custom_type_script = "uid://dxbbffiau4vqt"
 [node name="legs" type="AnimatedSprite2D" parent="SpriteStackComponent"]
 sprite_frames = SubResource("SpriteFrames_tl25y")
 animation = &"idle_up"
-offset = Vector2(0, -6)
+offset = Vector2(0, -12)
 
 [node name="body" type="AnimatedSprite2D" parent="SpriteStackComponent"]
 sprite_frames = SubResource("SpriteFrames_h0qm3")
 animation = &"idle_up"
-offset = Vector2(0, -6)
+offset = Vector2(0, -12)
 
 [node name="head" type="AnimatedSprite2D" parent="SpriteStackComponent"]
 sprite_frames = SubResource("SpriteFrames_hxf3l")
 animation = &"idle_up"
-offset = Vector2(0, -6)
+offset = Vector2(0, -12)
 
 [node name="InteractionComponent" type="Node2D" parent="."]
 script = ExtResource("2_5virf")

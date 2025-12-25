@@ -9,6 +9,12 @@ signal velocity_changed(new_velocity: Vector2)
 
 @export var speed : int = 200 ## Velocidad de movimiento
 @export var can_move : bool = true ## Determina si la entidad puede moverse o no
+@export_subgroup("input_buffer_values")
+#variables para input buffer
+var buffered_input: Vector2 = Vector2.ZERO
+@export var inputbuffer_time: float = 0.1
+@export var buffer_timer: float = 0.0
+
 @export_subgroup("Tile Movement")
 @export var tile_based: bool = true ## Determina el tipo de movimiento, si es falso el movimiento sera libre/vectorial
 @export_custom(PROPERTY_HINT_LAYERS_2D_PHYSICS, "Collision Mask") var raycast_mask : int = 1
@@ -22,6 +28,7 @@ var last_input_axis : Vector2 = Vector2.ZERO ## El eje del ultimo input recibido
 var last_facing_dir : Vector2 = Vector2.ZERO ## Ultima direccion en la que la entidad quedo
 var tile_destination : Vector2 = Vector2.ZERO ## Posicion a la que el entity interpola para movimiento suave
 var is_moving : bool = false ## Determina si la entidad esta en movimiento o no
+
 #endregion
 
 #region DEFAULTS
@@ -50,12 +57,17 @@ func _physics_process(delta: float):
 	if not can_move:
 		return
 		
+	if buffer_timer > 0:
+		buffer_timer -= delta
+		
+		if buffer_timer <= 0:
+			buffered_input = Vector2.ZERO
+		
 	apply_movement(delta)
 #endregion
 
 #region HANDLERS
 func apply_movement(delta : float): ## Determina que tipo de movimiento se usara y maneja las señales
-	var player = entity as Player
 	var was_moving = is_moving
 	var old_velocity = entity.velocity
 	var direction = last_facing_dir
@@ -69,11 +81,14 @@ func apply_movement(delta : float): ## Determina que tipo de movimiento se usara
 		movement_started.emit()
 	if was_moving and not is_moving:
 		movement_stopped.emit()
-	player.set_animation_direction(last_facing_dir)
 	entity.move_and_slide()
 	
 func tile_movement(_delta: float) -> void: ## Maneja el movimiento basado por tiles
 	var distance := entity.global_position.distance_to(tile_destination)
+	
+	## El sistema de detección de tiles planteado causa un pequeño delay en los inputs por los pixeles que 
+	## tiene que detectar el jugador al pasar a cada tile, esto interfiere directamente con los fps
+	## hay que usar un input buffer para amortiguarlo
 	if distance <= 3.0:
 		_snap_to_tile()
 		_try_start_next_move()
@@ -81,7 +96,7 @@ func tile_movement(_delta: float) -> void: ## Maneja el movimiento basado por ti
 		_move_towards_tile()
 
 func dynamic_movement(delta:float): ## Maneja el movimiento libre/vectorial 
-	var desired_direction = Vector2(x_direction,y_direction)
+	var desired_direction = Vector2(x_direction,y_direction).normalized()
 	if desired_direction.length() > 0:
 		entity.velocity = lerp(entity.velocity, desired_direction * speed, delta)
 		is_moving = true
@@ -97,18 +112,33 @@ func _snap_to_tile() -> void: ## Ajusta con un margen la posicion del player par
 	is_moving = false
 
 func _try_start_next_move() -> void: ## Intenta empezar el siguiente movimiento verificando las colisiones
-	var input_dir := Vector2(x_direction, y_direction)
-	if input_dir == Vector2.ZERO: return
+	var input_dir: Vector2 = Vector2.ZERO
+	
+	if buffered_input != Vector2.ZERO:
+		input_dir = buffered_input
+	else:
+		input_dir = Vector2(x_direction, y_direction)
+	
+	if input_dir == Vector2.ZERO:
+		return
+		
 	var next_step := _get_priority_step(input_dir)
 	last_facing_dir = next_step
-	if is_tile_blocked(next_step): return
+	
+	if is_tile_blocked(next_step):
+		buffered_input = Vector2.ZERO
+		return
+		
 	tile_destination = entity.global_position + next_step * tile_size
 	is_moving = true
+	
+	buffered_input = Vector2.ZERO
+	buffer_timer = 0.0
 
 func _get_priority_step(direction: Vector2) -> Vector2: ## Retorna la direccion por prioridad. La prioridad es determinada por el eje del ultimo input
-	if last_input_axis == Vector2.RIGHT and direction.x != 0:
+	if last_input_axis.x != 0 and direction.x != 0:
 		return Vector2(sign(direction.x), 0)
-	if last_input_axis == Vector2.UP and direction.y != 0:
+	if last_input_axis.y != 0 and direction.y != 0:
 		return Vector2(0, sign(direction.y))
 	if direction.x != 0:
 		return Vector2(sign(direction.x), 0)
@@ -127,15 +157,23 @@ func is_tile_blocked(next_step : Vector2) -> bool:
 		return true
 	return false
 
-func set_direction(x_dir : int, y_dir: int):
-	if x_dir != x_direction and x_dir != 0:
-		last_input_axis = Vector2(1, 0)
-	if y_dir != y_direction and y_dir != 0:
-		last_input_axis = Vector2(0, 1)
+func set_direction(x_dir : int, y_dir: int):	
+	var new_input = Vector2(x_dir, y_dir)
+	
+	if new_input != Vector2(x_direction, y_direction) and new_input != Vector2.ZERO:
+		buffered_input = new_input
+		buffer_timer = inputbuffer_time
+		
+		if x_dir != x_direction: 
+			last_input_axis = Vector2(1, 0)
+		elif y_dir != y_direction: 
+			last_input_axis = Vector2(0, 1)
+		
 	x_direction = clamp(x_dir, -1,1)
 	y_direction = clamp(y_dir, -1,1)
 
 func stop():
 	x_direction = 0
 	y_direction = 0
+	buffered_input = Vector2.ZERO
 #endregion

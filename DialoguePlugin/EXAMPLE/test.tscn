@@ -386,3 +386,4 @@ label_settings = SubResource("LabelSettings_7bjt1")
 script = ExtResource("6_7bjt1")
 
 [node name="DebugPanel" parent="." instance=ExtResource("6_4sy0m")]
+visible = false

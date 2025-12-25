@@ -1,5 +1,4 @@
 extends Node
-class_name eventManager
 
 @export var events : Array[Event] ## lista de eventos, no usar para saber cuales estan activos
 var stack_active_events : Array[Event]  ## lista de eventos activos
@@ -8,8 +7,9 @@ var stack_active_events : Array[Event]  ## lista de eventos activos
 
 func _ready() -> void:
 	TimeManager.time_changed.connect(check_events)
+	TimeManager.day_changed.connect(check_daily_events)
 
-func check_events(_new_time : String) -> void : ## revisa con el cambio del tiempo que eventos disparar o terminar
+func check_events(_new_time : int) -> void : ## revisa con el cambio del tiempo que eventos disparar o terminar
 	for event in events :
 		if event.is_enabled == false : return
 		
@@ -20,6 +20,11 @@ func check_events(_new_time : String) -> void : ## revisa con el cambio del tiem
 				elif TimeManager.is_time_between(event.hour, event.end_hour) :
 					TimeManager.connect_to_time(event.end_hour, event.finished)
 					event.execute()
+
+func check_daily_events(_new_day : int) -> void :
+	for event in events :
+		if event is not EventDaily : return
+		event.checked = false
 
 #endregion
 
@@ -79,5 +84,23 @@ func is_event_active(_event_unique_name : String) -> bool :
 	var event = get_event(_event_unique_name)
 	if event == null : return false
 	return stack_active_events.has(event)
+
+## Obtiene el tiempo restante para iniciar un evento
+func get_time_left_to_start(_event_unique_name : String) -> String :
+	var event = get_event(_event_unique_name)
+	if event == null or event is not EventScheduled: return ""
+	return TimeManager.time_left_to(event.hour)
+
+## Establece como hecho un evento
+func check_event(_event_unique_name : String) -> void :
+	var event = get_event(_event_unique_name)
+	if event == null : return
+	event.checked = true
+
+## Retorna si un evento esta marcado como hecho
+func is_event_check(_event_unique_name : String) -> bool :
+	var event = get_event(_event_unique_name)
+	if event == null : return false
+	return event.checked
 
 #endregion

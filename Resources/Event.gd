@@ -12,6 +12,7 @@ signal event_finished
 
 @export var is_enabled : bool
 @export var is_active : bool
+@export var checked : bool
 
 func activate() -> void :
 	is_enabled = true
@@ -20,6 +21,7 @@ func disable() -> void :
 	is_enabled = false
 
 func execute() -> void :
+	EventManager.stack_active_events.append(self)
 	if !is_enabled : return
 	event_executed.emit()
 

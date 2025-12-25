@@ -9,6 +9,12 @@ signal velocity_changed(new_velocity: Vector2)
 
 @export var speed : int = 200 ## Velocidad de movimiento
 @export var can_move : bool = true ## Determina si la entidad puede moverse o no
+@export_subgroup("input_buffer_values")
+#variables para input buffer
+var buffered_input: Vector2 = Vector2.ZERO
+@export var inputbuffer_time: float = 0.1
+@export var buffer_timer: float = 0.0
+
 @export_subgroup("Tile Movement")
 @export var tile_based: bool = true ## Determina el tipo de movimiento, si es falso el movimiento sera libre/vectorial
 @export_custom(PROPERTY_HINT_LAYERS_2D_PHYSICS, "Collision Mask") var raycast_mask : int = 1
@@ -22,11 +28,6 @@ var last_input_axis : Vector2 = Vector2.ZERO ## El eje del ultimo input recibido
 var last_facing_dir : Vector2 = Vector2.ZERO ## Ultima direccion en la que la entidad quedo
 var tile_destination : Vector2 = Vector2.ZERO ## Posicion a la que el entity interpola para movimiento suave
 var is_moving : bool = false ## Determina si la entidad esta en movimiento o no
-
-#variables para input buffer
-var buffered_input: Vector2 = Vector2.ZERO
-var inputbuffer_time: float = 0.2
-var buffer_timer: float = 0.0
 
 #endregion
 

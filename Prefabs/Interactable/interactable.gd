@@ -112,7 +112,6 @@ func toggle_visible(_custom_mode : TOGGLE_MODE = TOGGLE_MODE.TOGGLE) -> void :
 				TOGGLE_MODE.SHOW : node.show()
 				TOGGLE_MODE.HIDE : node.hide()
 				_ : node.visible = !node.visible
-			print("jhola")
 
 func execute() -> void :
 	can_interact = false

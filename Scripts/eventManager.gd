@@ -11,7 +11,8 @@ func _ready() -> void:
 
 func check_events(_new_time : int) -> void : ## revisa con el cambio del tiempo que eventos disparar o terminar
 	for event in events :
-		if event.is_enabled == false : return
+		if event.is_enabled == false: 
+			continue
 		
 		if event is EventScheduled :
 			if TimeManager.day == event.day and TimeManager.month == event.month:
@@ -33,7 +34,8 @@ func check_daily_events(_new_day : int) -> void :
 ## Carga un evento, usa trigger para disparar su acciones
 func load_event(event : Event, trigger : bool = false) -> void :
 	events.append(event)
-	if event.destroy_at_end : event.event_finished.connect(remove_event.bind(event))
+	if event.destroy_at_end: 
+		event.event_finished.connect(remove_event.bind(event))
 	if trigger :
 		event.execute()
 	if event is EventScheduled :
@@ -41,7 +43,9 @@ func load_event(event : Event, trigger : bool = false) -> void :
 
 ## remueve un evento, usa end_trigger para disparar su acciones inversas/finales
 func remove_event(event : Event, trigger_end : bool = false) -> void :
-	if !events.has(event) : printerr(" No exite el evento para eliminar");return
+	if !events.has(event) : 
+		printerr(" No exite el evento para eliminar")
+		return
 	events.erase(event)
 	if trigger_end :
 		event.finished()
@@ -56,7 +60,8 @@ func connect_to_event(event_unique_name : String, callable_to_enter : Callable =
 ## Devuelve si un evento esta habilitado
 func is_enable(_event_unique_name : String) -> bool :
 	var event = get_event(_event_unique_name)
-	if event == null : return false
+	if event == null : 
+		return false
 	return event.is_enabled
 
 ## Obten el recurso "Event" de un evento
@@ -69,7 +74,8 @@ func get_event(_event_unique_name : String) -> Event :
 ## Fuerza o instruye el inicio de un evento
 func execute_event(_event_unique_name : String) -> void :
 	var event = get_event(_event_unique_name)
-	if event == null : return
+	if event == null : 
+		return
 	event.execute()
 	if event is EventScheduled :
 		TimeManager.connect_to_time(event.end_hour, event.finished)
@@ -77,31 +83,36 @@ func execute_event(_event_unique_name : String) -> void :
 ## Fuerza o instruye el final de un evento
 func finish_event(_event_unique_name : String) -> void :
 	var event = get_event(_event_unique_name)
-	if event == null : return
+	if event == null : 
+		return
 	event.finished()
  
 ## Obten si un evento esta en ejecucion
 func is_event_active(_event_unique_name : String) -> bool :
 	var event = get_event(_event_unique_name)
-	if event == null : return false
+	if event == null : 
+		return false
 	return stack_active_events.has(event)
 
 ## Obtiene el tiempo restante para iniciar un evento
 func get_time_left_to_start(_event_unique_name : String) -> String :
 	var event = get_event(_event_unique_name)
-	if event == null or event is not EventScheduled: return ""
+	if event == null or event is not EventScheduled: 
+		return ""
 	return TimeManager.time_left_to(event.hour)
 
 ## Establece como hecho un evento
 func check_event(_event_unique_name : String) -> void :
 	var event = get_event(_event_unique_name)
-	if event == null : return
+	if event == null : 
+		return
 	event.checked = true
 
 ## Retorna si un evento esta marcado como hecho
 func is_event_check(_event_unique_name : String) -> bool :
 	var event = get_event(_event_unique_name)
-	if event == null : return false
+	if event == null : 
+		return false
 	return event.checked
 
 #endregion

@@ -5,6 +5,9 @@ var entities : Dictionary[String,Entity]
 @onready var label: Label = %Label
 
 func _ready() -> void:
+	
+	EventManager.load_event(load("res://Resources/events/test_basic_event.tres"))
+	
 	for entity : Entity in find_children("*", "Entity", true):
 		entities[entity.name] = entity
 		entity.world = self

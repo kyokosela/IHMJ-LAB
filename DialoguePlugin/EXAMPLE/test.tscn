@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://d1rf20ean4s0g"]
+[gd_scene load_steps=12 format=4 uid="uid://d1rf20ean4s0g"]
 
 [ext_resource type="PackedScene" uid="uid://tcey4tkkfvd8" path="res://Prefabs/Player/Player.tscn" id="1_mitkt"]
 [ext_resource type="Script" uid="uid://mni1cq3j7l53" path="res://Scripts/world.gd" id="1_sr6yd"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://btpm0l5mnnxxf" path="res://Prefabs/Interactable/interactable_container.gd" id="5_ikan7"]
 [ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="6_4sy0m"]
 [ext_resource type="Resource" uid="uid://cx5rph34mkd35" path="res://DialoguePlugin/EXAMPLE/example.dialogue" id="9_q15fj"]
+[ext_resource type="Script" uid="uid://74m0e6s730aj" path="res://Scripts/SupportScripts/label_support.gd" id="6_7bjt1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7bjt1"]
 texture = ExtResource("2_wy2xr")
@@ -351,6 +352,8 @@ sources/0 = SubResource("TileSetAtlasSource_7bjt1")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ikan7"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_7bjt1"]
+
 [node name="World" type="Node2D"]
 script = ExtResource("1_sr6yd")
 
@@ -372,5 +375,12 @@ random_time_range = true
 random_initial_time = "00:10"
 random_final_time = "00:15"
 metadata/_custom_type_script = "uid://btpm0l5mnnxxf"
+
+[node name="fps_label" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+scale = Vector2(0.6628039, 0.6628039)
+label_settings = SubResource("LabelSettings_7bjt1")
+script = ExtResource("6_7bjt1")
 
 [node name="DebugPanel" parent="." instance=ExtResource("6_4sy0m")]

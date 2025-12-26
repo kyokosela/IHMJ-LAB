@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Event" load_steps=2 format=3 uid="uid://bel5nc45mso2c"]
+
+[ext_resource type="Script" uid="uid://dlsp48thbofcf" path="res://Resources/Event.gd" id="1_q7057"]
+
+[resource]
+script = ExtResource("1_q7057")
+event_name = "TEST"
+event_unique_name = "TEST"
+is_enabled = true
+metadata/_custom_type_script = "uid://dlsp48thbofcf"

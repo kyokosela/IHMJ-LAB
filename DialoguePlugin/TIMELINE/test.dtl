@@ -1,0 +1,2 @@
+test_char: Hola como estas {Test_var} #id:11
+test_char: Bien y tu? {Test_var} #id:12

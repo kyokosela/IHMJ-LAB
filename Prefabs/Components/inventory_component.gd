@@ -176,6 +176,7 @@ func get_unique_items() -> Array[Item]:
 	return unique
 
 func get_random_item() -> Item:
+	if is_empty(): return null
 	return get_unique_items().pick_random()
 
 # Serializar para guardar

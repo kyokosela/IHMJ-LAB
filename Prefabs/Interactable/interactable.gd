@@ -36,7 +36,7 @@ var random_final_time: String = ""
 
 
 @export_group("Dialog Interactions")
-@export var dialog : DialogueResource ## Recurso de dialogo
+@export var dialog : DialogicTimeline ## Recurso de dialogo
 @export var dialog_title : String
 @export var extra_game_states : Array
 
@@ -138,9 +138,10 @@ func execute() -> void:
 	can_interact = false
 	consume_time_handler()
 	if dialog != null : 
-		DialogueManager.show_dialogue_balloon(dialog, dialog_title, extra_game_states)
+		print()
+		Dialogic.start(dialog)
 		if reusable: 
-			DialogueManager.dialogue_ended.connect(func (_r): can_interact = true, CONNECT_ONE_SHOT)
+			Dialogic.timeline_ended.connect(func (): can_interact = true, CONNECT_ONE_SHOT)
 	custom_execute()
 	executed.emit()
 	
@@ -148,7 +149,7 @@ func execute() -> void:
 	
 	if destroy_at_end : 
 		if dialog == null : queue_free()
-		else : DialogueManager.dialogue_ended.connect(func (_r) : queue_free(), CONNECT_ONE_SHOT)
+		else : Dialogic.timeline_ended.connect(func () : queue_free(), CONNECT_ONE_SHOT)
 
 func consume_time_handler():
 	if !consume_time: return

@@ -8,9 +8,7 @@ func _ready() -> void:
 	for entity : Entity in find_children("*", "Entity", true):
 		entities[entity.name] = entity
 		entity.world = self
-	_test()
 	
-
 func _process(_delta: float) -> void:
 	pass
 

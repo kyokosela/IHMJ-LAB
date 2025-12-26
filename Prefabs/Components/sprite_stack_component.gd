@@ -19,7 +19,6 @@ var layer_colors: Dictionary[String, Color] = {}
 var current_animation : String = "idle"
 var current_direction : String = "down"
 
-
 func _ready() -> void:
 	super()
 	collect_layers()

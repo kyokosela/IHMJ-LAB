@@ -11,6 +11,7 @@ enum TOGGLE_MODE {TOGGLE,SHOW,HIDE}
 var collshape : CollisionShape2D
 
 ## Rango de interaccion
+@export_group("Behaviour")
 @export var shape : Shape2D : 
 	set(value) : shape = value; if Engine.is_editor_hint() : collshape.shape = shape
 @export var display_text : String = "_INTERACT_BASE_MESSAGE_" ## Texto que se mostrara en pantalla al entrar en el rango del area, si esta vacio no mostrara nada
@@ -19,6 +20,20 @@ var collshape : CollisionShape2D
 @export var show_again_at_end : bool = false ## Mostrar elementos despues de acabar la ejecucion si es necesario
 @export var destroy_at_end : bool = false ## Destruir al final de la ejecución
 @export var signal_type : SIGNAL_TYPE = SIGNAL_TYPE.AREA ## Tipo de señal que utilizara el Interactable
+
+@export_group("Time Interaction")
+@export var consume_time: bool = false:
+	set(value):
+		consume_time = value
+		notify_property_list_changed()
+var time_consumption: String = " "
+var random_time_range: bool = false:
+	set(value):
+		random_time_range = value
+		notify_property_list_changed()
+var random_initial_time: String = ""
+var random_final_time: String = ""
+
 
 @export_group("Dialog Interactions")
 @export var dialog : DialogueResource ## Recurso de dialogo
@@ -32,6 +47,8 @@ var is_inside : bool
 var can_interact : bool = true
 var interact_label : Label
 var elements : Array
+var area_ref : Area2D
+var body_ref : Node2D
 
 func custom_execute(): pass ## [b]Funcion personalizada[/b] que se ejecutara al realizar la [b]interacción[/b]
 
@@ -62,7 +79,7 @@ func _ready() -> void:
 		add_child(label)
 		elements.append(label)
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Interact") and is_inside and can_interact:
 		execute()
 
@@ -82,21 +99,25 @@ func _input(event: InputEvent) -> void:
 func _on_body_entered(_body : Node2D) -> void :
 	#mejor se comprueba dentro del if para evitar errores con el motor
 	if _body is Player and !is_inside and signal_type == SIGNAL_TYPE.BODY:
+		body_ref = _body
 		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
 
 func _on_body_exited(_body : Node2D) -> void :
 	if _body is Player and is_inside and signal_type == SIGNAL_TYPE.BODY:
+		body_ref = null
 		toggle_visible(TOGGLE_MODE.HIDE)
 		is_inside = false
 
 func _on_area_entered(_area : Area2D) -> void :
 	if _area.is_in_group("Interactor") and !is_inside and signal_type == SIGNAL_TYPE.AREA:
+		area_ref = _area
 		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
 
 func _on_area_exited(_area: Area2D) -> void :
 	if _area.is_in_group("Interactor") and is_inside and signal_type == SIGNAL_TYPE.AREA:
+		area_ref = null
 		toggle_visible(TOGGLE_MODE.HIDE)
 		is_inside = false
 
@@ -112,10 +133,10 @@ func toggle_visible(_custom_mode : TOGGLE_MODE = TOGGLE_MODE.TOGGLE) -> void :
 				TOGGLE_MODE.SHOW : node.show()
 				TOGGLE_MODE.HIDE : node.hide()
 				_ : node.visible = !node.visible
-			print("jhola")
 
-func execute() -> void :
+func execute() -> void:
 	can_interact = false
+	consume_time_handler()
 	if dialog != null : 
 		DialogueManager.show_dialogue_balloon(dialog, dialog_title, extra_game_states)
 		if reusable: 
@@ -128,5 +149,74 @@ func execute() -> void :
 	if destroy_at_end : 
 		if dialog == null : queue_free()
 		else : DialogueManager.dialogue_ended.connect(func (_r) : queue_free(), CONNECT_ONE_SHOT)
+
+func consume_time_handler():
+	if !consume_time: return
+	if random_time_range: 
+		var random_initial_int = TimeManager.get_minutes(random_initial_time)
+		var random_final_int = TimeManager.get_minutes(random_final_time)
+		
+		var random_time = TimeManager.format_minutes(randi_range(random_initial_int, random_final_int))
+		print(random_time)
+		TimeManager.add_to_current_time(random_time)
+	else:
+		TimeManager.add_to_current_time(time_consumption)
+		print(TimeManager.get_current_time())
+#endregion
+
+
+#region Export Handler
+func _get_property_list() -> Array:
+	var props: Array = []
+	props.append({
+		"name": "Time Interaction",
+		"type": TYPE_NIL,
+		"usage": PROPERTY_USAGE_GROUP
+	})
+	if consume_time:
+		var time_usage = PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_STORAGE
+		if random_time_range:
+			time_usage |= PROPERTY_USAGE_READ_ONLY
+		props.append({
+			"name": "time_consumption",
+			"type": TYPE_STRING,
+			"hint": PROPERTY_HINT_PLACEHOLDER_TEXT,
+			"hint_string": "HH:MM",
+			"usage": time_usage
+		})
+		props.append({
+			"name": "random_time_range",
+			"type": TYPE_BOOL,
+			"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_STORAGE
+		})
+		if random_time_range:
+			props.append_array([
+				{
+					"name": "random_initial_time",
+					"type": TYPE_STRING,
+					"hint": PROPERTY_HINT_PLACEHOLDER_TEXT,
+					"hint_string": "HH:MM",
+					"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_STORAGE
+				},
+				{
+					"name": "random_final_time",
+					"type": TYPE_STRING,
+					"hint": PROPERTY_HINT_PLACEHOLDER_TEXT,
+					"hint_string": "HH:MM",
+					"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_STORAGE
+				}
+			])
+	return props
+
+func _set(property, value):
+	match property:
+		"time_consumption", "random_initial_time", "random_final_time":
+			var cleaned = value.replace(" ", "")
+			if cleaned.length() > 5:
+				cleaned = cleaned.substr(0, 5)
+			set(property, cleaned)
+			return true
+	return false
+
 
 #endregion

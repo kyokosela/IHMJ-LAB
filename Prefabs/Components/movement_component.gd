@@ -46,7 +46,6 @@ func _initialize():
 
 func _ready() -> void:
 	super()
-	direction_changed.connect(func (x,y): print("direction changed: %s, %s" % [x,y]))
 	call_deferred("_initialize")
 
 func _physics_process(delta: float):

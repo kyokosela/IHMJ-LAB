@@ -16,10 +16,10 @@ config/icon="uid://bjv6sibxm861c"
 
 [autoload]
 
-Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 TimeManager="*res://Scripts/time_manager.gd"
 GameManager="*res://Scripts/game_manager.gd"
-EventManager="*res://Scripts/eventManager.gd"
+EventManager="*res://Scripts/event_manager.gd"
+Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 
 [dialogic]
 
@@ -73,19 +73,21 @@ audio/channel_defaults={
 }
 }
 translation/enabled=true
-translation/original_locale="es"
 translation/file_mode=1
 translation/translation_folder="res://Textfiles/DialogicTranslations"
 translation/save_mode=0
 translation/add_separator=false
-translation/locales=[]
 translation/id_counter=19
 translation/intern/save_mode=0
 translation/intern/file_mode=1
 translation/intern/translation_folder="res://Textfiles/DialogicTranslations"
+translation/original_locale="es"
+translation/locales=["en"]
 
 [display]
 
+window/size/viewport_width=640
+window/size/viewport_height=360
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
@@ -164,8 +166,7 @@ dialogic_default_action={
 [internationalization]
 
 locale/translations=PackedStringArray("res://Textfiles/UI.en.translation", "res://Textfiles/UI.es.translation", "res://Textfiles/DialogicTranslations/dialogic_character_translations.es.translation", "res://Textfiles/DialogicTranslations/dialogic_test_translation.en.translation", "res://Textfiles/DialogicTranslations/dialogic_test_translation.es.translation")
-locale/translations_pot_files=PackedStringArray("res://DialoguePlugin/EXAMPLE/example.dialogue")
-locale/test="es"
+locale/test="en"
 
 [rendering]
 

@@ -20,7 +20,7 @@ var buffered_input: Vector2 = Vector2.ZERO
 @export_custom(PROPERTY_HINT_LAYERS_2D_PHYSICS, "Collision Mask") var raycast_mask : int = 1
 
 var tile_size: Vector2: ## Determina que tanto se va a mover el jugador dependiendo del tamaño de los tiles.
-	get: return GameManager.tile_size #Para acortar, en caso de que no lo quieran tener como una global solo quitar esto jasdj
+	get: return GameManager.tile_size # Para acortar, en caso de que no lo quieran tener como una global solo quitar esto jasdj
 var collision_raycast : RayCast2D ## Permite la colision
 var x_direction : int = 0 ## Direccion en X | -1 , 0 , 1 |
 var y_direction : int = 0 ## Direccion en Y | -1 , 0 , 1 |
@@ -70,16 +70,19 @@ func apply_movement(delta : float): ## Determina que tipo de movimiento se usara
 	var was_moving = is_moving
 	var old_velocity = entity.velocity
 	var direction = last_facing_dir
-	if tile_based:
-		tile_movement(delta)
-	else:
-		dynamic_movement(delta)
-	if entity.velocity != old_velocity: velocity_changed.emit(entity.velocity)
-	if direction != last_facing_dir: direction_changed.emit(direction, last_facing_dir)
-	if is_moving and not was_moving:
+	
+	if tile_based: tile_movement(delta)
+	else: dynamic_movement(delta)
+	
+	if entity.velocity != old_velocity: 
+		velocity_changed.emit(entity.velocity)
+	if direction != last_facing_dir: 
+		direction_changed.emit(direction, last_facing_dir)
+	if is_moving and not was_moving: 
 		movement_started.emit()
-	if was_moving and not is_moving:
+	if was_moving and not is_moving: 
 		movement_stopped.emit()
+	
 	entity.move_and_slide()
 	
 func tile_movement(_delta: float) -> void: ## Maneja el movimiento basado por tiles

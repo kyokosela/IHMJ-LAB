@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dyv1qmo2clngj"]
+
+[ext_resource type="Script" uid="uid://npgpfxdpa6su" path="res://Prefabs/Debug/entity_button.gd" id="1_4sflb"]
+
+[node name="HBoxContainer" type="HBoxContainer"]
+script = ExtResource("1_4sflb")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Player Entity: ADSKLJFDS"

@@ -2,12 +2,7 @@
 extends Interactable
 class_name InteractableContainer
 
-@export var initial_items : Array[Item]:
-	set(value):
-		while Engine.is_editor_hint() and value.size() > inventory.size: 
-			value.pop_back()
-		initial_items = value
-
+@export var initial_items : Array[Item]
 @export var inventory_size : int = 10
 
 var inventory: InventoryComponent

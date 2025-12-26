@@ -2,16 +2,23 @@ extends Node
 class_name World
 
 var entities : Dictionary[String,Entity]
-@onready var label: Label = %Label
+
+signal entity_created(entity : Entity)
+signal entity_removed(entity : Entity)
 
 func _ready() -> void:
-	
-	EventManager.load_event(load("res://Resources/events/test_basic_event.tres"))
-	
+	EventManager.load_event(load("res://Resources/Events/test_basic_event.tres"))
 	for entity : Entity in find_children("*", "Entity", true):
 		entities[entity.name] = entity
 		entity.world = self
-	
+		entity_created.emit(entity)
+
+func kill_entity(entity: Entity) -> void:
+	if !entities.has(entity): return
+	entities.erase(entity)
+	entity_removed.emit(entity)
+	entity.queue_free()
+
 func _process(_delta: float) -> void:
 	pass
 

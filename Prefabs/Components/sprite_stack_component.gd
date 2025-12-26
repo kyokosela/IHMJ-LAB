@@ -16,7 +16,7 @@ signal animation_changed(previous_anim : String, new_anim : String)
 ]
 
 var layer_colors: Dictionary[String, Color] = {}
-var current_animation : String = "idle"
+var current_animation : String = "idle_down"
 var current_direction : String = "down"
 
 func _ready() -> void:
@@ -50,7 +50,11 @@ func play_animation(anim_prefix : String):
 
 func get_directional_anim(anim_name : String):
 	return anim_name + "_" + current_direction
-
+	
+func get_raw_animation() -> String:
+	var splits = current_animation.split("_")
+	return splits[0]
+	
 func stop_animation():
 	for layer : AnimatedSprite2D in layers.values():
 		layer.stop()

@@ -1,9 +1,10 @@
 [gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://da7q88axtodt1"]
 
-[ext_resource type="Script" uid="uid://laen7eoognkv" path="res://Resources/inventory/item.gd" id="1_pk7r5"]
+[ext_resource type="Script" uid="uid://laen7eoognkv" path="res://Resources/Items/item.gd" id="1_lw2hs"]
 
 [resource]
-script = ExtResource("1_pk7r5")
+script = ExtResource("1_lw2hs")
 item_name = "test_two"
 item_unique_name = "test_two"
+max_stack = 2
 metadata/_custom_type_script = "uid://laen7eoognkv"

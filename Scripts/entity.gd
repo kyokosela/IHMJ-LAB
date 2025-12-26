@@ -2,8 +2,6 @@ extends CharacterBody2D
 class_name Entity
 
 #region SETUP
-signal entity_created
-signal entity_removed
 signal entity_ready
 
 var components : Dictionary[String,Component]
@@ -14,9 +12,6 @@ var movement : MovementComponent
 var sprite : SpriteStackComponent
 var inventory : InventoryComponent
 
-
-func _init() -> void:
-	entity_created.emit()
 
 func _ready() -> void:
 	for component : Component in find_children("*", "Component"):
@@ -34,6 +29,9 @@ func get_component(component_name : String) -> Component:
 		return components[component_name]
 	return null
 
+func get_all_components() -> Array[Component]:
+	return components.values()
+
 func add_component(component: Component) -> void:
 	if !components.has(component.name):
 		components[component.name] = component
@@ -46,9 +44,7 @@ func remove_component(component: Component) -> void:
 		component.queue_free()
 
 func kill_entity() -> void:
-	if world.entities.has(self):
-		world.entities.erase(self)
-		entity_removed.emit()
+	world.kill_entity(self)
 	queue_free()
 #endregion
 
@@ -92,7 +88,7 @@ func stop_animation():
 	
 func play_animation(anim_name : String):
 	if _has_sprite(): sprite.play_animation(anim_name)
-	
+
 func set_animation_direction(direction : Vector2):
 	if _has_sprite(): sprite.set_direction(direction)
 	
@@ -104,9 +100,12 @@ func change_layer_sprite(layer_name : String, sprite_frames : SpriteFrames):
 	
 func change_layer_color(layer_name : String, color : Color):
 	if _has_sprite(): sprite.change_layer_color(layer_name, color)
-	
+
 func current_animation() -> String:
-	return sprite.current_animation + "_" + sprite.current_direction if _has_sprite() else ""
+	return sprite.current_animation if _has_sprite() else ""
+
+func current_raw_animation() -> String:
+	return sprite.get_raw_animation() if _has_sprite() else ""
 
 func _has_sprite() -> bool:
 	return sprite != null

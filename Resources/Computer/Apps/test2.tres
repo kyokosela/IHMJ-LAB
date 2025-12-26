@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AppData" load_steps=4 format=3 uid="uid://d2mj0y2q3vvpw"]
+
+[ext_resource type="Texture2D" uid="uid://bjv6sibxm861c" path="res://Assets/temporalLogo.png" id="1_w580e"]
+[ext_resource type="Script" uid="uid://bnv3nah4ycqtd" path="res://Scripts/Resources/Computer/AppData.gd" id="2_arpf5"]
+[ext_resource type="PackedScene" uid="uid://ljeah00er2oy" path="res://Scenes/TestScenes/dialogue_test.tscn" id="3_w580e"]
+
+[resource]
+script = ExtResource("2_arpf5")
+app_name = "coso2"
+icon = ExtResource("1_w580e")
+window_scene = ExtResource("3_w580e")
+titlebar_bg_color = Color(1, 1, 1, 1)
+titlebar_text_color = Color(1, 0.70364827, 0.8381331, 1)
+metadata/_custom_type_script = "uid://bnv3nah4ycqtd"

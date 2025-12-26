@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://288wq82hqpsh"]
+
+[ext_resource type="Texture2D" uid="uid://d4c7ih8v62qhh" path="res://Assets/TestSprites/bg.png" id="1_cxiyg"]
+[ext_resource type="PackedScene" uid="uid://dp5owm80w2vqt" path="res://Prefabs/Workspace/Computer/Desktop.tscn" id="1_pcdlm"]
+[ext_resource type="Shader" uid="uid://7q3c2uor7gwr" path="res://Assets/Shaders/blur.gdshader" id="2_kx5bb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ixvs8"]
+shader = ExtResource("2_kx5bb")
+shader_parameter/blur_amount = 2.0
+shader_parameter/tint_color = Color(1, 1, 1, 0.2)
+
+[node name="Workspace" type="Node2D"]
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Background"]
+scale = Vector2(8, 8)
+texture = ExtResource("1_cxiyg")
+region_enabled = true
+region_rect = Rect2(579.4607, 231.14703, 237.49463, 160.3089)
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+material = SubResource("ShaderMaterial_ixvs8")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -990.0
+offset_top = -510.0
+offset_right = 990.0
+offset_bottom = 510.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Monitor" type="SubViewportContainer" parent="."]
+custom_minimum_size = Vector2(640, 360)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Monitor"]
+handle_input_locally = false
+gui_embed_subwindows = true
+size = Vector2i(640, 360)
+render_target_update_mode = 4
+
+[node name="Desktop" parent="Monitor/SubViewport" instance=ExtResource("1_pcdlm")]

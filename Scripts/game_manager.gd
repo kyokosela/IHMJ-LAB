@@ -56,5 +56,7 @@ func write_line_log(line : String) -> void : ## escribe una linea a registrar en
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST :
-		write_line_log("END CORRECTLY")
-		current_sesion.close()
+		if create_log and current_sesion != null:
+			write_line_log("END CORRECTLY")
+			current_sesion.close()
+			current_sesion = null

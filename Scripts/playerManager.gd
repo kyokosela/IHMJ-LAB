@@ -21,17 +21,22 @@ enum MOOD_STATES {
 func _ready() -> void:
 	load_default_stats()
 
+#recorre el recurso que contiene las stats y carga su valor
 func load_default_stats() -> void :
 	for stat_res in DirAccess.get_files_at(STATS_FOLDER_PATH) :
 		stats.append(load(STATS_FOLDER_PATH + stat_res))
-
+		
+		
+#con la variable modifier, modifica el valor de cada stat recorriendo su recurso que se obtuvo antes
 func get_stat_modifiers(_query_stat_unique_name : String) -> float :
 	var modifier : float = 0.0
 	for effect : Effect in effects :
 		for statchanger : statChanger in effect.stat_changes :
 			if statchanger.stat_unique_name == _query_stat_unique_name :
-				if statchanger.OPERATION == statChanger.OPERATION_CASE.INCREASE : modifier += statchanger.value 
-				elif statchanger.OPERATION == statChanger.OPERATION_CASE.DECREASE : modifier -= statchanger.value 
+				if statchanger.OPERATION == statChanger.OPERATION_CASE.INCREASE : 
+					modifier += statchanger.value 
+				elif statchanger.OPERATION == statChanger.OPERATION_CASE.DECREASE : 
+					modifier -= statchanger.value 
 	return modifier
 
 #endregion
@@ -48,13 +53,15 @@ func add_effect(effect : Effect) -> void :
 	
 func remove_effect(unique_effect_name : String) -> void : ## Remueve un efecto, usa el nombre unico/identificador
 	var effect : Effect = get_effect_res(unique_effect_name)
-	if effect == null : return
+	if effect == null or not effect : 
+		return
 	effect_removed.emit(effect)
 	effects.erase(effect)
 
 func has_effect(unique_effect_name : String) -> bool : ## Devuelve verdadero si el efecto existe, usa el nombre unico/identificador
 	var effect : Effect = get_effect_res(unique_effect_name)
-	if effect == null : return false
+	if effect == null or not effect: 
+		return false
 	return effects.has(effect)
 
 func get_effect_res(unique_effect_name : String) -> Effect : ## Obten el recurso tipo efecto, usa el nombre unico/identificador
@@ -69,7 +76,8 @@ func get_effect_res(unique_effect_name : String) -> Effect : ## Obten el recurso
 
 func connect_to_stat(unique_stat_name : String, callable : Callable) -> void : ## Conecta una funcion al cambio de una estadistica, usa el nombre unico/identificador, Esta señal retornara el valor nuevo de la estadistica
 	var stat : Stat = get_stat_res(unique_stat_name)
-	if stat == null : return
+	if stat == null : 
+		return
 	stat.value_changed.connect(callable)
 
 func get_mood_state() -> MOOD_STATES : ## Obten el estado mental del jugador, ENUM MOOD_STATES, ejemplo MOOD_STATES.SAD
@@ -77,12 +85,14 @@ func get_mood_state() -> MOOD_STATES : ## Obten el estado mental del jugador, EN
 
 func decrease_stat(unique_stat_name : String, value : float) -> void : ## Disminuye una estadistica, usa el nombre unico/identificador
 	var stat : Stat = get_stat_res(unique_stat_name)
-	if stat == null : return
+	if stat == null or not stat: 
+		return
 	stat.value -= value
 
 func increase_stat(unique_stat_name : String, value : float) -> void : ## Aumenta una estadistica, usa el nombre unico/identificador
 	var stat : Stat = get_stat_res(unique_stat_name)
-	if stat == null : return
+	if stat == null or not stat: 
+		return
 	stat.value += value
 
 func get_stat_res(unique_stat_name : String) -> Stat : ## Obten el recurso tipo Stat, usa el nombre unico/identificador
@@ -93,7 +103,8 @@ func get_stat_res(unique_stat_name : String) -> Stat : ## Obten el recurso tipo 
 
 func get_stat_value(unique_stat_name : String) -> float : ## Obten el valor de una Stat, usa el nombre unico/identificador
 	var stat : Stat = get_stat_res(unique_stat_name)
-	if stat == null : return -1.0
+	if stat == null or not stat: 
+		return -1.0
 	return stat.value
 
 #endregion

@@ -1,5 +1,8 @@
 extends Node
 
+signal effect_added(effect : Effect)
+signal effect_removed(effect : Effect)
+
 const STATS_FOLDER_PATH : String = "res://Resources/Stats/stats/"
 
 var stats : Array[Stat]
@@ -17,7 +20,6 @@ enum MOOD_STATES {
 
 func _ready() -> void:
 	load_default_stats()
-	print(stats)
 
 func load_default_stats() -> void :
 	for stat_res in DirAccess.get_files_at(STATS_FOLDER_PATH) :
@@ -32,11 +34,13 @@ func add_effect(effect : Effect) -> void :
 		##TODO probablemente manejo de niveles, no puede ser una variable de level por si acaso, usa el nombre unico/identificador
 		pass
 	else :
+		effect_added.emit(effect)
 		effects.append(effect)
 	
 func remove_effect(unique_effect_name : String) -> void : ## Remueve un efecto, usa el nombre unico/identificador
 	var effect : Effect = get_effect_res(unique_effect_name)
 	if effect == null : return
+	effect_removed.emit(effect)
 	effects.erase(effect)
 
 func has_effect(unique_effect_name : String) -> bool : ## Devuelve verdadero si el efecto existe, usa el nombre unico/identificador

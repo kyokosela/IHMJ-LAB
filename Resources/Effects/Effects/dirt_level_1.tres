@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Effect" load_steps=3 format=3 uid="uid://bnne5oxs1330j"]
+
+[ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_ilic8"]
+[ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/StatChanger.gd" id="2_q7dbj"]
+
+[resource]
+script = ExtResource("1_ilic8")
+effect_unique_name = "DIRT"
+effect_display_name = "_EFFECT_DIRT_"
+render = true
+metadata/_custom_type_script = "uid://b7krqqvmfg6wr"

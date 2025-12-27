@@ -121,7 +121,6 @@ func _on_remove_time_pressed() -> void:
 	if TimeManager.is_valid_time(line_edit.text):
 		TimeManager.substract_to_current_time(line_edit.text)
 
-
 func _on_set_time_pressed() -> void:
 	if TimeManager.is_valid_time(line_edit.text):
 		TimeManager.set_current_time(line_edit.text)

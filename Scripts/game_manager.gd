@@ -40,6 +40,11 @@ var current_sesion : FileAccess
 func setup_log() -> void :
 	if !create_log : return
 	current_sesion = FileAccess.open(log_file_name, FileAccess.WRITE)
+	
+	if current_sesion == null:
+		printerr("Error crítico: No se pudo crear el archivo de log en ", log_file_name)
+		create_log = false #se desactiva el log para evitar errores posteriores
+		return
 	current_sesion.store_line("LOG " + log_file_name + " Iniciado ")
 	current_sesion.seek_end()
 	PlayerManager.effect_added.connect(func (_effect : Effect) : write_line_log("[PlayerManager] -> effect %s was added" % _effect))

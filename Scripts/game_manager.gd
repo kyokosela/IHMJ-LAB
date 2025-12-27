@@ -41,21 +41,20 @@ func setup_log() -> void :
 	if !create_log : return
 	current_sesion = FileAccess.open(log_file_name, FileAccess.WRITE)
 	current_sesion.store_line("LOG " + log_file_name + " Iniciado ")
-	current_sesion.close()
-	
+	current_sesion.seek_end()
 	PlayerManager.effect_added.connect(func (_effect : Effect) : write_line_log("[PlayerManager] -> effect %s was added" % _effect))
 	PlayerManager.effect_removed.connect(func (_effect : Effect) : write_line_log("[PlayerManager] -> effect %s was removed" % _effect))
 
 func write_line_log(line : String) -> void : ## escribe una linea a registrar en el log
 	if !create_log : return
-	current_sesion = FileAccess.open(log_file_name, FileAccess.WRITE)
 	var time = Time.get_ticks_msec()
+	current_sesion.seek_end()
 	current_sesion.store_line(str("[%s]" % time, " | " ,line))
 	if print_mode : print(line)
-	current_sesion.close()
 	
 #endregion
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST :
 		write_line_log("END CORRECTLY")
+		current_sesion.close()

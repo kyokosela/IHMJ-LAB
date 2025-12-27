@@ -140,7 +140,7 @@ size = Vector2(50, 16)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w54oy"]
 size = Vector2(64, 20)
 
-[node name="House" type="Node"]
+[node name="ApartamentOne" type="Node"]
 script = ExtResource("1_w54oy")
 metadata/_custom_type_script = "uid://mni1cq3j7l53"
 

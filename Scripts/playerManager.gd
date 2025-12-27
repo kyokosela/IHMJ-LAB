@@ -25,13 +25,22 @@ func load_default_stats() -> void :
 	for stat_res in DirAccess.get_files_at(STATS_FOLDER_PATH) :
 		stats.append(load(STATS_FOLDER_PATH + stat_res))
 
+func get_stat_modifiers(_query_stat_unique_name : String) -> float :
+	var modifier : float = 0.0
+	for effect : Effect in effects :
+		for statchanger : statChanger in effect.stat_changes :
+			if statchanger.stat_unique_name == _query_stat_unique_name :
+				if statchanger.OPERATION == statChanger.OPERATION_CASE.INCREASE : modifier += statchanger.value 
+				elif statchanger.OPERATION == statChanger.OPERATION_CASE.DECREASE : modifier -= statchanger.value 
+	return modifier
+
 #endregion
 
 #region EFFECTS API
 
 func add_effect(effect : Effect) -> void :
 	if has_effect(effect.effect_unique_name) :
-		##TODO probablemente manejo de niveles, no puede ser una variable de level por si acaso, usa el nombre unico/identificador
+		# TODO probablemente manejo de niveles, no puede ser una variable de level por si acaso, usa el nombre unico/identificador
 		pass
 	else :
 		effect_added.emit(effect)
@@ -47,11 +56,6 @@ func has_effect(unique_effect_name : String) -> bool : ## Devuelve verdadero si 
 	var effect : Effect = get_effect_res(unique_effect_name)
 	if effect == null : return false
 	return effects.has(effect)
-
-func get_effect_value(unique_effect_name : String) -> float : ## Obten el valor de un efecto, usa el nombre unico/identificador
-	var effect : Effect = get_effect_res(unique_effect_name)
-	if effect == null : return -1.0
-	return effect.value
 
 func get_effect_res(unique_effect_name : String) -> Effect : ## Obten el recurso tipo efecto, usa el nombre unico/identificador
 	for effect : Effect in effects :

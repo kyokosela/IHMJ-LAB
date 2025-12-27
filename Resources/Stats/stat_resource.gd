@@ -9,5 +9,6 @@ signal value_changed(new_value : float) ## notifica cuando el valor de la estadi
 		return tr(stat_display_name)
 @export var value : float = 0.0 : ## Valor de la estadistica, emite una señal cuando cambia
 	set(_value) :
+		_value += PlayerManager.get_stat_modifiers(stat_unique_name)
 		value = clamp(_value, 0, 100.0)
 		value_changed.emit(_value)

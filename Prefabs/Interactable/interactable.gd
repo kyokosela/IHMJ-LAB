@@ -9,6 +9,8 @@ signal executed ## Se emite cuando el jugador realiza la [b]interacción[/b]
 enum SIGNAL_TYPE {AREA, BODY}
 enum TOGGLE_MODE {TOGGLE,SHOW,HIDE}
 var collshape : CollisionShape2D
+#booleana para codigo de seguridad
+var index_code: bool = GameManager.index_code
 
 ## Rango de interaccion
 @export_group("Behaviour")
@@ -91,12 +93,33 @@ func _ready() -> void:
 		elements.append(label)
 
 func custom_expression_handler()-> void:
+
+	#validación de seguridad para indexación de código externo
+	if not index_code:
+		if !Engine.is_editor_hint():
+			print_rich("[color=yellow][Security][/color] Indexación de código denegada para: ", name)
+		return
+
+	if expresion.strip_edges().is_empty():
+		return
+
 	var inputs : Dictionary = {
-		"TimeManager": TimeManager
+		"TimeManager": TimeManager,
+		"EventManager": EventManager,
+		"PlayerManager": PlayerManager,
+		"GameManager": GameManager,
+		"Dialogic": Dialogic
 	}
 	var error = custom_expresion.parse(expresion, inputs.keys())
-	if error != OK: print("Expression parse error", custom_expresion.get_error_text())
-	else: custom_expresion.execute(inputs.values(),self)
+	
+	if error != OK: 
+		print("Expression parse error", custom_expresion.get_error_text())
+
+	else: 
+		custom_expresion.execute(inputs.values(),self)
+
+	if custom_expresion.has_execute_failed():
+		push_error("Error de ejecución en la expresión" + name)
 	
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -9,12 +9,15 @@ var fps: float = 0.0
 var create_log : bool = false ## activar si quieren generar logs
 var print_mode : bool = true
 var log_file_name : String
+var is_on_tutorial : bool
 
 func _ready() -> void:
 	if create_log :
 		var array = Time.get_date_dict_from_system().values() + Time.get_time_dict_from_system().values()
 		log_file_name = str("res://log/" + "%s-%s-%s-%s (%sh%sm%ss)" % array) + ".txt"
 		setup_log()
+	
+	new_game()
 
 func _process(_delta: float) -> void:
 	fps = Engine.get_frames_per_second()
@@ -23,6 +26,7 @@ func _process(_delta: float) -> void:
 
 func new_game() -> void :
 	#TODO creacion de archivos
+	is_on_tutorial = true
 	TimeManager.minutes = 360
 	PlayerManager.add_effect(load("res://Resources/Effects/Effects/hunger_level_1.tres"))
 	PlayerManager.add_effect(load("res://Resources/Effects/Effects/dirt_level_1.tres"))

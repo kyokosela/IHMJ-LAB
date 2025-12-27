@@ -1,9 +1,9 @@
-[gd_scene load_steps=7 format=4 uid="uid://b843i7637f1s8"]
+[gd_scene load_steps=9 format=4 uid="uid://b843i7637f1s8"]
 
 [ext_resource type="Texture2D" uid="uid://dcyu7bt5gfn71" path="res://Assets/homeTiles.png" id="1_mfa3j"]
 [ext_resource type="Script" uid="uid://mni1cq3j7l53" path="res://Scripts/world.gd" id="1_w54oy"]
 [ext_resource type="PackedScene" uid="uid://tcey4tkkfvd8" path="res://Prefabs/Player/Player.tscn" id="2_2h6jt"]
-[ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="3_rn03d"]
+[ext_resource type="Script" uid="uid://dc2fbamjb8ktv" path="res://Prefabs/Interactable/interactable.gd" id="4_w54oy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2h6jt"]
 texture = ExtResource("1_mfa3j")
@@ -134,6 +134,12 @@ tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_2h6jt")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ul1ao"]
+size = Vector2(50, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w54oy"]
+size = Vector2(64, 20)
+
 [node name="House" type="Node"]
 script = ExtResource("1_w54oy")
 metadata/_custom_type_script = "uid://mni1cq3j7l53"
@@ -144,7 +150,7 @@ tile_map_data = PackedByteArray("AAABAAAAAAABAAAAAAACAAAAAAABAAAAAAADAAAAAAABAAA
 tile_set = SubResource("TileSet_rn03d")
 
 [node name="Player" parent="World" instance=ExtResource("2_2h6jt")]
-position = Vector2(247, 121)
+position = Vector2(319, 122)
 
 [node name="Camera2D" type="Camera2D" parent="World/Player"]
 zoom = Vector2(1.7, 1.7)
@@ -153,4 +159,14 @@ limit_top = 0
 limit_right = 416
 limit_bottom = 280
 
-[node name="DebugPanel" parent="." instance=ExtResource("3_rn03d")]
+[node name="Closet" type="Area2D" parent="World"]
+position = Vector2(272, 112)
+script = ExtResource("4_w54oy")
+shape = SubResource("RectangleShape2D_ul1ao")
+metadata/_custom_type_script = "uid://dc2fbamjb8ktv"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="World/Closet"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Closet/StaticBody2D"]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_w54oy")

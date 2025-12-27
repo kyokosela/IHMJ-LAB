@@ -9,7 +9,6 @@ signal event_finished
 @export var event_unique_name : String ## Nombre unico para referenciar este evento, aqui si no usar tr xd
 
 #region API
-
 @export var is_enabled : bool = true
 @export var is_active : bool
 @export var can_multiple_active : bool

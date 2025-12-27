@@ -49,11 +49,18 @@ var interact_label : Label
 var elements : Array
 var area_ref : Area2D
 var body_ref : Node2D
+var custom_expresion : Expression = Expression.new()
+
+@export_group("DANGEROUS")
+@export_custom(PROPERTY_HINT_EXPRESSION,"") var expresion : String = ""
 
 func custom_execute(): pass ## [b]Funcion personalizada[/b] que se ejecutara al realizar la [b]interacción[/b]
 
 func _ready() -> void:
 	add_to_group("Interactable")
+	
+	custom_expression_handler()
+	
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	area_entered.connect(_on_area_entered)
@@ -78,6 +85,15 @@ func _ready() -> void:
 			label.position.x -= shape.size.x / 2
 		add_child(label)
 		elements.append(label)
+
+func custom_expression_handler()-> void:
+	var inputs : Dictionary = {
+		"TimeManager": TimeManager
+	}
+	var error = custom_expresion.parse(expresion, inputs.keys())
+	if error != OK: print("Expression parse error", custom_expresion.get_error_text())
+	else: custom_expresion.execute(inputs.values(),self)
+	
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Interact") and is_inside and can_interact:
@@ -138,7 +154,6 @@ func execute() -> void:
 	can_interact = false
 	consume_time_handler()
 	if dialog != null : 
-		print()
 		Dialogic.start(dialog)
 		if reusable: 
 			Dialogic.timeline_ended.connect(func (): can_interact = true, CONNECT_ONE_SHOT)
@@ -158,11 +173,9 @@ func consume_time_handler():
 		var random_final_int = TimeManager.get_minutes(random_final_time)
 		
 		var random_time = TimeManager.format_minutes(randi_range(random_initial_int, random_final_int))
-		print(random_time)
 		TimeManager.add_to_current_time(random_time)
 	else:
 		TimeManager.add_to_current_time(time_consumption)
-		print(TimeManager.get_current_time())
 #endregion
 
 

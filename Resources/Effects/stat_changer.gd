@@ -1,5 +1,5 @@
 extends Resource
-class_name statChanger
+class_name StatChanger
 
 enum OPERATION_CASE {
 	INCREASE,

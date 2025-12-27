@@ -22,27 +22,28 @@ func _ready() -> void:
 	load_default_stats()
 
 func load_default_stats() -> void :
-	for stat_res in DirAccess.get_files_at(STATS_FOLDER_PATH) :
+	for stat_res in DirAccess.get_files_at(STATS_FOLDER_PATH):
 		stats.append(load(STATS_FOLDER_PATH + stat_res))
-
-func get_stat_modifiers(_query_stat_unique_name : String) -> float :
-	var modifier : float = 0.0
-	for effect : Effect in effects :
-		for statchanger : statChanger in effect.stat_changes :
-			if statchanger.stat_unique_name == _query_stat_unique_name :
-				if statchanger.OPERATION == statChanger.OPERATION_CASE.INCREASE : modifier += statchanger.value 
-				elif statchanger.OPERATION == statChanger.OPERATION_CASE.DECREASE : modifier -= statchanger.value 
-	return modifier
 
 #endregion
 
 #region EFFECTS API
+func apply_effects(_effect_name : String = "") -> void:
+	for stat in stats:
+		stat.value += stat_change_total(stat.stat_unique_name)
 
+func stat_change_total(unique_stat_name: String) -> float:
+	var total : float = 0
+	for effect in effects:
+		total += effect.stat_change_total(unique_stat_name)
+	print("stat: ",unique_stat_name," value: ",get_stat_value(unique_stat_name)," Total: ",total)
+	return total
+	
 func add_effect(effect : Effect) -> void :
 	if has_effect(effect.effect_unique_name) :
-		# TODO probablemente manejo de niveles, no puede ser una variable de level por si acaso, usa el nombre unico/identificador
+		##TODO probablemente manejo de niveles, no puede ser una variable de level por si acaso, usa el nombre unico/identificador
 		pass
-	else :
+	else:
 		effect_added.emit(effect)
 		effects.append(effect)
 	
@@ -57,12 +58,16 @@ func has_effect(unique_effect_name : String) -> bool : ## Devuelve verdadero si 
 	if effect == null : return false
 	return effects.has(effect)
 
+func get_effect_value(unique_effect_name : String) -> float : ## Obten el valor de un efecto, usa el nombre unico/identificador
+	var effect : Effect = get_effect_res(unique_effect_name)
+	if effect == null : return -1.0
+	return effect.value
+
 func get_effect_res(unique_effect_name : String) -> Effect : ## Obten el recurso tipo efecto, usa el nombre unico/identificador
 	for effect : Effect in effects :
 		if effect.effect_unique_name == unique_effect_name :
 			return effect
 	return null
-
 #endregion
 
 #region STATS API

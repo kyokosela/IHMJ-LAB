@@ -20,7 +20,7 @@ var collshape : CollisionShape2D
 @export var show_again_at_end : bool = false ## Mostrar elementos despues de acabar la ejecucion si es necesario
 @export var destroy_at_end : bool = false ## Destruir al final de la ejecución
 @export var signal_type : SIGNAL_TYPE = SIGNAL_TYPE.AREA ## Tipo de señal que utilizara el Interactable
-
+@export var is_solid : bool = false
 @export_group("Time Interaction")
 @export var consume_time: bool = false:
 	set(value):
@@ -69,6 +69,12 @@ func _ready() -> void:
 	collshape = CollisionShape2D.new()
 	collshape.shape = shape
 	add_child(collshape)
+	
+	if is_solid :
+		var collision = collshape.duplicate()
+		var static_body := StaticBody2D.new()
+		static_body.add_child(collision)
+		add_child(static_body)
 	
 	if children_visible :
 		for x in get_children() :

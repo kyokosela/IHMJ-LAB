@@ -1,11 +1,6 @@
 extends Resource
 class_name Effect
 
-enum OPERATION_CASE {
-	INCREASE,
-	DECREASE
-}
-
 @export var effect_unique_name : String
 @export var effect_display_name : String :
 	get() :
@@ -24,9 +19,9 @@ func stat_change_total(unique_stat_name : String)-> float:
 	var total : float = 0
 	var stats_changers = stat_changes_list(unique_stat_name)
 	for stat_change in stats_changers:
-		if stat_change.OPERATION == OPERATION_CASE.INCREASE:
+		if stat_change.OPERATION == StatChanger.OPERATION_CASE.INCREASE:
 			total += stat_change.value
-		elif stat_change.OPERATION == OPERATION_CASE.DECREASE:
+		elif stat_change.OPERATION == StatChanger.OPERATION_CASE.DECREASE:
 			total -= stat_change.value
 	return total
 		

@@ -26,19 +26,18 @@ func load_default_stats() -> void :
 	for stat_res in DirAccess.get_files_at(STATS_FOLDER_PATH) :
 		stats.append(load(STATS_FOLDER_PATH + stat_res))
 		
-		
 #con la variable modifier, modifica el valor de cada stat recorriendo su recurso que se obtuvo antes
-func get_stat_modifiers(_query_stat_unique_name : String) -> float :
-	var modifier : float = 0.0
-	for effect : Effect in effects :
-		for statchanger : statChanger in effect.stat_changes :
-			if statchanger.stat_unique_name == _query_stat_unique_name :
-				if statchanger.OPERATION == statChanger.OPERATION_CASE.INCREASE : 
-					modifier += statchanger.value 
-				elif statchanger.OPERATION == statChanger.OPERATION_CASE.DECREASE : 
-					modifier -= statchanger.value 
-	return modifier
+func apply_effects(_effect_name : String = "") -> void:
+	for stat in stats:
+		stat.value += stat_change_total(stat.stat_unique_name)
 
+func stat_change_total(unique_stat_name: String) -> float:
+	var total : float = 0
+	for effect in effects:
+		total += effect.stat_change_total(unique_stat_name)
+	print("stat: ",unique_stat_name," value: ",get_stat_value(unique_stat_name)," Total: ",total)
+	return total
+	
 #endregion
 
 #region EFFECTS API

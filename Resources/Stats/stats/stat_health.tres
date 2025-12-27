@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Stat" load_steps=2 format=3 uid="uid://bq33dq06e4uuj"]
+
+[ext_resource type="Script" uid="uid://b67lcmxuqlp5t" path="res://Resources/Stats/stat_resource.gd" id="1_7occg"]
+
+[resource]
+script = ExtResource("1_7occg")
+stat_unique_name = "HEALTH"
+stat_display_name = "_STAT_HEALTH_"
+value = 100.0
+metadata/_custom_type_script = "uid://b67lcmxuqlp5t"

@@ -28,10 +28,12 @@ var minutes : int = 0:
 			julian_day += 1
 			minutes = 0
 
-var month : int = 0 :
+var month : int = 6 :
 	set(_value) :
 		month = _value
 		month_changed.emit(_value)
+
+var year : int = 2026
 
 #region logic
 
@@ -50,10 +52,10 @@ func check_scheduled_times(_new_time) -> void :
 
 ## Obtiene el [b]tiempo actual[/b] con el formato HH:MM
 func get_current_time() -> String :
-	return format_minutes()
+	return format_minutes(minutes)
 
 ## Retorna un tiempo formateado
-func format_minutes(_minute : int = minutes) -> String :
+func format_minutes(_minute : int) -> String :
 	var hour : float = _minute / 60.0
 	var minute : float = fmod(_minute,60)
 	return "%02d:%02d" % [hour, minute]
@@ -107,7 +109,7 @@ func time_left_to(_query_time : String) -> String :
 #region tools
 
 ## Valida si el formato "HH:MM" es correcto
-func is_valid_time(time_formated : String) -> bool :
+static func is_valid_time(time_formated : String) -> bool :
 	var splitted : PackedStringArray = time_formated.split(":")
 	if splitted.size() <= 1 : return false
 	if splitted[TIMES.HOUR].length() != 2 or splitted[TIMES.MINUTE].length() != 2 : return false

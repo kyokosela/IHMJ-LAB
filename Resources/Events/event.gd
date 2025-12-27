@@ -23,15 +23,13 @@ func disable() -> void :
 	is_enabled = false
 
 func execute() -> void :
-	if !is_enabled or (is_active and !can_multiple_active): 
-		return
+	if !is_enabled or (EventManager.is_event_active(event_unique_name) and !can_multiple_active): return
 	is_active = true
 	EventManager.stack_active_events.append(self)
 	event_executed.emit()
 
 func finished() -> void :
-	if !is_enabled or (!is_active and !can_multiple_active): 
-		return
+	if !is_enabled or (!EventManager.is_event_active(event_unique_name) and !can_multiple_active): return
 	is_active = false
 	EventManager.stack_active_events.erase(self)
 	event_finished.emit()

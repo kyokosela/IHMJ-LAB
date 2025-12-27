@@ -7,7 +7,10 @@ signal entity_created(entity : Entity)
 signal entity_removed(entity : Entity)
 
 func _ready() -> void:
-	EventManager.load_event(load("res://Resources/Events/test_basic_event.tres"))
+	EventManager.load_event(load("res://Resources/events/test_schedule.tres"))
+	
+	EventManager.connect_to_event("SCHEDULETEST", print.bind("hola"))
+	
 	for entity : Entity in find_children("*", "Entity", true):
 		entities[entity.name] = entity
 		entity.world = self
@@ -21,15 +24,3 @@ func kill_entity(entity: Entity) -> void:
 
 func _process(_delta: float) -> void:
 	pass
-
-func _test():
-	TimeManager.set_current_time("04:00")
-	await get_tree().create_timer(2).timeout
-	TimeManager.add_to_current_time("02:00")
-	await get_tree().create_timer(2).timeout
-	TimeManager.add_to_current_time("01:00")
-	await get_tree().create_timer(2).timeout
-	TimeManager.add_to_current_time("00:10")
-	await get_tree().create_timer(2).timeout
-	TimeManager.add_to_current_time("00:60")
-	

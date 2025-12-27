@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Stat" load_steps=2 format=3 uid="uid://bjao2vpl4gk5s"]
+
+[ext_resource type="Script" uid="uid://b67lcmxuqlp5t" path="res://Resources/Stats/stat_resource.gd" id="1_6uxwc"]
+
+[resource]
+script = ExtResource("1_6uxwc")
+stat_unique_name = "ENERGY"
+stat_display_name = "_STAT_ENERGY_"
+value = 80.0
+metadata/_custom_type_script = "uid://b67lcmxuqlp5t"

@@ -34,6 +34,8 @@ func new_game() -> void :
 	PlayerManager.add_effect(load("res://Resources/Effects/Effects/hunger_level_1.tres"))
 	PlayerManager.add_effect(load("res://Resources/Effects/Effects/dirt_level_1.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
+	EventManager.load_event(load("res://Resources/Events/GlobalEvents/event_night.tres"), true)
+	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
 
 #endregion
 

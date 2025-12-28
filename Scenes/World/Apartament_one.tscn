@@ -1,143 +1,17 @@
-[gd_scene load_steps=14 format=4 uid="uid://b843i7637f1s8"]
+[gd_scene load_steps=12 format=3 uid="uid://b843i7637f1s8"]
 
 [ext_resource type="Script" uid="uid://5fyyfswqh38m" path="res://Scripts/tutorial.gd" id="1_e8ob4"]
-[ext_resource type="Texture2D" uid="uid://dcyu7bt5gfn71" path="res://Assets/homeTiles.png" id="1_mfa3j"]
 [ext_resource type="PackedScene" uid="uid://tcey4tkkfvd8" path="res://Prefabs/Player/Player.tscn" id="2_2h6jt"]
 [ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="5_ul1ao"]
 [ext_resource type="Script" uid="uid://c13pr1gbe31et" path="res://Prefabs/Interactable/Task/interactable_task.gd" id="7_c3hay"]
-[ext_resource type="Script" uid="uid://bo21emochobl7" path="res://Prefabs/Interactable/Action/interactable_action.gd" id="7_e7syp"]
-[ext_resource type="Resource" uid="uid://bmtiaxm2713vx" path="res://Resources/Task/Tutorial/TutorialDoor.tres" id="8_e8ob4"]
+[ext_resource type="Script" uid="uid://big4o7sjh0g0y" path="res://Scripts/HouseInteracts/bathe.gd" id="7_e8ob4"]
+[ext_resource type="Script" uid="uid://c2qbhsn6tgmrc" path="res://Resources/StringChain/string_chain.gd" id="9_e7syp"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2h6jt"]
-texture = ExtResource("1_mfa3j")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-7:0/0 = 0
-8:0/0 = 0
-9:0/0 = 0
-0:1/0 = 0
-0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-1:1/0 = 0
-1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-2:1/0 = 0
-2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-3:1/0 = 0
-3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-4:1/0 = 0
-4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-5:1/0 = 0
-5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-6:1/0 = 0
-6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-7:1/0 = 0
-8:1/0 = 0
-9:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-3:2/0 = 0
-3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-4:2/0 = 0
-4:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-5:2/0 = 0
-5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-6:2/0 = 0
-6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-7:2/0 = 0
-8:2/0 = 0
-8:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-9:2/0 = 0
-0:3/0 = 0
-1:3/0 = 0
-2:3/0 = 0
-3:3/0 = 0
-3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-4:3/0 = 0
-5:3/0 = 0
-6:3/0 = 0
-6:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-7:3/0 = 0
-7:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-8:3/0 = 0
-9:3/0 = 0
-0:4/0 = 0
-1:4/0 = 0
-2:4/0 = 0
-3:4/0 = 0
-4:4/0 = 0
-5:4/0 = 0
-6:4/0 = 0
-6:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-7:4/0 = 0
-7:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-8:4/0 = 0
-9:4/0 = 0
-0:5/0 = 0
-1:5/0 = 0
-2:5/0 = 0
-3:5/0 = 0
-4:5/0 = 0
-4:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-5:5/0 = 0
-5:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-6:5/0 = 0
-7:5/0 = 0
-8:5/0 = 0
-9:5/0 = 0
-8:6/0 = 0
-9:6/0 = 0
-0:7/0 = 0
-8:7/0 = 0
-9:7/0 = 0
-0:8/0 = 0
-3:8/0 = 0
-7:8/0 = 0
-8:8/0 = 0
-9:8/0 = 0
-0:9/0 = 0
-1:9/0 = 0
-2:9/0 = 0
-3:9/0 = 0
-4:9/0 = 0
-5:9/0 = 0
-6:9/0 = 0
-7:9/0 = 0
-8:9/0 = 0
-9:9/0 = 0
-2:6/0 = 0
-1:7/size_in_atlas = Vector2i(1, 2)
-1:7/0 = 0
-1:7/0/texture_origin = Vector2i(0, 16)
-1:7/0/y_sort_origin = 4
-2:7/size_in_atlas = Vector2i(1, 2)
-2:7/0 = 0
-2:7/0/texture_origin = Vector2i(0, 16)
-2:7/0/y_sort_origin = 4
-0:6/size_in_atlas = Vector2i(2, 1)
-0:6/0 = 0
-3:6/size_in_atlas = Vector2i(1, 2)
-3:6/0 = 0
-3:6/0/texture_origin = Vector2i(0, 16)
-3:6/0/y_sort_origin = 2
-5:6/size_in_atlas = Vector2i(2, 1)
-5:6/0 = 0
-4:6/0 = 0
-4:7/size_in_atlas = Vector2i(3, 2)
-4:7/0 = 0
-7:6/size_in_atlas = Vector2i(1, 2)
-7:6/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_rn03d"]
-tile_size = Vector2i(32, 32)
-physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_2h6jt")
+[sub_resource type="Resource" id="Resource_mmwbi"]
+script = ExtResource("9_e7syp")
+string_list = Array[String](["_BED_#1_", "_BED_#2_", "_BED_#3_"])
+cooldown_message = "_BED_COOLDOWN_"
+metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e7syp"]
 size = Vector2(32, 64)
@@ -145,66 +19,52 @@ size = Vector2(32, 64)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e8ob4"]
 size = Vector2(32, 64)
 
+[sub_resource type="Resource" id="Resource_uhj6x"]
+script = ExtResource("9_e7syp")
+string_list = Array[String](["_TAKE_BATH_#1_", "_TAKE_BATH_#2_", "_TAKE_BATH_#3_"])
+cooldown_message = "_TAKE_BATH_COOLDOWN_"
+metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c3hay"]
 size = Vector2(64, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhj6x"]
-size = Vector2(64, 16)
-
 [node name="ApartamentOne" type="Node2D"]
-script = ExtResource("1_w54oy")
+script = ExtResource("1_e8ob4")
 metadata/_custom_type_script = "uid://mni1cq3j7l53"
 
 [node name="Player" parent="." instance=ExtResource("2_2h6jt")]
-y_sort_enabled = true
-tile_map_data = PackedByteArray("AAABAAAAAAABAAAAAAACAAAAAAABAAAAAAADAAAAAAABAAAAAAAEAAAAAAABAAAAAAAFAAAAAAABAAAAAAAGAAAAAAABAAAAAAAAAAEAAAADAAMAAAAAAAAAAAAEAAMAAAAGAAEAAAABAAEAAAAFAAEAAAABAAEAAAAEAAEAAAABAAEAAAADAAEAAAABAAEAAAACAAEAAAABAAEAAAABAAEAAAABAAEAAAAAAAQAAAAEAAMAAAAAAAUAAAADAAIAAAAAAAYAAAADAAIAAAAAAAcAAAADAAIAAAAAAAgAAAAGAAMAAAAAAAkAAAAEAAEAAAAAAAoAAAAEAAEAAAAAAAsAAAAEAAEAAAAAAAwAAAAEAAEAAAABAAgAAAAFAAAAAAABAAkAAAAFAAEAAAABAAoAAAAFAAEAAAABAAsAAAAFAAEAAAABAAwAAAAFAAEAAAACAAgAAAAFAAAAAAACAAkAAAAFAAEAAAACAAoAAAAFAAEAAAACAAsAAAAFAAEAAAACAAwAAAAFAAEAAAADAAgAAAAFAAAAAAADAAkAAAAFAAEAAAADAAoAAAAFAAEAAAADAAsAAAAFAAEAAAADAAwAAAAFAAEAAAAEAAgAAAAFAAAAAAAEAAkAAAAFAAEAAAAEAAoAAAAFAAEAAAAEAAsAAAAFAAEAAAAEAAwAAAAFAAEAAAAFAAQAAAAFAAMAAAAFAAUAAAADAAIAAAAFAAYAAAADAAIAAAAFAAcAAAADAAIAAAAFAAgAAAAHAAUAAAAFAAkAAAAFAAEAAAAFAAoAAAAFAAEAAAAFAAsAAAAFAAEAAAAFAAwAAAAFAAEAAAAGAAkAAAAFAAEAAAAGAAoAAAAFAAEAAAAGAAsAAAAFAAEAAAAGAAwAAAAFAAEAAAAAAA0AAAAEAAEAAAABAAQAAAABAAAAAAABAA0AAAAFAAEAAAACAAQAAAACAAAAAAACAA0AAAAFAAEAAAADAA0AAAAFAAEAAAAEAAQAAAAAAAAAAAAEAA0AAAAFAAEAAAAFAA0AAAAFAAEAAAAGAA0AAAAFAAEAAAAAAAMAAAAHAAIAAAAAAAIAAAAIAAIAAAAGAAIAAAABAAIAAAAFAAIAAAABAAIAAAAEAAIAAAABAAIAAAADAAIAAAABAAIAAAACAAIAAAABAAIAAAABAAIAAAABAAIAAAAGAAgAAAAFAAAAAAACAAUAAAACAAEAAAAEAAUAAAAAAAEAAAAEAAYAAAAAAAIAAAACAAYAAAACAAIAAAABAAYAAAABAAIAAAABAAUAAAABAAEAAAAJAAAAAAABAAAAAAAJAAEAAAABAAEAAAAJAAIAAAABAAIAAAAJAAgAAAAFAAAAAAAJAAkAAAAFAAEAAAAJAAoAAAAFAAEAAAAJAAsAAAAFAAEAAAAJAAwAAAAFAAEAAAAJAA0AAAAFAAEAAAAKAAAAAAAFAAMAAAAKAAEAAAADAAIAAAAKAAIAAAADAAIAAAAKAAgAAAAGAAAAAAAKAAkAAAAGAAEAAAAKAAoAAAAGAAEAAAAKAAsAAAAGAAEAAAAKAAwAAAAGAAEAAAAKAA0AAAAGAAEAAAAHAAAAAAABAAAAAAAHAAEAAAABAAEAAAAHAAIAAAABAAIAAAAHAAgAAAAFAAAAAAAHAAkAAAAFAAEAAAAHAAoAAAAFAAEAAAAHAAsAAAAFAAEAAAAHAAwAAAAFAAEAAAAHAA0AAAAFAAEAAAAIAAAAAAABAAAAAAAIAAEAAAABAAEAAAAIAAIAAAABAAIAAAAIAAgAAAAFAAAAAAAIAAkAAAAFAAEAAAAIAAoAAAAFAAEAAAAIAAsAAAAFAAEAAAAIAAwAAAAFAAEAAAAIAA0AAAAFAAEAAAAKAAMAAAADAAIAAAAKAAQAAAADAAMAAAAKAAUAAAAIAAIAAAAKAAYAAAAHAAIAAAA=")
-tile_set = SubResource("TileSet_rn03d")
-
-[node name="Player" parent="World" instance=ExtResource("2_2h6jt")]
 position = Vector2(272, 128)
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(1.7, 1.7)
-limit_left = 0
-limit_top = 0
-limit_right = 416
-limit_bottom = 280
-
-[node name="DebugPanel" parent="World" instance=ExtResource("5_ul1ao")]
+[node name="DebugPanel" parent="." instance=ExtResource("5_ul1ao")]
 position = Vector2i(355, 130)
+visible = false
 
-[node name="Bed" type="Area2D" parent="World"]
+[node name="Bed" type="Area2D" parent="."]
 position = Vector2(304, 128)
-script = ExtResource("7_e7syp")
-talk_chain = Array[String](["_BED_#1_", "_BED_#2_", "_BED_#3_"])
-cooldown_message = "_BED_COOLDOWN_"
-cooldown_time = "00:05"
+script = ExtResource("7_c3hay")
+event_list = Array[String](["NIGHT"])
+event_messages = SubResource("Resource_mmwbi")
 shape = SubResource("RectangleShape2D_e7syp")
 is_solid = true
-metadata/_custom_type_script = "uid://bo21emochobl7"
+metadata/_custom_type_script = "uid://c13pr1gbe31et"
 
-[node name="MainDoor" type="Area2D" parent="World"]
+[node name="MainDoor" type="Area2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(16, 128)
 script = ExtResource("7_c3hay")
-task_list = ExtResource("8_e8ob4")
+task_lists = Array[String](["TUTORIAL_DOOR"])
 shape = SubResource("RectangleShape2D_e8ob4")
 display_text = ""
 children_visible = false
+reusable = false
 is_solid = true
 collision_trigger = true
 metadata/_custom_type_script = "uid://c13pr1gbe31et"
 
-[node name="Ducha" type="Area2D" parent="World"]
+[node name="Ducha" type="Area2D" parent="."]
 position = Vector2(64, 240)
-script = ExtResource("7_c3hay")
+script = ExtResource("7_e8ob4")
+effect_list = Array[String](["DIRT"])
+effect_messages = SubResource("Resource_uhj6x")
 shape = SubResource("RectangleShape2D_c3hay")
 metadata/_custom_type_script = "uid://c13pr1gbe31et"
-
-[node name="Closet" type="Area2D" parent="World"]
-position = Vector2(240, 96)
-script = ExtResource("7_e7syp")
-talk_chain = Array[String]([""])
-shape = SubResource("RectangleShape2D_uhj6x")
-is_solid = true
-metadata/_custom_type_script = "uid://bo21emochobl7"

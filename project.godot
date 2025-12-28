@@ -22,6 +22,7 @@ GameManager="*res://Scripts/game_manager.gd"
 EventManager="*res://Scripts/event_manager.gd"
 Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 PlayerManager="*res://Scripts/player_manager.gd"
+TaskManager="*res://Scripts/task_manager.gd"
 
 [dialogic]
 

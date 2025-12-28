@@ -139,7 +139,7 @@ sources/0 = SubResource("TileSetAtlasSource_2h6jt")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ul1ao"]
 size = Vector2(50, 20)
 
-[node name="ApartamentOne" type="Node"]
+[node name="ApartamentOne" type="Node2D"]
 script = ExtResource("1_w54oy")
 metadata/_custom_type_script = "uid://mni1cq3j7l53"
 
@@ -162,6 +162,9 @@ limit_bottom = 280
 position = Vector2(272, 96)
 script = ExtResource("4_w54oy")
 shape = SubResource("RectangleShape2D_ul1ao")
+display_text = ""
+children_visible = false
+reusable = false
 is_solid = true
 dialog = ExtResource("5_mmwbi")
 expresion = "TimeManager.add_to_current_time(\"05:00\")"

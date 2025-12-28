@@ -15,7 +15,7 @@ func _initialize() -> void:
 	inventory = get_node_or_null("InventoryComponent")
 
 func _process(_delta: float) -> void:
-	set_animation_direction(facing_direction())
+	pass
 
 # MEME
 #func random_color() -> Color:

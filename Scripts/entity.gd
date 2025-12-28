@@ -82,7 +82,7 @@ func inventory_component() -> InventoryComponent:
 #region Sprite API 
 func set_animation_frame(idx: int):
 	if _has_sprite(): sprite.set_frame(idx)
-	
+
 func stop_animation():
 	if _has_sprite(): sprite.stop_animation()
 	

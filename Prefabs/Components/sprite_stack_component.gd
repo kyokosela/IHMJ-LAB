@@ -52,8 +52,6 @@ func _setup_z_index() -> void: ##Configura el z_index de cada capa según layer_
 func play_animation(anim_prefix: String) -> void:## Reproduce una animación con el prefijo dado (ej: 'idle', 'walk') Se añade automáticamente la dirección actual
 	if anim_prefix == current_animation_prefix:
 		return
-		
-	print("ol")
 	var full_anim_name = _build_animation_name(anim_prefix, current_direction)
 	
 	if not _validate_animation(full_anim_name):

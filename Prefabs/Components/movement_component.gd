@@ -25,7 +25,7 @@ var collision_raycast : RayCast2D ## Permite la colision
 var x_direction : int = 0 ## Direccion en X | -1 , 0 , 1 |
 var y_direction : int = 0 ## Direccion en Y | -1 , 0 , 1 |
 var last_input_axis : Vector2 = Vector2.ZERO ## El eje del ultimo input recibido | (1,0), (0,1) |
-var last_facing_dir : Vector2 = Vector2.ZERO ## Ultima direccion en la que la entidad quedo
+var last_facing_dir : Vector2 = Vector2.DOWN ## Ultima direccion en la que la entidad quedo
 var tile_destination : Vector2 = Vector2.ZERO ## Posicion a la que el entity interpola para movimiento suave
 var is_moving : bool = false ## Determina si la entidad esta en movimiento o no
 
@@ -126,6 +126,7 @@ func _try_start_next_move() -> void: ## Intenta empezar el siguiente movimiento 
 		
 	var next_step := _get_priority_step(input_dir)
 	last_facing_dir = next_step
+	entity.set_animation_direction(next_step)
 	
 	if is_tile_blocked(next_step):
 		buffered_input = Vector2.ZERO
@@ -149,6 +150,7 @@ func _get_priority_step(direction: Vector2) -> Vector2: ## Retorna la direccion 
 func _move_towards_tile() -> void:
 	var move_dir : Vector2 = entity.global_position.direction_to(tile_destination)
 	last_facing_dir = move_dir
+	entity.set_animation_direction(move_dir)
 	entity.velocity = move_dir * speed
 	is_moving = true
 
@@ -159,7 +161,7 @@ func is_tile_blocked(next_step : Vector2) -> bool:
 		return true
 	return false
 
-func set_direction(x_dir : int, y_dir: int):	
+func set_direction(x_dir : int, y_dir: int):
 	var new_input = Vector2(x_dir, y_dir)
 	
 	if new_input != Vector2(x_direction, y_direction) and new_input != Vector2.ZERO:

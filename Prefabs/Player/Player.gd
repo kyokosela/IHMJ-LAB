@@ -13,6 +13,9 @@ func _initialize() -> void:
 	sprite = get_component("SpriteStackComponent")
 	interaction = get_component("InteractionComponent")
 	inventory = get_node_or_null("InventoryComponent")
+	
+	Dialogic.timeline_started.connect(movement.set_physics_process.bind(false))
+	Dialogic.timeline_ended.connect(movement.set_physics_process.bind(true))
 
 func _process(_delta: float) -> void:
 	set_animation_direction(facing_direction())

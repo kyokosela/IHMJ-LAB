@@ -4,24 +4,27 @@ class_name State
 var fsm: FSMComponent
 var entity: Entity
 
-func _ready():
-	await get_tree().process_frame
-	if not fsm and get_parent() is FSMComponent:
-		fsm = get_parent()
-		entity = fsm.entity
-	call_deferred("_initialize")
-
-func _initialize():
+func _ready() -> void:
 	pass
 
-func enter():
+func enter() -> void:
 	pass
 
-func exit():
+func exit() -> void:
 	pass
 
-func update(_delta: float):
+func update(_delta: float) -> void:
 	pass
 
-func physics_update(_delta: float):
+func physics_update(_delta: float) -> void:
 	pass
+
+func change_to(state_name: String) -> void:
+	if fsm:
+		fsm.change_state(state_name)
+
+func is_current() -> bool:
+	return fsm and fsm.current_state == self
+
+func get_state_name() -> String:
+	return name

@@ -102,7 +102,7 @@ func change_layer_color(layer_name : String, color : Color):
 	if _has_sprite(): sprite.change_layer_color(layer_name, color)
 
 func current_animation() -> String:
-	return sprite.current_animation if _has_sprite() else ""
+	return sprite.get_current_animation() if _has_sprite() else ""
 
 func current_raw_animation() -> String:
 	return sprite.get_raw_animation() if _has_sprite() else ""

@@ -108,8 +108,9 @@ func time_left_to(_query_time : String) -> String :
 
 #region tools
 
+## Dejarla sin static para evitar advertencias del motor
 ## Valida si el formato "HH:MM" es correcto
-static func is_valid_time(time_formated : String) -> bool :
+func is_valid_time(time_formated : String) -> bool :
 	var splitted : PackedStringArray = time_formated.split(":")
 	if splitted.size() <= 1 : return false
 	if splitted[TIMES.HOUR].length() != 2 or splitted[TIMES.MINUTE].length() != 2 : return false

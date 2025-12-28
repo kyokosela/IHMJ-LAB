@@ -27,6 +27,7 @@ var playtime := 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	close_requested.connect(hide)
 	if !world: entity_info.hide()
 	else: 
 		world.entity_created.connect(_on_entity_added)
@@ -134,11 +135,9 @@ func _on_add_time_pressed() -> void:
 	if TimeManager.is_valid_time(line_edit.text):
 		TimeManager.add_to_current_time(line_edit.text)
 
-
 func _on_remove_time_pressed() -> void:
 	if TimeManager.is_valid_time(line_edit.text):
 		TimeManager.substract_to_current_time(line_edit.text)
-
 
 func _on_set_time_pressed() -> void:
 	if TimeManager.is_valid_time(line_edit.text):

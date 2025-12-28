@@ -23,6 +23,7 @@ var index_code: bool = GameManager.index_code
 @export var destroy_at_end : bool = false ## Destruir al final de la ejecución
 @export var signal_type : SIGNAL_TYPE = SIGNAL_TYPE.AREA ## Tipo de señal que utilizara el Interactable
 @export var is_solid : bool = false
+@export var collision_trigger : bool = false
 @export_group("Time Interaction")
 @export var consume_time: bool = false:
 	set(value):
@@ -36,11 +37,8 @@ var random_time_range: bool = false:
 var random_initial_time: String = ""
 var random_final_time: String = ""
 
-
 @export_group("Dialog Interactions")
 @export var dialog : DialogicTimeline ## Recurso de dialogo
-@export var dialog_title : String
-@export var extra_game_states : Array
 
 @export_group("Custom behaviors")
 @export var custom_visible_node : Node ## [b]Intercambia[/b] el estado de visibilidad del nodo asignado en este campo
@@ -125,21 +123,8 @@ func custom_expression_handler()-> void:
 	
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("Interact") and is_inside and can_interact:
+	if event.is_action_pressed("Interact") and is_inside and can_interact and !collision_trigger:
 		execute()
-
-#Esta comprobación causa error al solo detectar cuerpos físicos e ignorar el resto de elementos que entran el en área
-#E 0:00:01:001   emit_signalp: Error calling from signal 'body_entered' to callable: 'Area2D(interactable.gd)::_on_body_entered': Cannot convert argument 1 from Object to Object.
-
-#func _on_body_entered(_body : CharacterBody2D) -> void :
-	#if _body and !is_inside and signal_type == SIGNAL_TYPE.BODY:
-		#toggle_visible(TOGGLE_MODE.SHOW)
-		#is_inside = true
-
-#func _on_body_exited(_body : CharacterBody2D) -> void :
-	#if _body and is_inside and signal_type == SIGNAL_TYPE.BODY:
-		#toggle_visible(TOGGLE_MODE.HIDE)
-		#is_inside = false
 		
 func _on_body_entered(_body : Node2D) -> void :
 	#mejor se comprueba dentro del if para evitar errores con el motor
@@ -147,6 +132,7 @@ func _on_body_entered(_body : Node2D) -> void :
 		body_ref = _body
 		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
+		if collision_trigger : execute()
 
 func _on_body_exited(_body : Node2D) -> void :
 	if _body is Player and is_inside and signal_type == SIGNAL_TYPE.BODY:
@@ -159,6 +145,7 @@ func _on_area_entered(_area : Area2D) -> void :
 		area_ref = _area
 		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
+		if collision_trigger : execute()
 
 func _on_area_exited(_area: Area2D) -> void :
 	if _area.is_in_group("Interactor") and is_inside and signal_type == SIGNAL_TYPE.AREA:

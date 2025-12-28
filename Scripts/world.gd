@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 class_name World
 
 var entities : Dictionary[String,Entity]
@@ -15,6 +15,13 @@ func _ready() -> void:
 		entities[entity.name] = entity
 		entity.world = self
 		entity_created.emit(entity)
+	
+	print("Energy: ",PlayerManager.get_stat_value("ENERGY"))
+	print("Health: ",PlayerManager.get_stat_value("HEALTH"))
+	PlayerManager.apply_effects()
+	print("Energy: ",PlayerManager.get_stat_value("ENERGY"))
+	print("Health: ",PlayerManager.get_stat_value("HEALTH"))
+
 
 func kill_entity(entity: Entity) -> void:
 	if !entities.has(entity): return

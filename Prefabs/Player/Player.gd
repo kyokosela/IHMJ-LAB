@@ -18,7 +18,7 @@ func _initialize() -> void:
 	Dialogic.timeline_ended.connect(movement.set_physics_process.bind(true))
 
 func _process(_delta: float) -> void:
-	set_animation_direction(facing_direction())
+	pass
 
 # MEME
 #func random_color() -> Color:

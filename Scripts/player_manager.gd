@@ -3,6 +3,14 @@ extends Node
 signal effect_added(effect : Effect)
 signal effect_removed(effect : Effect)
 
+signal stat_connection_added
+
+enum CONNECTION_PARAM {
+	SIGNAL,
+	CALLABLE,
+	FLAGS
+}
+
 const STATS_FOLDER_PATH : String = "res://Resources/Stats/stats/"
 
 var stats : Array[Stat]
@@ -23,7 +31,7 @@ func _ready() -> void:
 
 #recorre el recurso que contiene las stats y carga su valor
 func load_default_stats() -> void :
-	for stat_res in DirAccess.get_files_at(STATS_FOLDER_PATH) :
+	for stat_res in DirAccess.get_files_at(STATS_FOLDER_PATH):
 		stats.append(load(STATS_FOLDER_PATH + stat_res))
 		
 #con la variable modifier, modifica el valor de cada stat recorriendo su recurso que se obtuvo antes
@@ -35,7 +43,6 @@ func stat_change_total(unique_stat_name: String) -> float:
 	var total : float = 0
 	for effect in effects:
 		total += effect.stat_change_total(unique_stat_name)
-	print("stat: ",unique_stat_name," value: ",get_stat_value(unique_stat_name)," Total: ",total)
 	return total
 	
 #endregion
@@ -73,11 +80,26 @@ func get_effect_res(unique_effect_name : String) -> Effect : ## Obten el recurso
 
 #region STATS API
 
+func get_stat_connections(unique_stat_name : String, connection_parameter: CONNECTION_PARAM = CONNECTION_PARAM) -> Array:
+	var stat : Stat = get_stat_res(unique_stat_name)
+	var connections = stat.value_changed.get_connections()
+	var parameter = CONNECTION_PARAM.find_key(connection_parameter).to_lower()
+	if !stat or connections.is_empty(): return []
+	var value : Array = []
+	for connection in connections:
+		value.append(connection[parameter])
+	return value
+	
+func is_callable_connected(unique_stat_name : String, callable: Callable) -> bool:
+	var stat : Stat = get_stat_res(unique_stat_name)
+	return stat.value_changed.is_connected(callable)
+
 func connect_to_stat(unique_stat_name : String, callable : Callable) -> void : ## Conecta una funcion al cambio de una estadistica, usa el nombre unico/identificador, Esta señal retornara el valor nuevo de la estadistica
 	var stat : Stat = get_stat_res(unique_stat_name)
 	if stat == null : 
 		return
 	stat.value_changed.connect(callable)
+	stat_connection_added.emit()
 
 func get_mood_state() -> MOOD_STATES : ## Obten el estado mental del jugador, ENUM MOOD_STATES, ejemplo MOOD_STATES.SAD
 	return MOOD_STATES[MOOD_STATES.keys()[mood_value / MOOD_STATES.size()]]

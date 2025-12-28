@@ -13,10 +13,13 @@ class_name DebugPanel
 @onready var entity_info: MarginContainer = %EntityInfo
 @onready var active_entities: FoldableContainer = %ActiveEntities
 @onready var entity_info_label: RichTextLabel = %EntityInfoLabel
+@onready var stat_list: VBoxContainer = %StatList
 
 var entity_widgets : Dictionary = {}
+var stat_widgets : Array[StatContainerDebug]
 
 const ENTITY_BUTTON = preload("uid://dyv1qmo2clngj") # UID MIEDO
+const STAT_CONTAINER = preload("uid://bgpho3743di65") # UID MIEDO
 
 var current_entity : Entity
 var frame_time_ms := 0.0
@@ -24,10 +27,13 @@ var playtime := 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	close_requested.connect(hide)
 	if !world: entity_info.hide()
 	else: 
 		world.entity_created.connect(_on_entity_added)
 		world.entity_removed.connect(_on_entity_removed)
+	setup_stats()
+	PlayerManager.stat_connection_added.connect(update_stats)
 
 func _on_entity_added(entity: Node) -> void:
 	if entity_widgets.has(entity):
@@ -36,8 +42,21 @@ func _on_entity_added(entity: Node) -> void:
 	active_entities.add_child(widget)
 	widget.setup(self,entity)
 	entity_widgets[entity] = widget
+
+func setup_stats() -> void:
+	for stat in PlayerManager.stats:
+		var widget = STAT_CONTAINER.instantiate()
+		widget.stat = stat
+		stat_list.add_child(widget)
+		stat_widgets.append(widget)
+		widget.info_update()
+
+func update_stats() -> void:
+	print("ol")
+	for x in stat_widgets:
+		x.info_update()
 	
-	
+
 func _on_entity_removed(entity: Node) -> void:
 	if not entity_widgets.has(entity):
 		return
@@ -116,11 +135,9 @@ func _on_add_time_pressed() -> void:
 	if TimeManager.is_valid_time(line_edit.text):
 		TimeManager.add_to_current_time(line_edit.text)
 
-
 func _on_remove_time_pressed() -> void:
 	if TimeManager.is_valid_time(line_edit.text):
 		TimeManager.substract_to_current_time(line_edit.text)
-
 
 func _on_set_time_pressed() -> void:
 	if TimeManager.is_valid_time(line_edit.text):

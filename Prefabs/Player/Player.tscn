@@ -1,6 +1,6 @@
 [gd_scene load_steps=49 format=3 uid="uid://tcey4tkkfvd8"]
 
-[ext_resource type="Script" uid="uid://76eoxychonuw" path="res://Prefabs/Player/player.gd" id="1_t5con"]
+[ext_resource type="Script" uid="uid://76eoxychonuw" path="res://Prefabs/Player/Player.gd" id="1_t5con"]
 [ext_resource type="Script" uid="uid://cx06pj7isyhot" path="res://Prefabs/Components/movement_component.gd" id="2_1cl7s"]
 [ext_resource type="Script" uid="uid://crlr2he6ydrsf" path="res://Prefabs/Components/interaction_component.gd" id="2_5virf"]
 [ext_resource type="Script" uid="uid://dxbbffiau4vqt" path="res://Prefabs/Components/sprite_stack_component.gd" id="2_8ipit"]
@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://curbu5sfq0py3" path="res://Assets/NPCS/npc_idle_up.png" id="5_xo5gc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rj4gf"]
-size = Vector2(8, 8)
+size = Vector2(8, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ae6jo"]
 atlas = ExtResource("3_4rw4d")
@@ -312,6 +312,7 @@ radius = 5.0
 script = ExtResource("1_t5con")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_rj4gf")
 
 [node name="InventoryComponent" type="Node2D" parent="."]

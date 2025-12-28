@@ -371,16 +371,7 @@ shape = SubResource("RectangleShape2D_ikan7")
 display_text = ""
 children_visible = false
 reusable = false
-is_solid = null
-consume_time = null
 dialog = ExtResource("5_l3fqk")
-dialog_title = null
-extra_game_states = ""
-expresion = null
-time_consumption = "02:00"
-random_time_range = ""
-random_initial_time = "00:10"
-random_final_time = "00:15"
 metadata/_custom_type_script = "uid://btpm0l5mnnxxf"
 
 [node name="DebugPanel" parent="." node_paths=PackedStringArray("world") instance=ExtResource("7_sdauk")]

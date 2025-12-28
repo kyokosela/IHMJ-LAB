@@ -88,7 +88,11 @@ func _ready() -> void:
 
 func custom_expression_handler()-> void:
 	var inputs : Dictionary = {
-		"TimeManager": TimeManager
+		"TimeManager": TimeManager,
+		"EventManager": EventManager,
+		"PlayerManager": PlayerManager,
+		"GameManager": GameManager,
+		"Dialogic": Dialogic
 	}
 	var error = custom_expresion.parse(expresion, inputs.keys())
 	if error != OK: print("Expression parse error", custom_expresion.get_error_text())

@@ -6,6 +6,9 @@ var tile_size : Vector2 = Vector2(16,16) # No se si se cambiara o algo por ahora
 
 var fps: float = 0.0
 
+#booleana de seguridad para perminir o no la indexación de código externo
+var index_code: bool = false
+
 var create_log : bool = false ## activar si quieren generar logs
 var print_mode : bool = true
 var log_file_name : String

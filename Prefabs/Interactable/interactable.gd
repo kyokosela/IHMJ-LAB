@@ -9,6 +9,8 @@ signal executed ## Se emite cuando el jugador realiza la [b]interacción[/b]
 enum SIGNAL_TYPE {AREA, BODY}
 enum TOGGLE_MODE {TOGGLE,SHOW,HIDE}
 var collshape : CollisionShape2D
+#booleana para codigo de seguridad
+var index_code: bool = GameManager.index_code
 
 ## Rango de interaccion
 @export_group("Behaviour")
@@ -20,7 +22,7 @@ var collshape : CollisionShape2D
 @export var show_again_at_end : bool = false ## Mostrar elementos despues de acabar la ejecucion si es necesario
 @export var destroy_at_end : bool = false ## Destruir al final de la ejecución
 @export var signal_type : SIGNAL_TYPE = SIGNAL_TYPE.AREA ## Tipo de señal que utilizara el Interactable
-
+@export var is_solid : bool = false
 @export_group("Time Interaction")
 @export var consume_time: bool = false:
 	set(value):
@@ -70,6 +72,12 @@ func _ready() -> void:
 	collshape.shape = shape
 	add_child(collshape)
 	
+	if is_solid :
+		var collision = collshape.duplicate()
+		var static_body := StaticBody2D.new()
+		static_body.add_child(collision)
+		add_child(static_body)
+	
 	if children_visible :
 		for x in get_children() :
 			if x == collshape : continue
@@ -87,6 +95,16 @@ func _ready() -> void:
 		elements.append(label)
 
 func custom_expression_handler()-> void:
+
+	#validación de seguridad para indexación de código externo
+	if not index_code:
+		if !Engine.is_editor_hint():
+			print_rich("[color=yellow][Security][/color] Indexación de código denegada para: ", name)
+		return
+
+	if expresion.strip_edges().is_empty():
+		return
+
 	var inputs : Dictionary = {
 		"TimeManager": TimeManager,
 		"EventManager": EventManager,
@@ -95,8 +113,15 @@ func custom_expression_handler()-> void:
 		"Dialogic": Dialogic
 	}
 	var error = custom_expresion.parse(expresion, inputs.keys())
-	if error != OK: print("Expression parse error", custom_expresion.get_error_text())
-	else: custom_expresion.execute(inputs.values(),self)
+	
+	if error != OK: 
+		print("Expression parse error", custom_expresion.get_error_text())
+
+	else: 
+		custom_expresion.execute(inputs.values(),self)
+
+	if custom_expresion.has_execute_failed():
+		push_error("Error de ejecución en la expresión" + name)
 	
 
 func _unhandled_input(event: InputEvent) -> void:

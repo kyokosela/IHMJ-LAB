@@ -1,26 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://dp5owm80w2vqt"]
+[gd_scene load_steps=3 format=3 uid="uid://dp5owm80w2vqt"]
 
 [ext_resource type="Script" uid="uid://dikt8rqxl71gv" path="res://Prefabs/Workspace/Computer/desktop.gd" id="1_dtfhs"]
-[ext_resource type="Resource" uid="uid://d082lpjnncmgj" path="res://Resources/Computer/Profiles/mayui_pc.tres" id="2_dtfhs"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_3kpab"]
 
-[node name="Desktop" type="Node2D"]
-
-[node name="Display" type="CanvasLayer" parent="."]
-
-[node name="Desktop" type="Control" parent="Display"]
+[node name="Desktop" type="Control"]
+custom_minimum_size = Vector2(800, 600)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 script = ExtResource("1_dtfhs")
-current_profile = ExtResource("2_dtfhs")
 
-[node name="Wallpaper" type="TextureRect" parent="Display/Desktop"]
+[node name="Wallpaper" type="TextureRect" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -31,14 +25,14 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("PlaceholderTexture2D_3kpab")
 
-[node name="Icons" type="Control" parent="Display/Desktop"]
+[node name="Icons" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Display/Desktop/Icons"]
+[node name="MarginContainer" type="MarginContainer" parent="Icons"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -47,14 +41,14 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="IconGrid" type="GridContainer" parent="Display/Desktop/Icons/MarginContainer"]
+[node name="IconGrid" type="GridContainer" parent="Icons/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 20
 columns = 3
 
-[node name="Windows" type="Control" parent="Display/Desktop"]
+[node name="Windows" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -64,7 +58,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Taskbar" type="Panel" parent="Display/Desktop"]
+[node name="Taskbar" type="Panel" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 12
@@ -76,7 +70,7 @@ grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Display/Desktop/Taskbar"]
+[node name="MarginContainer" type="MarginContainer" parent="Taskbar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -86,27 +80,27 @@ grow_vertical = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Display/Desktop/Taskbar/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Taskbar/MarginContainer"]
 layout_mode = 2
 
-[node name="PowerButton" type="Button" parent="Display/Desktop/Taskbar/MarginContainer/HBoxContainer"]
+[node name="PowerButton" type="Button" parent="Taskbar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "apagar coso"
 
-[node name="VSeparator" type="VSeparator" parent="Display/Desktop/Taskbar/MarginContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="Taskbar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="ActiveWindows" type="HBoxContainer" parent="Display/Desktop/Taskbar/MarginContainer/HBoxContainer"]
+[node name="ActiveWindows" type="HBoxContainer" parent="Taskbar/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VSeparator2" type="VSeparator" parent="Display/Desktop/Taskbar/MarginContainer/HBoxContainer"]
+[node name="VSeparator2" type="VSeparator" parent="Taskbar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="clock" type="Label" parent="Display/Desktop/Taskbar/MarginContainer/HBoxContainer"]
+[node name="clock" type="Label" parent="Taskbar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "12:61:67"
 horizontal_alignment = 1

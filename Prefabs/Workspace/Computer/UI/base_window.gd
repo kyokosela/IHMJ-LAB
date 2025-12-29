@@ -55,6 +55,7 @@ func maximize():
 		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		offset_bottom = -bottom_margin
 		is_maximized = true
+
 	focus()
 
 func focus():

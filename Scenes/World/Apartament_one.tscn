@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://b843i7637f1s8"]
+[gd_scene load_steps=13 format=3 uid="uid://bvaqnpkfdbwb8"]
 
-[ext_resource type="Script" uid="uid://5fyyfswqh38m" path="res://Scripts/tutorial.gd" id="1_e8ob4"]
+[ext_resource type="Script" path="res://Scripts/tutorial.gd" id="1_e8ob4"]
 [ext_resource type="PackedScene" uid="uid://tcey4tkkfvd8" path="res://Prefabs/Player/Player.tscn" id="2_2h6jt"]
+[ext_resource type="PackedScene" uid="uid://cu461bcw0jkb8" path="res://Scenes/TestScenes/tilemapbackup.tscn" id="2_c3hay"]
 [ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="5_ul1ao"]
 [ext_resource type="Script" uid="uid://c13pr1gbe31et" path="res://Prefabs/Interactable/Task/interactable_task.gd" id="7_c3hay"]
 [ext_resource type="Script" uid="uid://big4o7sjh0g0y" path="res://Scripts/HouseInteracts/bathe.gd" id="7_e8ob4"]
@@ -32,6 +33,8 @@ size = Vector2(64, 64)
 script = ExtResource("1_e8ob4")
 metadata/_custom_type_script = "uid://mni1cq3j7l53"
 
+[node name="World" parent="." instance=ExtResource("2_c3hay")]
+
 [node name="Player" parent="." instance=ExtResource("2_2h6jt")]
 position = Vector2(272, 128)
 
@@ -45,6 +48,9 @@ script = ExtResource("7_c3hay")
 event_list = Array[String](["NIGHT"])
 event_messages = SubResource("Resource_mmwbi")
 shape = SubResource("RectangleShape2D_e7syp")
+display_text = ""
+children_visible = false
+reusable = false
 is_solid = true
 metadata/_custom_type_script = "uid://c13pr1gbe31et"
 
@@ -67,4 +73,7 @@ script = ExtResource("7_e8ob4")
 effect_list = Array[String](["DIRT"])
 effect_messages = SubResource("Resource_uhj6x")
 shape = SubResource("RectangleShape2D_c3hay")
+display_text = ""
+children_visible = false
+reusable = false
 metadata/_custom_type_script = "uid://c13pr1gbe31et"

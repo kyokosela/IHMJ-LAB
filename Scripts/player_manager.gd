@@ -32,6 +32,9 @@ func _ready() -> void:
 #recorre el recurso que contiene las stats y carga su valor
 func load_default_stats() -> void :
 	for stat_res in DirAccess.get_files_at(STATS_FOLDER_PATH):
+		#validación de tipo recursos, para evitar errores
+		if not stat_res.ends_with("tres") and not stat_res.ends_with("res"):
+			continue
 		stats.append(load(STATS_FOLDER_PATH + stat_res))
 		
 #con la variable modifier, modifica el valor de cada stat recorriendo su recurso que se obtuvo antes

@@ -12,7 +12,7 @@ func _initialize() -> void:
 	movement = get_component("MovementComponent")
 	sprite = get_component("SpriteStackComponent")
 	interaction = get_component("InteractionComponent")
-	inventory = get_node_or_null("InventoryComponent")
+	inventory = get_node_or_null("InventoryContainer")
 
 func _process(_delta: float) -> void:
 	pass

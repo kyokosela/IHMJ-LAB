@@ -1,17 +1,19 @@
-@tool
 extends Resource
 class_name Item
 
-@export var item_name : String = ""
-@export var item_unique_name : String = "": # En caso de que items diferentes puedan tener el mismo nombre para algo secreto no se
-	get: 
-		if item_unique_name == "": return item_name
-		else: return item_unique_name
-	set(value):
-		if  value == "": item_unique_name = item_name
-		else: item_unique_name = value
-@export var texture : Texture2D
-@export var is_stackable : bool = false
-@export var max_stack : int = 1
-@export var item_description : String = ""
-@export var unique_item : bool = false
+@export var data : ItemData
+var condition : float = 100.0
+var states : Dictionary[String, ItemState]
+
+func _init(p_data : ItemData) -> void:
+	data = p_data
+
+func add_state(state : ItemState) -> void: ## Añade un estado, en caso de que ya contenga un estado de un grupo exclusivo, se reemplazara por el nuevo estado
+	if state.exclusive_group != "":
+		for s : ItemState in states.values():
+			if s.exclusive_group == state.exclusive_group:
+				states.erase(s.id)
+	states[state.id] = state
+
+func has_state(id : String) -> bool:
+	return states.has(id)

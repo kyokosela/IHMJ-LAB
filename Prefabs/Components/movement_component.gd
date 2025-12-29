@@ -8,6 +8,7 @@ signal direction_changed(new_direction : Vector2, prev_direction : Vector2)
 signal velocity_changed(new_velocity: Vector2)
 
 @export var speed : int = 200 ## Velocidad de movimiento
+@export var run_speed : int = 240
 @export var can_move : bool = true ## Determina si la entidad puede moverse o no
 @export_subgroup("input_buffer_values")
 #variables para input buffer
@@ -19,6 +20,13 @@ var buffered_input: Vector2 = Vector2.ZERO
 @export var tile_based: bool = true ## Determina el tipo de movimiento, si es falso el movimiento sera libre/vectorial
 @export_custom(PROPERTY_HINT_LAYERS_2D_PHYSICS, "Collision Mask") var raycast_mask : int = 1
 
+@export_subgroup("Fallback")
+@export var stuck_time_limit := 0.15 # segundos
+@export var min_movement_delta := 0.5 # pixeles
+
+var stuck_timer := 0.0
+var last_position := Vector2.ZERO
+
 var tile_size: Vector2: ## Determina que tanto se va a mover el jugador dependiendo del tamaño de los tiles.
 	get: return GameManager.tile_size # Para acortar, en caso de que no lo quieran tener como una global solo quitar esto jasdj
 var collision_raycast : RayCast2D ## Permite la colision
@@ -28,13 +36,11 @@ var last_input_axis : Vector2 = Vector2.ZERO ## El eje del ultimo input recibido
 var last_facing_dir : Vector2 = Vector2.DOWN ## Ultima direccion en la que la entidad quedo
 var tile_destination : Vector2 = Vector2.ZERO ## Posicion a la que el entity interpola para movimiento suave
 var is_moving : bool = false ## Determina si la entidad esta en movimiento o no
-
+var is_running : bool = false
 #endregion
 
 #region DEFAULTS
 func _initialize():
-	tile_destination = entity.global_position
-	assert(tile_destination != null,"Tile destination should not be NULL")
 	if collision_raycast: return
 	collision_raycast = RayCast2D.new()
 	collision_raycast.enabled = true
@@ -44,6 +50,10 @@ func _initialize():
 	collision_raycast.hit_from_inside = false
 	add_child(collision_raycast)
 
+	last_position = entity.global_position
+
+	tile_destination = entity.global_position
+	assert(tile_destination != null,"Tile destination should not be NULL")
 func _ready() -> void:
 	super()
 	call_deferred("_initialize")
@@ -82,20 +92,36 @@ func apply_movement(delta : float): ## Determina que tipo de movimiento se usara
 		movement_started.emit()
 	if was_moving and not is_moving: 
 		movement_stopped.emit()
-	
 	entity.move_and_slide()
 	
 func tile_movement(_delta: float) -> void: ## Maneja el movimiento basado por tiles
 	var distance := entity.global_position.distance_to(tile_destination)
-	
-	## El sistema de detección de tiles planteado causa un pequeño delay en los inputs por los pixeles que 
-	## tiene que detectar el jugador al pasar a cada tile, esto interfiere directamente con los fps
-	## hay que usar un input buffer para amortiguarlo
+	if is_moving:
+		var moved := entity.global_position.distance_to(last_position)
+		if moved < min_movement_delta:
+			stuck_timer += _delta
+		else:
+			stuck_timer = 0.0
+		last_position = entity.global_position
+		if stuck_timer >= stuck_time_limit:
+			_handle_stuck()
+			return
 	if distance <= 3.0:
 		_snap_to_tile()
 		_try_start_next_move()
 	else:
 		_move_towards_tile()
+
+func _handle_stuck() -> void:
+	entity.velocity = Vector2.ZERO
+	is_moving = false
+	stuck_timer = 0.0
+	
+	entity.global_position = entity.global_position.snapped(tile_size) + tile_size / 2
+	
+	buffered_input = Vector2.ZERO
+	
+	tile_destination = entity.global_position
 
 func dynamic_movement(delta:float): ## Maneja el movimiento libre/vectorial 
 	var desired_direction = Vector2(x_direction,y_direction).normalized()
@@ -148,6 +174,9 @@ func _get_priority_step(direction: Vector2) -> Vector2: ## Retorna la direccion 
 	return Vector2(0, sign(direction.y))
 
 func _move_towards_tile() -> void:
+	if entity.is_on_wall():
+		_handle_stuck()
+		return
 	var move_dir : Vector2 = entity.global_position.direction_to(tile_destination)
 	last_facing_dir = move_dir
 	entity.set_animation_direction(move_dir)

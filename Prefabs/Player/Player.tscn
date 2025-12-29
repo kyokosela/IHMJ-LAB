@@ -1,12 +1,15 @@
-[gd_scene load_steps=49 format=3 uid="uid://tcey4tkkfvd8"]
+[gd_scene load_steps=54 format=3 uid="uid://tcey4tkkfvd8"]
 
 [ext_resource type="Script" uid="uid://76eoxychonuw" path="res://Prefabs/Player/Player.gd" id="1_t5con"]
 [ext_resource type="Script" uid="uid://cx06pj7isyhot" path="res://Prefabs/Components/movement_component.gd" id="2_1cl7s"]
 [ext_resource type="Script" uid="uid://crlr2he6ydrsf" path="res://Prefabs/Components/interaction_component.gd" id="2_5virf"]
 [ext_resource type="Script" uid="uid://dxbbffiau4vqt" path="res://Prefabs/Components/sprite_stack_component.gd" id="2_8ipit"]
+[ext_resource type="Script" uid="uid://dvc4ajwmih83o" path="res://Prefabs/Components/inventory_container.gd" id="2_21ku0"]
 [ext_resource type="Script" uid="uid://ctwvwqkrwenys" path="res://Prefabs/Components/inventory_component.gd" id="2_rcqut"]
 [ext_resource type="Texture2D" uid="uid://cphscwf35272e" path="res://Assets/NPCS/npc_idle_down.png" id="3_4rw4d"]
 [ext_resource type="Script" uid="uid://dghcs7x1a73jn" path="res://Prefabs/Components/state_machine_component.gd" id="3_c4lgr"]
+[ext_resource type="Script" uid="uid://ckwswawlru4js" path="res://Resources/Containers/container_rules.gd" id="3_mvuy7"]
+[ext_resource type="Script" uid="uid://bo45lmkm6yiet" path="res://Resources/Containers/container_environment.gd" id="4_3opp6"]
 [ext_resource type="Texture2D" uid="uid://621ahvudno68" path="res://Assets/NPCS/npc_idle_right.png" id="4_ae6jo"]
 [ext_resource type="Script" uid="uid://ducauixn8n82c" path="res://Prefabs/Player/States/player_idle.gd" id="4_hnr8y"]
 [ext_resource type="Script" uid="uid://cgylbrtu8pte4" path="res://Prefabs/Player/States/player_walk.gd" id="5_5virf"]
@@ -14,6 +17,15 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rj4gf"]
 size = Vector2(8, 7)
+
+[sub_resource type="Resource" id="Resource_vbwbj"]
+script = ExtResource("3_mvuy7")
+allowed_types = Array[int]([1, 2, 3])
+metadata/_custom_type_script = "uid://ckwswawlru4js"
+
+[sub_resource type="Resource" id="Resource_21ku0"]
+script = ExtResource("4_3opp6")
+metadata/_custom_type_script = "uid://bo45lmkm6yiet"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ae6jo"]
 atlas = ExtResource("3_4rw4d")
@@ -315,9 +327,15 @@ script = ExtResource("1_t5con")
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_rj4gf")
 
-[node name="InventoryComponent" type="Node2D" parent="."]
+[node name="InventoryContainer" type="Node2D" parent="." node_paths=PackedStringArray("inventory")]
+script = ExtResource("2_21ku0")
+inventory = NodePath("InventoryComponent")
+rules = SubResource("Resource_vbwbj")
+environment = SubResource("Resource_21ku0")
+metadata/_custom_type_script = "uid://dvc4ajwmih83o"
+
+[node name="InventoryComponent" type="Node2D" parent="InventoryContainer"]
 script = ExtResource("2_rcqut")
-size = 2
 metadata/_custom_type_script = "uid://ctwvwqkrwenys"
 
 [node name="SpriteStackComponent" type="Node2D" parent="."]

@@ -65,7 +65,7 @@ func set_current_time(_target_time : String) -> void:
 	assert(is_valid_time(_target_time), "Time should have a valid format")
 	var times : int = get_minutes(_target_time)
 	minutes = times
-
+ 
 ## Comprueba con el parametro si el tiempo establecido es superior al tiempo actual del juego
 func is_time_higher(_query_time : String) -> bool:
 	assert(is_valid_time(_query_time), "Time should have a valid format")

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ChoiceEvent" load_steps=2 format=3 uid="uid://cg33rsx7eo2kl"]
+
+[ext_resource type="Script" uid="uid://btyf5mfoc7176" path="res://Resources/Computer/Apps/Mail/Events/choice_event.gd" id="1_bpoaf"]
+
+[resource]
+script = ExtResource("1_bpoaf")
+options = Array[String](["croissant", "quasó"])
+metadata/_custom_type_script = "uid://btyf5mfoc7176"

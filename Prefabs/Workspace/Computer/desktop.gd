@@ -2,30 +2,34 @@ extends Control
 class_name Desktop
 
 #region SETUP
-@export var current_profile: DesktopProfile
+@export var current_profile: DesktopProfile ## perfil que se quiere cargar in-game
 
-@onready var icon_grid = $Icons/MarginContainer/GridContainer
-@onready var wallpaper = $Wallpaper
-@onready var windows: Control = $Windows
-@onready var active_windows: HBoxContainer = $Taskbar/MarginContainer/HBoxContainer/ActiveWindows
-@onready var taskbar: Panel = $Taskbar
+@onready var icon_grid := %IconGrid
+@onready var wallpaper := %Wallpaper
+@onready var windows_root := %Windows
+@onready var active_windows := %ActiveWindows
+@onready var taskbar: Panel = %Taskbar
 
-var window_base = preload("res://Prefabs/Workspace/Computer/BaseWindow.tscn")
+var base_window = preload("uid://b3gndi1tcb5on")
 var running_apps := {}
+var taskbar_group := ButtonGroup.new()
 
 func _ready() -> void:
-	if current_profile: 
-		load_profile(current_profile)
+	taskbar_group.allow_unpress = true
+	if current_profile: load_profile(current_profile)
 #endregion
 
 #region LOGIC
+
+## obtiene los datos del perfil cargado
 func load_profile(profile: DesktopProfile):
 	if profile.wallpaper: 
 		wallpaper.texture = profile.wallpaper
-		
+
 	for app_data in profile.installed_apps: 
 		create_icon(app_data)
 
+## Crea instancias de iconos para las aplicaciones cargadas
 func create_icon(data: AppData):
 	var btn = Button.new()
 	btn.text = data.app_name
@@ -35,21 +39,27 @@ func create_icon(data: AppData):
 	btn.flat = true
 	btn.pressed.connect(open_app.bind(data))
 	icon_grid.add_child(btn)
- 	
+ 
+# TODO: mantener status de la aplicación luego de cerrarse,
+# e.g. cuando ya completaste todos los correos, no puedes volver a hacerlos.
+
+## Crea la instancia de la aplicación. 
+## Si ya fue creada, muestra la misma.
+## Si fue cerrada pero vuelto a abrir. Se vuelve a crear  
 func open_app(data: AppData):
 	if running_apps.has(data):
 		var window = running_apps[data]
-		if is_instance_valid(window):
-			window.show()
-			return
-		else:
-			running_apps.erase(data)
+		window.focus()
+		return
+	else:
+		running_apps.erase(data)
 			
 	spawn_new_window(data)
-	
+
+## Instancia la escena de la app en una ventana y añade una referencia a la barra de tareas
 func spawn_new_window(data: AppData):
-	var window = window_base.instantiate()
-	$Windows.add_child(window)
+	var window = base_window.instantiate()
+	windows_root.add_child(window)
 	
 	window.app_data = data
 	running_apps[data] = window
@@ -58,31 +68,32 @@ func spawn_new_window(data: AppData):
 	var btn = Button.new()
 	btn.text = data.app_name
 	btn.toggle_mode = true
-	btn.button_pressed = true
+	btn.button_group = taskbar_group
 	
-	btn.pressed.connect(func():
-		if not window.visible:
-			window.visible = true
-			windows.move_child(window, -1)
-			btn.set_pressed_no_signal(true)
-		elif window.get_index() < windows.get_child_count() - 1:
-			windows.move_child(window, -1)
-			btn.set_pressed_no_signal(true)
-		else:
-			window.minimize()
-			btn.set_pressed_no_signal(false)
+	btn.pressed.connect(func(): 
+		if btn.button_pressed: window.focus()
+		else: window.minimize()
 	)
 	
-	window.close_requested.connect(
-		func():
-			running_apps.erase(data)
-			btn.queue_free()	
+	window.focused.connect(func():
+			btn.set_block_signals(true)
+			btn.button_pressed = true
+			btn.set_block_signals(false)
 	)
 	
-	window.maximize_requested.connect(func(): btn.button_pressed = true)
-	window.minimize_requested.connect(func(): btn.button_pressed = false)
+	window.minimized.connect(func():
+			btn.set_block_signals(true)
+			btn.button_pressed = false
+			btn.set_block_signals(false)
+	)
 	
+	window.closed.connect(func():
+		running_apps.erase(data)
+		btn.queue_free()	
+	)
+
 	active_windows.add_child(btn)
+	window.focus()
 
 func set_brightness():
 	pass

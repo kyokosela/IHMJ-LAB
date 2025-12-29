@@ -1,14 +1,15 @@
-[gd_resource type="Resource" script_class="DesktopProfile" load_steps=7 format=3 uid="uid://d082lpjnncmgj"]
+[gd_resource type="Resource" script_class="DesktopProfile" load_steps=8 format=3 uid="uid://d082lpjnncmgj"]
 
-[ext_resource type="Script" uid="uid://bnv3nah4ycqtd" path="res://Resources/Computer/app_data.gd" id="1_rfrm8"]
+[ext_resource type="Script" uid="uid://bnv3nah4ycqtd" path="res://Resources/Computer/Apps/app_data.gd" id="1_rfrm8"]
 [ext_resource type="Resource" uid="uid://cdluox22uiqji" path="res://Resources/Computer/Apps/test.tres" id="2_fwgu4"]
-[ext_resource type="Script" uid="uid://dub7asmchprhm" path="res://Resources/Computer/desktop_profile.gd" id="2_tnhku"]
+[ext_resource type="Script" uid="uid://dub7asmchprhm" path="res://Resources/Computer/Profiles/desktop_profile.gd" id="2_tnhku"]
 [ext_resource type="Resource" uid="uid://d2mj0y2q3vvpw" path="res://Resources/Computer/Apps/test2.tres" id="3_jiapt"]
 [ext_resource type="Texture2D" uid="uid://bjv6sibxm861c" path="res://Assets/temporalLogo.png" id="4_jiapt"]
 [ext_resource type="Resource" uid="uid://idspew6lhfpd" path="res://Resources/Computer/Apps/test3.tres" id="4_skmiy"]
+[ext_resource type="Resource" uid="uid://ds2ocipaocfst" path="res://Resources/Computer/Apps/Mail.tres" id="4_ulaov"]
 
 [resource]
 script = ExtResource("2_tnhku")
 wallpaper = ExtResource("4_jiapt")
-installed_apps = Array[ExtResource("1_rfrm8")]([ExtResource("2_fwgu4"), ExtResource("3_jiapt"), ExtResource("2_fwgu4"), ExtResource("4_skmiy")])
+installed_apps = Array[ExtResource("1_rfrm8")]([ExtResource("2_fwgu4"), ExtResource("3_jiapt"), ExtResource("4_ulaov"), ExtResource("4_skmiy")])
 metadata/_custom_type_script = "uid://dub7asmchprhm"

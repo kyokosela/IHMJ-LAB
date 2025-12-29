@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AppData" load_steps=4 format=3 uid="uid://idspew6lhfpd"]
 
-[ext_resource type="Script" uid="uid://bnv3nah4ycqtd" path="res://Resources/Computer/app_data.gd" id="1_ds8bb"]
+[ext_resource type="Script" uid="uid://bnv3nah4ycqtd" path="res://Resources/Computer/Apps/app_data.gd" id="1_ds8bb"]
 [ext_resource type="Texture2D" uid="uid://bjv6sibxm861c" path="res://Assets/temporalLogo.png" id="1_tni4s"]
 [ext_resource type="PackedScene" uid="uid://d24jubegvm4ly" path="res://Scenes/TestScenes/test.tscn" id="3_t1m0q"]
 

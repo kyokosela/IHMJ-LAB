@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="EventDaily" load_steps=2 format=3 uid="uid://bcdf43s0waxpj"]
+
+[ext_resource type="Script" uid="uid://cxf3viptxvmc3" path="res://Resources/Events/event_daily.gd" id="1_e4y7n"]
+
+[resource]
+script = ExtResource("1_e4y7n")
+metadata/_custom_type_script = "uid://cxf3viptxvmc3"

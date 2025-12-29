@@ -467,3 +467,31 @@ func print_debug_moment() -> void:
 	printerr("\tAt event ", current_event_idx+1, " (",current_timeline_events[current_event_idx].event_name, ' Event) in timeline "', current_timeline.get_identifier(), '" (',current_timeline.resource_path,').')
 	print("\n")
 #endregion
+
+#region CUSTOM BEHAVIOURS
+
+var cha_list : Dictionary[String, DialogicCharacter]
+
+var characters_path : Dictionary[String, String] = {
+	"Mayui" : "res://DialoguePlugin/CHARACTERS/Mayui.dch"
+}
+
+func create_quick_dialog(cha_path : String, string : String) -> DialogicTimeline :
+	var events := []
+	var text_event := DialogicTextEvent.new()
+	
+	if !cha_list.keys().has(cha_path) : 
+		cha_list[cha_path] = load(cha_path)
+
+	text_event.character = cha_list[cha_path]
+	text_event.text = string
+	events.append(text_event)
+	
+	var timeline := DialogicTimeline.new()
+	timeline.events = events
+	timeline.events_processed = true
+	start(timeline)
+	
+	return timeline
+	
+#endregion

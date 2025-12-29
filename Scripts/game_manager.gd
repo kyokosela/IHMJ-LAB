@@ -2,7 +2,7 @@ extends Node
 
 #this bool can be used in dialogue for manage Mayui movement
 var is_dialogue_active: bool = false
-var tile_size : Vector2 = Vector2(16,16) # No se si se cambiara o algo por ahora lo dejare aca, si lo cambian, cambien el movement component
+var tile_size : Vector2 = Vector2(32,32) # No se si se cambiara o algo por ahora lo dejare aca, si lo cambian, cambien el movement component
 
 var fps: float = 0.0
 
@@ -33,6 +33,9 @@ func new_game() -> void :
 	TimeManager.minutes = 360
 	PlayerManager.add_effect(load("res://Resources/Effects/Effects/hunger_level_1.tres"))
 	PlayerManager.add_effect(load("res://Resources/Effects/Effects/dirt_level_1.tres"))
+	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
+	EventManager.load_event(load("res://Resources/Events/GlobalEvents/event_night.tres"), true)
+	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
 
 #endregion
 

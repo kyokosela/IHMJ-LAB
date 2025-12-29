@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://ckacghf7gq1mp"
+
+[deps]
+
+files=["res://Textfiles/Interact/Interacts.es.translation", "res://Textfiles/Interact/Interacts.en.translation"]
+
+source_file="res://Textfiles/Interact/Interacts.csv"
+dest_files=["res://Textfiles/Interact/Interacts.es.translation", "res://Textfiles/Interact/Interacts.en.translation"]
+
+[params]
+
+compress=true
+delimiter=0

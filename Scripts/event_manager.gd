@@ -5,7 +5,7 @@ var stack_active_events : Array[Event]  ## lista de eventos activos
 
 #region Logic
 
-func _ready() -> void:	
+func _ready() -> void:
 	TimeManager.time_changed.connect(check_events)
 	TimeManager.day_changed.connect(check_daily_events)
 

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EventDaily" load_steps=2 format=3 uid="uid://c4ug3cteemrtf"]
+
+[ext_resource type="Script" uid="uid://cxf3viptxvmc3" path="res://Resources/Events/event_daily.gd" id="1_8e64a"]
+
+[resource]
+script = ExtResource("1_8e64a")
+days = 30
+week_day = 7
+months = 11
+hour = 6
+end_hour = 12
+event_name = "_NIGHT_"
+event_unique_name = "NIGHT"
+is_active = true
+metadata/_custom_type_script = "uid://cxf3viptxvmc3"

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dnwayuanpuh4k"]
+
+[ext_resource type="Script" uid="uid://bo21emochobl7" path="res://Prefabs/Interactable/Action/interactable_action.gd" id="1_bss7d"]
+
+[node name="InteractableAction" type="Area2D"]
+script = ExtResource("1_bss7d")
+talk_chain = Array[String]([""])
+metadata/_custom_type_script = "uid://dc2fbamjb8ktv"

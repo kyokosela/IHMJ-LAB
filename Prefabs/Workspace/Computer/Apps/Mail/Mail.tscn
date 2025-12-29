@@ -1,0 +1,97 @@
+[gd_scene load_steps=10 format=3 uid="uid://v8c6vu22yl43"]
+
+[ext_resource type="Script" uid="uid://cicrbvcub4q4r" path="res://Prefabs/Workspace/Computer/Apps/Mail/mail.gd" id="1_ecqxk"]
+[ext_resource type="PackedScene" uid="uid://b40tk8ekcmjxa" path="res://Prefabs/Workspace/Computer/Apps/Mail/UI/MailItem/MailItem.tscn" id="2_21y06"]
+[ext_resource type="Script" uid="uid://m8r3f0pqwg4n" path="res://Prefabs/Workspace/Computer/Apps/Mail/inbox.gd" id="2_a0ws7"]
+[ext_resource type="Script" uid="uid://cuitkwl7f4bhs" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="3_7q6ax"]
+[ext_resource type="Resource" uid="uid://civxru7sbk1p8" path="res://Resources/Computer/Apps/Mail/Entries/generic_mail.tres" id="4_nwne3"]
+[ext_resource type="Resource" uid="uid://cx4bw0bdqif63" path="res://Resources/Computer/Apps/Mail/Entries/choice_mail.tres" id="5_7q6ax"]
+[ext_resource type="Resource" uid="uid://1tovieatr17g" path="res://Resources/Computer/Apps/Mail/Entries/leave_mail.tres" id="6_72h35"]
+[ext_resource type="Resource" uid="uid://cbk31vix22a1c" path="res://Resources/Computer/Apps/Mail/Entries/type_mail.tres" id="7_cdg4n"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dtwwy"]
+friction = 0.0
+
+[node name="Mail" type="Control"]
+custom_minimum_size = Vector2(800, 600)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ecqxk")
+mail_item_scene = ExtResource("2_21y06")
+mail_pool = Array[ExtResource("3_7q6ax")]([ExtResource("5_7q6ax"), ExtResource("4_nwne3"), ExtResource("6_72h35"), ExtResource("7_cdg4n")])
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(640, 315)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Inbox" type="Panel" parent="HBoxContainer"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(210, 0)
+layout_mode = 2
+script = ExtResource("2_a0ws7")
+
+[node name="StackBoundary" type="StaticBody2D" parent="HBoxContainer/Inbox"]
+physics_material_override = SubResource("PhysicsMaterial_dtwwy")
+
+[node name="Collision" type="CollisionPolygon2D" parent="HBoxContainer/Inbox/StackBoundary"]
+unique_name_in_owner = true
+build_mode = 1
+
+[node name="Spawn" type="Marker2D" parent="HBoxContainer/Inbox"]
+unique_name_in_owner = true
+position = Vector2(95, 0)
+
+[node name="Timer" type="Timer" parent="HBoxContainer/Inbox"]
+unique_name_in_owner = true
+autostart = true
+
+[node name="Reader" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Reader"]
+layout_mode = 2
+
+[node name="Mail" type="PanelContainer" parent="HBoxContainer/Reader/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Reader/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Content" type="PanelContainer" parent="HBoxContainer/Reader/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Text" type="Label" parent="HBoxContainer/Reader/VBoxContainer/MarginContainer/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_vertical = 0
+autowrap_mode = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/Reader/VBoxContainer"]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+
+[node name="ActionBox" type="VBoxContainer" parent="HBoxContainer/Reader/VBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3 uid="uid://civxru7sbk1p8"]
+
+[ext_resource type="Resource" uid="uid://bekcd0brnyetr" path="res://Resources/Computer/Apps/Mail/Events/generic.tres" id="1_gfakv"]
+[ext_resource type="Script" uid="uid://cuitkwl7f4bhs" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2_exmvs"]
+
+[resource]
+script = ExtResource("2_exmvs")
+sender = "Yo"
+subject = "yo"
+content = "coso"
+event = ExtResource("1_gfakv")
+metadata/_custom_type_script = "uid://cuitkwl7f4bhs"

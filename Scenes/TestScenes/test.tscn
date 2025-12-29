@@ -6,9 +6,9 @@
 [ext_resource type="Script" uid="uid://btpm0l5mnnxxf" path="res://Prefabs/Interactable/interactable_container.gd" id="4_porce"]
 [ext_resource type="Resource" uid="uid://bf77bgsmc4sua" path="res://DialoguePlugin/TIMELINE/test.dtl" id="5_l3fqk"]
 [ext_resource type="Script" uid="uid://laen7eoognkv" path="res://Resources/Items/item.gd" id="5_porce"]
-[ext_resource type="Resource" uid="uid://dwd2gxw30uron" path="res://Resources/Items/test_item.tres" id="6_l3fqk"]
+[ext_resource type="Resource" uid="uid://bt0m76qd15ptj" path="res://Resources/Items/Data/Test_Item_1.tres" id="6_l3fqk"]
 [ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="7_sdauk"]
-[ext_resource type="Resource" uid="uid://da7q88axtodt1" path="res://Resources/Items/test_item_two.tres" id="7_xprrk"]
+[ext_resource type="Resource" uid="uid://bvx6r35khet8g" path="res://Resources/Items/Data/Test_Item_2.tres" id="7_xprrk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7bjt1"]
 texture = ExtResource("2_55kiy")

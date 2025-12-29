@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3 uid="uid://cbk31vix22a1c"]
+
+[ext_resource type="Script" uid="uid://cuitkwl7f4bhs" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="1_a8aua"]
+[ext_resource type="Resource" uid="uid://bfmddqj0jpnbk" path="res://Resources/Computer/Apps/Mail/Events/type_event.tres" id="1_jmmuo"]
+
+[resource]
+script = ExtResource("1_a8aua")
+sender = "Billa"
+subject = "Quien es mejor"
+content = "agnes tachyon o tm opera O"
+event = ExtResource("1_jmmuo")
+metadata/_custom_type_script = "uid://cuitkwl7f4bhs"

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="LeaveEvent" load_steps=2 format=3 uid="uid://calgwhpy3mhif"]
+
+[ext_resource type="Script" uid="uid://cd2yjwlhhyhhi" path="res://Resources/Computer/Apps/Mail/Events/leave_event.gd" id="1_wr56a"]
+
+[resource]
+script = ExtResource("1_wr56a")
+event_id = "prochoneros city"
+metadata/_custom_type_script = "uid://cd2yjwlhhyhhi"

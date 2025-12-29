@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://b40tk8ekcmjxa"]
+
+[ext_resource type="Script" uid="uid://c1w6417ypnqny" path="res://Prefabs/Workspace/Computer/Apps/Mail/UI/MailItem/mail_item.gd" id="1_1kaix"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ibvuk"]
+friction = 0.1
+bounce = 0.3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1kaix"]
+size = Vector2(208, 38)
+
+[node name="MailItem" type="RigidBody2D"]
+mass = 5.0
+physics_material_override = SubResource("PhysicsMaterial_ibvuk")
+script = ExtResource("1_1kaix")
+
+[node name="Button" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -15.5
+offset_right = 100.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "prueba"
+flat = true
+text_overrun_behavior = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1kaix")
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

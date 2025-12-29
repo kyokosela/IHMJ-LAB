@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="I Hate My Job"
-run/main_scene="uid://b843i7637f1s8"
+run/main_scene="uid://d24jubegvm4ly"
 config/features=PackedStringArray("4.5")
 config/icon="uid://bjv6sibxm861c"
 
@@ -91,8 +91,8 @@ translation/locales=["es", "en"]
 
 [display]
 
-window/size/viewport_width=640
-window/size/viewport_height=360
+window/size/viewport_width=1366
+window/size/viewport_height=768
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
@@ -176,6 +176,10 @@ dialogic_default_action={
 
 locale/translations=PackedStringArray("res://Textfiles/UI.en.translation", "res://Textfiles/UI.es.translation", "res://Textfiles/DialogicTranslations/dialogic_character_translations.es.translation", "res://Textfiles/DialogicTranslations/dialogic_test_translation.en.translation", "res://Textfiles/DialogicTranslations/dialogic_test_translation.es.translation", "res://Textfiles/Interact/Interacts.en.translation", "res://Textfiles/Interact/Interacts.es.translation")
 locale/test="es"
+
+[physics]
+
+common/physics_interpolation=true
 
 [rendering]
 

@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="MailEvent" load_steps=2 format=3 uid="uid://bekcd0brnyetr"]
+
+[ext_resource type="Script" uid="uid://dtb87oxr6j8ng" path="res://Resources/Computer/Apps/Mail/Events/mail_event.gd" id="1_03tha"]
+
+[resource]
+script = ExtResource("1_03tha")
+metadata/_custom_type_script = "uid://dtb87oxr6j8ng"

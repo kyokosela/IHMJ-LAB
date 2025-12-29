@@ -48,14 +48,16 @@ func _initialize():
 	collision_raycast.target_position = Vector2.ONE
 	collision_raycast.collision_mask = raycast_mask
 	collision_raycast.hit_from_inside = false
+	
 	add_child(collision_raycast)
 
 	last_position = entity.global_position
-
-	tile_destination = entity.global_position
+	
 	assert(tile_destination != null,"Tile destination should not be NULL")
+
 func _ready() -> void:
 	super()
+	tile_destination = entity.global_position
 	call_deferred("_initialize")
 
 func _physics_process(delta: float):
@@ -178,7 +180,9 @@ func _move_towards_tile() -> void:
 		_handle_stuck()
 		return
 	var move_dir : Vector2 = entity.global_position.direction_to(tile_destination)
+	print(entity.global_position, " ", tile_destination)
 	last_facing_dir = move_dir
+	print(last_facing_dir)
 	entity.set_animation_direction(move_dir)
 	entity.velocity = move_dir * speed
 	is_moving = true

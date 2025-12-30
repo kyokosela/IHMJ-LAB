@@ -50,10 +50,12 @@ func maximize():
 		global_position = previous_rect.position
 		size = previous_rect.size
 		is_maximized = false
+		print(size, "minimizado")
 	else:
 		previous_rect = get_global_rect()
 		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		offset_bottom = -bottom_margin
+		print(size, "maximizado")
 		is_maximized = true
 
 	focus()

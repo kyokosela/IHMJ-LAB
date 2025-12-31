@@ -19,17 +19,40 @@ var message_cycle_index : int = 0
 
 func get_message() -> String :
 	
-	var selection : StringChainArray
+	var selection : StringChainArray = null
 	
 	for x in string_list :
 		if EventManager.is_event_active(x.unique_event_name) : 
 			selection = x
+			break
+			
+	if selection == null:
+		printerr("Error, no hay eventos activos para mostrar un mensaje")
+		return ""
+			
+	var list_to_check: Array[String] = selection.string_list
+			
+	if list_to_check.is_empty():
+		printerr("StringChain: La lista de mensajes de ", selection.unique_event_name, "está vacía")
+		return ""
+			
 	if selection.string_list.is_empty() : printerr(" No se encontro ningun texto en ", self);return ""
 	
-	if selection.behaviour == StringChainArray.BEHAVIOUR.COOLDOWN : return get_cooldown_message(selection)
-	if selection.behaviour == StringChainArray.BEHAVIOUR.RANDOM : return selection.string_list.pick_random()
-	if selection.behaviour == StringChainArray.BEHAVIOUR.ORDER : message_order_index = clamp(message_order_index + 1, 0, string_list.size() - 1);return selection.string_list[message_order_index]
-	if selection.behaviour == StringChainArray.BEHAVIOUR.CYCLE : message_cycle_index += 1;return selection.string_list[message_cycle_index % string_list.size() - 1]
+	match selection.behaviour:
+		StringChainArray.BEHAVIOUR.COOLDOWN:
+			return get_cooldown_message(selection)
+			
+		StringChainArray.BEHAVIOUR.RANDOM:
+			list_to_check.pick_random()
+		
+		StringChainArray.BEHAVIOUR.ORDER:
+			message_order_index = clamp(message_order_index + 1, 0, list_to_check.size() - 1)
+			return list_to_check[message_order_index]
+			
+		StringChainArray.BEHAVIOUR.CYCLE:
+			message_cycle_index += 1
+			var idx = (message_cycle_index - 1) % list_to_check.size()
+			return list_to_check[idx]
 	
 	printerr(" unknow error with stringChain, check export sets")
 	return ""

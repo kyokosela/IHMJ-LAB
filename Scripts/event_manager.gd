@@ -1,5 +1,8 @@
 extends Node
 
+signal event_activated(event_name : String)
+signal event_deactivaded(event_name : String)
+
 @export var events : Array[Event] ## lista de eventos, no usar para saber cuales estan activos
 var stack_active_events : Array[Event]  ## lista de eventos activos
 

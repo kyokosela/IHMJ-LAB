@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://0k5lqw8ew7im"]
+
+[ext_resource type="PackedScene" uid="uid://cjjq3o8l3u5r5" path="res://Prefabs/AreaSceneChanger/AreaSceneChanger.tscn" id="1_u1tdx"]
+[ext_resource type="PackedScene" uid="uid://tcey4tkkfvd8" path="res://Prefabs/Player/Player.tscn" id="2_7ihrb"]
+
+[sub_resource type="GDScript" id="GDScript_u1tdx"]
+resource_name = "xd"
+script/source = "extends Node2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	ZoneManager.current_zone_node = self
+"
+
+[node name="Calle1" type="Node2D"]
+script = SubResource("GDScript_u1tdx")
+
+[node name="puerta" parent="." instance=ExtResource("1_u1tdx")]
+position = Vector2(17, 452)
+new_scene_path = "res://Scenes/World/Apartament_one.tscn"
+
+[node name="puerta2" parent="." instance=ExtResource("1_u1tdx")]
+position = Vector2(1046, 460)
+new_scene_path = "res://Scenes/World/calle2.tscn"
+new_scene_id = 2
+
+[node name="Player" parent="." instance=ExtResource("2_7ihrb")]
+position = Vector2(141, 477)

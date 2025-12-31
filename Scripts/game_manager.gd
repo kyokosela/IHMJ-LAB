@@ -19,8 +19,6 @@ func _ready() -> void:
 		var array = Time.get_date_dict_from_system().values() + Time.get_time_dict_from_system().values()
 		log_file_name = str("res://log/" + "%s-%s-%s-%s (%sh%sm%ss)" % array) + ".txt"
 		setup_log()
-	
-	new_game()
 
 func _process(_delta: float) -> void:
 	fps = Engine.get_frames_per_second()
@@ -34,7 +32,7 @@ func new_game() -> void :
 	PlayerManager.add_effect(load("res://Resources/Effects/Effects/hunger_level_1.tres"))
 	PlayerManager.add_effect(load("res://Resources/Effects/Effects/dirt_level_1.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
-	EventManager.load_event(load("res://Resources/Events/GlobalEvents/event_night.tres"), true)
+	EventManager.load_event(load("res://Resources/Events/GlobalEvents/event_night.tres"))
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
 
 #endregion

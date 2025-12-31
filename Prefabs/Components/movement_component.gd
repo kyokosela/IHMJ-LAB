@@ -180,9 +180,10 @@ func _move_towards_tile() -> void:
 		_handle_stuck()
 		return
 	var move_dir : Vector2 = entity.global_position.direction_to(tile_destination)
-	print(entity.global_position, " ", tile_destination)
+	#print(entity.global_position, " ", tile_destination)
 	last_facing_dir = move_dir
-	print(last_facing_dir)
+	#print(last_facing_dir)
+	## BILLA MALPARIDO
 	entity.set_animation_direction(move_dir)
 	entity.velocity = move_dir * speed
 	is_moving = true

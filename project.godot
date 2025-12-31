@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="I Hate My Job"
-run/main_scene="uid://d24jubegvm4ly"
+run/main_scene="uid://bvaqnpkfdbwb8"
 config/features=PackedStringArray("4.5")
 config/icon="uid://bjv6sibxm861c"
 
@@ -23,6 +23,7 @@ EventManager="*res://Scripts/event_manager.gd"
 Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 PlayerManager="*res://Scripts/player_manager.gd"
 TaskManager="*res://Scripts/task_manager.gd"
+ZoneManager="*res://Scripts/zoneManager.gd"
 
 [dialogic]
 

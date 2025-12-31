@@ -14,6 +14,7 @@ class_name DebugPanel
 @onready var active_entities: FoldableContainer = %ActiveEntities
 @onready var entity_info_label: RichTextLabel = %EntityInfoLabel
 @onready var stat_list: VBoxContainer = %StatList
+@onready var event_manager : MarginContainer = %EventManager
 
 var entity_widgets : Dictionary = {}
 var stat_widgets : Array[StatContainerDebug]
@@ -34,6 +35,18 @@ func _ready() -> void:
 		world.entity_removed.connect(_on_entity_removed)
 	setup_stats()
 	PlayerManager.stat_connection_added.connect(update_stats)
+	EventManager.event_activated.connect(_on_event_active)
+	EventManager.event_deactivaded.connect(_on_event_deactive)
+
+func _on_event_active(event_unique_name : String) -> void:
+	var _label := Label.new()
+	_label.text = event_unique_name
+	_label.name = event_unique_name
+	%eventmanagervbox.add_child(_label)
+
+func _on_event_deactive(event_unique_name : String) -> void:
+	var node = %eventmanagervbox.get_node_or_null(event_unique_name)
+	if node : node.queue_free()
 
 func _on_entity_added(entity: Node) -> void:
 	if entity_widgets.has(entity):

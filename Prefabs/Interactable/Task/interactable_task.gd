@@ -55,5 +55,5 @@ func check_effects() -> bool :
 
 func check_events() -> bool :
 	for event : String in event_list :
-		if EventManager.is_event_active(event) : return false
+		if !EventManager.is_event_active(event) : return false
 	return true

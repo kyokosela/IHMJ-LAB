@@ -16,14 +16,14 @@ var index_code: bool = GameManager.index_code
 @export_group("Behaviour")
 @export var shape : Shape2D : 
 	set(value) : shape = value; if Engine.is_editor_hint() : collshape.shape = shape
-@export var display_text : String = "_INTERACT_BASE_MESSAGE_" ## Texto que se mostrara en pantalla al entrar en el rango del area, si esta vacio no mostrara nada
-@export var children_visible : bool = true ## Si es [b]verdadero[/b] ocultara a todos los nodos de tipo [b]control[/b] que se encuentren como hijos
-@export var reusable : bool = true ## La acción se podra realizar varias veces si es verdadera, en caso contrario la interacción solo se ejecutara una unica vez
-@export var show_again_at_end : bool = false ## Mostrar elementos despues de acabar la ejecucion si es necesario
-@export var destroy_at_end : bool = false ## Destruir al final de la ejecución
+@export var display_text : String ## default: _INTERACT_BASE_MESSAGE_, Texto que se mostrara en pantalla al entrar en el rango del area, si esta vacio no mostrara nada
+@export var children_visible : bool ## Si es [b]verdadero[/b] ocultara a todos los nodos de tipo [b]control[/b] que se encuentren como hijos
+@export var reusable : bool ## La acción se podra realizar varias veces si es verdadera, en caso contrario la interacción solo se ejecutara una unica vez
+@export var show_again_at_end : bool ## Mostrar elementos despues de acabar la ejecucion si es necesario
+@export var destroy_at_end : bool ## Destruir al final de la ejecución
 @export var signal_type : SIGNAL_TYPE = SIGNAL_TYPE.AREA ## Tipo de señal que utilizara el Interactable
-@export var is_solid : bool = false
-@export var collision_trigger : bool = false
+@export var is_solid : bool
+@export var collision_trigger : bool
 @export_group("Time Interaction")
 @export var consume_time: bool = false:
 	set(value):

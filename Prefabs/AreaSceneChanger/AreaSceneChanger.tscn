@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjjq3o8l3u5r5"]
+
+[ext_resource type="Script" uid="uid://e0gjewbup0jg" path="res://Scripts/sceneChanger.gd" id="1_ojl3f"]
+
+[node name="SceneChanger" type="Area2D"]
+script = ExtResource("1_ojl3f")

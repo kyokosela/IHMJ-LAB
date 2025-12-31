@@ -1,7 +1,6 @@
 extends Resource
 class_name Event
 
-@warning_ignore_start("unused_signal")
 signal event_executed
 signal event_finished
 
@@ -26,11 +25,13 @@ func execute() -> void :
 	is_active = true
 	EventManager.stack_active_events.append(self)
 	event_executed.emit()
+	EventManager.event_activated.emit(event_unique_name)
 
 func finished() -> void :
 	if !is_enabled or (!EventManager.is_event_active(event_unique_name) and !can_multiple_active): return
 	is_active = false
 	EventManager.stack_active_events.erase(self)
 	event_finished.emit()
+	EventManager.event_deactivaded.emit(event_unique_name)
 
 #endregion

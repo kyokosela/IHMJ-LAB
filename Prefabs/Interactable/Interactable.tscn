@@ -4,6 +4,4 @@
 
 [node name="Interactable" type="Area2D" groups=["Interactable"]]
 script = ExtResource("1_046on")
-display_text = ""
-children_visible = false
-reusable = false
+display_text = "_INTERACT_BASE_MESSAGE_"

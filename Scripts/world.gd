@@ -1,15 +1,16 @@
 extends Node2D
 class_name World
 
+@export var zone_id : ZoneManager.ZONES
+
 var entities : Dictionary[String,Entity]
 
 signal entity_created(entity : Entity)
 signal entity_removed(entity : Entity)
 
 func _ready() -> void:
-	EventManager.load_event(load("res://Resources/events/test_schedule.tres"))
 	
-	EventManager.connect_to_event("SCHEDULETEST", print.bind("hola"))
+	ZoneManager.zone_node = self
 	
 	for entity : Entity in find_children("*", "Entity", true):
 		entities[entity.name] = entity
@@ -28,6 +29,3 @@ func kill_entity(entity: Entity) -> void:
 	entities.erase(entity)
 	entity_removed.emit(entity)
 	entity.queue_free()
-
-func _process(_delta: float) -> void:
-	pass

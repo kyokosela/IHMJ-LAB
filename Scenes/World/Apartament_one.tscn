@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://bvaqnpkfdbwb8"]
 
-[ext_resource type="Script" path="res://Scripts/tutorial.gd" id="1_e8ob4"]
+[ext_resource type="Script" uid="uid://5fyyfswqh38m" path="res://Scripts/tutorial.gd" id="1_e8ob4"]
 [ext_resource type="PackedScene" uid="uid://tcey4tkkfvd8" path="res://Prefabs/Player/Player.tscn" id="2_2h6jt"]
 [ext_resource type="PackedScene" uid="uid://cu461bcw0jkb8" path="res://Scenes/TestScenes/tilemapbackup.tscn" id="2_c3hay"]
 [ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="5_ul1ao"]
@@ -38,19 +38,22 @@ metadata/_custom_type_script = "uid://mni1cq3j7l53"
 [node name="Player" parent="." instance=ExtResource("2_2h6jt")]
 position = Vector2(272, 128)
 
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(4, 4)
+
 [node name="DebugPanel" parent="." instance=ExtResource("5_ul1ao")]
 position = Vector2i(355, 130)
 visible = false
 
 [node name="Bed" type="Area2D" parent="."]
-position = Vector2(304, 128)
+position = Vector2(367, 129)
 script = ExtResource("7_c3hay")
 event_list = Array[String](["NIGHT"])
 event_messages = SubResource("Resource_mmwbi")
 shape = SubResource("RectangleShape2D_e7syp")
-display_text = ""
-children_visible = false
-reusable = false
+display_text = "_INTERACT_BASE_MESSAGE_"
+children_visible = true
+reusable = true
 is_solid = true
 metadata/_custom_type_script = "uid://c13pr1gbe31et"
 
@@ -60,9 +63,8 @@ position = Vector2(16, 128)
 script = ExtResource("7_c3hay")
 task_lists = Array[String](["TUTORIAL_DOOR"])
 shape = SubResource("RectangleShape2D_e8ob4")
-display_text = ""
-children_visible = false
-reusable = false
+children_visible = true
+reusable = true
 is_solid = true
 collision_trigger = true
 metadata/_custom_type_script = "uid://c13pr1gbe31et"
@@ -73,7 +75,7 @@ script = ExtResource("7_e8ob4")
 effect_list = Array[String](["DIRT"])
 effect_messages = SubResource("Resource_uhj6x")
 shape = SubResource("RectangleShape2D_c3hay")
-display_text = ""
-children_visible = false
-reusable = false
+display_text = "_INTERACT_BASE_MESSAGE_"
+children_visible = true
+reusable = true
 metadata/_custom_type_script = "uid://c13pr1gbe31et"

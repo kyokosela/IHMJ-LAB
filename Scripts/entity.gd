@@ -35,7 +35,7 @@ func get_all_components() -> Array[Component]:
 func add_component(component: Component) -> void:
 	if !components.has(component.name):
 		components[component.name] = component
-		component.entity = self
+		component.host = self
 		if component.get_parent() != self: add_child(component)
 
 func remove_component(component: Component) -> void:

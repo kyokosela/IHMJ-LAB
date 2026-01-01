@@ -23,7 +23,7 @@ func _collect_states() -> void:
 
 func _initialize_fsm() -> void:
 	for state in states.values():
-		state.entity = entity
+		state.host = host
 	
 	var start_state: State = null
 	var start_state_name: String = ""
@@ -66,11 +66,11 @@ func change_state(new_state_name: String) -> void:
 	state_changed.emit(old_state_name, new_state_name)
 
 func _process(delta: float) -> void:
-	if current_state and is_enabled and entity:
+	if current_state and is_enabled and host:
 		current_state.update(delta)
 
 func _physics_process(delta: float) -> void:
-	if current_state and is_enabled and entity:
+	if current_state and is_enabled and host:
 		current_state.physics_update(delta)
 
 func has_state(state_name: String) -> bool:

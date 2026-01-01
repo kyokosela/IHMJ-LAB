@@ -7,6 +7,9 @@ signal movement_stopped
 signal direction_changed(new_direction : Vector2, prev_direction : Vector2)
 signal velocity_changed(new_velocity: Vector2)
 
+var entity : Entity:
+	get: return host as Entity
+
 @export var speed : int = 200 ## Velocidad de movimiento
 @export var run_speed : int = 240
 @export var can_move : bool = true ## Determina si la entidad puede moverse o no
@@ -58,6 +61,7 @@ func _initialize():
 func _ready() -> void:
 	super()
 	tile_destination = entity.global_position
+	entity = host
 	call_deferred("_initialize")
 
 func _physics_process(delta: float):

@@ -2,7 +2,7 @@ extends Node
 class_name State
 
 var fsm: FSMComponent
-var entity: Entity
+var host: Node2D
 
 func _ready() -> void:
 	pass

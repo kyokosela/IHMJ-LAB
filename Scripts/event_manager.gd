@@ -9,7 +9,7 @@ var stack_active_events : Array[Event]  ## lista de eventos activos
 #region Logic
 
 func _ready() -> void:
-	TimeManager.time_changed.connect(check_events)
+	TimeManager.minutes_changed.connect(check_events)
 	TimeManager.day_changed.connect(check_daily_events)
 
 func check_events(_new_time : int) -> void : ## revisa con el cambio del tiempo que eventos disparar o terminar

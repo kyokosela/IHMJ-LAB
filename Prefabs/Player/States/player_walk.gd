@@ -21,9 +21,9 @@ func physics_update(_delta: float):
 	var vertical_axis = Input.get_axis("move_up","move_down")
 	var direction = Vector2(horizontal_axis,vertical_axis)
 	if direction:
-		entity.set_direction(horizontal_axis,vertical_axis)
-		entity.play_animation("idle")
+		player.set_direction(horizontal_axis,vertical_axis)
+		player.play_animation("idle")
 	else:
-		entity.stop_move()
+		player.stop_move()
 		fsm.change_state("PlayerIdle")
 	

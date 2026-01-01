@@ -5,13 +5,13 @@ signal component_ready
 signal component_disabled
 signal component_enabled
 
-var entity : Entity
+var host : Node2D
 var is_enabled : bool = true
 
 func _ready() -> void:
-	if not entity and get_parent() is Entity:
-		entity = get_parent()
-	assert(entity != null, "Entity should never be NULL")
+	if not host and get_parent() is Node2D:
+		host = get_parent()
+	assert(host != null, "Entity should never be NULL")
 	component_ready.emit()
 
 func enable() -> void:

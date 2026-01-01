@@ -63,14 +63,19 @@ func play_animation(anim_prefix: String) -> void:## Reproduce una animación con
 	
 	_play_on_all_layers(full_anim_name)
 	animation_changed.emit(previous_full_name, full_anim_name)
-
-func set_direction(direction: Vector2) -> void: ## Cambia la dirección de la animación basándose en un Vector2 Maneja automáticamente el flip horizontal para left/right
-	if not Utils.valid_single_dir_vector(direction):
-		push_warning("Invalid direction vector: %s" % direction)
-		return
 	
-	var new_direction = _get_direction_name(direction)
-	var should_flip = direction.x < 0
+func set_direction(direction: Vector2) -> void: ## Cambia la dirección de la animación basándose en un Vector2 Maneja automáticamente el flip horizontal para left/right
+	if direction == Vector2.ZERO:
+		return
+
+	var cardinal_direction := Vector2.ZERO
+	if abs(direction.x) > abs(direction.y):
+		cardinal_direction = Vector2(sign(direction.x), 0)
+	else:
+		cardinal_direction = Vector2(0, sign(direction.y))
+
+	var new_direction = _get_direction_name(cardinal_direction)
+	var should_flip = cardinal_direction.x < 0
 	
 	if new_direction == current_direction and should_flip == is_flipped:
 		return
@@ -86,8 +91,7 @@ func set_direction(direction: Vector2) -> void: ## Cambia la dirección de la an
 	
 	direction_changed.emit(current_direction)
 
-func stop_animation() -> void:
-	##Detiene todas las animaciones
+func stop_animation() -> void: ##Detiene todas las animaciones
 	for layer in layers.values():
 		layer.stop()
 
@@ -180,8 +184,12 @@ func get_all_layers() -> Dictionary[String, AnimatedSprite2D]: ##Retorna todas l
 func _build_animation_name(prefix: String, direction: String) -> String: ##Construye el nombre completo de la animación
 	return "%s_%s" % [prefix, direction]
 
-func _get_direction_name(direction: Vector2) -> String: ##Convierte un Vector2 a nombre de dirección
-	return DIRECTION_MAP.get(direction, "down")
+func _get_direction_name(direction: Vector2) -> String:
+	var simplified = Vector2(sign(direction.x), sign(direction.y))
+	if simplified.x != 0 and simplified.y != 0:
+		simplified.y = 0 
+		
+	return DIRECTION_MAP.get(simplified, "down")
 
 func _validate_animation(anim_name: String) -> bool: ##Valida que una animación existe en todas las capas
 	for layer in layers.values():

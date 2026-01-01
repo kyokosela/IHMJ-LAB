@@ -12,10 +12,10 @@ func _initialize() -> void:
 	movement = get_component("MovementComponent")
 	sprite = get_component("SpriteStackComponent")
 	interaction = get_component("InteractionComponent")
-	inventory = get_node_or_null("InventoryContainer")
+	inventory = get_component("InventoryContainer")
 	
-	Dialogic.timeline_started.connect(movement.set_physics_process.bind(false))
-	Dialogic.timeline_ended.connect(movement.set_physics_process.bind(true))
+	Dialogic.timeline_started.connect(func(): movement.can_move = false)
+	Dialogic.timeline_ended.connect(func(): movement.can_move = true)
 
 func _process(_delta: float) -> void:
 	pass

@@ -25,7 +25,7 @@ func change_zone(new_zone_id : ZONES) -> void :
 		time_cost_incremental = time_cost_base
 	else : 
 		energy_cost_incremental += energy_cost_base
-		time_cost_incremental = timeString.increase_time(time_cost_incremental, time_cost_base)
+		time_cost_incremental = TimeUtils.increase_time(time_cost_incremental, time_cost_base)
 	
 	previous_zone = current_zone
 	current_zone = new_zone_id

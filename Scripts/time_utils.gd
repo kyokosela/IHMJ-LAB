@@ -1,5 +1,30 @@
 extends Node
-class_name timeString
+class_name TimeUtils
+
+enum WEEKDAY {
+	LUNES,
+	MARTES,
+	MIERCOLES,
+	JUEVES,
+	VIERNES,
+	SABADO,
+	DOMINGO
+}
+
+enum MONTHS {
+	ENERO,
+	FEBRERO,
+	MARZO,
+	ABRIL,
+	MAYO,
+	JUNIO,
+	JULIO,
+	AGOSTO,
+	SEPTIEMBRE,
+	OCTUBRE,
+	NOVIEMBRE,
+	DICIEMBRE
+}
 
 static func increase_time(time : String, new_time : String) -> String :
 	if !is_valid_format(time) : return time

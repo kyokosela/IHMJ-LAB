@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="ScheduleConfig" load_steps=2 format=3 uid="uid://4u5kgaosjbfo"]
+
+[ext_resource type="Script" uid="uid://ca7hor7ijm84i" path="res://Resources/Schedules/schedule_config.gd" id="1_nf8ai"]
+
+[resource]
+script = ExtResource("1_nf8ai")
+metadata/_custom_type_script = "uid://ca7hor7ijm84i"

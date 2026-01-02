@@ -4,7 +4,7 @@ const DAY_MINUTES : int = 1440
 
 enum TIMES {HOUR,MINUTE}
 
-signal time_changed(months : int, week: int, day: int, minutes: int)
+signal time_changed(month : TimeUtils.MONTHS, week: TimeUtils.WEEKDAY, day: int, minutes: int)
 
 signal minutes_changed(time_value : int) ## se emite cuando el tiempo cambia
 signal day_changed(day_value : int) ## se emite cuando el dia cambia
@@ -16,24 +16,13 @@ var scheduled_times : Dictionary[ScheduleConfig, Callable]
 
 var day : int = 1 :
 	set(_value) : 
-		day = _value
-		day_changed.emit(day)
-		if week_day == TimeUtils.WEEKDAY.DOMINGO: week += 1
-		if day == 30:
-			day = 0
-			week = 0
-			month += 1
+		day = day_set_handler(_value)
 
 var minutes : int = 0:
 	set(_value) :
-		minutes = clamp(_value, 0 , DAY_MINUTES)
-		minutes_changed.emit(minutes)
-		if minutes >= DAY_MINUTES:
-			day +=1
-			julian_day += 1
-			minutes = 0
+		minutes = minutes_set_handler(_value)
 		time_changed.emit(month,week,day,minutes)
-
+	
 var week : int = 1:
 	set(_value):
 		week = _value
@@ -52,11 +41,24 @@ var year : int = 2026
 
 func _ready() -> void:
 	week_changed.connect(func(_r): print("week changed: ", _r))
-	minutes_changed.connect(check_scheduled_times)
+	connect_to_day(3, func(): print("hola"), "22:00", [TimeUtils.MONTHS.JUNIO, TimeUtils.MONTHS.JULIO])
+	time_changed.connect(check_scheduled_times)
+	minutes_changed.connect(func(_r): print("Minutes changed: "+ str(_r))) 
 
-func check_scheduled_times(months : TimeUtils.MONTHS, week: int, day: int, minutes: int) -> void :
+func check_scheduled_times(_query_month : TimeUtils.MONTHS, _query_weekday: TimeUtils.WEEKDAY, _query_day: int, _query_minutes: int) -> void :
 	for x : ScheduleConfig in scheduled_times:
-		if scheduled_times.
+		if !x.month.is_empty() and _query_month not in x.month:
+			continue
+		print("month verified")
+		if !x.week_day.is_empty() and _query_weekday not in x.week_day and _query_day != -1:
+			continue
+		print("weekday verified")
+		if x.day != -1 and  x.day != _query_day:
+			continue
+		print("day verified")
+		#TODO en caso de que el auimento de tiempo suba un dia, verificar tambien eso, quizas? no se
+		if is_time_lower(x.time):
+			print("ola")
 #endregion
 
 #region API
@@ -93,7 +95,8 @@ func is_equal_time(_query_time : String) -> bool :
 func is_time_lower(_query_time : String) -> bool :
 	assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
 	var times : int = get_minutes(_query_time)
-	return times < minutes
+	print("Current minutes: ",minutes, " Query Minutes: ", times )
+	return times < minutes 
 
 ## Comprueba si el tiempo actual del juego esta dentro del rango start y end
 func is_time_between(_query_start_time : String, _query_end_time : String) -> bool :
@@ -103,14 +106,40 @@ func is_time_between(_query_start_time : String, _query_end_time : String) -> bo
 	return minutes >= start_query_minutes and minutes <= end_query_minutes
 	
 ## Conecta una funcion a un tiempo establecido, se ejecutara en cuanto sea superior
-func connect_to_time(_query_time : String, callable : Callable) -> void :
+func connect_to_time(_query_time : String, callable : Callable) -> void:
+	#hola no se si cambiarlo a que sea modificable los dias semanas etc.
 	assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
-	scheduled_times[_query_time] = callable
+	var schedule_config : ScheduleConfig = ScheduleConfig.new()
+	
+	schedule_config.time = _query_time
+	schedule_config.day = -1
+	schedule_config.month = []
+	schedule_config.week_day = []
+	
+	scheduled_times[schedule_config] = callable
 
-func connect_to_weekday(_query_week : TimeUtils.WEEKDAY,callable : Callable,_query_hour : String = "00", _query_minute : String = "00") -> void:
-	var _query_time : String = _query_hour +":"+_query_minute
+func connect_to_day(_query_day : int,callable : Callable, _query_time : String = "00:00", _query_months : Array[TimeUtils.MONTHS] = []):
+	assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
+	var schedule_config : ScheduleConfig = ScheduleConfig.new()
+	schedule_config.day = _query_day
+	schedule_config.time = _query_time
+	schedule_config.month = _query_months
+	schedule_config.week_day = []
+	
+	scheduled_times[schedule_config] = callable
+	
+
+func connect_to_weekday(_query_weekday : Array[TimeUtils.WEEKDAY],callable : Callable,_query_time : String,_query_months: Array[TimeUtils.MONTHS]) -> void:
 	assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
 	
+	var schedule_config : ScheduleConfig = ScheduleConfig.new()
+	
+	schedule_config.week_day = _query_weekday
+	schedule_config.day = -1
+	schedule_config.time = _query_time
+	schedule_config.month = _query_months
+	
+	scheduled_times[schedule_config] = callable
 	
 
 ## Retorna el tiempo restante para un tiempo objetivo
@@ -120,11 +149,40 @@ func time_left_to(_query_time : String) -> String :
 	var left_time = minutes - minute
 	return format_minutes(left_time)
 
-func get_week_day() -> String :
+func get_week_day_name() -> String :
 	return TimeUtils.WEEKDAY.find_key(week_day)
+
+func get_month_name() -> String:
+	return TimeUtils.MONTHS.find_key(month)
 #endregion
 
-#region tools
+#region Tools
+
+
+func day_set_handler(_value) -> int:
+	var day_value = _value
+	if week_day == TimeUtils.WEEKDAY.DOMINGO: week += 1
+	if day_value >= 30:
+		day_value = 0
+		week = 0
+		month  += 1
+	day_changed.emit(day_value)
+	return _value
+
+func minutes_set_handler(_value) -> int:
+	var minute_value = clamp(_value, 0 , DAY_MINUTES)
+	if _value >= DAY_MINUTES:
+		day +=1
+		julian_day += 1
+		minute_value = 0
+	#manejar el tema de la resta para definir a que hora del dia siguientes establecerlo
+	if _value < 0:
+		day -=1
+		julian_day -= 1
+		minute_value = DAY_MINUTES
+	#lo mismo de arriba pero alrevez, mayormente para debug
+	minutes_changed.emit(minute_value)
+	return minute_value
 
 
 func get_time_values(_custom_target_time : String = get_current_time()) -> Array[int] :

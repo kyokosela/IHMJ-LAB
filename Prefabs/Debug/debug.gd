@@ -40,7 +40,8 @@ func _ready() -> void:
 	PlayerManager.stat_connection_added.connect(update_stats)
 	EventManager.event_activated.connect(_on_event_active)
 	EventManager.event_deactivaded.connect(_on_event_deactive)
-	TimeManager.minutes_changed.connect(time_debug)
+	TimeManager.time_changed.connect(time_debug)
+	
 func _on_event_active(event_unique_name : String) -> void:
 	var _label := Label.new()
 	_label.text = event_unique_name
@@ -89,12 +90,12 @@ func _process(_delta: float) -> void:
 	if not get_tree().paused:
 		playtime+= _delta
 
-func time_debug(_r) -> void:
+func time_debug(_m,_w,_d,_r) -> void:
 	current_time.text = "Current Timer: %s" % TimeManager.get_current_time()
 	current_day.text = "Current Day: %s" % TimeManager.day
 	current_week.text = "Current Week: %s" % TimeManager.week
-	current_week_day.text = "Current Week Day: %s" % TimeManager.get_week_day()
-	current_month.text = "Current Month: %s" % TimeManager.month
+	current_week_day.text = "Current Week Day: %s" % TimeManager.get_week_day_name()
+	current_month.text = "Current Month: %s" % TimeManager.get_month_name()
 
 func entity_info_update(_delta : float)-> void:
 	if current_entity == null: current_entity_label.text = "Select an Entity"; return

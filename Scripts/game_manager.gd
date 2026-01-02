@@ -6,6 +6,7 @@ var tile_size : Vector2 = Vector2(16,16) # No se si se cambiara o algo por ahora
 
 var fps: float = 0.0
 
+
 #booleana de seguridad para perminir o no la indexación de código externo
 var index_code: bool = false
 
@@ -19,11 +20,24 @@ func _ready() -> void:
 		var array = Time.get_date_dict_from_system().values() + Time.get_time_dict_from_system().values()
 		log_file_name = str("res://log/" + "%s-%s-%s-%s (%sh%sm%ss)" % array) + ".txt"
 		setup_log()
+	
+	
 
 func _process(_delta: float) -> void:
 	fps = Engine.get_frames_per_second()
 
 #region FILE SYSTEM
+
+# FILE  CONTROL
+const SAVE_PATHS : Array[String] = [
+	"user://saves/save1.sv",
+	"user://saves/save2.sv",
+	"user://saves/save3.sv"
+]
+
+var file_count = 0
+var current_file_path : String
+var game_data : Dictionary
 
 func new_game() -> void :
 	#TODO creacion de archivos
@@ -34,6 +48,21 @@ func new_game() -> void :
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
 	EventManager.load_event(load("res://Resources/Events/GlobalEvents/event_night.tres"))
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
+
+func load_file(save_id : int) -> void : ## MAX 2 en el parametro
+	var file = FileAccess.open(SAVE_PATHS[save_id], FileAccess.READ)
+	var data : Dictionary = file.get_var(true)
+	if data.is_empty() :
+		game_data = {
+			
+		}
+	file.close()
+
+func save_file(save_id : int) -> void :
+	if game_data.is_empty() : return
+	var file = FileAccess.open(SAVE_PATHS[save_id], FileAccess.WRITE)
+	file.store_var(game_data, true)
+	file.close()
 
 #endregion
 

@@ -21,7 +21,7 @@ var day : int = 1 :
 var minutes : int = 0:
 	set(_value) :
 		minutes = minutes_set_handler(_value)
-		time_changed.emit(month,week,day,minutes)
+		time_changed.emit(month,week_day,day,minutes,week)
 	
 var week : int = 1:
 	set(_value):
@@ -41,24 +41,29 @@ var year : int = 2026
 
 func _ready() -> void:
 	week_changed.connect(func(_r): print("week changed: ", _r))
-	connect_to_day(3, func(): print("hola"), "22:00", [TimeUtils.MONTHS.JUNIO, TimeUtils.MONTHS.JULIO])
+	#connect_to_day(3, func(): print("hola"), "22:00", [TimeUtils.MONTHS.JUNIO, TimeUtils.MONTHS.JULIO])
 	time_changed.connect(check_scheduled_times)
 	minutes_changed.connect(func(_r): print("Minutes changed: "+ str(_r))) 
 
-func check_scheduled_times(_query_month : TimeUtils.MONTHS, _query_weekday: TimeUtils.WEEKDAY, _query_day: int, _query_minutes: int) -> void :
+func check_scheduled_times(_query_month : TimeUtils.MONTHS, _query_weekday: TimeUtils.WEEKDAY, _query_day: int, _query_minutes: int, _query_week : int) -> void :
+	print(scheduled_times)
 	for x : ScheduleConfig in scheduled_times:
+		print("indice: ", x)
 		if !x.month.is_empty() and _query_month not in x.month:
 			continue
 		print("month verified")
-		if !x.week_day.is_empty() and _query_weekday not in x.week_day and _query_day != -1:
+		print("???", x.week_day, " | ", _query_weekday)
+		if !x.week_day.is_empty() and _query_weekday not in x.week_day:
 			continue
 		print("weekday verified")
-		if x.day != -1 and  x.day != _query_day:
+		if x.day != -1 and x.day != _query_day:
 			continue
 		print("day verified")
 		#TODO en caso de que el auimento de tiempo suba un dia, verificar tambien eso, quizas? no se
-		if is_time_lower(x.time):
-			print("ola")
+		for time in x.times :
+			if is_time_lower(time) :
+				scheduled_times[x].call()
+
 #endregion
 
 #region API
@@ -83,7 +88,7 @@ func is_time_higher(_query_time : String) -> bool:
 	assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
 	var times : int = get_minutes(_query_time)
 	print("comparando ", minutes, " con ", times, " da ", times > minutes)
-	return times > minutes
+	return times >= minutes
 
 ## Comprueba con el parametro si el tiempo establecido es el mismo al tiempo actual del juego
 func is_equal_time(_query_time : String) -> bool :
@@ -96,7 +101,7 @@ func is_time_lower(_query_time : String) -> bool :
 	assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
 	var times : int = get_minutes(_query_time)
 	print("Current minutes: ",minutes, " Query Minutes: ", times )
-	return times < minutes 
+	return times <= minutes 
 
 ## Comprueba si el tiempo actual del juego esta dentro del rango start y end
 func is_time_between(_query_start_time : String, _query_end_time : String) -> bool :
@@ -129,14 +134,14 @@ func connect_to_day(_query_day : int,callable : Callable, _query_time : String =
 	scheduled_times[schedule_config] = callable
 	
 
-func connect_to_weekday(_query_weekday : Array[TimeUtils.WEEKDAY],callable : Callable,_query_time : String,_query_months: Array[TimeUtils.MONTHS]) -> void:
-	assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
+func connect_to_weekday(_query_weekday : Array[TimeUtils.WEEKDAY],callable : Callable,_query_time : Array[String],_query_months: Array[TimeUtils.MONTHS]) -> void:
+	#assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
 	
 	var schedule_config : ScheduleConfig = ScheduleConfig.new()
 	
 	schedule_config.week_day = _query_weekday
 	schedule_config.day = -1
-	schedule_config.time = _query_time
+	schedule_config.times = _query_time
 	schedule_config.month = _query_months
 	
 	scheduled_times[schedule_config] = callable

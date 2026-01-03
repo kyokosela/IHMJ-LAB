@@ -90,7 +90,7 @@ func _process(_delta: float) -> void:
 	if not get_tree().paused:
 		playtime+= _delta
 
-func time_debug(_m,_w,_d,_r) -> void:
+func time_debug(_m,_w,_d,_r,_wi) -> void:
 	current_time.text = "Current Timer: %s" % TimeManager.get_current_time()
 	current_day.text = "Current Day: %s" % TimeManager.day
 	current_week.text = "Current Week: %s" % TimeManager.week

@@ -12,3 +12,4 @@ func _ready() -> void:
 			#TODO cuando exita aplicar
 			#Dialogic.timeline_ended.connect(ZoneManager.change_zone.bind(ZoneManager.CALLE O ALGO ASI))
 			)
+	TimeManager.connect_to_weekday([TimeUtils.WEEKDAY.JUEVES], print.bind("test hola"), ["05:00"], [])

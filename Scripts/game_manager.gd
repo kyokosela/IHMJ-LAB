@@ -54,7 +54,6 @@ func load_file(save_id : int) -> void : ## MAX 2 en el parametro
 	var data : Dictionary = file.get_var(true)
 	if data.is_empty() :
 		game_data = {
-			
 		}
 	file.close()
 

@@ -41,7 +41,7 @@ var year : int = 2026
 
 func _ready() -> void:
 	week_changed.connect(func(_r): print("week changed: ", _r))
-	connect_to_day(3, func(): print("hola"), "22:00", [TimeUtils.MONTHS.JUNIO, TimeUtils.MONTHS.JULIO])
+	connect_to_weekday([TimeUtils.WEEKDAY.LUNES], func(): print("hola"))
 	time_changed.connect(check_scheduled_times)
 	minutes_changed.connect(func(_r): print("Minutes changed: "+ str(_r))) 
 
@@ -50,7 +50,7 @@ func check_scheduled_times(_query_month : TimeUtils.MONTHS, _query_weekday: Time
 		if !x.month.is_empty() and _query_month not in x.month:
 			continue
 		print("month verified")
-		if !x.week_day.is_empty() and _query_weekday not in x.week_day and _query_day != -1:
+		if !x.week_day.is_empty() and _query_weekday not in x.week_day and x.day != -1:
 			continue
 		print("weekday verified")
 		if x.day != -1 and  x.day != _query_day:
@@ -129,7 +129,7 @@ func connect_to_day(_query_day : int,callable : Callable, _query_time : String =
 	scheduled_times[schedule_config] = callable
 	
 
-func connect_to_weekday(_query_weekday : Array[TimeUtils.WEEKDAY],callable : Callable,_query_time : String,_query_months: Array[TimeUtils.MONTHS]) -> void:
+func connect_to_weekday(_query_weekday : Array[TimeUtils.WEEKDAY],callable : Callable,_query_time : String = "00:00",_query_months: Array[TimeUtils.MONTHS] = []) -> void:
 	assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
 	
 	var schedule_config : ScheduleConfig = ScheduleConfig.new()
@@ -167,7 +167,7 @@ func day_set_handler(_value) -> int:
 		week = 0
 		month  += 1
 	day_changed.emit(day_value)
-	return _value
+	return day_value
 
 func minutes_set_handler(_value) -> int:
 	var minute_value = clamp(_value, 0 , DAY_MINUTES)

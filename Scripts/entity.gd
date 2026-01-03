@@ -9,7 +9,7 @@ var world : World
 
 var fsm : FSMComponent
 var movement : MovementComponent
-var sprite : SpriteStackComponent
+var sprite : SpriteComponent
 var inventory : InventoryContainer
 
 func _ready() -> void:
@@ -94,37 +94,16 @@ func inventory_container() -> InventoryContainer:
 #endregion
 
 #region Sprite API 
-func set_animation_frame(idx: int):
-	if _has_sprite(): sprite.set_frame(idx)
-
-func stop_animation():
-	if _has_sprite(): sprite.stop_animation()
-	
 func play_animation(anim_name : String):
 	if _has_sprite(): sprite.play_animation(anim_name)
 
-func set_animation_direction(direction : Vector2):
-	if _has_sprite(): sprite.set_direction(direction)
-	
-func toggle_animation_layer(layer_name : String):
-	if _has_sprite(): sprite.toggle_layer(layer_name)
-	
-func change_layer_sprite(layer_name : String, sprite_frames : SpriteFrames):
-	if _has_sprite(): sprite.change_layer_sprite(layer_name, sprite_frames)
-	
-func change_layer_color(layer_name : String, color : Color):
-	if _has_sprite(): sprite.change_layer_color(layer_name, color)
-
-func current_animation() -> String:
-	return sprite.get_current_animation() if _has_sprite() else ""
-
-func current_raw_animation() -> String:
-	return sprite.get_raw_animation() if _has_sprite() else ""
+func set_animation_direction(direction :Vector2):
+	if _has_sprite(): sprite.set_anim_direction(direction)
 
 func _has_sprite() -> bool:
 	return sprite != null
 	
-func sprite_component() -> SpriteStackComponent:
+func sprite_component() -> SpriteComponent:
 	return sprite if _has_sprite() else null
 #endregion
 

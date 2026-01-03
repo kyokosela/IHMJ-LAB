@@ -2,6 +2,7 @@ extends Entity
 class_name Player
 
 var interaction : InteractionComponent
+const MAYUI_WORK_BODY_TEST = preload("uid://cnwqcbdmj2h5j")
 
 func _ready() -> void:
 	super()
@@ -10,7 +11,7 @@ func _ready() -> void:
 func _initialize() -> void:
 	fsm = get_component("FSMComponent")
 	movement = get_component("MovementComponent")
-	sprite = get_component("SpriteStackComponent")
+	sprite = get_component("SpriteComponent")
 	interaction = get_component("InteractionComponent")
 	inventory = get_component("InventoryContainer")
 	

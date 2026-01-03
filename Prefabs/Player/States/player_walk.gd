@@ -22,7 +22,7 @@ func physics_update(_delta: float):
 	var direction = Vector2(horizontal_axis,vertical_axis)
 	if direction:
 		player.set_direction(horizontal_axis,vertical_axis)
-		player.play_animation("idle")
+		player.play_animation("walk")
 	else:
 		player.stop_move()
 		fsm.change_state("PlayerIdle")

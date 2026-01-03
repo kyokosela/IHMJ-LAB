@@ -172,7 +172,7 @@ func day_set_handler(_value) -> int:
 		#hay que espeicficar el tipo de valor a pasar como un enum para evitar errores
 		month = (month + 1) as TimeUtils.MONTHS
 	day_changed.emit(day_value)
-	return _value
+	return day_value
 
 func minutes_set_handler(_value) -> int:
 	var minute_value = clamp(_value, 0 , DAY_MINUTES)

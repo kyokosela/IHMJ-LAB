@@ -158,14 +158,14 @@ func get_month_name() -> String:
 
 #region Tools
 
-
 func day_set_handler(_value) -> int:
 	var day_value = _value
 	if week_day == TimeUtils.WEEKDAY.DOMINGO: week += 1
 	if day_value >= 30:
 		day_value = 0
 		week = 0
-		month  += 1
+		#hay que espeicficar el tipo de valor a pasar como un enum para evitar errores
+		month = (month + 1) as TimeUtils.MONTHS
 	day_changed.emit(day_value)
 	return day_value
 

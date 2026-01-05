@@ -1,5 +1,14 @@
 extends Control
 
+#region SETUP
+@onready var inbox: Panel = %Inbox
+@onready var timer: Timer = %Timer
+@onready var sender_mail_label: Label = %SenderMailLabel
+@onready var sender_icon: TextureRect = %SenderIcon
+@onready var subject_label: Label = %SubjectLabel
+@onready var content_label: Label = %ContentLabel
+@onready var action_box: VBoxContainer = %ActionBox
+
 @export var mail_item_scene: PackedScene
 @export var mail_pool: Array[MailEntry]
 
@@ -7,23 +16,25 @@ var cache := {}
 var current_wrapper: Control = null
 
 func _ready() -> void:
-	%Timer.timeout.connect(spawn)
+	while !mail_pool.is_empty():
+		spawn()
+		await timer.timeout
+#endregion
 
 func spawn():
-	if mail_pool.is_empty(): 
-		%Timer.stop()
-		return
-
 	var mail_data = mail_pool.pop_at(randi() % mail_pool.size())
-	var instance = mail_item_scene.instantiate()
-	instance.setup(mail_data)
-	%Inbox.add_child(instance)
+	var mail_item = mail_item_scene.instantiate()
+	inbox.add_child(mail_item)
+	mail_item.setup(mail_data)
 	
-	instance.launch(%Inbox.get_spawn_pos())
-	instance.opened.connect(_handle_mail_content)
-		
+	mail_item.launch(inbox.get_spawn_pos())
+	mail_item.opened.connect(_handle_mail_content)
+
 func _handle_mail_content(data: MailEntry) -> void:
-	%Text.text = data.content
+	sender_mail_label.text = data.mail
+	sender_icon.texture = data.icon 
+	subject_label.text = data.subject
+	content_label.text = data.content
 	data.open()
 	
 	if current_wrapper: current_wrapper.hide()
@@ -39,7 +50,7 @@ func _create_wrapper(data: MailEntry) -> void:
 	var wrapper = VBoxContainer.new()
 	wrapper.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	wrapper.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	%ActionBox.add_child(wrapper)
+	action_box.add_child(wrapper)
 	
 	if data.finished: _show_solved(wrapper)
 	elif data.event:
@@ -62,7 +73,5 @@ func _show_solved(parent: Control) -> void:
 	parent.add_child(l)
 	
 func _get_focus(wrapper: Control) -> void:
-	for child in wrapper.get_children():
-		if child.focus_mode != Control.FOCUS_NONE:
-			child.grab_focus()
-			return
+	var next = wrapper.find_next_valid_focus()
+	if next: next.grab_focus()

@@ -5,8 +5,11 @@ signal completed
 
 @export_category("Header")
 @export var sender := "Coso"
+@export var mail := "default@hola.com"
+@export var icon: Texture2D
 @export var subject := "No hay coso"
 
+# TODO: añadir imagenes en content
 @export_category("Content")
 @export_multiline var content := ""
 @export var event: MailEvent
@@ -14,16 +17,14 @@ signal completed
 var finished := false
 var _opened := false
 
-# TODO:Evitar que el evento se ejecute cada vez que se abre el mail.
 func open() -> void:
-	if not _opened: _opened = true
+	if _opened: return
+	_opened = true
 		
 	if event is LeaveEvent:
 		var id = event.event_id
-		
-		if not id.is_empty():
-			print("evento coso", id)
-			# aquí se emite la señal
+		print("evento coso", id)
+		# aquí se emite la señal
 				
 func solve() -> void:
 	if !finished: finished = true

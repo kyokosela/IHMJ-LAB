@@ -1,15 +1,16 @@
 extends RigidBody2D
 class_name MailInboxItem
 
+@onready var button: Button = %Button
+
 signal opened(data: MailEntry)
 
 var _mail_data: MailEntry
 
-# TODO: setup all necessary values (text, sender, email, icon...)
 func setup(data: MailEntry) -> void:
 	_mail_data = data
-	$Button.text = data.sender + ": " + data.subject
-	%Button.pressed.connect(_on_pressed)
+	button.text = data.sender + ": " + data.subject
+	button.pressed.connect(_on_pressed)
 	
 	if _mail_data.completed:
 		modulate = Color(0.7, 0.7, 0.7)

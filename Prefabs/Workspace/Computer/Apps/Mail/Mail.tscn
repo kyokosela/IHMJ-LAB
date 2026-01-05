@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://v8c6vu22yl43"]
+[gd_scene load_steps=12 format=3 uid="uid://v8c6vu22yl43"]
 
 [ext_resource type="Script" uid="uid://cicrbvcub4q4r" path="res://Prefabs/Workspace/Computer/Apps/Mail/mail.gd" id="1_ecqxk"]
 [ext_resource type="PackedScene" uid="uid://b40tk8ekcmjxa" path="res://Prefabs/Workspace/Computer/Apps/Mail/UI/MailItem/MailItem.tscn" id="2_21y06"]
@@ -11,6 +11,10 @@
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dtwwy"]
 friction = 0.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_72h35"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cdg4n"]
 
 [node name="Mail" type="Control"]
 custom_minimum_size = Vector2(696, 340)
@@ -54,6 +58,7 @@ position = Vector2(95, 0)
 
 [node name="Timer" type="Timer" parent="HBoxContainer/Inbox"]
 unique_name_in_owner = true
+wait_time = 0.5
 autostart = true
 
 [node name="Reader" type="PanelContainer" parent="HBoxContainer"]
@@ -64,12 +69,31 @@ size_flags_horizontal = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Reader"]
 layout_mode = 2
 
-[node name="Mail" type="PanelContainer" parent="HBoxContainer/Reader/VBoxContainer"]
+[node name="SenderMarginContainer" type="MarginContainer" parent="HBoxContainer/Reader/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+
+[node name="Mail" type="PanelContainer" parent="HBoxContainer/Reader/VBoxContainer/SenderMarginContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Reader/VBoxContainer"]
+[node name="SenderMailLabel" type="Label" parent="HBoxContainer/Reader/VBoxContainer/SenderMarginContainer/Mail"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+vertical_alignment = 1
+
+[node name="SenderIcon" type="TextureRect" parent="HBoxContainer/Reader/VBoxContainer/SenderMarginContainer/Mail"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="ContentMarginContainer" type="MarginContainer" parent="HBoxContainer/Reader/VBoxContainer"]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_vertical = 3
@@ -78,22 +102,52 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="Content" type="PanelContainer" parent="HBoxContainer/Reader/VBoxContainer/MarginContainer"]
+[node name="Content" type="PanelContainer" parent="HBoxContainer/Reader/VBoxContainer/ContentMarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Text" type="Label" parent="HBoxContainer/Reader/VBoxContainer/MarginContainer/Content"]
+[node name="HScrollBar" type="HScrollBar" parent="HBoxContainer/Reader/VBoxContainer/ContentMarginContainer/Content"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/grabber = SubResource("StyleBoxEmpty_72h35")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Reader/VBoxContainer/ContentMarginContainer/Content/HScrollBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubjectLabel" type="Label" parent="HBoxContainer/Reader/VBoxContainer/ContentMarginContainer/Content/HScrollBar/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/Reader/VBoxContainer/ContentMarginContainer/Content/HScrollBar/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_cdg4n")
+
+[node name="ContentLabel" type="Label" parent="HBoxContainer/Reader/VBoxContainer/ContentMarginContainer/Content/HScrollBar/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_vertical = 0
 autowrap_mode = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/Reader/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
+[node name="ActionMarginContainer" type="MarginContainer" parent="HBoxContainer/Reader/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/Reader/VBoxContainer/ActionMarginContainer"]
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 
-[node name="ActionBox" type="VBoxContainer" parent="HBoxContainer/Reader/VBoxContainer/PanelContainer"]
+[node name="ActionBox" type="VBoxContainer" parent="HBoxContainer/Reader/VBoxContainer/ActionMarginContainer/PanelContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2

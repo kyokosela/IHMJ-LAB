@@ -73,14 +73,20 @@ func clear_energy_effects(_exception : String) :
 #con la variable modifier, modifica el valor de cada stat recorriendo su recurso que se obtuvo antes
 func apply_effects(_effect_name : String = "") -> void:
 	for stat in stats:
-		stat.value += stat_change_total(stat.stat_unique_name)
+		stat.value = get_stat_change_total(stat.stat_unique_name)
 
-func stat_change_total(unique_stat_name: String) -> float:
+func get_stat_change_total(unique_stat_name: String) -> float:
 	var total : float = 0
 	for effect in effects:
 		total += effect.stat_change_total(unique_stat_name)
 	return total
-	
+
+func get_cost_with_effects(unique_stat_name: String, _custom_num : float = 0) -> float :
+	var total : float = _custom_num
+	for effect in effects:
+		total = effect.get_stat_change_total(unique_stat_name, _custom_num)
+	return total
+
 #endregion
 
 #region EFFECTS API

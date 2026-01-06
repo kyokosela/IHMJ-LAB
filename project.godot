@@ -11,7 +11,11 @@ config_version=5
 [application]
 
 config/name="I Hate My Job"
+config/description="AiAe"
+config/version="2026.01.06"
 run/main_scene="uid://cdmbl4s6mgpoi"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="IHMJ"
 config/features=PackedStringArray("4.5")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 config/icon="uid://bjv6sibxm861c"

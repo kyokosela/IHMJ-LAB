@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=4 uid="uid://cdmbl4s6mgpoi"]
+[gd_scene load_steps=21 format=4 uid="uid://cdmbl4s6mgpoi"]
 
 [ext_resource type="Script" uid="uid://cbs8bskt5bfsp" path="res://Scenes/playground.gd" id="1_u6rxl"]
 [ext_resource type="PackedScene" uid="uid://ctagwp38abn4u" path="res://Prefabs/walls/floors.tscn" id="2_npy7o"]
@@ -36,8 +36,30 @@ string_list = Array[ExtResource("8_ipdnw")]([SubResource("Resource_iv8lt")])
 cooldown_message = "SEJE DE INSISTIR PERRO IMBEVCIL"
 metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
 
+[sub_resource type="Resource" id="Resource_eodav"]
+script = ExtResource("8_ipdnw")
+string_list = Array[String](["No tengo suficiente energia"])
+behaviour = 3
+metadata/_custom_type_script = "uid://cdqqyuliu6jyp"
+
+[sub_resource type="Resource" id="Resource_jefqp"]
+script = ExtResource("7_fikvc")
+string_list = Array[ExtResource("8_ipdnw")]([SubResource("Resource_eodav")])
+metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k2wcb"]
 size = Vector2(50, 50)
+
+[sub_resource type="Resource" id="Resource_7rk4w"]
+script = ExtResource("8_ipdnw")
+string_list = Array[String](["NO TRENGO UN DURO"])
+behaviour = 3
+metadata/_custom_type_script = "uid://cdqqyuliu6jyp"
+
+[sub_resource type="Resource" id="Resource_yhss4"]
+script = ExtResource("7_fikvc")
+string_list = Array[ExtResource("8_ipdnw")]([SubResource("Resource_7rk4w")])
+metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ipdnw"]
 
@@ -59,6 +81,7 @@ position = Vector2(88, 72)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(4.2, 4.2)
+limit_enabled = false
 
 [node name="Label" type="Label" parent="."]
 offset_left = 224.0
@@ -99,6 +122,10 @@ position = Vector2(18.73706, 7.414772)
 script = ExtResource("7_ipdnw")
 effect_list = Array[String](["DIRT"])
 effect_messages = SubResource("Resource_st1l6")
+stat_req_list = Dictionary[String, int]({
+"ENERGY": 10
+})
+stat_messages = SubResource("Resource_jefqp")
 shape = SubResource("RectangleShape2D_k2wcb")
 display_text = "DUCHA"
 children_visible = true
@@ -117,6 +144,10 @@ text = "lavamanos"
 [node name="InteractableAction" type="Area2D" parent="Label3"]
 position = Vector2(44.337463, 18.12053)
 script = ExtResource("6_u6rxl")
+stat_req_list = Dictionary[String, int]({
+"ENERGY": 10
+})
+stat_messages = SubResource("Resource_yhss4")
 shape = SubResource("RectangleShape2D_ipdnw")
 display_text = "marrana de mierda"
 children_visible = true

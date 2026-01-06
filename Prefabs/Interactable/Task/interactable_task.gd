@@ -7,12 +7,18 @@ class_name InteractableAction
 @export var effect_messages : StringChain
 @export var event_list : Array[String]
 @export var event_messages : StringChain
+@export var stat_req_list : Dictionary[String, int] ## usar nombre unico como por ejemplo ENERGY
+@export var stat_messages : StringChain
 var is_cooldown : bool
 
 func custom_execute(): 
 	super()
 	if !is_cooldown : 
 		can_interact = true 
+	
+	for stat_name in stat_req_list :
+		var test = PlayerManager.get_cost_with_effects(stat_name, stat_req_list[stat_name])
+		PlayerManager.decrease_stat(stat_name, test)
 
 func _ready() -> void:
 	super()
@@ -40,6 +46,12 @@ func execute() -> void :
 			Dialogic.timeline_ended.connect(func (): if !is_cooldown : can_interact = true, CONNECT_ONE_SHOT)
 		return
 	
+	if !check_stats() :
+		if stat_messages != null :
+			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], stat_messages.get_message())
+			Dialogic.timeline_ended.connect(func (): if !is_cooldown : can_interact = true, CONNECT_ONE_SHOT)
+		return
+	
 	custom_execute()
 	executed.emit()
 	
@@ -62,4 +74,10 @@ func check_effects() -> bool :
 func check_events() -> bool :
 	for event : String in event_list :
 		if !EventManager.is_event_active(event) : return false
+	return true
+
+func check_stats() -> bool :
+	for stat in stat_req_list :
+		if PlayerManager.get_stat_value(stat) < (PlayerManager.get_cost_with_effects(stat, stat_req_list[stat])) :
+			return false
 	return true

@@ -1,11 +1,19 @@
-[gd_resource type="Resource" script_class="Effect" load_steps=3 format=3 uid="uid://bjjg72x4dps63"]
+[gd_resource type="Resource" script_class="Effect" load_steps=4 format=3 uid="uid://bjjg72x4dps63"]
 
 [ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_vblmv"]
 [ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_f861h"]
+
+[sub_resource type="Resource" id="Resource_vblmv"]
+script = ExtResource("2_f861h")
+stat_unique_name = "ENERGY"
+value = 0.1
+OPERATION = 2
+metadata/_custom_type_script = "uid://8yhqerdijsj6"
 
 [resource]
 script = ExtResource("1_vblmv")
 effect_unique_name = "HYPERACTIVE"
 effect_display_name = "_EFFECT_HYPERACTIVE_"
 render = true
+stat_changes = Array[ExtResource("2_f861h")]([SubResource("Resource_vblmv")])
 metadata/_custom_type_script = "uid://b7krqqvmfg6wr"

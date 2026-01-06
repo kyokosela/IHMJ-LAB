@@ -1,19 +1,26 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=6 format=3 uid="uid://bvx6r35khet8g"]
 
-[ext_resource type="Script" uid="uid://bm7ggxhjtd643" path="res://Resources/Items/Behaviors/item_behavior.gd" id="1_ike26"]
-[ext_resource type="Script" uid="uid://bhvlc64o0ato" path="res://Resources/Items/Behaviors/cloth_behavior.gd" id="2_3qd6b"]
+[ext_resource type="Script" uid="uid://do0pdg85om6vq" path="res://Resources/Items/Behaviors/consumable_behavior.gd" id="1_ike26"]
 [ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="2_hh70t"]
-[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/item_data.gd" id="3_3qd6b"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="3_3qd6b"]
 
-[sub_resource type="Resource" id="Resource_fo4rm"]
-script = ExtResource("2_3qd6b")
-metadata/_custom_type_script = "uid://bhvlc64o0ato"
+[sub_resource type="Resource" id="Resource_hh70t"]
+script = ExtResource("1_ike26")
+metadata/_custom_type_script = "uid://do0pdg85om6vq"
+
+[sub_resource type="Resource" id="Resource_ike26"]
+script = ExtResource("2_hh70t")
+applies_to = "cold"
+multiplier = 0.0
+metadata/_custom_type_script = "uid://wotj3baput20"
 
 [resource]
 script = ExtResource("3_3qd6b")
 item_name = "ItemTester"
-item_unique_name = "test_item_2"
+item_unique_name = "item_test_2"
 item_description = "asdasdf"
-item_type = 2
-behaviours = Array[ExtResource("1_ike26")]([SubResource("Resource_fo4rm")])
+item_type = 1
+behavior = SubResource("Resource_hh70t")
+base_decay_time = 60
+modifiers = Array[ExtResource("2_hh70t")]([SubResource("Resource_ike26")])
 metadata/_custom_type_script = "uid://b03xnf82gb26a"

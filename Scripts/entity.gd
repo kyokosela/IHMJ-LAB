@@ -58,14 +58,8 @@ func remove_item(item: ItemData, amount : int = 1) -> int:
 func has_item(item_data: ItemData, amount: int = 1) -> bool:
 	return _has_inventory() and inventory.has_item(item_data, amount)
 
-func get_item_data_by_name(unique_name: String) -> ItemData:
-	var slots = inventory.get_slots() 
-	for slot in slots:
-		if slot.is_empty(): continue
-		var data = slot.items[0].data
-		if data.item_unique_name == unique_name:
-			return data
-	return null
+func get_item_by_name(unique_name: String) -> ItemData:
+	return inventory.get_item_by_name(unique_name) if _has_inventory() else null
 
 func count_item(item_data: ItemData) -> int:
 	return inventory.count_item(item_data) if _has_inventory() else 0
@@ -73,9 +67,12 @@ func count_item(item_data: ItemData) -> int:
 func get_inventory_size() -> int:
 	return inventory.get_inventory_size() if _has_inventory() else 0
 	
-func get_items() -> Array[ItemData]:
-	return inventory.get_unique_items() if _has_inventory() else []
-	
+func get_items(item : ItemData) -> Array[Item]:
+	return inventory.get_items_of(item) if _has_inventory() else []
+
+func get_items_of() -> Array[ItemData]:
+	return inventory.get_items() if _has_inventory() else []
+
 func has_space_for(item_data: ItemData, amount: int = 1) -> bool:
 	return inventory.has_space_for(item_data, amount)
 	

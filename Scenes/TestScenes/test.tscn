@@ -364,9 +364,6 @@ position = Vector2(8, 8)
 position = Vector2(42, 23)
 script = ExtResource("4_porce")
 shape = SubResource("RectangleShape2D_ikan7")
-display_text = ""
-children_visible = false
-reusable = false
 dialog = ExtResource("5_l3fqk")
 metadata/_custom_type_script = "uid://btpm0l5mnnxxf"
 

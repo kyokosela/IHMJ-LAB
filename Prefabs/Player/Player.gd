@@ -18,6 +18,16 @@ func _initialize() -> void:
 	Dialogic.timeline_started.connect(func(): movement.can_move = false)
 	Dialogic.timeline_ended.connect(func(): movement.can_move = true)
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("test"):
+		add_item(preload("uid://bt0m76qd15ptj"))
+		add_item(preload("uid://bvx6r35khet8g"))
+	if event.is_action_pressed("Interact"):
+		var item = get_items(preload("uid://bt0m76qd15ptj"))
+		if item: 
+			item[0].use()
+			item[0].condition -= 1
+
 func _process(_delta: float) -> void:
 	pass
 

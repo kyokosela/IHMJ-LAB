@@ -6,7 +6,9 @@ enum TIMES {HOUR,MINUTE}
 
 signal time_changed(month : TimeUtils.MONTHS, week: TimeUtils.WEEKDAY, day: int, minutes: int)
 
-signal minutes_changed(time_value : int) ## se emite cuando el tiempo cambia
+signal minutes_changed(minutes_value : int) ## se emite cuando el tiempo cambia
+signal minutes_delta(delta_minutes : int)
+
 signal day_changed(day_value : int) ## se emite cuando el dia cambia
 signal week_changed(week_value : int) ## se emite cada vez que la semana cambia, automaticamente los dias 7
 signal month_changed(month_value : int) ## se emite cada vez que el mes cambia, automaticamente los dias 30
@@ -175,18 +177,23 @@ func day_set_handler(_value) -> int:
 	return day_value
 
 func minutes_set_handler(_value) -> int:
+	var delta : int = 0
 	var minute_value = clamp(_value, 0 , DAY_MINUTES)
+	delta = _value - minutes
 	if _value >= DAY_MINUTES:
 		day +=1
 		julian_day += 1
 		minute_value = 0
+		delta = DAY_MINUTES - minutes
 	#manejar el tema de la resta para definir a que hora del dia siguientes establecerlo
 	if _value < 0:
 		day -=1
 		julian_day -= 1
 		minute_value = DAY_MINUTES
+		delta = minutes - DAY_MINUTES
 	#lo mismo de arriba pero alrevez, mayormente para debug
 	minutes_changed.emit(minute_value)
+	minutes_delta.emit(delta)
 	return minute_value
 
 

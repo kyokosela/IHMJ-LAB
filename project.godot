@@ -25,6 +25,7 @@ Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 PlayerManager="*res://Scripts/player_manager.gd"
 TaskManager="*res://Scripts/task_manager.gd"
 ZoneManager="*res://Scripts/zone_manager.gd"
+PlayerUi="*res://UI/PLAYERUI/PlayerUI.tscn"
 
 [dialogic]
 
@@ -118,6 +119,7 @@ folder_colors={
 "res://Scenes/": "blue",
 "res://Scripts/": "purple",
 "res://Textfiles/": "pink",
+"res://UI/": "green",
 "res://addons/": "red"
 }
 

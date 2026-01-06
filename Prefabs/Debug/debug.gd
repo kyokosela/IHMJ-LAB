@@ -41,7 +41,19 @@ func _ready() -> void:
 	EventManager.event_activated.connect(_on_event_active)
 	EventManager.event_deactivaded.connect(_on_event_deactive)
 	TimeManager.time_changed.connect(time_debug)
-	
+	PlayerManager.effect_added.connect(_on_effect_active)
+	PlayerManager.effect_removed.connect(_on_effect_remove)
+
+func _on_effect_active(effect : Effect) -> void :
+	var _label := Label.new()
+	_label.text = effect.effect_display_name + str( " ", effect.effect_unique_name)
+	_label.name = effect.effect_unique_name
+	%EffectsList.add_child(_label)
+
+func _on_effect_remove(effect : Effect) -> void :
+	var node = %EffectsList.get_node_or_null(effect.effect_unique_name)
+	if node : node.queue_free()
+
 func _on_event_active(event_unique_name : String) -> void:
 	var _label := Label.new()
 	_label.text = event_unique_name

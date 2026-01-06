@@ -1,6 +1,6 @@
 @tool
 extends Interactable
-class_name InteractableTask
+class_name InteractableAction
 
 @export var task_lists : Array[String]
 @export var effect_list : Array[String]
@@ -9,12 +9,18 @@ class_name InteractableTask
 @export var event_messages : StringChain
 var is_cooldown : bool
 
+func custom_execute(): 
+	super()
+	if !is_cooldown : 
+		can_interact = true 
+
 func _ready() -> void:
 	super()
 	if effect_messages : effect_messages.end_chain.connect(set_cooldown)
 	if event_messages : event_messages.end_chain.connect(set_cooldown)
 
 func execute() -> void :
+
 	can_interact = false
 	for task_list in task_lists :
 		if TaskManager.is_task_list_active(task_list) and !TaskManager.is_task_list_done(task_list) :
@@ -34,14 +40,14 @@ func execute() -> void :
 			Dialogic.timeline_ended.connect(func (): if !is_cooldown : can_interact = true, CONNECT_ONE_SHOT)
 		return
 	
+	custom_execute()
+	executed.emit()
+	
 	if !show_again_at_end : toggle_visible(TOGGLE_MODE.HIDE)
 	
 	if destroy_at_end : 
 		if dialog == null : queue_free()
 		else : Dialogic.timeline_ended.connect(func () : queue_free(), CONNECT_ONE_SHOT)
-	
-	custom_execute()
-	executed.emit()
 
 func set_cooldown() -> void :
 	is_cooldown = true

@@ -54,7 +54,7 @@ var custom_expresion : Expression = Expression.new()
 @export_group("DANGEROUS")
 @export_custom(PROPERTY_HINT_EXPRESSION,"") var expresion : String = ""
 
-func custom_execute(): pass ## [b]Funcion personalizada[/b] que se ejecutara al realizar la [b]interacción[/b]
+func custom_execute(): return ## [b]Funcion personalizada[/b] que se ejecutara al realizar la [b]interacción[/b], USAR SUPER
 
 func _ready() -> void:
 	add_to_group("Interactable")

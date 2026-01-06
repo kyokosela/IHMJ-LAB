@@ -1,5 +1,6 @@
 extends Node
 
+@warning_ignore_start("unused_signal")
 signal event_activated(event_name : String)
 signal event_deactivaded(event_name : String)
 

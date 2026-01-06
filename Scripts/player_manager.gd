@@ -5,6 +5,9 @@ signal effect_removed(effect : Effect)
 
 signal stat_connection_added
 
+@warning_ignore_start("unused_signal")
+signal stat_value_changed(stat : Stat, new_value : float)
+
 enum CONNECTION_PARAM {
 	SIGNAL,
 	CALLABLE,

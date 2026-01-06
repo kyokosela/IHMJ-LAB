@@ -24,10 +24,12 @@ func apply_decay(minutes: int):
 		var modifiers : Array[ConditionModifier] = item.data.modifiers
 		var env_conditions : Array[String] = environment.get_conditions()
 		
+		decay_value = round( (minutes / (base_decay + (base_decay * quality)) * 100) )
+		
 		for modifier : ConditionModifier in modifiers:
 			if modifier.applies_to in env_conditions:
 				decay_value = round( (minutes / (base_decay + (base_decay * quality)) * 100) * modifier.multiplier )
-		if modifiers.is_empty(): decay_value = round( (minutes / (base_decay + (base_decay * quality)) * 100) )
+		
 		print(decay_value)
 		item.condition -= decay_value # Test por ahora, no creo que mantenga la formula asi
 		print("item: ", item.data.item_unique_name, " | condition: ",item.condition)

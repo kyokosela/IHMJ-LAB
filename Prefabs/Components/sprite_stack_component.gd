@@ -3,6 +3,7 @@ extends Component
 class_name SpriteComponent
 
 @export var animation_player : AnimationPlayer
+@export var custom_presets : Array[SpritePreset]
 
 @export var current_preset: SpritePreset:
 	set(v):
@@ -54,6 +55,26 @@ func change_layer(layer_name : String, texture : Texture2D):
 	
 	current_preset.layers[layer_name] = texture
 	_update_textures()
+
+func has_preset(preset_name : String) -> bool:
+	for preset in custom_presets:
+		if preset.preset_name == preset_name: return true
+	return false
+
+func change_preset(preset: SpritePreset) -> void:
+	current_preset = preset
+
+func change_preset_by_name(preset_name : String) -> void:
+	if !has_preset(preset_name): return
+	change_preset(get_preset(preset_name))
+
+func get_preset(preset_name : String) -> SpritePreset:
+	for preset in custom_presets:
+		if preset.preset_name == preset_name: return preset
+	return null
+
+func get_all_preset() -> Array[SpritePreset]:
+	return custom_presets
 
 func set_anim_direction(direction : Vector2):
 	anim_direction = Utils.get_vector_name(direction)

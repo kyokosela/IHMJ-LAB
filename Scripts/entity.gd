@@ -97,6 +97,21 @@ func play_animation(anim_name : String):
 func set_animation_direction(direction :Vector2):
 	if _has_sprite(): sprite.set_anim_direction(direction)
 
+func has_preset(preset_name : String) -> bool:
+	return sprite.has_preset(preset_name) and _has_sprite()
+
+func change_preset(preset : SpritePreset) ->void:
+	if _has_sprite(): sprite.change_preset(preset)
+
+func change_preset_by_name(preset_name : String) -> void:
+	if _has_sprite(): sprite.change_preset_by_name(preset_name)
+
+func get_preset(preset_name : String) -> SpritePreset:
+	return sprite.get_preset(preset_name) if _has_sprite() else null
+
+func get_all_preset() -> Array[SpritePreset]:
+	return sprite.get_all_preset() if _has_sprite() else []
+
 func _has_sprite() -> bool:
 	return sprite != null
 	

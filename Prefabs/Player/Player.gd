@@ -20,6 +20,7 @@ func _initialize() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("test"):
+		sprite.change_preset_by_name("mayui_towel")
 		add_item(preload("uid://bt0m76qd15ptj"))
 		add_item(preload("uid://bvx6r35khet8g"))
 	if event.is_action_pressed("Interact"):

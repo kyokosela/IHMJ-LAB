@@ -1,6 +1,7 @@
-[gd_scene load_steps=21 format=4 uid="uid://cdmbl4s6mgpoi"]
+[gd_scene load_steps=22 format=4 uid="uid://cdmbl4s6mgpoi"]
 
 [ext_resource type="Script" uid="uid://cbs8bskt5bfsp" path="res://Scenes/playground.gd" id="1_u6rxl"]
+[ext_resource type="PackedScene" uid="uid://dsipbskcmad4s" path="res://Scenes/HudScenes/hud.tscn" id="2_iv8lt"]
 [ext_resource type="PackedScene" uid="uid://ctagwp38abn4u" path="res://Prefabs/walls/floors.tscn" id="2_npy7o"]
 [ext_resource type="PackedScene" uid="uid://b2w4stq2ucdlo" path="res://Prefabs/walls/walls.tscn" id="3_u6rxl"]
 [ext_resource type="PackedScene" uid="uid://tcey4tkkfvd8" path="res://Prefabs/Player/Player.tscn" id="4_k2wcb"]
@@ -67,6 +68,14 @@ metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
 script = ExtResource("1_u6rxl")
 metadata/_custom_type_script = "uid://mni1cq3j7l53"
 
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="UILayer" instance=ExtResource("2_iv8lt")]
+offset_left = -1.0
+offset_top = -3.0
+offset_right = -1.0
+offset_bottom = -3.0
+
 [node name="DebugPanel" parent="." instance=ExtResource("5_npy7o")]
 position = Vector2i(5, 210)
 
@@ -80,8 +89,12 @@ tile_map_data = PackedByteArray("AAAAAAAAAAADAAAAAAAAAAEAAAADAAEAAAAAAAIAAAAIAAY
 position = Vector2(88, 72)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(-11, 0)
 zoom = Vector2(4.2, 4.2)
+process_callback = 0
 limit_enabled = false
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
 
 [node name="Label" type="Label" parent="."]
 offset_left = 224.0

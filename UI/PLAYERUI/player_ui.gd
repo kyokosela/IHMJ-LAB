@@ -13,9 +13,12 @@ func _ready() -> void:
 	
 	PlayerManager.connect_to_stat("ENERGY", func (_new_value) : energy_var.value = _new_value) 
 	#PlayerManager.connect_to_stat("HEALTH", func (_new_value) : health_bar.value = _new_value)
-	TimeManager.minutes_changed.connect(func (_minutes) : time_label.text = TimeManager.format_minutes(_minutes))
+	TimeManager.minutes_changed.connect(_on_minutes_changed)
 	PlayerManager.effect_added.connect(create_effect_slot)
 	PlayerManager.effect_removed.connect(remove_effect_slot)
+	
+func _on_minutes_changed(_minutes):
+	time_label.text = TimeManager.format_minutes(_minutes)
 
 func create_effect_slot(effect : Effect) -> void :
 	var effect_slot : TextureRect = effect_slot_scene.instantiate()

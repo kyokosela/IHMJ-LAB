@@ -26,20 +26,20 @@ enum MONTHS {
 	DICIEMBRE
 }
 
-static func increase_time(time : String, new_time : String) -> String :
+static func increase_time(time : String, addition_time : String) -> String :
 	if !is_valid_format(time) : return time
 	var time_val = get_minutes(time)
-	var new_time_val = get_minutes(new_time)
+	var addition_time_val = get_minutes(addition_time)
 	
-	var res = time_val + new_time_val
+	var res = time_val + addition_time_val
 	return TimeManager.format_minutes(res)
 
-static func decrease_time(time : String, new_time : String) -> String :
+static func decrease_time(time : String, substract_time : String) -> String :
 	if !is_valid_format(time) : return time
 	var time_val = get_minutes(time)
-	var new_time_val = get_minutes(new_time)
+	var new_substract_time_val = get_minutes(substract_time)
 	
-	var res = time_val - new_time_val
+	var res = time_val - new_substract_time_val
 	return TimeManager.format_minutes(res)
 
 static func is_valid_format(time : String) -> bool :

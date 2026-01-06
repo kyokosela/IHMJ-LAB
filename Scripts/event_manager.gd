@@ -8,7 +8,6 @@ signal event_deactivaded(event_name : String)
 var stack_active_events : Array[Event]  ## lista de eventos activos
 
 #region Logic
-
 func _ready() -> void:
 	TimeManager.minutes_changed.connect(check_events)
 	TimeManager.day_changed.connect(check_daily_events)

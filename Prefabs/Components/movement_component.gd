@@ -23,10 +23,6 @@ var buffered_input: Vector2 = Vector2.ZERO
 @export var tile_based: bool = true ## Determina el tipo de movimiento, si es falso el movimiento sera libre/vectorial
 @export_custom(PROPERTY_HINT_LAYERS_2D_PHYSICS, "Collision Mask") var raycast_mask : int = 1
 
-@export_subgroup("Fallback")
-@export var stuck_time_limit := 0.15 # segundos
-@export var min_movement_delta := 0.5 # pixeles
-
 var stuck_timer := 0.0
 var last_position := Vector2.ZERO
 
@@ -103,31 +99,12 @@ func apply_movement(delta : float): ## Determina que tipo de movimiento se usara
 func tile_movement(_delta: float) -> void: ## Maneja el movimiento basado por tiles
 	var distance := entity.global_position.distance_to(tile_destination)
 	if is_moving:
-		var moved := entity.global_position.distance_to(last_position)
-		if moved < min_movement_delta:
-			stuck_timer += _delta
-		else:
-			stuck_timer = 0.0
 		last_position = entity.global_position
-		if stuck_timer >= stuck_time_limit:
-			_handle_stuck()
-			return
 	if distance <= 3.0:
 		_snap_to_tile()
 		_try_start_next_move()
 	else:
 		_move_towards_tile()
-
-func _handle_stuck() -> void:
-	entity.velocity = Vector2.ZERO
-	is_moving = false
-	stuck_timer = 0.0
-	
-	entity.global_position = entity.global_position.snapped(tile_size) + tile_size / 2
-	
-	buffered_input = Vector2.ZERO
-	
-	tile_destination = entity.global_position
 
 func dynamic_movement(delta:float): ## Maneja el movimiento libre/vectorial 
 	var desired_direction = Vector2(x_direction,y_direction).normalized()
@@ -180,9 +157,6 @@ func _get_priority_step(direction: Vector2) -> Vector2: ## Retorna la direccion 
 	return Vector2(0, sign(direction.y))
 
 func _move_towards_tile() -> void:
-	if entity.is_on_wall():
-		_handle_stuck()
-		return
 	var move_dir : Vector2 = entity.global_position.direction_to(tile_destination)
 	#print(entity.global_position, " ", tile_destination)
 	last_facing_dir = move_dir

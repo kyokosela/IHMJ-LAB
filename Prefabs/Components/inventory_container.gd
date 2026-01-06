@@ -9,6 +9,31 @@ func _ready():
 	if inventory == null:
 		inventory = InventoryComponent.new()
 		add_child(inventory)
+	TimeManager.minutes_delta.connect(apply_decay)
+
+#region LOGIC
+func apply_decay(minutes: int):
+	print(minutes)
+	var items = get_all_items()
+	if not items: return 
+	for item : Item in items:
+		print("item: ", item.data.item_unique_name, " | condition: ",item.condition)
+		var decay_value : float = 0
+		var base_decay : int = item.data.base_decay_time
+		var quality : float = item.data.get_quality_percentage()
+		var modifiers : Array[ConditionModifier] = item.data.modifiers
+		var env_conditions : Array[String] = environment.get_conditions()
+		
+		for modifier : ConditionModifier in modifiers:
+			if modifier.applies_to in env_conditions:
+				decay_value = round( (minutes / (base_decay + (base_decay * quality)) * 100) * modifier.multiplier )
+		if modifiers.is_empty(): decay_value = round( (minutes / (base_decay + (base_decay * quality)) * 100) )
+		print(decay_value)
+		item.condition -= decay_value # Test por ahora, no creo que mantenga la formula asi
+		print("item: ", item.data.item_unique_name, " | condition: ",item.condition)
+			
+	
+#endregion
 
 #region API
 
@@ -45,6 +70,14 @@ func transfer_slot_to(target: InventoryContainer,slot_index: int,amount := 1) ->
 
 #region UTILS
 
+func get_all_items() -> Array[Item]:
+	var item_slots = get_slots()
+	var items : Array[Item]
+	for slot : InventorySlot in item_slots:
+		for item in slot.items:
+			items.append(item)
+	return items
+	
 func has_item(data: ItemData, amount := 1) -> bool:
 	return inventory.has_item(data, amount)
 
@@ -69,6 +102,15 @@ func get_items() -> Array[ItemData]:
 
 func get_items_of(item : ItemData) -> Array[Item]:
 	return inventory.get_all_instances_of(item)
+
+func get_item_by_name(unique_name : String) -> ItemData:
+	var slots = get_slots() 
+	for slot in slots:
+		if slot.is_empty(): continue
+		var data = slot.items[0].data
+		if data.item_unique_name == unique_name:
+			return data
+	return null
 
 func get_random_item() -> ItemData:
 	return get_items().pick_random()

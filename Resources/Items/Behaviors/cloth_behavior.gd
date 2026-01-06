@@ -8,3 +8,7 @@ class_name ClothBehavior
 ##### Mi idea es que el entity tenga una funcion de swap_sprite o algo y se llame desde aca
 ##### Se le pasa de referencia el item y el entity se encarga de agarrar la ropa que tiene puesta
 ##### y cambiarla por esta
+
+#### Otra cosa, al parecer la ropa tendra un sistema de estadisticas o atributos, es decir si mucho
+#### frio, una ropa caliente puede hacer que se te quite el frio, tocara hacer sistema de equipamiento
+#### gggg roguelike 500 billones

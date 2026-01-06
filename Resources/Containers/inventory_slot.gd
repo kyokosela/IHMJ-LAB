@@ -2,7 +2,7 @@ extends RefCounted
 class_name InventorySlot
 
 var items: Array[Item] = []
-var slot_type : Array[ItemData.TYPE]
+var slot_type : Array[ItemData.TYPE] #unused por ahora
 var max_stack := 10
 
 

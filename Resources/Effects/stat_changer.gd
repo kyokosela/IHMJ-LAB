@@ -3,7 +3,8 @@ class_name StatChanger
 
 enum OPERATION_CASE {
 	INCREASE,
-	DECREASE
+	DECREASE,
+	MULTIPLIER
 }
 
 @export var stat_unique_name : String

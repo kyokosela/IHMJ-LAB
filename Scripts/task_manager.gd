@@ -21,6 +21,8 @@ func done_task(_task_list_unique_name : String, _task_unique_name : String) -> v
 	var task_list : TaskList = get_task_list_res(_task_list_unique_name)
 	if task_list != null : 
 		task_list.check_task(_task_unique_name)
+	else :
+		printerr(" error con al asignar la tarea ", _task_list_unique_name, " -> ", _task_unique_name)
 
 func is_task_list_done(_task_list_unique_name : String) -> bool :
 	var task_list : TaskList = get_task_list_res(_task_list_unique_name)

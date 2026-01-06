@@ -20,8 +20,6 @@ func _ready() -> void:
 		var array = Time.get_date_dict_from_system().values() + Time.get_time_dict_from_system().values()
 		log_file_name = str("res://log/" + "%s-%s-%s-%s (%sh%sm%ss)" % array) + ".txt"
 		setup_log()
-	
-	
 
 func _process(_delta: float) -> void:
 	fps = Engine.get_frames_per_second()
@@ -42,12 +40,10 @@ var game_data : Dictionary
 func new_game() -> void :
 	#TODO creacion de archivos
 	is_on_tutorial = true
-	TimeManager.minutes = 360
+	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
 	PlayerManager.add_effect(load("res://Resources/Effects/Effects/hunger_level_1.tres"))
 	PlayerManager.add_effect(load("res://Resources/Effects/Effects/dirt_level_1.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
-	EventManager.load_event(load("res://Resources/Events/GlobalEvents/event_night.tres"))
-	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
 
 func load_file(save_id : int) -> void : ## MAX 2 en el parametro
 	var file = FileAccess.open(SAVE_PATHS[save_id], FileAccess.READ)

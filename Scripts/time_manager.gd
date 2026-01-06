@@ -48,23 +48,17 @@ func _ready() -> void:
 	minutes_changed.connect(func(_r): print("Minutes changed: "+ str(_r))) 
 
 func check_scheduled_times(_query_month : TimeUtils.MONTHS, _query_weekday: TimeUtils.WEEKDAY, _query_day: int, _query_minutes: int, _query_week : int) -> void :
-	print(scheduled_times)
 	for x : ScheduleConfig in scheduled_times:
-		print("indice: ", x)
 		if !x.month.is_empty() and _query_month not in x.month:
 			continue
-		print("month verified")
-		print("???", x.week_day, " | ", _query_weekday)
 		if !x.week_day.is_empty() and _query_weekday not in x.week_day:
 			continue
-		print("weekday verified")
 		if x.day != -1 and x.day != _query_day:
 			continue
-		print("day verified")
 		#TODO en caso de que el auimento de tiempo suba un dia, verificar tambien eso, quizas? no se
-		for time in x.times :
-			if is_time_lower(time) :
-				scheduled_times[x].call()
+		if is_time_lower(x.time) and x.triggered == false:
+			scheduled_times[x].call()
+			x.triggered = true
 
 #endregion
 
@@ -136,18 +130,20 @@ func connect_to_day(_query_day : int,callable : Callable, _query_time : String =
 	scheduled_times[schedule_config] = callable
 	
 
-func connect_to_weekday(_query_weekday : Array[TimeUtils.WEEKDAY],callable : Callable,_query_time : Array[String],_query_months: Array[TimeUtils.MONTHS]) -> void:
+func connect_to_weekday(_query_weekday : Array[TimeUtils.WEEKDAY],callable : Callable,_query_time : String,_query_months: Array[TimeUtils.MONTHS]) -> void:
 	#assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
 	
 	var schedule_config : ScheduleConfig = ScheduleConfig.new()
 	
 	schedule_config.week_day = _query_weekday
 	schedule_config.day = -1
-	schedule_config.times = _query_time
+	schedule_config.time = _query_time
 	schedule_config.month = _query_months
 	
 	scheduled_times[schedule_config] = callable
-	
+
+func connect_with_res(_res : ScheduleConfig, callable : Callable) -> void :
+	scheduled_times[_res] = callable
 
 ## Retorna el tiempo restante para un tiempo objetivo
 func time_left_to(_query_time : String) -> String :
@@ -173,6 +169,11 @@ func day_set_handler(_value) -> int:
 		week = 0
 		#hay que espeicficar el tipo de valor a pasar como un enum para evitar errores
 		month = (month + 1) as TimeUtils.MONTHS
+	
+	for time_res : ScheduleConfig in scheduled_times :
+		if time_res.day_reset :
+			time_res.restore()
+	
 	day_changed.emit(day_value)
 	return day_value
 
@@ -180,18 +181,16 @@ func minutes_set_handler(_value) -> int:
 	var delta : int = 0
 	var minute_value = clamp(_value, 0 , DAY_MINUTES)
 	delta = _value - minutes
-	if _value >= DAY_MINUTES:
+	if _value >= DAY_MINUTES: #manejar el tema de la resta para definir a que hora del dia siguientes establecerlo
 		day +=1
 		julian_day += 1
-		minute_value = 0
-		delta = DAY_MINUTES - minutes
-	#manejar el tema de la resta para definir a que hora del dia siguientes establecerlo
+		minute_value = delta - (DAY_MINUTES - minutes)
+	
 	if _value < 0:
 		day -=1
 		julian_day -= 1
-		minute_value = DAY_MINUTES
-		delta = minutes - DAY_MINUTES
-	#lo mismo de arriba pero alrevez, mayormente para debug
+		minute_value = delta + (DAY_MINUTES + minutes)
+	
 	minutes_changed.emit(minute_value)
 	minutes_delta.emit(delta)
 	return minute_value

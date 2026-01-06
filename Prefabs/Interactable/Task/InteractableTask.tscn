@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cipdu4ek7c2wr"]
-
-[ext_resource type="Script" uid="uid://c13pr1gbe31et" path="res://Prefabs/Interactable/Task/interactable_task.gd" id="1_eq4pq"]
-
-[node name="InteractableTask" type="Area2D"]
-script = ExtResource("1_eq4pq")
-display_text = "_INTERACT_BASE_MESSAGE_"
-metadata/_custom_type_script = "uid://dc2fbamjb8ktv"

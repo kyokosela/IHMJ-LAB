@@ -1,5 +1,8 @@
 extends Node
 
+const INIT_EVENTS_FOLDER_PATH : String = "res://Resources/Events/InitialEvents/"
+
+@warning_ignore_start("unused_signal")
 signal event_activated(event_name : String)
 signal event_deactivaded(event_name : String)
 
@@ -8,26 +11,13 @@ var stack_active_events : Array[Event]  ## lista de eventos activos
 
 #region Logic
 func _ready() -> void:
-	TimeManager.minutes_changed.connect(check_events)
-	TimeManager.day_changed.connect(check_daily_events)
+	load_default_events()
 
-func check_events(_new_time : int) -> void : ## revisa con el cambio del tiempo que eventos disparar o terminar
-	for event in events :
-		if event.is_enabled == false: 
+func load_default_events() -> void :
+	for event_res in DirAccess.get_files_at(INIT_EVENTS_FOLDER_PATH):
+		if not event_res.ends_with("tres") and not event_res.ends_with("res"):
 			continue
-		
-		if event is not EventScheduled : continue
-		if TimeManager.day != event.day and TimeManager.month != event.month: continue
-		if TimeManager.is_time_between(event.get_formated_start(), event.get_formated_end()):
-			event.execute()
-			if event.end_hour != -1 or event.end_minute != -1:
-				TimeManager.connect_to_time(event.get_formated_end(), event.finished)
-
-func check_daily_events(_new_day : int) -> void :
-	for event in events :
-		if event is not EventDaily: return
-		event.checked = false
-
+		load_event(load(INIT_EVENTS_FOLDER_PATH + event_res), true)
 #endregion
 
 #region API
@@ -39,7 +29,8 @@ func load_event(event : Event, trigger : bool = false) -> void :
 		event.event_finished.connect(remove_event.bind(event))
 	if trigger: event.execute()
 	if event is EventScheduled:
-		TimeManager.connect_to_time(event.get_formated_end(), event.finished)
+		if event.start != null : TimeManager.connect_with_res(event.start, event.execute)
+		if event.end != null : TimeManager.connect_with_res(event.end, event.finished)
 	
 ## remueve un evento, usa end_trigger para disparar su acciones inversas/finales
 func remove_event(event : Event, trigger_end : bool = false) -> void :

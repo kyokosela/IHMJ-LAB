@@ -25,6 +25,7 @@ Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 PlayerManager="*res://Scripts/player_manager.gd"
 TaskManager="*res://Scripts/task_manager.gd"
 ZoneManager="*res://Scripts/zone_manager.gd"
+PlayerUi="*res://UI/PLAYERUI/PlayerUI.tscn"
 
 [dialogic]
 
@@ -118,6 +119,7 @@ folder_colors={
 "res://Scenes/": "blue",
 "res://Scripts/": "purple",
 "res://Textfiles/": "pink",
+"res://UI/": "green",
 "res://addons/": "red"
 }
 
@@ -176,7 +178,7 @@ dialogic_default_action={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://Textfiles/UI.en.translation", "res://Textfiles/UI.es.translation", "res://Textfiles/DialogicTranslations/dialogic_character_translations.es.translation", "res://Textfiles/DialogicTranslations/dialogic_test_translation.en.translation", "res://Textfiles/DialogicTranslations/dialogic_test_translation.es.translation", "res://Textfiles/Interact/Interacts.en.translation", "res://Textfiles/Interact/Interacts.es.translation")
+locale/translations=PackedStringArray("res://Textfiles/UI.en.translation", "res://Textfiles/UI.es.translation", "res://Textfiles/DialogicTranslations/dialogic_character_translations.es.translation", "res://Textfiles/DialogicTranslations/dialogic_test_translation.en.translation", "res://Textfiles/DialogicTranslations/dialogic_test_translation.es.translation", "res://Textfiles/Interact/Interacts.en.translation", "res://Textfiles/Interact/Interacts.es.translation", "res://Textfiles/Effects/effects.en.translation", "res://Textfiles/Effects/effects.es.translation")
 locale/test="es"
 
 [physics]

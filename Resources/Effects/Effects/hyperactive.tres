@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Effect" load_steps=3 format=3 uid="uid://bjjg72x4dps63"]
+
+[ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_vblmv"]
+[ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_f861h"]
+
+[resource]
+script = ExtResource("1_vblmv")
+effect_unique_name = "HYPERACTIVE"
+effect_display_name = "_EFFECT_HYPERACTIVE_"
+render = true
+metadata/_custom_type_script = "uid://b7krqqvmfg6wr"

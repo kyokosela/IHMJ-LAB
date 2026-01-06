@@ -1,5 +1,7 @@
 extends Node
 
+const INIT_EVENTS_FOLDER_PATH : String = "res://Resources/Events/InitialEvents/"
+
 @warning_ignore_start("unused_signal")
 signal event_activated(event_name : String)
 signal event_deactivaded(event_name : String)
@@ -10,7 +12,13 @@ var stack_active_events : Array[Event]  ## lista de eventos activos
 #region Logic
 func _ready() -> void:
 	TimeManager.minutes_changed.connect(check_events)
-	TimeManager.day_changed.connect(check_daily_events)
+	load_default_events()
+
+func load_default_events() -> void :
+	for event_res in DirAccess.get_files_at(INIT_EVENTS_FOLDER_PATH):
+		if not event_res.ends_with("tres") and not event_res.ends_with("res"):
+			continue
+		load_event(load(INIT_EVENTS_FOLDER_PATH + event_res), true)
 
 func check_events(_new_time : int) -> void : ## revisa con el cambio del tiempo que eventos disparar o terminar
 	for event in events :
@@ -23,11 +31,6 @@ func check_events(_new_time : int) -> void : ## revisa con el cambio del tiempo 
 			event.execute()
 			if event.end_hour != -1 or event.end_minute != -1:
 				TimeManager.connect_to_time(event.get_formated_end(), event.finished)
-
-func check_daily_events(_new_day : int) -> void :
-	for event in events :
-		if event is not EventDaily: return
-		event.checked = false
 
 #endregion
 

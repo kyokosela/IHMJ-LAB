@@ -25,11 +25,9 @@ qué puedes hacer dentro, qué puedes comprar, lavandería, etc
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	TimeManager.minutes = 360
-	PlayerManager.add_effect(load("res://Resources/Effects/Effects/hunger_level_1.tres"))
-	PlayerManager.add_effect(load("res://Resources/Effects/Effects/dirt_level_1.tres"))
-	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
-	EventManager.load_event(load("res://Resources/Events/GlobalEvents/event_night.tres"))
-	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
+	GameManager.new_game()
+	
+	TimeManager.connect_to_weekday([TimeUtils.WEEKDAY.MIERCOLES], print.bind("hola"), "03:00", [])
 	
 	PlayerManager.stat_value_changed.connect(mensaje_de_mierda_gay_el_que_me_lea_excepto_yo)
 

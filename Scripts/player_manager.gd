@@ -14,12 +14,17 @@ enum CONNECTION_PARAM {
 	FLAGS
 }
 
+const ENERGY_EFFECTS : Dictionary[String, Effect] = {
+	"hyperactive" : preload("res://Resources/Effects/Effects/hyperactive.tres"),
+	"tired" : preload("res://Resources/Effects/Effects/tired.tres")
+}
+
 const STATS_FOLDER_PATH : String = "res://Resources/Stats/stats/"
 
 var stats : Array[Stat]
 var effects : Array[Effect]
 var mood_value : float = 50.0
-var money : int = 1000
+var money : int = 250
 
 enum MOOD_STATES {
 	HAPPY,
@@ -35,11 +40,30 @@ func _ready() -> void:
 #recorre el recurso que contiene las stats y carga su valor
 func load_default_stats() -> void :
 	for stat_res in DirAccess.get_files_at(STATS_FOLDER_PATH):
-		#validación de tipo recursos, para evitar errores
 		if not stat_res.ends_with("tres") and not stat_res.ends_with("res"):
 			continue
 		stats.append(load(STATS_FOLDER_PATH + stat_res))
-		
+	
+	connect_to_stat("ENERGY", auto_energy_effects)
+
+func auto_energy_effects(_new_value : float) -> void :
+	if _new_value <= 1 :
+		#TODO algo, el desmayo o algo creo aqui va esa monda
+		return
+	
+	if _new_value <= 15 :
+		add_effect(ENERGY_EFFECTS.tired)
+		clear_energy_effects(ENERGY_EFFECTS.tired.effect_unique_name)
+		return
+	
+	if _new_value >= 90 :
+		add_effect(ENERGY_EFFECTS.hyperactive)
+		clear_energy_effects(ENERGY_EFFECTS.hyperactive.effect_unique_name)
+		return
+
+func clear_energy_effects(_exception : String) : 
+	for x in ENERGY_EFFECTS : if ENERGY_EFFECTS[x].effect_unique_name != _exception : remove_effect(ENERGY_EFFECTS[x].effect_unique_name)
+
 #con la variable modifier, modifica el valor de cada stat recorriendo su recurso que se obtuvo antes
 func apply_effects(_effect_name : String = "") -> void:
 	for stat in stats:
@@ -58,7 +82,7 @@ func stat_change_total(unique_stat_name: String) -> float:
 func add_effect(effect : Effect) -> void :
 	if has_effect(effect.effect_unique_name) :
 		# TODO probablemente manejo de niveles, no puede ser una variable de level por si acaso, usa el nombre unico/identificador
-		pass
+		return
 	else :
 		effect_added.emit(effect)
 		effects.append(effect)

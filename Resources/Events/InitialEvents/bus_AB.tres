@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EventScheduled" load_steps=5 format=3 uid="uid://culshfyhpv2m0"]
+
+[ext_resource type="Script" uid="uid://ca7hor7ijm84i" path="res://Resources/Schedules/schedule_config.gd" id="1_76y50"]
+[ext_resource type="Script" uid="uid://l24xut58cfq6" path="res://Resources/Events/event_scheduled.gd" id="2_r401t"]
+
+[sub_resource type="Resource" id="Resource_qy6wc"]
+script = ExtResource("1_76y50")
+time = "07:35"
+metadata/_custom_type_script = "uid://ca7hor7ijm84i"
+
+[sub_resource type="Resource" id="Resource_dbxu0"]
+script = ExtResource("1_76y50")
+time = "07:30"
+metadata/_custom_type_script = "uid://ca7hor7ijm84i"
+
+[resource]
+script = ExtResource("2_r401t")
+start = SubResource("Resource_dbxu0")
+end = SubResource("Resource_qy6wc")
+event_name = "BUS AB"
+event_unique_name = "BUSAB"
+metadata/_custom_type_script = "uid://l24xut58cfq6"

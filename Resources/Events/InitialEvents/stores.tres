@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EventScheduled" load_steps=5 format=3 uid="uid://d2s6dwo78fsxa"]
+
+[ext_resource type="Script" uid="uid://ca7hor7ijm84i" path="res://Resources/Schedules/schedule_config.gd" id="1_6s445"]
+[ext_resource type="Script" uid="uid://l24xut58cfq6" path="res://Resources/Events/event_scheduled.gd" id="2_3s0g1"]
+
+[sub_resource type="Resource" id="Resource_smlj2"]
+script = ExtResource("1_6s445")
+time = "22:00"
+metadata/_custom_type_script = "uid://ca7hor7ijm84i"
+
+[sub_resource type="Resource" id="Resource_e0gat"]
+script = ExtResource("1_6s445")
+time = "07:00"
+metadata/_custom_type_script = "uid://ca7hor7ijm84i"
+
+[resource]
+script = ExtResource("2_3s0g1")
+start = SubResource("Resource_e0gat")
+end = SubResource("Resource_smlj2")
+event_name = "_IS_STORES_"
+event_unique_name = "STORES"
+metadata/_custom_type_script = "uid://l24xut58cfq6"

@@ -1,6 +1,6 @@
 extends World
 
-@onready var main_door : InteractableTask = %MainDoor
+@onready var main_door : InteractableAction = %MainDoor
 
 func _ready() -> void:
 	super()
@@ -12,4 +12,4 @@ func _ready() -> void:
 			#TODO cuando exita aplicar
 			#Dialogic.timeline_ended.connect(ZoneManager.change_zone.bind(ZoneManager.CALLE O ALGO ASI))
 			)
-	TimeManager.connect_to_weekday([TimeUtils.WEEKDAY.JUEVES], print.bind("test hola"), ["05:00"], [])
+	TimeManager.connect_to_weekday([TimeUtils.WEEKDAY.JUEVES], print.bind("test hola"), "05:00", [])

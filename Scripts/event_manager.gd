@@ -11,7 +11,6 @@ var stack_active_events : Array[Event]  ## lista de eventos activos
 
 #region Logic
 func _ready() -> void:
-	TimeManager.minutes_changed.connect(check_events)
 	load_default_events()
 
 func load_default_events() -> void :
@@ -19,19 +18,6 @@ func load_default_events() -> void :
 		if not event_res.ends_with("tres") and not event_res.ends_with("res"):
 			continue
 		load_event(load(INIT_EVENTS_FOLDER_PATH + event_res), true)
-
-func check_events(_new_time : int) -> void : ## revisa con el cambio del tiempo que eventos disparar o terminar
-	for event in events :
-		if event.is_enabled == false: 
-			continue
-		
-		if event is not EventScheduled : continue
-		if TimeManager.day != event.day and TimeManager.month != event.month: continue
-		if TimeManager.is_time_between(event.get_formated_start(), event.get_formated_end()):
-			event.execute()
-			if event.end_hour != -1 or event.end_minute != -1:
-				TimeManager.connect_to_time(event.get_formated_end(), event.finished)
-
 #endregion
 
 #region API
@@ -43,7 +29,8 @@ func load_event(event : Event, trigger : bool = false) -> void :
 		event.event_finished.connect(remove_event.bind(event))
 	if trigger: event.execute()
 	if event is EventScheduled:
-		TimeManager.connect_to_time(event.get_formated_end(), event.finished)
+		if event.start != null : TimeManager.connect_with_res(event.start, event.execute)
+		if event.end != null : TimeManager.connect_with_res(event.end, event.finished)
 	
 ## remueve un evento, usa end_trigger para disparar su acciones inversas/finales
 func remove_event(event : Event, trigger_end : bool = false) -> void :

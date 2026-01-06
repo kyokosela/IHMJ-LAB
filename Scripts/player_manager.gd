@@ -14,28 +14,30 @@ enum CONNECTION_PARAM {
 	FLAGS
 }
 
-const ENERGY_EFFECTS : Dictionary[String, Effect] = {
-	"hyperactive" : preload("res://Resources/Effects/Effects/hyperactive.tres"),
-	"tired" : preload("res://Resources/Effects/Effects/tired.tres")
-}
+var energy_effects : Dictionary[String, Effect] = {}
 
 const STATS_FOLDER_PATH : String = "res://Resources/Stats/stats/"
 
 var stats : Array[Stat]
 var effects : Array[Effect]
-var mood_value : float = 50.0
+var sanity_value : float = 50.0
 var money : int = 250
 
-enum MOOD_STATES {
-	HAPPY,
-	NORMAL,
-	BAD
+enum SANITY_STATES {
+	DOCILE,
+	NEUTRAL,
+	DISTURBED
 }
 
 #region LOGIC
 
 func _ready() -> void:
 	load_default_stats()
+	
+	energy_effects = {
+		"hyperactive" : load("res://Resources/Effects/Effects/hyperactive.tres"),
+		"tired" : load("res://Resources/Effects/Effects/tired.tres")
+	}
 
 #recorre el recurso que contiene las stats y carga su valor
 func load_default_stats() -> void :
@@ -52,17 +54,21 @@ func auto_energy_effects(_new_value : float) -> void :
 		return
 	
 	if _new_value <= 15 :
-		add_effect(ENERGY_EFFECTS.tired)
-		clear_energy_effects(ENERGY_EFFECTS.tired.effect_unique_name)
+		add_effect(energy_effects.tired)
+		clear_energy_effects(energy_effects.tired.effect_unique_name)
 		return
 	
 	if _new_value >= 90 :
-		add_effect(ENERGY_EFFECTS.hyperactive)
-		clear_energy_effects(ENERGY_EFFECTS.hyperactive.effect_unique_name)
+		add_effect(energy_effects.hyperactive)
+		clear_energy_effects(energy_effects.hyperactive.effect_unique_name)
 		return
+	
+	clear_energy_effects("")
 
 func clear_energy_effects(_exception : String) : 
-	for x in ENERGY_EFFECTS : if ENERGY_EFFECTS[x].effect_unique_name != _exception : remove_effect(ENERGY_EFFECTS[x].effect_unique_name)
+	for x in energy_effects : 
+		if energy_effects[x].effect_unique_name != _exception : 
+			remove_effect(energy_effects[x].effect_unique_name)
 
 #con la variable modifier, modifica el valor de cada stat recorriendo su recurso que se obtuvo antes
 func apply_effects(_effect_name : String = "") -> void:
@@ -86,6 +92,8 @@ func add_effect(effect : Effect) -> void :
 	else :
 		effect_added.emit(effect)
 		effects.append(effect)
+		if effect is TemporalEffect :
+			TimeManager.connect_with_res(effect.duration, remove_effect.bind(effect.effect_unique_name))
 	
 func remove_effect(unique_effect_name : String) -> void : ## Remueve un efecto, usa el nombre unico/identificador
 	var effect : Effect = get_effect_res(unique_effect_name)
@@ -110,7 +118,7 @@ func get_effect_res(unique_effect_name : String) -> Effect : ## Obten el recurso
 
 #region STATS API
 
-func get_stat_connections(unique_stat_name : String, connection_parameter: CONNECTION_PARAM = CONNECTION_PARAM) -> Array:
+func get_stat_connections(unique_stat_name : String, connection_parameter: CONNECTION_PARAM = CONNECTION_PARAM.SIGNAL) -> Array:
 	var stat : Stat = get_stat_res(unique_stat_name)
 	var connections = stat.value_changed.get_connections()
 	var parameter = CONNECTION_PARAM.find_key(connection_parameter).to_lower()
@@ -126,13 +134,18 @@ func is_callable_connected(unique_stat_name : String, callable: Callable) -> boo
 
 func connect_to_stat(unique_stat_name : String, callable : Callable) -> void : ## Conecta una funcion al cambio de una estadistica, usa el nombre unico/identificador, Esta señal retornara el valor nuevo de la estadistica
 	var stat : Stat = get_stat_res(unique_stat_name)
-	if stat == null : 
+	if stat == null :
 		return
 	stat.value_changed.connect(callable)
 	stat_connection_added.emit()
 
-func get_mood_state() -> MOOD_STATES : ## Obten el estado mental del jugador, ENUM MOOD_STATES, ejemplo MOOD_STATES.SAD
-	return MOOD_STATES[MOOD_STATES.keys()[mood_value / MOOD_STATES.size()]]
+func get_sanity_state() -> SANITY_STATES : ## Obten el estado mental del jugador, ENUM SANITY_STATES, ejemplo SANITY_STATES.DOCILE
+	if sanity_value >= 60 :
+		return SANITY_STATES.DOCILE
+	elif sanity_value >= 40 :
+		return SANITY_STATES.NEUTRAL
+	else :
+		return SANITY_STATES.DISTURBED
 
 func decrease_stat(unique_stat_name : String, value : float) -> void : ## Disminuye una estadistica, usa el nombre unico/identificador
 	var stat : Stat = get_stat_res(unique_stat_name)

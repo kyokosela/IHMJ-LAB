@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="EventScheduled" load_steps=5 format=3 uid="uid://qov2w6nc37hf"]
+
+[ext_resource type="Script" uid="uid://ca7hor7ijm84i" path="res://Resources/Schedules/schedule_config.gd" id="1_osdb6"]
+[ext_resource type="Script" uid="uid://l24xut58cfq6" path="res://Resources/Events/event_scheduled.gd" id="2_bwf0o"]
+
+[sub_resource type="Resource" id="Resource_id5id"]
+script = ExtResource("1_osdb6")
+week_day = Array[int]([0, 1, 2, 3, 4])
+time = "13:45"
+metadata/_custom_type_script = "uid://ca7hor7ijm84i"
+
+[sub_resource type="Resource" id="Resource_y2xb0"]
+script = ExtResource("1_osdb6")
+week_day = Array[int]([0, 1, 2, 3, 4])
+time = "13:00"
+metadata/_custom_type_script = "uid://ca7hor7ijm84i"
+
+[resource]
+script = ExtResource("2_bwf0o")
+start = SubResource("Resource_y2xb0")
+end = SubResource("Resource_id5id")
+event_name = "LUNCH BREAK"
+event_unique_name = "LUNCH BREAK"
+metadata/_custom_type_script = "uid://l24xut58cfq6"

@@ -60,7 +60,6 @@ func check_scheduled_times(_query_month : TimeUtils.MONTHS, _query_weekday: Time
 			scheduled_times[x].call()
 			x.triggered = true
 
-
 #endregion
 
 #region API
@@ -142,7 +141,9 @@ func connect_to_weekday(_query_weekday : Array[TimeUtils.WEEKDAY],callable : Cal
 	schedule_config.month = _query_months
 	
 	scheduled_times[schedule_config] = callable
-	
+
+func connect_with_res(_res : ScheduleConfig, callable : Callable) -> void :
+	scheduled_times[_res] = callable
 
 ## Retorna el tiempo restante para un tiempo objetivo
 func time_left_to(_query_time : String) -> String :

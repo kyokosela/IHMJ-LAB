@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-@onready var energy_var : TextureProgressBar = %EnergyBar
+@onready var energy_bar : TextureProgressBar = %EnergyBar
 @onready var health_bar : TextureProgressBar = %HealthBar
 @onready var time_label : Label = %TimeLabel
 @onready var effect_list : HBoxContainer = %EffectList
@@ -8,14 +8,20 @@ extends CanvasLayer
 const effect_slot_scene : Resource = preload("res://UI/PLAYERUI/effect_slot.tscn")
 
 func _ready() -> void:
-	energy_var.value = PlayerManager.get_stat_value("ENERGY")
+	energy_bar.value = PlayerManager.get_stat_value("ENERGY")
 	#health_bar.value = PlayerManager.get_stat_value("HEALTH")
 	
-	PlayerManager.connect_to_stat("ENERGY", func (_new_value) : energy_var.value = _new_value) 
-	#PlayerManager.connect_to_stat("HEALTH", func (_new_value) : health_bar.value = _new_value)
+	PlayerManager.connect_to_stat("ENERGY", _on_energy_changed) 
+	#PlayerManager.connect_to_stat("HEALTH", _on_health_changed)
 	TimeManager.minutes_changed.connect(_on_minutes_changed)
 	PlayerManager.effect_added.connect(create_effect_slot)
 	PlayerManager.effect_removed.connect(remove_effect_slot)
+	
+func _on_energy_changed(_new_value):
+	energy_bar.value = _new_value
+	
+func _on_health_changed(_new_value):
+	health_bar.value = _new_value
 	
 func _on_minutes_changed(_minutes):
 	time_label.text = TimeManager.format_minutes(_minutes)

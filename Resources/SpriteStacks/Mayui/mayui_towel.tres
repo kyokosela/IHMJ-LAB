@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://c7xrwleix05oo" path="res://Assets/Mayui/mayui_accesories.png" id="1_gclpo"]
 [ext_resource type="Script" uid="uid://bswuea3inx1i8" path="res://Resources/SpriteStacks/Mayui/sprite_preset.gd" id="1_gxmab"]
-[ext_resource type="Texture2D" uid="uid://cxmgoxewya4il" path="res://Assets/Mayui/mayui_work_body.png" id="2_n7ilr"]
+[ext_resource type="Texture2D" uid="uid://cnwqcbdmj2h5j" path="res://Assets/Mayui/mayui_work_body-test.png" id="2_gclpo"]
 [ext_resource type="Texture2D" uid="uid://bhkln5nq45lwf" path="res://Assets/Mayui/mayui_eyes.png" id="3_w08jx"]
 [ext_resource type="Texture2D" uid="uid://ci8n5ia3dji02" path="res://Assets/Mayui/mayui_hair.png" id="4_4mvkm"]
 [ext_resource type="Texture2D" uid="uid://7ywufu1mplt2" path="res://Assets/Mayui/mayui_face.png" id="5_2k1i4"]
@@ -10,10 +10,10 @@
 
 [resource]
 script = ExtResource("1_gxmab")
-preset_name = "mayui_work"
+preset_name = "mayui_towel"
 layers = Dictionary[String, Texture2D]({
 "accesories": ExtResource("1_gclpo"),
-"body": ExtResource("2_n7ilr"),
+"body": ExtResource("2_gclpo"),
 "eyes": ExtResource("3_w08jx"),
 "hair": ExtResource("4_4mvkm"),
 "head": ExtResource("5_2k1i4"),

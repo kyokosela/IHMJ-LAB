@@ -17,7 +17,7 @@ func get_conditions() -> Array[String]:
 	
 func get_temperature_condition():
 	if temperature <= 0: return "cold"
-	elif temperature < 30.0: return "warm"
+	elif temperature <= 30.0: return "warm"
 	else: return "hot"
 
 func get_humidity_condition():

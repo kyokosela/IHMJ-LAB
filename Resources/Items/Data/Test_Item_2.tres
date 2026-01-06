@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=6 format=3 uid="uid://bvx6r35khet8g"]
+[gd_resource type="Resource" script_class="ItemData" load_steps=8 format=3 uid="uid://bvx6r35khet8g"]
 
 [ext_resource type="Script" uid="uid://do0pdg85om6vq" path="res://Resources/Items/Behaviors/consumable_behavior.gd" id="1_ike26"]
 [ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="2_hh70t"]
@@ -11,7 +11,19 @@ metadata/_custom_type_script = "uid://do0pdg85om6vq"
 [sub_resource type="Resource" id="Resource_ike26"]
 script = ExtResource("2_hh70t")
 applies_to = "cold"
-multiplier = 0.0
+multiplier = 1.2
+metadata/_custom_type_script = "uid://wotj3baput20"
+
+[sub_resource type="Resource" id="Resource_3qd6b"]
+script = ExtResource("2_hh70t")
+applies_to = "warm"
+multiplier = 1.1
+metadata/_custom_type_script = "uid://wotj3baput20"
+
+[sub_resource type="Resource" id="Resource_fo4rm"]
+script = ExtResource("2_hh70t")
+applies_to = "hot"
+multiplier = 0.5
 metadata/_custom_type_script = "uid://wotj3baput20"
 
 [resource]
@@ -22,5 +34,5 @@ item_description = "asdasdf"
 item_type = 1
 behavior = SubResource("Resource_hh70t")
 base_decay_time = 60
-modifiers = Array[ExtResource("2_hh70t")]([SubResource("Resource_ike26")])
+modifiers = Array[ExtResource("2_hh70t")]([SubResource("Resource_ike26"), SubResource("Resource_3qd6b"), SubResource("Resource_fo4rm")])
 metadata/_custom_type_script = "uid://b03xnf82gb26a"

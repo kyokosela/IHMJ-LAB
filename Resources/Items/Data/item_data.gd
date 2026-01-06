@@ -17,10 +17,11 @@ enum QUALITY {
 @export var texture : Texture2D
 @export var item_name : String = ""
 @export var item_unique_name : String = ""
-@export var max_stack : int = 1
 @export var is_stackable : bool = true
 @export var item_quality : QUALITY
+@export var max_stack : int = 1
 @export_custom(PROPERTY_HINT_MULTILINE_TEXT,"") var item_description : String = ""
+
 @export_group("Behaviors")
 @export var item_type : TYPE = TYPE.UNDEFINED
 @export var behavior : ItemBehavior

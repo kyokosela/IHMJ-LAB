@@ -5,7 +5,6 @@ var items: Array[Item] = []
 var slot_type : Array[ItemData.TYPE] #unused por ahora
 var max_stack := 10
 
-
 func _init(p_slot_type : Array[ItemData.TYPE] = [ItemData.TYPE.UNDEFINED], p_item : Array[Item] = [], p_max_stack : int = 1) -> void:
 	items = p_item
 	max_stack = p_max_stack

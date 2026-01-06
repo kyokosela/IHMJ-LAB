@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=7 format=3 uid="uid://dkblhyk7mquyg"]
+
+[ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="1_2475d"]
+[ext_resource type="Script" uid="uid://do0pdg85om6vq" path="res://Resources/Items/Behaviors/consumable_behavior.gd" id="1_k4lul"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="2_k4lul"]
+
+[sub_resource type="Resource" id="Resource_ii8na"]
+script = ExtResource("1_k4lul")
+metadata/_custom_type_script = "uid://do0pdg85om6vq"
+
+[sub_resource type="Resource" id="Resource_keq65"]
+script = ExtResource("1_2475d")
+applies_to = "hot"
+multiplier = 1.2
+metadata/_custom_type_script = "uid://wotj3baput20"
+
+[sub_resource type="Resource" id="Resource_gkabt"]
+script = ExtResource("1_2475d")
+applies_to = "cold"
+multiplier = 0.5
+metadata/_custom_type_script = "uid://wotj3baput20"
+
+[resource]
+script = ExtResource("2_k4lul")
+item_name = "Test Item 3"
+item_unique_name = "test_item_3"
+item_quality = 1
+item_description = "hello"
+item_type = 2
+behavior = SubResource("Resource_ii8na")
+base_decay_time = 2880
+modifiers = Array[ExtResource("1_2475d")]([SubResource("Resource_keq65"), SubResource("Resource_gkabt")])
+metadata/_custom_type_script = "uid://b03xnf82gb26a"

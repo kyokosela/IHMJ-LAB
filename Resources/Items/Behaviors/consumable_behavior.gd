@@ -5,7 +5,6 @@ const CONDITION_GOOD = preload("uid://xgsygm562hoc")
 const CONDITION_BAD = preload("uid://bnjmcea38ho8i")
 const CONDITION_ROTTEN = preload("uid://bilf2i6cga502")
 
-
 func can_use(_item: Item) -> bool:
 	return true
 

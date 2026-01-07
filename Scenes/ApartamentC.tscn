@@ -24,3 +24,4 @@ zoom = Vector2(2, 2)
 position = Vector2(88, 72)
 
 [node name="DebugPanel" parent="." instance=ExtResource("5_tqo08")]
+visible = false

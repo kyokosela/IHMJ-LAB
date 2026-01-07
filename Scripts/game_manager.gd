@@ -4,8 +4,10 @@ extends Node
 var is_dialogue_active: bool = false
 var tile_size : Vector2 = Vector2(16,16) # No se si se cambiara o algo por ahora lo dejare aca, si lo cambian, cambien el movement component
 
+#fps, si quieren activar el label de fps
+#referenciar a estas variables donde lo vean necesario
 var fps: float = 0.0
-
+var show_fps: bool = false
 
 #booleana de seguridad para perminir o no la indexación de código externo
 var index_code: bool = false
@@ -74,8 +76,14 @@ func setup_log() -> void :
 		return
 	current_sesion.store_line("LOG " + log_file_name + " Iniciado ")
 	current_sesion.seek_end()
-	PlayerManager.effect_added.connect(func (_effect : Effect) : write_line_log("[PlayerManager] -> effect %s was added" % _effect))
-	PlayerManager.effect_removed.connect(func (_effect : Effect) : write_line_log("[PlayerManager] -> effect %s was removed" % _effect))
+	PlayerManager.effect_added.connect(_on_effect_added)
+	PlayerManager.effect_removed.connect(_on_effect_removed)
+	
+func _on_effect_added(_effect: Effect):
+	write_line_log("[PlayerManager] -> effect %s was added" % _effect)
+	
+func _on_effect_removed(_effect: Effect):
+	write_line_log("[PlayerManager] -> effect %s was removed" % _effect)
 
 func write_line_log(line : String) -> void : ## escribe una linea a registrar en el log
 	if !create_log : return

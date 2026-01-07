@@ -30,6 +30,8 @@ func _ready() -> void:
 	TimeManager.connect_to_weekday([TimeUtils.WEEKDAY.MIERCOLES], print.bind("hola"), "03:00", [])
 	
 	PlayerManager.stat_value_changed.connect(mensaje_de_mierda_gay_el_que_me_lea_excepto_yo)
+	
+	EventManager.create_lapse_event("06:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/hunger.tres")), "AUTO_HUNGER_LAPSE" , "HUNGER TIMER",true)
 
 func mensaje_de_mierda_gay_el_que_me_lea_excepto_yo(stat : Stat, value : float) -> void :
 	print(stat.stat_display_name, " | ",value)

@@ -7,6 +7,7 @@ class_name Effect
 		return tr(effect_display_name)
 @export var render : bool
 @export var stat_changes : Array[StatChanger]
+@export var time_changes : TimeChanger
 
 func stat_changes_list(unique_stat_name : String) -> Array[StatChanger]:
 	var stats_changers : Array[StatChanger]= []

@@ -18,6 +18,7 @@ func _ready() -> void:
 	PlayerManager.effect_removed.connect(remove_effect_slot)
 
 func create_effect_slot(effect : Effect) -> void :
+	if !effect.render : return
 	var effect_slot : TextureRect = effect_slot_scene.instantiate()
 	effect_slot.name = effect.effect_unique_name
 	effect_slot.tooltip_text = effect.effect_display_name
@@ -25,5 +26,6 @@ func create_effect_slot(effect : Effect) -> void :
 	
 
 func remove_effect_slot(effect : Effect) -> void :
+	if !effect.render : return
 	var node = effect_list.get_node_or_null(effect.effect_unique_name)
 	if node != null : node.queue_free()

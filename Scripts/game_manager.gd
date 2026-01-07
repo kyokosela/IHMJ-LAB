@@ -41,8 +41,7 @@ func new_game() -> void :
 	#TODO creacion de archivos
 	is_on_tutorial = true
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
-	PlayerManager.add_effect(load("res://Resources/Effects/Effects/hunger_level_1.tres"))
-	PlayerManager.add_effect(load("res://Resources/Effects/Effects/dirt_level_1.tres"))
+	PlayerManager.add_effect(load("res://Resources/Effects/Effects/dirt.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
 
 func load_file(save_id : int) -> void : ## MAX 2 en el parametro

@@ -1,0 +1,157 @@
+[gd_scene load_steps=21 format=4 uid="uid://cdmbl4s6mgpoi"]
+
+[ext_resource type="Script" uid="uid://cbs8bskt5bfsp" path="res://Scenes/playground.gd" id="1_u6rxl"]
+[ext_resource type="PackedScene" uid="uid://ctagwp38abn4u" path="res://Prefabs/walls/floors.tscn" id="2_npy7o"]
+[ext_resource type="PackedScene" uid="uid://b2w4stq2ucdlo" path="res://Prefabs/walls/walls.tscn" id="3_u6rxl"]
+[ext_resource type="PackedScene" uid="uid://tcey4tkkfvd8" path="res://Prefabs/Player/Player.tscn" id="4_k2wcb"]
+[ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="5_npy7o"]
+[ext_resource type="Script" uid="uid://c13pr1gbe31et" path="res://Prefabs/Interactable/Task/interactable_task.gd" id="6_u6rxl"]
+[ext_resource type="Script" uid="uid://c2qbhsn6tgmrc" path="res://Resources/StringChain/string_chain.gd" id="7_fikvc"]
+[ext_resource type="Script" uid="uid://big4o7sjh0g0y" path="res://Scripts/HouseInteracts/bathe.gd" id="7_ipdnw"]
+[ext_resource type="Script" uid="uid://cdqqyuliu6jyp" path="res://Resources/StringChain/string_chain_array.gd" id="8_ipdnw"]
+
+[sub_resource type="Resource" id="Resource_ipdnw"]
+script = ExtResource("8_ipdnw")
+string_list = Array[String](["ALGUIEN AYUDE A JOTA", "MENSAJE 2", "MENSAJE 3"])
+metadata/_custom_type_script = "uid://cdqqyuliu6jyp"
+
+[sub_resource type="Resource" id="Resource_7cqfn"]
+script = ExtResource("7_fikvc")
+string_list = Array[ExtResource("8_ipdnw")]([SubResource("Resource_ipdnw")])
+cooldown_message = "COOLDOWN"
+apply_energy = false
+metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u6rxl"]
+size = Vector2(30, 50)
+
+[sub_resource type="Resource" id="Resource_iv8lt"]
+script = ExtResource("8_ipdnw")
+string_list = Array[String](["NO ESTAS SUCIO OME NO JODA", "AIAE BY YUYOYUPPE", "XD"])
+metadata/_custom_type_script = "uid://cdqqyuliu6jyp"
+
+[sub_resource type="Resource" id="Resource_st1l6"]
+script = ExtResource("7_fikvc")
+string_list = Array[ExtResource("8_ipdnw")]([SubResource("Resource_iv8lt")])
+cooldown_message = "SEJE DE INSISTIR PERRO IMBEVCIL"
+metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
+
+[sub_resource type="Resource" id="Resource_eodav"]
+script = ExtResource("8_ipdnw")
+string_list = Array[String](["No tengo suficiente energia"])
+behaviour = 3
+metadata/_custom_type_script = "uid://cdqqyuliu6jyp"
+
+[sub_resource type="Resource" id="Resource_jefqp"]
+script = ExtResource("7_fikvc")
+string_list = Array[ExtResource("8_ipdnw")]([SubResource("Resource_eodav")])
+metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k2wcb"]
+size = Vector2(50, 50)
+
+[sub_resource type="Resource" id="Resource_7rk4w"]
+script = ExtResource("8_ipdnw")
+string_list = Array[String](["NO TRENGO UN DURO"])
+behaviour = 3
+metadata/_custom_type_script = "uid://cdqqyuliu6jyp"
+
+[sub_resource type="Resource" id="Resource_yhss4"]
+script = ExtResource("7_fikvc")
+string_list = Array[ExtResource("8_ipdnw")]([SubResource("Resource_7rk4w")])
+metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ipdnw"]
+
+[node name="ApartamentC" type="Node2D"]
+script = ExtResource("1_u6rxl")
+metadata/_custom_type_script = "uid://mni1cq3j7l53"
+
+[node name="DebugPanel" parent="." instance=ExtResource("5_npy7o")]
+position = Vector2i(5, 210)
+
+[node name="floors" parent="." instance=ExtResource("2_npy7o")]
+tile_map_data = PackedByteArray("AAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAkAAAAAAAAAAAABAAMAAAAAAAAAAAABAAQAAAAAAAAAAAABAAUAAAAAAAAAAAABAAYAAAAAAAAAAAABAAcAAAAAAAAAAAABAAgAAAAAAAAAAAABAAkAAAAAAAAAAAACAAMAAAAAAAAAAAACAAQAAAAAAAAAAAACAAUAAAAAAAAAAAACAAYAAAAAAAAAAAACAAcAAAAAAAAAAAACAAgAAAAAAAAAAAACAAkAAAAAAAAAAAADAAMAAAAAAAAAAAADAAQAAAAAAAAAAAADAAUAAAAAAAAAAAADAAYAAAAAAAAAAAADAAcAAAAAAAAAAAADAAgAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAEAAUAAAAAAAAAAAAEAAYAAAAAAAAAAAAEAAcAAAAAAAAAAAAEAAgAAAAAAAAAAAAEAAkAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAUAAAAAAAAAAAAFAAYAAAAAAAAAAAAFAAcAAAAAAAAAAAAFAAgAAAAAAAAAAAAFAAkAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAAGAAUAAAAAAAAAAAAGAAYAAAAAAAAAAAAGAAcAAAAAAAAAAAAGAAgAAAAAAAAAAAAGAAkAAAAAAAAAAAAHAAMAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAUAAAAAAAAAAAAHAAYAAAAAAAAAAAAHAAcAAAAAAAAAAAAHAAgAAAAAAAAAAAAHAAkAAAAAAAAAAAAIAAMAAAAAAAAAAAAIAAQAAAAAAAAAAAAIAAUAAAAAAAAAAAAIAAYAAAAAAAAAAAAIAAcAAAAAAAAAAAAIAAgAAAAAAAAAAAAIAAkAAAAAAAAAAAAJAAMAAAAAAAAAAAAJAAQAAAAAAAAAAAAJAAUAAAAAAAAAAAAJAAYAAAAAAAAAAAAJAAcAAAAAAAAAAAAJAAgAAAAAAAAAAAAJAAkAAAAAAAAAAAA=")
+
+[node name="Walls" parent="." instance=ExtResource("3_u6rxl")]
+tile_map_data = PackedByteArray("AAAAAAAAAAADAAAAAAAAAAEAAAADAAEAAAAAAAIAAAAIAAYAAAAAAAMAAAAIAAIAAAAAAAQAAAAIAAMAAAAAAAUAAAADAAAAAAAAAAYAAAADAAEAAAAAAAcAAAADAAIAAAAAAAgAAAADAAMAAAAAAAkAAAAJAAIAAAABAAAAAAABAAAAAAABAAEAAAABAAEAAAABAAIAAAABAAIAAAABAAkAAAABAAYAAAACAAAAAAABAAAAAAACAAEAAAABAAEAAAACAAIAAAABAAIAAAADAAAAAAABAAAAAAADAAEAAAABAAEAAAADAAIAAAABAAIAAAAEAAAAAAABAAAAAAAEAAEAAAABAAEAAAAEAAIAAAABAAIAAAAFAAAAAAABAAAAAAAFAAEAAAABAAEAAAAFAAIAAAABAAIAAAAGAAAAAAABAAAAAAAGAAEAAAABAAEAAAAGAAIAAAABAAIAAAAGAAkAAAABAAYAAAAHAAAAAAABAAAAAAAHAAEAAAABAAEAAAAHAAIAAAABAAIAAAAHAAkAAAABAAYAAAAIAAAAAAABAAAAAAAIAAEAAAABAAEAAAAIAAIAAAABAAIAAAAIAAkAAAABAAYAAAAJAAAAAAAEAAAAAAAJAAEAAAAEAAEAAAAJAAIAAAAEAAIAAAAJAAMAAAAEAAMAAAAJAAQAAAAEAAMAAAAJAAUAAAAEAAMAAAAJAAYAAAAEAAMAAAAJAAcAAAAEAAMAAAAJAAgAAAAEAAMAAAAJAAkAAAAKAAIAAAADAAUAAAAIAAAAAAADAAkAAAABAAYAAAACAAkAAAABAAYAAAACAAUAAAAHAAAAAAACAAYAAAACAAEAAAACAAcAAAACAAIAAAABAAcAAAABAAIAAAABAAYAAAABAAEAAAABAAUAAAABAAAAAAAEAAYAAAAAAAEAAAAEAAcAAAAAAAIAAAAFAAYAAAAEAAEAAAAFAAUAAAAEAAAAAAAEAAUAAAAJAAAAAAAFAAcAAAAEAAIAAAAFAAgAAAAEAAMAAAAEAAkAAAABAAYAAAAFAAkAAAAEAAcAAAA=")
+
+[node name="Player" parent="." instance=ExtResource("4_k2wcb")]
+position = Vector2(88, 72)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(4.2, 4.2)
+limit_enabled = false
+
+[node name="Label" type="Label" parent="."]
+offset_left = 224.0
+offset_top = 80.0
+offset_right = 271.0
+offset_bottom = 103.0
+text = "CAMA"
+
+[node name="InteractableAction" type="Area2D" parent="Label"]
+position = Vector2(27.53714, 15.200859)
+script = ExtResource("6_u6rxl")
+event_list = Array[String](["NIGHT"])
+event_messages = SubResource("Resource_7cqfn")
+shape = SubResource("RectangleShape2D_u6rxl")
+display_text = "Interactuacion con la perrisima cama"
+children_visible = true
+reusable = true
+is_solid = true
+metadata/_custom_type_script = "uid://c13pr1gbe31et"
+
+[node name="ducha" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 320.0
+offset_top = 80.0
+offset_right = 377.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+text = "DUCHA"
+
+[node name="InteractableAction" type="Area2D" parent="ducha"]
+position = Vector2(18.73706, 7.414772)
+script = ExtResource("7_ipdnw")
+effect_list = Array[String](["DIRT"])
+effect_messages = SubResource("Resource_st1l6")
+stat_req_list = Dictionary[String, int]({
+"ENERGY": 10
+})
+stat_messages = SubResource("Resource_jefqp")
+time_cost = "00:20"
+shape = SubResource("RectangleShape2D_k2wcb")
+display_text = "DUCHA"
+children_visible = true
+reusable = true
+show_again_at_end = true
+is_solid = true
+metadata/_custom_type_script = "uid://c13pr1gbe31et"
+
+[node name="Label3" type="Label" parent="."]
+offset_left = 344.60657
+offset_top = 160.47104
+offset_right = 384.60657
+offset_bottom = 183.47104
+text = "lavamanos"
+
+[node name="InteractableAction" type="Area2D" parent="Label3"]
+position = Vector2(44.337463, 18.12053)
+script = ExtResource("6_u6rxl")
+stat_req_list = Dictionary[String, int]({
+"ENERGY": 10
+})
+stat_messages = SubResource("Resource_yhss4")
+shape = SubResource("RectangleShape2D_ipdnw")
+display_text = "marrana de mierda"
+children_visible = true
+reusable = true
+is_solid = true
+metadata/_custom_type_script = "uid://c13pr1gbe31et"

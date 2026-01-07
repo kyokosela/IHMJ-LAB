@@ -131,7 +131,7 @@ func connect_to_day(_query_day : int,callable : Callable, _query_time : String =
 	
 
 func connect_to_weekday(_query_weekday : Array[TimeUtils.WEEKDAY],callable : Callable,_query_time : String,_query_months: Array[TimeUtils.MONTHS]) -> void:
-	#assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
+	assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
 	
 	var schedule_config : ScheduleConfig = ScheduleConfig.new()
 	

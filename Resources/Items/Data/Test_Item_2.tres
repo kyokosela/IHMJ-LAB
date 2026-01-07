@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://do0pdg85om6vq" path="res://Resources/Items/Behaviors/consumable_behavior.gd" id="1_ike26"]
 [ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="2_hh70t"]
-[ext_resource type="Script" path="res://Resources/Items/Data/item_data.gd" id="3_3qd6b"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="3_3qd6b"]
 
 [sub_resource type="Resource" id="Resource_hh70t"]
 script = ExtResource("1_ike26")

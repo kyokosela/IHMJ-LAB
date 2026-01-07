@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://4hq6vggvv7pv"]
+
+[ext_resource type="Script" uid="uid://c5tmcnj0wdxvt" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="1_0qjjq"]
+
+[node name="Spawnpoint" type="Marker2D" groups=["spawn_point"]]
+script = ExtResource("1_0qjjq")

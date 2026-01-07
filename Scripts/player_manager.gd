@@ -7,6 +7,8 @@ signal stat_connection_added
 
 @warning_ignore_start("unused_signal")
 signal stat_value_changed(stat : Stat, new_value : float)
+signal stat_decrease(stat : Stat, lost_amount : float)
+signal stat_increase(stat : Stat, gain_amount : float)
 
 enum CONNECTION_PARAM {
 	SIGNAL,
@@ -14,6 +16,7 @@ enum CONNECTION_PARAM {
 	FLAGS
 }
 
+var player : Player
 var energy_effects : Dictionary[String, Effect] = {}
 
 const STATS_FOLDER_PATH : String = "res://Resources/Stats/stats/"
@@ -32,12 +35,15 @@ enum SANITY_STATES {
 #region LOGIC
 
 func _ready() -> void:
+	player = load("res://Prefabs/Player/Player.tscn").instantiate()
+	add_child(player)
 	load_default_stats()
 	
 	energy_effects = {
 		"hyperactive" : load("res://Resources/Effects/Effects/hyperactive.tres"),
 		"tired" : load("res://Resources/Effects/Effects/tired.tres")
 	}
+	stat_decrease.connect(energy_spend_handler)
 
 #recorre el recurso que contiene las stats y carga su valor
 func load_default_stats() -> void :
@@ -47,21 +53,44 @@ func load_default_stats() -> void :
 		stats.append(load(STATS_FOLDER_PATH + stat_res))
 	
 	connect_to_stat("ENERGY", auto_energy_effects)
+	
+var hungry_energy_log : float = 0
+var hungry_energy : float = 120
+
+func energy_spend_handler(stat : Stat, _decrease_value : float) -> void :
+	if stat.stat_unique_name == "ENERGY" : 
+		hungry_energy_log += _decrease_value
+		if hungry_energy_log >= hungry_energy :
+			PlayerManager.add_effect(load("res://Resources/Effects/Effects/hunger.tres"))
+			hungry_energy_log -= hungry_energy
+	
 
 func auto_energy_effects(_new_value : float) -> void :
-	if _new_value <= 1 :
-		#TODO algo, el desmayo o algo creo aqui va esa monda
-		return
-	
-	if _new_value <= 15 :
-		add_effect(energy_effects.tired)
-		clear_energy_effects(energy_effects.tired.effect_unique_name)
-		return
-	
+	"""
+	ESTE SCRIPT DISPARA :
+		topes:
+		cansacion/tired cuando la energia es menor a 15
+		hiperactiva cuando la energia es superior a 90
+		
+		lapsos:
+		hambre cada 120 de energia gastado
+	"""
+
 	if _new_value >= 90 :
 		add_effect(energy_effects.hyperactive)
 		clear_energy_effects(energy_effects.hyperactive.effect_unique_name)
-		return
+	elif _new_value <= 0 :
+		TransitionManager.fadeIn(5)
+		await TransitionManager.transition_finished
+		TimeManager.add_to_current_time("08:00")
+		TransitionManager.fadeOut(5)
+		await TransitionManager.transition_finished
+		## TODO aplicar efecto debilitambiento
+		
+	elif _new_value <= 15 :
+		add_effect(energy_effects.tired)
+		clear_energy_effects(energy_effects.tired.effect_unique_name)
+	
 	
 	clear_energy_effects("")
 
@@ -157,12 +186,14 @@ func decrease_stat(unique_stat_name : String, value : float) -> void : ## Dismin
 	var stat : Stat = get_stat_res(unique_stat_name)
 	if stat == null or not stat: 
 		return
+	stat_decrease.emit(stat, value)
 	stat.value -= value
 
 func increase_stat(unique_stat_name : String, value : float) -> void : ## Aumenta una estadistica, usa el nombre unico/identificador
 	var stat : Stat = get_stat_res(unique_stat_name)
 	if stat == null or not stat: 
 		return
+	stat_increase.emit(stat, value)
 	stat.value += value
 
 func get_stat_res(unique_stat_name : String) -> Stat : ## Obten el recurso tipo Stat, usa el nombre unico/identificador

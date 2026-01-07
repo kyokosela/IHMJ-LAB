@@ -30,6 +30,7 @@ PlayerManager="*res://Scripts/player_manager.gd"
 TaskManager="*res://Scripts/task_manager.gd"
 ZoneManager="*res://Scripts/zone_manager.gd"
 PlayerUi="*res://UI/PLAYERUI/PlayerUI.tscn"
+TransitionManager="*res://UI/TransitionManager/TransitionManager.tscn"
 
 [dialogic]
 
@@ -131,6 +132,7 @@ folder_colors={
 Interactable="Nodos de interacción con el jugador"
 Player=""
 Interactor=""
+spawn_point=""
 
 [input]
 

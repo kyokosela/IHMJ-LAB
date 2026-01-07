@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemState" load_steps=2 format=3 uid="uid://dmk8i8fxtpbyx"]
+
+[ext_resource type="Script" uid="uid://d1u4chvj2k7me" path="res://Resources/Items/States/item_state.gd" id="1_nponx"]
+
+[resource]
+script = ExtResource("1_nponx")
+id = "prepared"
+exclusive_group = "preparation"
+metadata/_custom_type_script = "uid://d1u4chvj2k7me"

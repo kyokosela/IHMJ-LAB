@@ -17,24 +17,11 @@ func apply_decay(minutes: int):
 	var items = get_all_items()
 	if not items: return 
 	for item : Item in items:
-		print("item: ", item.data.item_unique_name, " | condition: ",item.condition)
-		var decay_value : float = 0
-		var base_decay : int = item.data.base_decay_time
-		var quality : float = item.data.get_quality_percentage()
-		var modifiers : Array[ConditionModifier] = item.data.modifiers
 		var env_conditions : Array[String] = environment.get_conditions()
+		var env_properties : Array[String] = environment.get_properties()
+		item.apply_decay(minutes, env_conditions)
+		item.apply_enviroment(minutes, env_properties)
 		
-		decay_value = round( (minutes / (base_decay + (base_decay * quality)) * 100) )
-		
-		for modifier : ConditionModifier in modifiers:
-			if modifier.applies_to in env_conditions:
-				decay_value = round( (minutes / (base_decay + (base_decay * quality)) * 100) * modifier.multiplier )
-		
-		print(decay_value)
-		item.condition -= decay_value # Test por ahora, no creo que mantenga la formula asi
-		print("item: ", item.data.item_unique_name, " | condition: ",item.condition)
-			
-	
 #endregion
 
 #region API

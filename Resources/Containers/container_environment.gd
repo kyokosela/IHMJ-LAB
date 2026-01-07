@@ -33,3 +33,13 @@ func get_custom_conditions() -> Array[String]:
 	if is_dark: customs.append("dark")
 	
 	return customs
+
+func get_properties()-> Array[String]:
+	var properties : Array[String]
+	
+	properties.append("temperature")
+	properties.append("humidity")
+	if is_refrigerated: properties.append("refrigerated")
+	if is_dark: properties.append("dark")
+	
+	return properties

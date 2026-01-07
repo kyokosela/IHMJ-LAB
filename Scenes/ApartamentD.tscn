@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4 uid="uid://vv6n4521k5rq"]
+[gd_scene load_steps=22 format=4 uid="uid://vv6n4521k5rq"]
 
 [ext_resource type="Script" uid="uid://mni1cq3j7l53" path="res://Scripts/world.gd" id="1_8uipv"]
 [ext_resource type="PackedScene" uid="uid://tcey4tkkfvd8" path="res://Prefabs/Player/Player.tscn" id="2_ol0xk"]
@@ -12,6 +12,9 @@
 [ext_resource type="Script" uid="uid://ckwswawlru4js" path="res://Resources/Containers/container_rules.gd" id="10_ox6iw"]
 [ext_resource type="Script" uid="uid://bo45lmkm6yiet" path="res://Resources/Containers/container_environment.gd" id="11_hcjjt"]
 [ext_resource type="Resource" path="res://DialoguePlugin/TIMELINE/task.dtl" id="12_hcjjt"]
+[ext_resource type="Script" uid="uid://btpm0l5mnnxxf" path="res://Prefabs/Interactable/interactable_container.gd" id="13_sl7m2"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="14_qad6c"]
+[ext_resource type="Resource" uid="uid://bt0m76qd15ptj" path="res://Resources/Items/Data/Test_Item_1.tres" id="15_xcnxs"]
 
 [sub_resource type="Resource" id="Resource_qad6c"]
 script = ExtResource("10_ox6iw")
@@ -23,6 +26,18 @@ script = ExtResource("11_hcjjt")
 metadata/_custom_type_script = "uid://bo45lmkm6yiet"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ox6iw"]
+
+[sub_resource type="Resource" id="Resource_mx67u"]
+script = ExtResource("10_ox6iw")
+allowed_types = Array[int]([1])
+metadata/_custom_type_script = "uid://ckwswawlru4js"
+
+[sub_resource type="Resource" id="Resource_5k1sf"]
+script = ExtResource("11_hcjjt")
+temperature = 0.0
+metadata/_custom_type_script = "uid://bo45lmkm6yiet"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4dip4"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_8uipv")
@@ -42,7 +57,6 @@ position = Vector2(80, 80)
 zoom = Vector2(2, 2)
 
 [node name="DebugPanel" parent="." instance=ExtResource("5_yw1yi")]
-visible = false
 
 [node name="Wardrobe" type="Area2D" parent="."]
 position = Vector2(128, 40)
@@ -59,3 +73,20 @@ dialog = ExtResource("12_hcjjt")
 time_consumption = "01:00"
 random_time_range = false
 metadata/_custom_type_script = "uid://cit1v6ktt3yrn"
+
+[node name="InteractableContainer" type="Area2D" parent="."]
+position = Vector2(24, 40)
+script = ExtResource("13_sl7m2")
+initial_items = Dictionary[ExtResource("14_qad6c"), int]({
+ExtResource("15_xcnxs"): 1
+})
+rules = SubResource("Resource_mx67u")
+environment = SubResource("Resource_5k1sf")
+shape = SubResource("RectangleShape2D_4dip4")
+reusable = true
+is_solid = true
+consume_time = true
+dialog = ExtResource("12_hcjjt")
+time_consumption = "01:00"
+random_time_range = false
+metadata/_custom_type_script = "uid://btpm0l5mnnxxf"

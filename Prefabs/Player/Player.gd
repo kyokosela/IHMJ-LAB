@@ -21,13 +21,11 @@ func _initialize() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("test"):
 		sprite.change_preset_by_name("mayui_towel")
-		add_item(preload("uid://bt0m76qd15ptj"))
-		add_item(preload("uid://bvx6r35khet8g"))
+		add_item(preload("uid://b364ksxd3tlh0"))
 	if event.is_action_pressed("Interact"):
-		var item = get_items(preload("uid://bt0m76qd15ptj"))
+		var item = get_items(preload("uid://b364ksxd3tlh0"))
 		if item: 
 			item[0].use()
-			item[0].condition -= 1
 
 func _process(_delta: float) -> void:
 	pass

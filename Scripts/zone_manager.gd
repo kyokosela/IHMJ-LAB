@@ -10,13 +10,16 @@ const zone_paths : Array[String] = [
 
 var current_zone : int = ZONES.APARTAMENT_ONE
 var previous_zone : int = -1
-var zone_node : World
+var zone_node : World :
+	set(_value) :
+		zone_node = _value
+		TransitionManager.fadeOut()
 
 var energy_cost_base : float = 2
 var energy_cost_incremental : float = 0
 
 var time_cost_base : String = "00:05"
-var time_cost_incremental = "00:05"
+var time_cost_incremental : String = "00:05"
 
 func change_zone(new_zone_id : ZONES) -> void :
 	
@@ -32,4 +35,7 @@ func change_zone(new_zone_id : ZONES) -> void :
 	
 	PlayerManager.decrease_stat("ENERGY", energy_cost_incremental)
 	TimeManager.add_to_current_time(time_cost_incremental)
+	
+	TransitionManager.fadeIn()
+	await TransitionManager.transition_finished
 	zone_node.get_tree().call_deferred("change_scene_to_file", zone_paths[new_zone_id])

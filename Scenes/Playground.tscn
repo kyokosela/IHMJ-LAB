@@ -1,15 +1,14 @@
-[gd_scene load_steps=22 format=4 uid="uid://cdmbl4s6mgpoi"]
+[gd_scene load_steps=21 format=4 uid="uid://cdmbl4s6mgpoi"]
 
 [ext_resource type="Script" uid="uid://cbs8bskt5bfsp" path="res://Scenes/playground.gd" id="1_u6rxl"]
-[ext_resource type="PackedScene" uid="uid://dsipbskcmad4s" path="res://Scenes/HudScenes/hud.tscn" id="2_iv8lt"]
 [ext_resource type="PackedScene" uid="uid://ctagwp38abn4u" path="res://Prefabs/walls/floors.tscn" id="2_npy7o"]
 [ext_resource type="PackedScene" uid="uid://b2w4stq2ucdlo" path="res://Prefabs/walls/walls.tscn" id="3_u6rxl"]
-[ext_resource type="PackedScene" uid="uid://tcey4tkkfvd8" path="res://Prefabs/Player/Player.tscn" id="4_k2wcb"]
 [ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="5_npy7o"]
 [ext_resource type="Script" uid="uid://c13pr1gbe31et" path="res://Prefabs/Interactable/Task/interactable_task.gd" id="6_u6rxl"]
 [ext_resource type="Script" uid="uid://c2qbhsn6tgmrc" path="res://Resources/StringChain/string_chain.gd" id="7_fikvc"]
 [ext_resource type="Script" uid="uid://big4o7sjh0g0y" path="res://Scripts/HouseInteracts/bathe.gd" id="7_ipdnw"]
 [ext_resource type="Script" uid="uid://cdqqyuliu6jyp" path="res://Resources/StringChain/string_chain_array.gd" id="8_ipdnw"]
+[ext_resource type="Script" uid="uid://c5tmcnj0wdxvt" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="9_ipdnw"]
 
 [sub_resource type="Resource" id="Resource_ipdnw"]
 script = ExtResource("8_ipdnw")
@@ -64,17 +63,10 @@ metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ipdnw"]
 
-[node name="ApartamentC" type="Node2D"]
+[node name="ApartamentC" type="Node2D" node_paths=PackedStringArray("optional_camera_node")]
 script = ExtResource("1_u6rxl")
+optional_camera_node = NodePath("Camera2D")
 metadata/_custom_type_script = "uid://mni1cq3j7l53"
-
-[node name="UILayer" type="CanvasLayer" parent="."]
-
-[node name="HUD" parent="UILayer" instance=ExtResource("2_iv8lt")]
-offset_left = -1.0
-offset_top = -3.0
-offset_right = -1.0
-offset_bottom = -3.0
 
 [node name="DebugPanel" parent="." instance=ExtResource("5_npy7o")]
 position = Vector2i(5, 210)
@@ -84,17 +76,6 @@ tile_map_data = PackedByteArray("AAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAA
 
 [node name="Walls" parent="." instance=ExtResource("3_u6rxl")]
 tile_map_data = PackedByteArray("AAAAAAAAAAADAAAAAAAAAAEAAAADAAEAAAAAAAIAAAAIAAYAAAAAAAMAAAAIAAIAAAAAAAQAAAAIAAMAAAAAAAUAAAADAAAAAAAAAAYAAAADAAEAAAAAAAcAAAADAAIAAAAAAAgAAAADAAMAAAAAAAkAAAAJAAIAAAABAAAAAAABAAAAAAABAAEAAAABAAEAAAABAAIAAAABAAIAAAABAAkAAAABAAYAAAACAAAAAAABAAAAAAACAAEAAAABAAEAAAACAAIAAAABAAIAAAADAAAAAAABAAAAAAADAAEAAAABAAEAAAADAAIAAAABAAIAAAAEAAAAAAABAAAAAAAEAAEAAAABAAEAAAAEAAIAAAABAAIAAAAFAAAAAAABAAAAAAAFAAEAAAABAAEAAAAFAAIAAAABAAIAAAAGAAAAAAABAAAAAAAGAAEAAAABAAEAAAAGAAIAAAABAAIAAAAGAAkAAAABAAYAAAAHAAAAAAABAAAAAAAHAAEAAAABAAEAAAAHAAIAAAABAAIAAAAHAAkAAAABAAYAAAAIAAAAAAABAAAAAAAIAAEAAAABAAEAAAAIAAIAAAABAAIAAAAIAAkAAAABAAYAAAAJAAAAAAAEAAAAAAAJAAEAAAAEAAEAAAAJAAIAAAAEAAIAAAAJAAMAAAAEAAMAAAAJAAQAAAAEAAMAAAAJAAUAAAAEAAMAAAAJAAYAAAAEAAMAAAAJAAcAAAAEAAMAAAAJAAgAAAAEAAMAAAAJAAkAAAAKAAIAAAADAAUAAAAIAAAAAAADAAkAAAABAAYAAAACAAkAAAABAAYAAAACAAUAAAAHAAAAAAACAAYAAAACAAEAAAACAAcAAAACAAIAAAABAAcAAAABAAIAAAABAAYAAAABAAEAAAABAAUAAAABAAAAAAAEAAYAAAAAAAEAAAAEAAcAAAAAAAIAAAAFAAYAAAAEAAEAAAAFAAUAAAAEAAAAAAAEAAUAAAAJAAAAAAAFAAcAAAAEAAIAAAAFAAgAAAAEAAMAAAAEAAkAAAABAAYAAAAFAAkAAAAEAAcAAAA=")
-
-[node name="Player" parent="." instance=ExtResource("4_k2wcb")]
-position = Vector2(88, 72)
-
-[node name="Camera2D" type="Camera2D" parent="Player"]
-position = Vector2(-11, 0)
-zoom = Vector2(4.2, 4.2)
-process_callback = 0
-limit_enabled = false
-position_smoothing_enabled = true
-rotation_smoothing_enabled = true
 
 [node name="Label" type="Label" parent="."]
 offset_left = 224.0
@@ -115,7 +96,7 @@ reusable = true
 is_solid = true
 metadata/_custom_type_script = "uid://c13pr1gbe31et"
 
-[node name="Label2" type="Label" parent="."]
+[node name="ducha" type="Label" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -130,7 +111,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 text = "DUCHA"
 
-[node name="InteractableAction" type="Area2D" parent="Label2"]
+[node name="InteractableAction" type="Area2D" parent="ducha"]
 position = Vector2(18.73706, 7.414772)
 script = ExtResource("7_ipdnw")
 effect_list = Array[String](["DIRT"])
@@ -139,6 +120,7 @@ stat_req_list = Dictionary[String, int]({
 "ENERGY": 10
 })
 stat_messages = SubResource("Resource_jefqp")
+time_cost = "00:20"
 shape = SubResource("RectangleShape2D_k2wcb")
 display_text = "DUCHA"
 children_visible = true
@@ -167,3 +149,14 @@ children_visible = true
 reusable = true
 is_solid = true
 metadata/_custom_type_script = "uid://c13pr1gbe31et"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4.6, 4.6)
+limit_enabled = false
+position_smoothing_enabled = true
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(124, 124)
+script = ExtResource("9_ipdnw")
+entity = "Player"
+metadata/_custom_type_script = "uid://c5tmcnj0wdxvt"

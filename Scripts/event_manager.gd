@@ -21,7 +21,6 @@ func load_default_events() -> void :
 #endregion
 
 #region API
-
 ## Carga un evento, usa trigger para disparar sus acciones
 func load_event(event : Event, trigger : bool = false) -> void :
 	events.append(event)
@@ -31,6 +30,8 @@ func load_event(event : Event, trigger : bool = false) -> void :
 	if event is EventScheduled:
 		if event.start != null : TimeManager.connect_with_res(event.start, event.execute)
 		if event.end != null : TimeManager.connect_with_res(event.end, event.finished)
+	if event is LapseEvent :
+		TimeManager.minutes_delta.connect(event.check_timer)
 	
 ## remueve un evento, usa end_trigger para disparar su acciones inversas/finales
 func remove_event(event : Event, trigger_end : bool = false) -> void :
@@ -99,5 +100,15 @@ func is_event_check(_event_unique_name : String) -> bool :
 	var event = get_event(_event_unique_name)
 	if event == null: return false
 	return event.checked
+
+func create_lapse_event(_time_lapse : String, callable : Callable, event_unique_name : String, event_display_name : String, auto_restart : bool = false) -> void :
+	var new_lapse_event = LapseEvent.new()
+	new_lapse_event.event_name = event_display_name
+	new_lapse_event.event_unique_name = event_unique_name
+	new_lapse_event.event_executed.connect(callable)
+	new_lapse_event.time_lapse_value = _time_lapse
+	new_lapse_event.auto_restart = auto_restart
+	new_lapse_event.can_multiple_active = true
+	load_event(new_lapse_event, false)
 
 #endregion

@@ -11,18 +11,20 @@ signal entity_created(entity : Entity)
 signal entity_removed(entity : Entity)
 
 func _ready() -> void:
-	
 	ZoneManager.zone_node = self
 	if player_enabled : 
 		PlayerManager.player.reparent(self, false)
 		
 		for mark : SpawnPoint in get_tree().get_nodes_in_group("spawn_point") :
-			if mark.entity == "Player" :
+			if mark.entity == "Player":
 				PlayerManager.player.movement.tile_destination = mark.global_position
 				PlayerManager.player.global_position = mark.global_position
-		
-		optional_camera_node.reparent(PlayerManager.player, false)
+		if optional_camera_node: optional_camera_node.reparent(PlayerManager.player, false)
 	
+	if PlayerManager.player: 
+		entities["Player"] = PlayerManager.player
+		entity_created.emit(PlayerManager.player)
+		
 	for entity : Entity in find_children("*", "Entity", true):
 		entities[entity.name] = entity
 		entity.world = self
@@ -35,5 +37,5 @@ func kill_entity(entity: Entity) -> void:
 	entity.queue_free()
 
 func _exit_tree() -> void:
-	optional_camera_node.reparent(self)
+	if optional_camera_node: optional_camera_node.reparent(self)
 	PlayerManager.player.reparent(PlayerManager)

@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://cuu2mriq75id7"]
+
+[ext_resource type="Script" uid="uid://coy8mlwtnhgva" path="res://Prefabs/Debug/item_container.gd" id="1_xw451"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_k4n5k"]
+
+[node name="ItemContainer" type="FoldableContainer"]
+folded = true
+title = "Item Name"
+script = ExtResource("1_xw451")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = SubResource("PlaceholderTexture2D_k4n5k")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+fit_content = true
+
+[node name="FoldableContainer" type="FoldableContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+folded = true
+title = "Custom Conditions"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/FoldableContainer"]
+visible = false
+layout_mode = 2

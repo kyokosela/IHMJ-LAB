@@ -17,9 +17,7 @@ enum QUALITY {
 @export var texture : Texture2D
 @export var item_name : String = ""
 @export var item_unique_name : String = ""
-@export var is_stackable : bool = true
 @export var item_quality : QUALITY
-@export var max_stack : int = 1
 @export_custom(PROPERTY_HINT_MULTILINE_TEXT,"") var item_description : String = ""
 
 @export_group("Behaviors")
@@ -36,3 +34,9 @@ func get_quality_percentage() -> float:
 		QUALITY.B: return 0.40
 		QUALITY.C: return 0
 		_: return 0
+
+func get_modifiers_applies() -> Array[String]: ##Debug
+	var value :Array[String] = []
+	for x in modifiers:
+		value.append(x.applies_to)
+	return value

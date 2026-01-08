@@ -31,7 +31,6 @@ metadata/_custom_type_script = "uid://ckwswawlru4js"
 
 [sub_resource type="Resource" id="Resource_21ku0"]
 script = ExtResource("4_3opp6")
-temperature = 0.0
 metadata/_custom_type_script = "uid://bo45lmkm6yiet"
 
 [sub_resource type="Animation" id="Animation_tl25y"]

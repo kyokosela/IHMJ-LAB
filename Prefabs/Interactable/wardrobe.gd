@@ -33,10 +33,10 @@ func remove_preset(preset: SpritePreset) -> void:
 	presets.erase(preset)
 	preset_removed.emit(preset)
 
-func swap_preset(current: SpritePreset, swap_preset: SpritePreset) -> void:
-	if not current or not swap_preset in presets: return
-	preset_swapped.emit(current, swap_preset)
+func swap_preset(current: SpritePreset, swapped_preset: SpritePreset) -> void:
+	if not current or not swapped_preset in presets: return
+	preset_swapped.emit(current, swapped_preset)
 	
 	var temp = current
-	current = swap_preset
-	swap_preset = temp
+	current = swapped_preset
+	swapped_preset = temp

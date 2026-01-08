@@ -26,11 +26,10 @@ func _on_dialogic_timeline_ended():
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("test"):
-		sprite.change_preset_by_name("mayui_towel")
-		add_item(preload("uid://b364ksxd3tlh0"))
+		add_item_by_data(preload("uid://b364ksxd3tlh0"))
 	if event.is_action_pressed("Interact"):
-		var item = get_items(preload("uid://b364ksxd3tlh0"))
-		if item: 
+		var item = get_items()
+		if !item.is_empty():
 			item[0].use()
 
 func _process(_delta: float) -> void:

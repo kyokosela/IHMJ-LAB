@@ -51,44 +51,57 @@ func kill_entity() -> void:
 #endregion
 
 #region Inventory API 
-func add_item(item: ItemData, amount : int = 1) -> bool:
-	return _has_inventory() and inventory.add_item(item, amount)
-	
-func remove_item(item: ItemData, amount : int = 1) -> int:
-	return inventory.remove_item(item, amount) if _has_inventory() else 0
-	
-func has_item(item_data: ItemData, amount: int = 1) -> bool:
-	return _has_inventory() and inventory.has_item(item_data, amount)
+func get_items() -> Array[Item]:
+	return inventory.get_all_items() if _has_inventory() else []
 
-func get_item_by_name(unique_name: String) -> ItemData:
-	return inventory.get_item_by_name(unique_name) if _has_inventory() else null
+func add_item_by_data(data : ItemData) -> void:
+	if _has_inventory(): inventory.add_item_by_data(data)
+
+func add_item(item: Item) -> bool:
+	return _has_inventory() and inventory.add_item(item)
+	
+func remove_item(item: Item) -> bool:
+	return _has_inventory() and inventory.remove_item(item)
+	
+func has_item(item_data: ItemData) -> bool:
+	return _has_inventory() and inventory.has_item(item_data, 1)
+
+func get_item_by_name(unique_name: String) -> Item:
+	return inventory.get_item_instance_by_name(unique_name) if _has_inventory() else null
+
+func get_item_by_data(data: ItemData) -> Item:
+	return inventory.get_item_by_data(data) if _has_inventory() else null
 
 func count_item(item_data: ItemData) -> int:
 	return inventory.count_item(item_data) if _has_inventory() else 0
 
 func get_inventory_size() -> int:
-	return inventory.get_inventory_size() if _has_inventory() else 0
+	return inventory.slots.size() if _has_inventory() else 0
 	
-func get_items(item : ItemData) -> Array[Item]:
-	return inventory.get_items_of(item) if _has_inventory() else []
+func get_instances_of(item_data : ItemData) -> Array[Item]:
+	return inventory.get_items_of(item_data) if _has_inventory() else []
 
-func get_items_of() -> Array[ItemData]:
-	return inventory.get_items() if _has_inventory() else []
+func get_unique_content_data() -> Array[ItemData]:
+	return inventory.get_unique_items_data() if _has_inventory() else []
 
-func has_space_for(item_data: ItemData, amount: int = 1) -> bool:
-	return inventory.has_space_for(item_data, amount)
+func has_space_for(item_data: ItemData) -> bool:
+	return _has_inventory() and inventory.has_space_for(item_data)
 	
-func transfer_item_to(target_inventory: InventoryContainer,item_data: ItemData,amount: int = 1) -> bool:
-	return _has_inventory() and inventory.transfer_to(target_inventory, item_data, amount)
+func transfer_item_to(target: InventoryContainer, item: Item) -> bool:
+	return _has_inventory() and inventory.transfer_to(target, item)
 	
+func transfer_slot_to(target: InventoryContainer, index: int) -> bool:
+	return _has_inventory() and inventory.transfer_slot_to(target, index)
+
+
 func clear_inventory() -> void:
 	if _has_inventory(): inventory.clear()
 	
 func _has_inventory() -> bool:
 	return inventory != null
-	
+
 func inventory_container() -> InventoryContainer:
-	return inventory
+	return inventory 
 	
 #endregion
 

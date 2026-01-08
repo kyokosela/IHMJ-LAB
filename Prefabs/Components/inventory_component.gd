@@ -1,253 +1,139 @@
 extends Node2D
 class_name InventoryComponent
 
-signal item_added(item : ItemData, quantity: int)
-signal item_removed(item : ItemData, quantity: int)
-signal inventory_changed()
+signal item_added(item: Item)
+signal item_removed(item: Item)
 signal slot_changed(slot_index: int)
+signal inventory_changed
 
 @export var size : int = 10
-
 var slots : Array[InventorySlot] = []
-
-#Hola, si ves este codigo, probablemente lo vibecodee por un crashout a nivel global, en todo caso
-#lo revise y lo entendi a fondo gracias y perdon por todo. La IA va a dominar el mundo igualmente
 
 func _init(p_size : int = 10):
 	size = p_size
-	_initialize_slots() # Se ejecuta inmediatamente al hacer .new()
+	_initialize_slots()
 
 func _initialize_slots():
 	slots.clear()
 	for i in range(size):
-		slots.append(InventorySlot.new([], [], 99))
-		
-func add_item(data: ItemData, quantity: int = 1) -> bool:
-	if not data or quantity <= 0:
-		return false
-	var instances : Array[Item] = []
-	for i in range(quantity):
-		instances.append(Item.new(data))
+		slots.append(InventorySlot.new(null,[ItemData.TYPE.UNDEFINED]))
 
-	return _add_instances(instances)
+#region ADD / REMOVE
+func add_item(data: ItemData) -> bool:
+	if not data: return false
+	return add_item_instance(Item.new(data))
+
+func add_item_instance(item: Item) -> bool:
+	var slot_index = get_free_slot()
+	if slot_index == -1: return false
+	
+	slots[slot_index].item = item
+	item_added.emit(item)
+	slot_changed.emit(slot_index)
+	inventory_changed.emit()
+	return true
 
 func _add_instances(instances: Array[Item]) -> bool:
-	var remaining := instances.duplicate()
-	
+	var all_added = true
+	for item in instances:
+		if not add_item_instance(item):
+			all_added = false
+	return all_added
+
+func remove_item_instance(item: Item) -> bool:
 	for i in range(slots.size()):
-		var slot = slots[i]
-		if not remaining.is_empty() and slot.can_stack(remaining[0]):
-			var leftover = slot.add_items(remaining)
-			remaining = remaining.slice(remaining.size() - leftover, remaining.size())
+		if not slots[i].is_empty() and slots[i].item == item:
+			slots[i].clear()
+			item_removed.emit(item)
 			slot_changed.emit(i)
+			inventory_changed.emit()
+			return true
+	return false
 
-	if not remaining.is_empty():
-		for i in range(slots.size()):
-			var slot = slots[i]
-			if slot.is_empty():
-				var leftover = slot.add_items(remaining)
-				remaining = remaining.slice(remaining.size() - leftover, remaining.size())
-				slot_changed.emit(i)
-				if remaining.is_empty():
-					break
-	if remaining.size() < instances.size():
-		item_added.emit(instances[0].data, instances.size() - remaining.size())
-		inventory_changed.emit()
-
-	return remaining.is_empty()
-	
-func remove_item(data: ItemData, quantity: int = 1) -> int:
-	var to_remove = quantity
-	var removed_instances := []
-
-	for i in range(slots.size()):
-		var slot = slots[i]
-		if slot.is_empty():
-			continue
-
-		var matching := []
-		for inst in slot.items:
-			if inst.data == data:
-				matching.append(inst)
-
-		if matching.is_empty():
-			continue
-
-		var remove_count = min(to_remove, matching.size())
-		var removed = slot.remove(remove_count)
-		removed_instances.append_array(removed)
-
-		to_remove -= removed.size()
-		slot_changed.emit(i)
-		
-		if to_remove <= 0:
-			break
-			
-	if removed_instances.size() > 0:
-		item_removed.emit(data, removed_instances.size())
-		inventory_changed.emit()
-
-	return removed_instances.size()
-
-func remove_item_at(index: int, quantity: int = 1) -> Array[ItemData]:
-	if index < 0 or index >= slots.size(): return []
-	
+func remove_item_at(index: int) -> bool:
+	if index < 0 or index >= slots.size(): return false
 	var slot = slots[index]
-	if slot.is_empty(): return []
+	if slot.is_empty(): return false
+	
+	var item = slot.item[0]
+	slot.item.clear()
+	item_removed.emit(item)
+	slot_changed.emit(index)
+	inventory_changed.emit()
+	return true
 
-	var removed = slot.remove(quantity)
+#endregion
 
-	if not removed.is_empty():
-		item_removed.emit(removed[0].data, removed.size())
-		slot_changed.emit(index)
-		inventory_changed.emit()
+#region UTILS
 
-	return removed
+func get_items() -> Array[Item]:
+	var result : Array[Item] = []
+	for slot in slots:
+		if not slot.is_empty():
+			result.append(slot.item)
+	return result
 
-func get_first_item(item_unique_name : String) -> ItemData:
-	var items : Array[ItemData] = get_unique_item_data()
-	for item in items:
-		if item.item_unique_name == item_unique_name:
+func get_first_item_by_name(unique_name : String) -> Item:
+	for item in get_items():
+		if item.data.item_unique_name == unique_name:
 			return item
 	return null
 
-func count_item(data: ItemData) -> int:
+func count_item_data(data: ItemData) -> int:
 	var total := 0
-	for slot in slots:
-		for item in slot.items:
-			if item.data == data:
-				total += 1
+	for item in get_items():
+		if item.data == data:
+			total += 1
 	return total
 
-func has_item(data: ItemData, quantity: int = 1) -> bool:
-	return count_item(data) >= quantity
-
-func is_empty() -> bool:
+func has_space() -> int:
+	var free_slots = 0
 	for slot in slots:
-		if not slot.is_empty():
-			return false
-	return true
+		if slot.is_empty(): free_slots += 1
+	return free_slots 
 
 func get_free_slot() -> int:
 	for i in range(slots.size()):
-		var slot = slots[i]
-		if slot.is_empty(): return i
+		if slots[i].is_empty(): return i
 	return -1
 
-func has_space_for(data: ItemData, quantity: int = 1) -> bool:
-	var remaining = quantity
+#endregion
+
+#region TRANSFER & SLOTS
+
+func transfer_to(other: InventoryComponent, item: Item) -> bool:
+	if not other.has_space(): return false
 	
-	for slot in slots:
-		if slot.is_empty():
-			remaining -= data.max_stack
-		else:
-			var slot_data = slot.items[0].data
-			if slot_data == data and data.is_stackable:
-				var current_count = slot.items.size()
-				var space_in_slot = data.max_stack - current_count
-				remaining -= space_in_slot
-		if remaining <= 0:
+	if remove_item_instance(item):
+		if other.add_item_instance(item):
 			return true
-			
-	return false
-
-func transfer_to(other: InventoryComponent, data: ItemData, quantity: int = 1) -> bool:
-	if count_item(data) < quantity: return false
-	
-	var removed_instances : Array[Item]= []
-	var to_remove = quantity
-
-	for i in range(slots.size()):
-		if to_remove <= 0: break
-
-		var slot = slots[i]
-		if slot.is_empty(): continue
-
-		var matches := []
-		for inst in slot.items:
-			if inst.data == data:
-				matches.append(inst)
-
-		var count = min(to_remove, matches.size())
-		var removed = slot.remove(count)
-		removed_instances.append_array(removed)
-		to_remove -= removed.size()
-		slot_changed.emit(i)
-
-	if removed_instances.is_empty():
-		return false
-
-	if other._add_instances(removed_instances):
-		inventory_changed.emit()
-		return true
-
-	_add_instances(removed_instances) # Devuelve items si falla la transferencia
-	return false
-
-func transfer_slot_to(other: InventoryComponent, slot_index: int, quantity: int = 1) -> bool:
-	if slot_index < 0 or slot_index >= slots.size():
-		return false
-	
-	var slot = slots[slot_index]
-	if slot.is_empty():
-		return false
-	
-	var removed = slot.remove(quantity)
-	if removed.is_empty():
-		return false
-		
-	if other._add_instances(removed):
-		slot_changed.emit(slot_index)
-		inventory_changed.emit()
-		return true
-	
-	slot.items.append_array(removed)
+		else:
+			add_item_instance(item)
 	return false
 
 func swap_slots(slot_a: int, slot_b: int) -> bool:
 	if slot_a < 0 or slot_a >= slots.size() or slot_b < 0 or slot_b >= slots.size():
 		return false
 	
-	var temp = slots[slot_a]
-	slots[slot_a] = slots[slot_b]
-	slots[slot_b] = temp
+	var temp_items = slots[slot_a].item
+	slots[slot_a].item = slots[slot_b].item
+	slots[slot_b].item = temp_items
 	
 	slot_changed.emit(slot_a)
 	slot_changed.emit(slot_b)
 	inventory_changed.emit()
-	
 	return true
 
 func clear():
 	for i in range(slots.size()):
-		slots[i] = InventorySlot.new()
+		slots[i].item.clear()
 		slot_changed.emit(i)
 	inventory_changed.emit()
 
-func get_unique_item_data() -> Array[ItemData]:
-	var unique : Array[ItemData] = []
-	for slot in slots:
-		if slot.is_empty():
-			continue
-		var data = slot.items[0].data
-		if data not in unique:
-			unique.append(data)
-	return unique
-	
+#endregion
 
-func get_all_instances_of(data : ItemData) -> Array[Item]:
-	var result : Array[Item] = []
-	for slot in slots:
-		for item in slot.items:
-			if item.data == data:
-				result.append(item)
-	return result
+#region PERSISTENCE
 
-func get_random_item() -> ItemData:
-	if is_empty(): return null
-	return get_unique_item_data().pick_random()
-
-# Serializar para guardar
 func to_dict() -> Dictionary:
 	var data = {
 		"size": size,
@@ -255,24 +141,29 @@ func to_dict() -> Dictionary:
 	}
 	for slot in slots:
 		if not slot.is_empty():
+			var item = slot.item
 			data.slots.append({
-				"item_id": slot.item.id,
-				"quantity": slot.quantity
+				"item_unique_name": item.data.item_unique_name,
+				"condition": item.condition,
 			})
 		else:
 			data.slots.append(null)
 	return data
 
-func from_dict(data: Dictionary, item_database: Dictionary):
-	size = data.get("size", 20)
+func from_dict(dict_data: Dictionary, item_database: Dictionary):
+	size = dict_data.get("size", size)
 	_initialize_slots()
 	
-	var slot_data = data.get("slots", [])
+	var slot_data = dict_data.get("slots", [])
 	for i in range(min(slot_data.size(), slots.size())):
-		if slot_data[i] != null:
-			var item_id = slot_data[i].get("item_id", "")
-			if item_database.has(item_id):
-				slots[i].item = item_database[item_id]
-				slots[i].quantity = slot_data[i].get("quantity", 0)
+		var entry = slot_data[i]
+		if entry != null:
+			var unique_name = entry.get("item_unique_name", "")
+			if item_database.has(unique_name):
+				var new_item = Item.new(item_database[unique_name])
+				new_item.condition = entry.get("condition", 100.0)
+				slots[i].item = new_item
 	
 	inventory_changed.emit()
+
+#endregion

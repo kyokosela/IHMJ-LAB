@@ -6,7 +6,7 @@
 oversampling_override = 1.0
 title = "Debug"
 position = Vector2i(5, 36)
-size = Vector2i(300, 300)
+size = Vector2i(615, 480)
 content_scale_mode = 2
 content_scale_aspect = 2
 content_scale_stretch = 1
@@ -25,7 +25,7 @@ theme_override_constants/margin_bottom = 0
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer"]
 layout_mode = 2
-current_tab = 4
+current_tab = 1
 
 [node name="GameInfo" type="MarginContainer" parent="MarginContainer/TabContainer"]
 visible = false
@@ -51,7 +51,6 @@ fit_content = true
 
 [node name="EntityInfo" type="MarginContainer" parent="MarginContainer/TabContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
@@ -194,6 +193,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PlayerManager" type="ScrollContainer" parent="MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 4
 
@@ -221,6 +221,14 @@ layout_mode = 2
 title = "Effects"
 
 [node name="EffectsList" type="VBoxContainer" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/effects"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="inventory" type="FoldableContainer" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer"]
+layout_mode = 2
+title = "Inventory"
+
+[node name="ItemList" type="VBoxContainer" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/inventory"]
 unique_name_in_owner = true
 layout_mode = 2
 

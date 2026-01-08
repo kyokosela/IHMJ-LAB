@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0f7lqvnstjs2"]
+
+[ext_resource type="Script" uid="uid://bf8tlrnlkhmb5" path="res://Prefabs/Debug/custom_condition_container.gd" id="1_sg50u"]
+
+[node name="FoldableContainer" type="FoldableContainer"]
+folded = true
+title = "Condition name"
+script = ExtResource("1_sg50u")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+visible = false
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true

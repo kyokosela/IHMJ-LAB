@@ -1,13 +1,13 @@
 extends Resource
 class_name ItemBehavior
 
-signal used
+@export var can_decay : bool = true
 
-func can_use(_item) -> bool:
+func can_use(_item: Item) -> bool:
 	return false
 
-func use(_item) -> void:
-	used.emit()
+func use(_item: Item) -> void:
+	_item.used.emit()
 
 func update_states(_item: Item) -> void:
 	var conditions = _item.data.custom_conditions
@@ -16,6 +16,7 @@ func update_states(_item: Item) -> void:
 		condition.update_states(_item) 
 
 func apply_base_decay(minutes:int,item: Item, env_conditions: Array[String]):
+	if !can_decay: return
 	var decay_value : float = 0
 	var base_decay : int = item.data.base_decay_time
 	var quality : float = item.data.get_quality_percentage()

@@ -18,14 +18,23 @@ class_name DebugPanel
 @onready var current_month: RichTextLabel = %CurrentMonth
 @onready var current_week: RichTextLabel = %CurrentWeek
 @onready var current_week_day: RichTextLabel = %CurrentWeekDay
+@onready var item_list: VBoxContainer = %ItemList
 
 var entity_widgets : Dictionary = {}
 var stat_widgets : Array[StatContainerDebug]
 
+var item_widgets : Dictionary[Item, ItemContainerDebug]
+
 const ENTITY_BUTTON = preload("uid://dyv1qmo2clngj") # UID MIEDO
 const STAT_CONTAINER = preload("res://Prefabs/Debug/stat_container.tscn") # UID MIEDO
+const ITEM_CONTAINER = preload("uid://cuu2mriq75id7") # UID MIEDO
 
-var current_entity : Entity
+var current_entity : Entity:
+	set(_v):
+		current_entity = _v
+		if current_entity._has_inventory():
+			initial_item_setup(current_entity)
+
 var frame_time_ms := 0.0
 var playtime := 0.0
 
@@ -34,8 +43,7 @@ func _ready() -> void:
 	close_requested.connect(hide)
 	if !world: entity_info.hide()
 	else: 
-		world.entity_created.connect(_on_entity_added)
-		world.entity_removed.connect(_on_entity_removed)
+		world_initial_setup()
 	setup_stats()
 	PlayerManager.stat_connection_added.connect(update_stats)
 	EventManager.event_activated.connect(_on_event_active)
@@ -43,6 +51,41 @@ func _ready() -> void:
 	TimeManager.time_changed.connect(time_debug)
 	PlayerManager.effect_added.connect(_on_effect_active)
 	PlayerManager.effect_removed.connect(_on_effect_remove)
+
+func initial_item_setup(entity: Entity) -> void:
+	entity.inventory_container().inventory.item_added.connect(on_item_added)
+	entity.inventory_container().inventory.item_removed.connect(on_item_removed)
+	entity.inventory_container().inventory.inventory_changed.connect(item_update)
+	
+	for x in entity.inventory.get_all_items():
+		on_item_added(x)
+	
+	item_update()
+	
+
+func on_item_added(item: Item) -> void:
+	
+	print("ello")
+	if item_widgets.has(item):
+		return
+	var widget : ItemContainerDebug = ITEM_CONTAINER.instantiate()
+	widget.item = item
+	item_widgets[item] = widget
+	item_list.add_child(widget)
+	
+	widget.update()
+
+func on_item_removed(item: Item) -> void:
+	if not item_widgets.has(item):
+		return
+	var widget = item_widgets[item]
+	item_widgets.erase(item)
+	widget.queue_free()
+
+func item_update() -> void:
+	for x : ItemContainerDebug in item_widgets.values():
+		x.update()
+		
 
 func _on_effect_active(effect : Effect) -> void :
 	var _label := Label.new()
@@ -64,7 +107,12 @@ func _on_event_deactive(event_unique_name : String) -> void:
 	var node = %eventmanagervbox.get_node_or_null(event_unique_name)
 	if node : node.queue_free()
 
-func _on_entity_added(entity: Node) -> void:
+func world_initial_setup():
+	world.entity_created.connect(_on_entity_added)
+	world.entity_removed.connect(_on_entity_removed)
+
+func _on_entity_added(entity: Entity) -> void:
+	print("ola")
 	if entity_widgets.has(entity):
 		return
 	var widget = ENTITY_BUTTON.instantiate()
@@ -86,7 +134,7 @@ func update_stats() -> void:
 		x.info_update()
 	
 
-func _on_entity_removed(entity: Node) -> void:
+func _on_entity_removed(entity: Entity) -> void:
 	if not entity_widgets.has(entity):
 		return
 	if entity == current_entity: current_entity = null
@@ -118,9 +166,7 @@ func entity_info_update(_delta : float)-> void:
 		[font_size=12]
 		Name: {name}
 		Components: {components}
-		Inventory: {inventory}
 		State: {state}
-		Animation: {animation}
 		Facing: {facing}
 		Can move: {can_move}
 		Is moving: {is_moving}
@@ -128,13 +174,12 @@ func entity_info_update(_delta : float)-> void:
 		""".format({
 			"name": current_entity.name,
 			"components": current_entity.get_all_components(),
-			"inventory": current_entity.inventory.get_unique_items(),
 			"state": current_entity.get_curr_state_name(),
-			"animation": current_entity.current_animation(),
 			"facing": Utils.get_vector_name(current_entity.facing_direction()),
 			"can_move": current_entity.can_move(),
 			"is_moving": current_entity.moving()
 		})
+		
 
 func game_info_update(_delta : float)->void:
 	frame_time_ms = _delta * 1000.0

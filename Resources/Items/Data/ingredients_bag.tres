@@ -103,8 +103,7 @@ metadata/_custom_type_script = "uid://wotj3baput20"
 [resource]
 script = ExtResource("3_x2k3f")
 item_name = "_INGREDIENTS_BAG_"
-item_unique_name = "Ingredients Bag"
-is_stackable = false
+item_unique_name = "ingredients_bag"
 item_quality = 1
 item_description = "Ingredients Bag
 Contains ingredients to make home meal"

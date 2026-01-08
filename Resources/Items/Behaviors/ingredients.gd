@@ -1,6 +1,9 @@
 extends ConsumableBehavior
 class_name Ingredients
 
+func update_states(_item: Item) -> void:
+	super(_item)
+
 func use(_item: Item) -> void:
 	print("30 de energia")
 	print("elimina hambre")

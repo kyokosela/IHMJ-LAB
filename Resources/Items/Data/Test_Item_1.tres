@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=8 format=3 uid="uid://bt0m76qd15ptj"]
+[gd_resource type="Resource" script_class="ItemData" load_steps=9 format=3 uid="uid://bt0m76qd15ptj"]
 
 [ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="2_htbid"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="2_kw0iu"]
 [ext_resource type="Script" uid="uid://do0pdg85om6vq" path="res://Resources/Items/Behaviors/consumable_behavior.gd" id="2_xlo53"]
 [ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="3_xlo53"]
 

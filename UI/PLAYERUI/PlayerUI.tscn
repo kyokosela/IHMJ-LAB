@@ -14,7 +14,6 @@ script/source = "extends TextureProgressBar
 "
 
 [node name="PlayerUi" type="CanvasLayer"]
-layer = 2
 script = ExtResource("1_3q05j")
 
 [node name="Label" type="Label" parent="."]

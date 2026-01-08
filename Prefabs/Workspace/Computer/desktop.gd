@@ -37,27 +37,27 @@ func create_icon(data: AppData):
 	btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	btn.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
 	btn.flat = true
+	
 	btn.pressed.connect(open_app.bind(data))
 	icon_grid.add_child(btn)
  
-# TODO: mantener status de la aplicación luego de cerrarse,
-# e.g. cuando ya completaste todos los correos, no puedes volver a hacerlos.
-
 ## Crea la instancia de la aplicación. 
 ## Si ya fue creada, muestra la misma.
 ## Si fue cerrada pero vuelto a abrir. Se vuelve a crear  
 func open_app(data: AppData):
 	if running_apps.has(data):
-		var window = running_apps[data]
-		window.focus()
+		running_apps[data].focus()
 		return
 	else:
 		running_apps.erase(data)
-			
+	
+
 	spawn_new_window(data)
 
 ## Instancia la escena de la app en una ventana y añade una referencia a la barra de tareas
 func spawn_new_window(data: AppData):
+	var session = _get_session(data)
+	
 	var window = base_window.instantiate()
 	windows_root.add_child(window)
 	
@@ -65,14 +65,17 @@ func spawn_new_window(data: AppData):
 	running_apps[data] = window
 	window.bottom_margin = taskbar.size.y
 	
+	if window.has_method("inject_session"):
+		window.inject_session(session)
+	
 	var btn = Button.new()
 	btn.text = data.app_name
 	btn.toggle_mode = true
 	btn.button_group = taskbar_group
 	
 	btn.pressed.connect(_on_button_pressed.bind(btn, window))
-	window.focused.connect(_on_window_focused.bind(btn))
-	window.minimized.connect(_on_window_minimized.bind(btn))
+	window.focused.connect(_set_button_pressed_state.bind(btn, true))
+	window.minimized.connect(_set_button_pressed_state.bind(btn, false))
 	
 	window.closed.connect(func():
 		running_apps.erase(data)
@@ -80,22 +83,26 @@ func spawn_new_window(data: AppData):
 	)
 
 	active_windows.add_child(btn)
-	window.focus()
 	
+	window.focus()
+
+func _get_session(data: AppData) -> AppSession:
+	if current_profile.app_states.has(data.app_name):
+		return current_profile.app_states[data.app_name]
+		
+	var new_session = data.session_script.new() if data.session_script else AppSession.new()
+	current_profile.app_states[data.app_name] = new_session
+	return new_session
+
 func _on_button_pressed(btn, window):
 	if btn.button_pressed:
 		window.focus()
 	else:
 		window.minimize()
 		
-func _on_window_focused(btn):
-	btn.set_block_signal(true)
-	btn.button_pressed = true
-	btn.set_block_signals(false)
-	
-func _on_window_minimized(btn):
+func _set_button_pressed_state(btn: Button, is_pressed: bool):
 	btn.set_block_signals(true)
-	btn.button_pressed = false
+	btn.button_pressed = is_pressed
 	btn.set_block_signals(false)
 
 func set_brightness():

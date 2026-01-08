@@ -61,7 +61,6 @@ func _create_wrapper(data: MailEntry) -> void:
 		
 	cache[data] = wrapper
 
-# TODO: mantener el estado completado al cerrar y volver a abrir la aplicación
 func _on_mail_completed(wrapper: Control) -> void:
 	for child in wrapper.get_children(): child.queue_free()
 	_show_solved(wrapper)

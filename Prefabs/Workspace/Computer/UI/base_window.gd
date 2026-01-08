@@ -2,6 +2,14 @@ extends PanelContainer
 class_name BaseWindow
 
 #region SETUP
+@onready var titlebar: MarginContainer = %Titlebar
+@onready var titlebar_bg: ColorRect = %TitlebarBg
+@onready var icon: TextureRect = %Icon
+@onready var title: Label = %Title
+@onready var minimize_btn: Button = %MinimizeBtn
+@onready var maximize_btn: Button = %MaximizeBtn
+@onready var close_btn: Button = %CloseBtn
+@onready var content: SubViewport = %Content
 
 ## Los datos de la app a cargar en la ventana.
 @export var app_data: AppData:
@@ -20,21 +28,21 @@ signal minimized
 signal focused
 
 func _ready() -> void:
-	%Titlebar.gui_input.connect(drag)
-	%Minimize.pressed.connect(minimize)
-	%Maximize.pressed.connect(maximize)
-	%Close.pressed.connect(close)
+	titlebar.gui_input.connect(drag)
+	minimize_btn.pressed.connect(minimize)
+	maximize_btn.pressed.connect(maximize)
+	close_btn.pressed.connect(close)
 #endregion
 
 #region LOGIC
 func _load_app_data():
 	if not app_data: return
 	print(app_data.app_name)
-	%Title.text = app_data.app_name
-	%TitlebarBg.color = app_data.titlebar_bg_color
-	%Title.add_theme_color_override("font_color", app_data.titlebar_text_color)
-	%Icon.texture = app_data.icon
-	%Content.add_child(app_data.window_scene.instantiate())
+	title.text = app_data.app_name
+	titlebar_bg.color = app_data.titlebar_bg_color
+	title.add_theme_color_override("font_color", app_data.titlebar_text_color)
+	icon.texture = app_data.icon
+	content.add_child(app_data.window_scene.instantiate())
 
 func close():
 	closed.emit()
@@ -63,6 +71,7 @@ func maximize():
 func focus():
 	show()
 	get_parent().move_child(self, -1)
+	grab_focus()
 	focused.emit()
 
 func drag(event: InputEvent):
@@ -82,3 +91,9 @@ func drag(event: InputEvent):
 		
 		global_position = new_pos
 #endregion
+
+func inject_session(session: AppSession):
+	if content.get_child_count() > 0:
+		var app = content.get_child(0)
+		if app.has_method("setup_session"):
+			app.setup_session(session)

@@ -19,7 +19,7 @@ offset_right = 348.0
 offset_bottom = 186.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
+focus_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lyl7k")
 script = ExtResource("1_lyl7k")
 metadata/_edit_use_anchors_ = true
@@ -84,21 +84,21 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 mouse_filter = 1
 
-[node name="Minimize" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
+[node name="MinimizeBtn" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
 text = "-"
 
-[node name="Maximize" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
+[node name="MaximizeBtn" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
 text = "+"
 
-[node name="Close" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
+[node name="CloseBtn" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
@@ -108,9 +108,9 @@ theme_override_font_sizes/font_size = 8
 text = "*"
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer"]
-unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+focus_mode = 2
 stretch = true
 
 [node name="Content" type="SubViewport" parent="VBoxContainer/SubViewportContainer"]

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemState" load_steps=2 format=3 uid="uid://qhh8ywy77dft"]
+
+[ext_resource type="Script" uid="uid://d1u4chvj2k7me" path="res://Resources/Items/States/item_state.gd" id="1_wmurp"]
+
+[resource]
+script = ExtResource("1_wmurp")
+id = "custom_1"
+exclusive_group = "custom"
+metadata/_custom_type_script = "uid://d1u4chvj2k7me"

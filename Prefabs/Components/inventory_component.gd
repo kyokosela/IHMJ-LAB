@@ -233,6 +233,7 @@ func get_unique_item_data() -> Array[ItemData]:
 		if data not in unique:
 			unique.append(data)
 	return unique
+	
 
 func get_all_instances_of(data : ItemData) -> Array[Item]:
 	var result : Array[Item] = []

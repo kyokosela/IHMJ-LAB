@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemState" load_steps=2 format=3 uid="uid://b18f3g76hqy6t"]
+
+[ext_resource type="Script" uid="uid://d1u4chvj2k7me" path="res://Resources/Items/States/item_state.gd" id="1_2hxx1"]
+
+[resource]
+script = ExtResource("1_2hxx1")
+id = "cold"
+exclusive_group = "coldness"
+metadata/_custom_type_script = "uid://d1u4chvj2k7me"

@@ -28,6 +28,7 @@ enum QUALITY {
 @export var base_decay_time : int = 1 ## Determina el tiempo base en el que un objeto se deteriorara en condiciones bases (minutos).
 @export var modifiers : Array[ConditionModifier] ## Modificadores por ambientes que aplicara este item
 @export var unique_item : bool = false
+@export var custom_conditions : Array[CustomCondition]
 
 func get_quality_percentage() -> float:
 	match item_quality:

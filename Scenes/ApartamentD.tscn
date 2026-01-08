@@ -57,6 +57,7 @@ position = Vector2(80, 80)
 zoom = Vector2(2, 2)
 
 [node name="DebugPanel" parent="." instance=ExtResource("5_yw1yi")]
+visible = false
 
 [node name="Wardrobe" type="Area2D" parent="."]
 position = Vector2(128, 40)

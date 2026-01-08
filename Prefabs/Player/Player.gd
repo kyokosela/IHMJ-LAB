@@ -15,8 +15,14 @@ func _initialize() -> void:
 	interaction = get_component("InteractionComponent")
 	inventory = get_component("InventoryContainer")
 	
-	Dialogic.timeline_started.connect(func(): movement.can_move = false)
-	Dialogic.timeline_ended.connect(func(): movement.can_move = true)
+	Dialogic.timeline_started.connect(_on_dialogic_timeline_started)
+	Dialogic.timeline_ended.connect(_on_dialogic_timeline_ended)
+	
+func _on_dialogic_timeline_started():
+	movement.can_move = false
+	
+func _on_dialogic_timeline_ended():
+	movement.can_move = true
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("test"):

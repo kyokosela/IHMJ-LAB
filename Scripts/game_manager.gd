@@ -4,8 +4,10 @@ extends Node
 var is_dialogue_active: bool = false
 var tile_size : Vector2 = Vector2(16,16) # No se si se cambiara o algo por ahora lo dejare aca, si lo cambian, cambien el movement component
 
+#fps, si quieren activar el label de fps
+#referenciar a estas variables donde lo vean necesario
 var fps: float = 0.0
-
+var show_fps: bool = false
 
 #booleana de seguridad para perminir o no la indexación de código externo
 var index_code: bool = false
@@ -41,9 +43,9 @@ func new_game() -> void :
 	#TODO creacion de archivos
 	is_on_tutorial = true
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
-	PlayerManager.add_effect(load("res://Resources/Effects/Effects/hunger_level_1.tres"))
-	PlayerManager.add_effect(load("res://Resources/Effects/Effects/dirt_level_1.tres"))
+	PlayerManager.add_effect(load("res://Resources/Effects/Effects/dirt.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
+	EventManager.create_lapse_event("06:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/hunger.tres")), "AUTO_HUNGER_LAPSE" , "HUNGER TIMER",true)
 
 func load_file(save_id : int) -> void : ## MAX 2 en el parametro
 	var file = FileAccess.open(SAVE_PATHS[save_id], FileAccess.READ)
@@ -75,8 +77,14 @@ func setup_log() -> void :
 		return
 	current_sesion.store_line("LOG " + log_file_name + " Iniciado ")
 	current_sesion.seek_end()
-	PlayerManager.effect_added.connect(func (_effect : Effect) : write_line_log("[PlayerManager] -> effect %s was added" % _effect))
-	PlayerManager.effect_removed.connect(func (_effect : Effect) : write_line_log("[PlayerManager] -> effect %s was removed" % _effect))
+	PlayerManager.effect_added.connect(_on_effect_added)
+	PlayerManager.effect_removed.connect(_on_effect_removed)
+	
+func _on_effect_added(_effect: Effect):
+	write_line_log("[PlayerManager] -> effect %s was added" % _effect)
+	
+func _on_effect_removed(_effect: Effect):
+	write_line_log("[PlayerManager] -> effect %s was removed" % _effect)
 
 func write_line_log(line : String) -> void : ## escribe una linea a registrar en el log
 	if !create_log : return

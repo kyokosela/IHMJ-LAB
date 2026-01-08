@@ -40,6 +40,7 @@ static func decrease_time(time : String, substract_time : String) -> String :
 	var new_substract_time_val = get_minutes(substract_time)
 	
 	var res = time_val - new_substract_time_val
+	if res <= 0 : return "00:00"
 	return TimeManager.format_minutes(res)
 
 static func is_valid_format(time : String) -> bool :
@@ -53,3 +54,20 @@ static func get_minutes(time : String) -> int :
 	if times.is_empty() : return -1
 	times[0] = times[0] * 60
 	return times[0] + times[1]
+
+static func multiply_time(time : String, _multiplier : float) -> String : ## retorna el valor ingresado despues de una operacion de multiplicacion
+	var times = get_minutes(time)
+	if times == -1 : printerr("Invalid get format in utills multiply");return "00:00"
+	
+	times *= _multiplier
+	return TimeManager.format_minutes(times)
+
+static func is_lower_or_equal(time : String, time_query : String) -> bool : ## compara si el tiempo query es menor al tiempo enviado
+	var time_minutes = get_minutes(time)
+	var query_minutes = get_minutes(time_query)
+	return query_minutes <= time_minutes
+
+static func is_lower(time : String, time_query : String) -> bool : ## compara si el tiempo query es menor al tiempo enviado
+	var time_minutes = get_minutes(time)
+	var query_minutes = get_minutes(time_query)
+	return query_minutes < time_minutes

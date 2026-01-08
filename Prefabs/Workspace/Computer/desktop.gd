@@ -70,22 +70,9 @@ func spawn_new_window(data: AppData):
 	btn.toggle_mode = true
 	btn.button_group = taskbar_group
 	
-	btn.pressed.connect(func(): 
-		if btn.button_pressed: window.focus()
-		else: window.minimize()
-	)
-	
-	window.focused.connect(func():
-			btn.set_block_signals(true)
-			btn.button_pressed = true
-			btn.set_block_signals(false)
-	)
-	
-	window.minimized.connect(func():
-			btn.set_block_signals(true)
-			btn.button_pressed = false
-			btn.set_block_signals(false)
-	)
+	btn.pressed.connect(_on_button_pressed.bind(btn, window))
+	window.focused.connect(_on_window_focused.bind(btn))
+	window.minimized.connect(_on_window_minimized.bind(btn))
 	
 	window.closed.connect(func():
 		running_apps.erase(data)
@@ -94,6 +81,22 @@ func spawn_new_window(data: AppData):
 
 	active_windows.add_child(btn)
 	window.focus()
+	
+func _on_button_pressed(btn, window):
+	if btn.button_pressed:
+		window.focus()
+	else:
+		window.minimize()
+		
+func _on_window_focused(btn):
+	btn.set_block_signal(true)
+	btn.button_pressed = true
+	btn.set_block_signals(false)
+	
+func _on_window_minimized(btn):
+	btn.set_block_signals(true)
+	btn.button_pressed = false
+	btn.set_block_signals(false)
 
 func set_brightness():
 	pass

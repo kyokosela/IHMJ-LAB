@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dllxwx05iy2lq"]
+
+[ext_resource type="Texture2D" uid="uid://db2aaji6eiylt" path="res://Assets/CustomIcons/Interactable.png" id="1_nk01i"]
+
+[node name="EffectSlot" type="TextureRect"]
+custom_minimum_size = Vector2(42, 42)
+texture = ExtResource("1_nk01i")
+expand_mode = 1
+stretch_mode = 6

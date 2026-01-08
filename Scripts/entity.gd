@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name Entity
 
+@export var entity_group : String ## unicamente servira como identificador
+
 #region SETUP
 signal entity_ready
 

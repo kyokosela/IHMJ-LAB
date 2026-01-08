@@ -23,7 +23,7 @@ var entity_widgets : Dictionary = {}
 var stat_widgets : Array[StatContainerDebug]
 
 const ENTITY_BUTTON = preload("uid://dyv1qmo2clngj") # UID MIEDO
-const STAT_CONTAINER = preload("uid://bgpho3743di65") # UID MIEDO
+const STAT_CONTAINER = preload("res://Prefabs/Debug/stat_container.tscn") # UID MIEDO
 
 var current_entity : Entity
 var frame_time_ms := 0.0

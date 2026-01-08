@@ -3,11 +3,11 @@
 [ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_nvdfj"]
 [ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_xfa77"]
 
-[sub_resource type="Resource" id="Resource_nvdfj"]
+[sub_resource type="Resource" id="Resource_jpd7d"]
 script = ExtResource("2_xfa77")
 stat_unique_name = "ENERGY"
-value = 2.0
-OPERATION = 1
+value = 0.15
+OPERATION = 2
 metadata/_custom_type_script = "uid://8yhqerdijsj6"
 
 [resource]
@@ -15,5 +15,5 @@ script = ExtResource("1_nvdfj")
 effect_unique_name = "HUNGER"
 effect_display_name = "_EFFECT_HUNGER_"
 render = true
-stat_changes = Array[ExtResource("2_xfa77")]([SubResource("Resource_nvdfj")])
+stat_changes = Array[ExtResource("2_xfa77")]([SubResource("Resource_jpd7d")])
 metadata/_custom_type_script = "uid://b7krqqvmfg6wr"

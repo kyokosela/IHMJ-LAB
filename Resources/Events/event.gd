@@ -13,6 +13,7 @@ signal event_finished
 @export var can_multiple_active : bool
 @export var checked : bool
 @export var destroy_at_end : bool
+@export var destroy_at_start : bool
 
 func activate() -> void :
 	is_enabled = true

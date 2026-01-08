@@ -2,21 +2,28 @@
 extends Interactable
 class_name InteractableAction
 
+@export var interaction_name : String
+@export var is_cooldown_at_execute : bool
+@export var cooldown_time : String = "05:00"
+@export var cooldown_timer_message : StringChain
+@export_group("Requeriments")
 @export var task_lists : Array[String]
 @export var effect_list : Array[String]
 @export var effect_messages : StringChain
 @export var event_list : Array[String]
 @export var event_messages : StringChain
-@export_category("Cost values")
+@export_group("Cost values")
 @export var stat_req_list : Dictionary[String, int] ## usar nombre unico como por ejemplo ENERGY
 @export var stat_messages : StringChain
 @export var time_cost : String
+
 var is_cooldown : bool
+var cooldown_executed : bool
 
 func custom_execute(): 
 	super()
-	if !is_cooldown : 
-		can_interact = true 
+	
+	if !is_cooldown : can_interact = true # esto parece que hace nada pero hace de default en acciones aslkdjsad
 	
 	for stat_name in stat_req_list :
 		var test = PlayerManager.get_cost_with_effects(stat_name, stat_req_list[stat_name])
@@ -28,39 +35,58 @@ func custom_execute():
 			time_cost = TimeUtils.multiply_time(time_cost, tired.time_changes.time_value)
 	
 	TimeManager.add_to_current_time(time_cost)
+	
+	if is_cooldown_at_execute :
+		if !TimeUtils.is_valid_format(cooldown_time) : printerr(" error con el formato del tiempo en cooldown");return
+		EventManager.create_lapse_event(cooldown_time, disable_cooldown, interaction_name.to_upper() + "_COOLDOWN", interaction_name.to_upper() + "_COOLDOWN", false, true, true)
+	
+	if !is_cooldown and is_cooldown_at_execute : cooldown_executed = true
 
 func _ready() -> void:
 	super()
-	if effect_messages : effect_messages.end_chain.connect(set_cooldown)
-	if event_messages : event_messages.end_chain.connect(set_cooldown)
+	if EventManager.is_event_exist( interaction_name.to_upper() + "_COOLDOWN") : is_cooldown = true
+	if effect_messages : effect_messages.end_chain.connect(_on_end_chain)
+	if event_messages : event_messages.end_chain.connect(_on_end_chain)
+	if stat_messages : stat_messages.end_chain.connect(_on_end_chain)
+	if cooldown_timer_message : cooldown_timer_message.end_chain.connect(set_cooldown, true)
+
+func _on_end_chain() -> void :
+	set_cooldown()
 
 func execute() -> void :
-
 	can_interact = false
+
 	for task_list in task_lists :
 		if TaskManager.is_task_list_active(task_list) and !TaskManager.is_task_list_done(task_list) :
 			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], TaskManager.get_task_list_message(task_list))
-			Dialogic.timeline_ended.connect(func (): if !is_cooldown : can_interact = true, CONNECT_ONE_SHOT)
+			Dialogic.timeline_ended.connect(_on_ended_message, CONNECT_ONE_SHOT)
 			return
 		
 	if !check_events()  :
 		if event_messages != null :
 			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], event_messages.get_message())
-			Dialogic.timeline_ended.connect(func (): if !is_cooldown : can_interact = true, CONNECT_ONE_SHOT)
+			Dialogic.timeline_ended.connect(_on_ended_message, CONNECT_ONE_SHOT)
 		return
 	
 	if !check_effects() :
 		if effect_messages != null :
 			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], effect_messages.get_message())
-			Dialogic.timeline_ended.connect(func (): if !is_cooldown : can_interact = true, CONNECT_ONE_SHOT)
+			Dialogic.timeline_ended.connect(_on_ended_message, CONNECT_ONE_SHOT)
 		return
 	
 	if !check_stats() :
 		if stat_messages != null :
 			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], stat_messages.get_message())
-			Dialogic.timeline_ended.connect(func (): if !is_cooldown : can_interact = true, CONNECT_ONE_SHOT)
+			Dialogic.timeline_ended.connect(_on_ended_message, CONNECT_ONE_SHOT)
 		return
 	
+	if cooldown_executed :
+		print("test")
+		if cooldown_timer_message != null:
+			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], cooldown_timer_message.get_message())
+			Dialogic.timeline_ended.connect(_on_ended_message, CONNECT_ONE_SHOT)
+		return
+		
 	custom_execute()
 	executed.emit()
 	
@@ -70,10 +96,19 @@ func execute() -> void :
 		if dialog == null : queue_free()
 		else : Dialogic.timeline_ended.connect(func () : queue_free(), CONNECT_ONE_SHOT)
 
+func _on_ended_message() -> void :
+	if !is_cooldown : can_interact = true
+
 func set_cooldown() -> void :
 	is_cooldown = true
-	toggle_visible(TOGGLE_MODE.HIDE)
 	can_interact = false
+	toggle_visible(TOGGLE_MODE.HIDE)
+
+func disable_cooldown() -> void :
+	is_cooldown = false
+	can_interact = true
+	cooldown_executed = false
+
 
 func check_effects() -> bool :
 	for effect : String in effect_list :

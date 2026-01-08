@@ -41,7 +41,7 @@ func _ready() -> void:
 	
 	energy_effects = {
 		"hyperactive" : load("res://Resources/Effects/Effects/hyperactive.tres"),
-		"tired" : load("res://Resources/Effects/Effects/tired.tres")
+		"tired" : load("res://Resources/Effects/Effects/tired.tres"),
 	}
 	stat_decrease.connect(energy_spend_handler)
 
@@ -66,33 +66,26 @@ func energy_spend_handler(stat : Stat, _decrease_value : float) -> void :
 	
 
 func auto_energy_effects(_new_value : float) -> void :
-	"""
-	ESTE SCRIPT DISPARA :
-		topes:
-		cansacion/tired cuando la energia es menor a 15
-		hiperactiva cuando la energia es superior a 90
-		
-		lapsos:
-		hambre cada 120 de energia gastado
-	"""
-
+	var nothing : bool = true
 	if _new_value >= 90 :
 		add_effect(energy_effects.hyperactive)
 		clear_energy_effects(energy_effects.hyperactive.effect_unique_name)
+		nothing = false
 	elif _new_value <= 0 :
+		nothing = false
 		TransitionManager.fadeIn(5)
 		await TransitionManager.transition_finished
 		TimeManager.add_to_current_time("08:00")
 		TransitionManager.fadeOut(5)
 		await TransitionManager.transition_finished
 		## TODO aplicar efecto debilitambiento
-		
 	elif _new_value <= 15 :
+		nothing = false
 		add_effect(energy_effects.tired)
 		clear_energy_effects(energy_effects.tired.effect_unique_name)
 	
 	
-	clear_energy_effects("")
+	if nothing : clear_energy_effects("")
 
 func clear_energy_effects(_exception : String) : 
 	for x in energy_effects : 

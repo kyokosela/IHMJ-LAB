@@ -43,9 +43,10 @@ func new_game() -> void :
 	#TODO creacion de archivos
 	is_on_tutorial = true
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
-	PlayerManager.add_effect(load("res://Resources/Effects/Effects/dirt.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
-	EventManager.create_lapse_event("06:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/hunger.tres")), "AUTO_HUNGER_LAPSE" , "HUNGER TIMER",true)
+	
+	EventManager.create_lapse_event("16:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/smelly.tres")), "AUTO_SMELLY_LAPSE", "SMELLY_TIMER", true)
+	EventManager.create_lapse_event("06:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/hunger.tres")), "AUTO_HUNGER_LAPSE", "HUNGER_TIMER",true)
 
 func load_file(save_id : int) -> void : ## MAX 2 en el parametro
 	var file = FileAccess.open(SAVE_PATHS[save_id], FileAccess.READ)

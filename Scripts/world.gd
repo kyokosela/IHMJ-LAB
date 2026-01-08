@@ -21,7 +21,7 @@ func _ready() -> void:
 				PlayerManager.player.movement.tile_destination = mark.global_position
 				PlayerManager.player.global_position = mark.global_position
 		
-		optional_camera_node.reparent(PlayerManager.player, false)
+		if optional_camera_node : optional_camera_node.reparent(PlayerManager.player, false)
 	
 	for entity : Entity in find_children("*", "Entity", true):
 		entities[entity.name] = entity

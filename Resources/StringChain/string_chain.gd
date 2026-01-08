@@ -26,7 +26,7 @@ var message_order_index : int = 0
 var message_cycle_index : int = 0
 
 func get_message() -> String :
-	print("GET MESSAGE")
+
 	var selection : StringChainArray = null
 	var all_selection : StringChainArray = null
 	
@@ -35,7 +35,6 @@ func get_message() -> String :
 			all_selection = x
 		if EventManager.is_event_active(x.unique_event_name) : 
 			selection = x
-			print("se encontro evento")
 			break
 			
 	if selection == null and all_selection != null: selection = all_selection

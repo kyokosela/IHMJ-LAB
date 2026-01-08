@@ -24,12 +24,16 @@ func load_default_events() -> void :
 ## Carga un evento, usa trigger para disparar sus acciones
 func load_event(event : Event, trigger : bool = false) -> void :
 	events.append(event)
+	
 	if event.destroy_at_end: 
 		event.event_finished.connect(remove_event.bind(event))
+	if event.destroy_at_start:
+		event.event_executed.connect(remove_event.bind(event))
 	if trigger: event.execute()
 	if event is EventScheduled:
 		if event.start != null : TimeManager.connect_with_res(event.start, event.execute)
 		if event.end != null : TimeManager.connect_with_res(event.end, event.finished)
+	
 	if event is LapseEvent :
 		TimeManager.minutes_delta.connect(event.check_timer)
 	
@@ -101,7 +105,14 @@ func is_event_check(_event_unique_name : String) -> bool :
 	if event == null: return false
 	return event.checked
 
-func create_lapse_event(_time_lapse : String, callable : Callable, event_unique_name : String, event_display_name : String, auto_restart : bool = false) -> void :
+func is_event_exist(_event_unique_name : String) -> bool :
+	for event in events :
+		if event.event_unique_name == _event_unique_name :
+			return true
+	return false
+
+func create_lapse_event(_time_lapse : String, callable : Callable, event_unique_name : String, event_display_name : String, auto_restart : bool = false, _auto_destroy : bool = false, _auto_start_destroy : bool = false) -> void :
+	if get_event(event_unique_name) != null : return
 	var new_lapse_event = LapseEvent.new()
 	new_lapse_event.event_name = event_display_name
 	new_lapse_event.event_unique_name = event_unique_name
@@ -109,6 +120,13 @@ func create_lapse_event(_time_lapse : String, callable : Callable, event_unique_
 	new_lapse_event.time_lapse_value = _time_lapse
 	new_lapse_event.auto_restart = auto_restart
 	new_lapse_event.can_multiple_active = true
+	new_lapse_event.destroy_at_end = _auto_destroy
+	new_lapse_event.destroy_at_start = _auto_start_destroy
 	load_event(new_lapse_event, false)
+
+func reset_lapse_event(event_unique_name : String) -> void : ## Asegurate de que el evento sea de tipo LapseEvent
+	var event = get_event(event_unique_name)
+	if event is not LapseEvent : printerr(" el evento que se quiere resetear no es de tipo LapseEvent");return
+	event.reset_lapse()
 
 #endregion

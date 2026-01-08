@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://cdmbl4s6mgpoi"]
+[gd_scene load_steps=18 format=4 uid="uid://cdmbl4s6mgpoi"]
 
 [ext_resource type="Script" uid="uid://cbs8bskt5bfsp" path="res://Scenes/playground.gd" id="1_u6rxl"]
 [ext_resource type="PackedScene" uid="uid://ctagwp38abn4u" path="res://Prefabs/walls/floors.tscn" id="2_npy7o"]
@@ -27,13 +27,13 @@ size = Vector2(30, 50)
 
 [sub_resource type="Resource" id="Resource_iv8lt"]
 script = ExtResource("8_ipdnw")
-string_list = Array[String](["NO ESTAS SUCIO OME NO JODA", "AIAE BY YUYOYUPPE", "XD"])
+string_list = Array[String](["YA ME BAÑE MIERDA", "EL AGUA NO ES GRATIS", "ECHE NO JODA"])
 metadata/_custom_type_script = "uid://cdqqyuliu6jyp"
 
 [sub_resource type="Resource" id="Resource_st1l6"]
 script = ExtResource("7_fikvc")
 string_list = Array[ExtResource("8_ipdnw")]([SubResource("Resource_iv8lt")])
-cooldown_message = "SEJE DE INSISTIR PERRO IMBEVCIL"
+cooldown_message = "YA NO MAS WACHO"
 metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
 
 [sub_resource type="Resource" id="Resource_eodav"]
@@ -49,19 +49,6 @@ metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k2wcb"]
 size = Vector2(50, 50)
-
-[sub_resource type="Resource" id="Resource_7rk4w"]
-script = ExtResource("8_ipdnw")
-string_list = Array[String](["NO TRENGO UN DURO"])
-behaviour = 3
-metadata/_custom_type_script = "uid://cdqqyuliu6jyp"
-
-[sub_resource type="Resource" id="Resource_yhss4"]
-script = ExtResource("7_fikvc")
-string_list = Array[ExtResource("8_ipdnw")]([SubResource("Resource_7rk4w")])
-metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ipdnw"]
 
 [node name="ApartamentC" type="Node2D" node_paths=PackedStringArray("optional_camera_node")]
 script = ExtResource("1_u6rxl")
@@ -114,8 +101,9 @@ text = "DUCHA"
 [node name="InteractableAction" type="Area2D" parent="ducha"]
 position = Vector2(18.73706, 7.414772)
 script = ExtResource("7_ipdnw")
-effect_list = Array[String](["DIRT"])
-effect_messages = SubResource("Resource_st1l6")
+interaction_name = "ISBATH"
+is_cooldown_at_execute = true
+cooldown_timer_message = SubResource("Resource_st1l6")
 stat_req_list = Dictionary[String, int]({
 "ENERGY": 10
 })
@@ -126,27 +114,6 @@ display_text = "DUCHA"
 children_visible = true
 reusable = true
 show_again_at_end = true
-is_solid = true
-metadata/_custom_type_script = "uid://c13pr1gbe31et"
-
-[node name="Label3" type="Label" parent="."]
-offset_left = 344.60657
-offset_top = 160.47104
-offset_right = 384.60657
-offset_bottom = 183.47104
-text = "lavamanos"
-
-[node name="InteractableAction" type="Area2D" parent="Label3"]
-position = Vector2(44.337463, 18.12053)
-script = ExtResource("6_u6rxl")
-stat_req_list = Dictionary[String, int]({
-"ENERGY": 10
-})
-stat_messages = SubResource("Resource_yhss4")
-shape = SubResource("RectangleShape2D_ipdnw")
-display_text = "marrana de mierda"
-children_visible = true
-reusable = true
 is_solid = true
 metadata/_custom_type_script = "uid://c13pr1gbe31et"
 

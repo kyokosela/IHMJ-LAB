@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Effect" load_steps=3 format=3 uid="uid://bnne5oxs1330j"]
+
+[ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_u0ugd"]
+[ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_ilrkb"]
+
+[resource]
+script = ExtResource("1_u0ugd")
+effect_unique_name = "SMELLY"
+effect_display_name = "_EFFECT_SMELLY_"
+render = true
+metadata/_custom_type_script = "uid://b7krqqvmfg6wr"

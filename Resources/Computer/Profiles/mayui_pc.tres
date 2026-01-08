@@ -11,5 +11,6 @@
 [resource]
 script = ExtResource("2_tnhku")
 wallpaper = ExtResource("4_jiapt")
+password = "2"
 installed_apps = Array[ExtResource("1_rfrm8")]([ExtResource("2_fwgu4"), ExtResource("3_jiapt"), ExtResource("4_ulaov"), ExtResource("4_skmiy")])
 metadata/_custom_type_script = "uid://dub7asmchprhm"

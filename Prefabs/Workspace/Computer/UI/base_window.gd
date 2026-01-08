@@ -44,6 +44,12 @@ func _load_app_data():
 	icon.texture = app_data.icon
 	content.add_child(app_data.window_scene.instantiate())
 
+func inject_session(session: AppSession):
+	if content.get_child_count() > 0:
+		var app = content.get_child(0)
+		if app.has_method("setup_session"):
+			app.setup_session(session)
+
 func close():
 	closed.emit()
 	queue_free()
@@ -91,9 +97,3 @@ func drag(event: InputEvent):
 		
 		global_position = new_pos
 #endregion
-
-func inject_session(session: AppSession):
-	if content.get_child_count() > 0:
-		var app = content.get_child(0)
-		if app.has_method("setup_session"):
-			app.setup_session(session)

@@ -11,6 +11,7 @@ class_name Desktop
 @onready var taskbar: Panel = %Taskbar
 
 var base_window = preload("uid://b3gndi1tcb5on")
+var login_screen = preload("uid://daeboh627voor")
 var running_apps := {}
 var taskbar_group := ButtonGroup.new()
 
@@ -23,12 +24,27 @@ func _ready() -> void:
 
 ## obtiene los datos del perfil cargado
 func load_profile(profile: DesktopProfile):
+	_show_login()
 	if profile.wallpaper: 
 		wallpaper.texture = profile.wallpaper
 
 	for app_data in profile.installed_apps: 
 		create_icon(app_data)
 
+func _show_login():
+	var instance = login_screen.instantiate()
+	add_child(instance)
+	instance.setup(current_profile)
+	taskbar.hide()
+	icon_grid.hide()
+
+	instance.unlocked.connect(func():
+		taskbar.show()
+		icon_grid.show()
+	)
+	
+	# TODO: manejar el estado lockout
+	
 ## Crea instancias de iconos para las aplicaciones cargadas
 func create_icon(data: AppData):
 	var btn = Button.new()
@@ -41,7 +57,7 @@ func create_icon(data: AppData):
 	btn.pressed.connect(open_app.bind(data))
 	icon_grid.add_child(btn)
  
-## Crea la instancia de la aplicación. 
+## Crea la instancia de la aplicación.
 ## Si ya fue creada, muestra la misma.
 ## Si fue cerrada pero vuelto a abrir. Se vuelve a crear  
 func open_app(data: AppData):
@@ -50,7 +66,6 @@ func open_app(data: AppData):
 		return
 	else:
 		running_apps.erase(data)
-	
 
 	spawn_new_window(data)
 
@@ -65,8 +80,7 @@ func spawn_new_window(data: AppData):
 	running_apps[data] = window
 	window.bottom_margin = taskbar.size.y
 	
-	if window.has_method("inject_session"):
-		window.inject_session(session)
+	window.inject_session(session)
 	
 	var btn = Button.new()
 	btn.text = data.app_name
@@ -86,6 +100,7 @@ func spawn_new_window(data: AppData):
 	
 	window.focus()
 
+# TODO: guardar la persistencia en disco
 func _get_session(data: AppData) -> AppSession:
 	if current_profile.app_states.has(data.app_name):
 		return current_profile.app_states[data.app_name]

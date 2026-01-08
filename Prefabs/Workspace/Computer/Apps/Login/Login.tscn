@@ -1,7 +1,18 @@
-[gd_scene format=3 uid="uid://daeboh627voor"]
+[gd_scene load_steps=4 format=3 uid="uid://daeboh627voor"]
 
-[node name="Login" type="Control"]
-layout_mode = 3
+[ext_resource type="Script" uid="uid://drw6wke2i3kw1" path="res://Prefabs/Workspace/Computer/Apps/Login/login.gd" id="1_xmxxw"]
+[ext_resource type="Shader" uid="uid://7q3c2uor7gwr" path="res://Assets/Shaders/blur.gdshader" id="2_ernab"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ykq1l"]
+shader = ExtResource("2_ernab")
+shader_parameter/blur_amount = 5.0
+shader_parameter/tint_color = Color(0, 0, 0, 0.78431374)
+
+[node name="Login" type="CanvasLayer"]
+script = ExtResource("1_xmxxw")
+
+[node name="Blur" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_ykq1l")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -9,7 +20,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,12 +27,29 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
 
-[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="PromptLabel" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 text = "CONTRASEÑA"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="CenterContainer/VBoxContainer"]
+[node name="Input" type="LineEdit" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
+placeholder_text = "Ingrese coso"
 secret = true
+
+[node name="SubmitBtn" type="Button" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "entrar coso"
+
+[node name="ErrorLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2

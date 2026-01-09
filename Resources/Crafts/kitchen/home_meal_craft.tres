@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Crafts" load_steps=7 format=3 uid="uid://dr81t4gaof2ns"]
+
+[ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="1_mysmx"]
+[ext_resource type="Script" uid="uid://d1u4chvj2k7me" path="res://Resources/Items/States/item_state.gd" id="2_iayam"]
+[ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="3_3xhfu"]
+[ext_resource type="Resource" uid="uid://c87phvhm6ujj0" path="res://Resources/Items/Data/home_meal.tres" id="3_vikre"]
+[ext_resource type="Resource" uid="uid://dm4jblotjlc1k" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_cooked.tres" id="4_3xhfu"]
+
+[sub_resource type="Resource" id="Resource_vikre"]
+script = ExtResource("1_mysmx")
+item_id = "ingredients"
+required_states = Array[String](["prepared"])
+metadata/_custom_type_script = "uid://bh8urv85cwvl5"
+
+[resource]
+script = ExtResource("3_3xhfu")
+needed_items = Array[ExtResource("1_mysmx")]([SubResource("Resource_vikre")])
+result_item = ExtResource("3_vikre")
+result_state = ExtResource("4_3xhfu")
+metadata/_custom_type_script = "uid://de0p0f0ihls31"

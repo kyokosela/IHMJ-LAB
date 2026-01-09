@@ -27,10 +27,10 @@ func _on_dialogic_timeline_ended():
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("test"):
 		add_item_by_data(preload("uid://b364ksxd3tlh0"))
-	if event.is_action_pressed("Interact"):
+	if event.is_action_pressed("test_2"):
 		var item = get_items()
 		if !item.is_empty():
-			item[0].use()
+			inventory.use_item_at(0)
 
 func _process(_delta: float) -> void:
 	pass

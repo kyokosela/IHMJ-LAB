@@ -200,9 +200,8 @@ entity_group = "Player"
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_h0qm3")
 
-[node name="InventoryContainer" type="Node2D" parent="." node_paths=PackedStringArray("inventory")]
+[node name="InventoryContainer" type="Node2D" parent="."]
 script = ExtResource("2_21ku0")
-inventory = NodePath("InventoryComponent")
 rules = SubResource("Resource_vbwbj")
 environment = SubResource("Resource_21ku0")
 metadata/_custom_type_script = "uid://dvc4ajwmih83o"

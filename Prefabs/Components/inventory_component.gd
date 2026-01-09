@@ -9,8 +9,7 @@ signal inventory_changed
 @export var size : int = 10
 var slots : Array[InventorySlot] = []
 
-func _init(p_size : int = 10):
-	size = p_size
+func _ready() -> void:
 	_initialize_slots()
 
 func _initialize_slots():
@@ -55,8 +54,8 @@ func remove_item_at(index: int) -> bool:
 	var slot = slots[index]
 	if slot.is_empty(): return false
 	
-	var item = slot.item[0]
-	slot.item.clear()
+	var item = slot.item
+	slot.clear()
 	item_removed.emit(item)
 	slot_changed.emit(index)
 	inventory_changed.emit()
@@ -79,12 +78,28 @@ func get_first_item_by_name(unique_name : String) -> Item:
 			return item
 	return null
 
+func get_first_item_by_data(data : ItemData) -> Item:
+	for item in get_items():
+		if item.data == data:
+			return item
+	return null
+
 func count_item_data(data: ItemData) -> int:
 	var total := 0
 	for item in get_items():
 		if item.data == data:
 			total += 1
 	return total
+
+func has_item_instance(item : Item) -> bool:
+	for i in get_items():
+		if i == item: return true
+	return false
+
+func has_item_data(data : ItemData) -> bool:
+	for i in get_items():
+		if i.data == data: return true
+	return false
 
 func has_space() -> int:
 	var free_slots = 0

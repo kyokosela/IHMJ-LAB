@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="CustomCondition" load_steps=12 format=3 uid="uid://clnvuiyjwonm4"]
+
+[ext_resource type="Resource" uid="uid://b5crwa3qm72eu" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_no_prep.tres" id="1_8ypur"]
+[ext_resource type="Script" uid="uid://2ayeg7yj87f6" path="res://Resources/Items/Conditions/condition_threshold.gd" id="2_db4fh"]
+[ext_resource type="Script" uid="uid://df2q5ei6ve3yq" path="res://Resources/Items/Conditions/threshold_entry.gd" id="3_077gv"]
+[ext_resource type="Resource" uid="uid://dmk8i8fxtpbyx" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_prep.tres" id="4_fgima"]
+[ext_resource type="Resource" uid="uid://dm4jblotjlc1k" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_cooked.tres" id="5_jcrut"]
+[ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="6_r5fos"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="7_xg1mo"]
+
+[sub_resource type="Resource" id="Resource_xtnmp"]
+script = ExtResource("3_077gv")
+state = ExtResource("1_8ypur")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_bygl2"]
+script = ExtResource("3_077gv")
+max_value = 1.0
+state = ExtResource("4_fgima")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_6477j"]
+script = ExtResource("3_077gv")
+max_value = 2.0
+state = ExtResource("5_jcrut")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_6owe1"]
+script = ExtResource("2_db4fh")
+thresholds = Array[ExtResource("3_077gv")]([SubResource("Resource_xtnmp"), SubResource("Resource_bygl2"), SubResource("Resource_6477j")])
+default_state = ExtResource("1_8ypur")
+metadata/_custom_type_script = "uid://2ayeg7yj87f6"
+
+[resource]
+script = ExtResource("7_xg1mo")
+condition = "preparation"
+value = 0.0
+condition_threshold = SubResource("Resource_6owe1")
+metadata/_custom_type_script = "uid://dbp4u6dyakclb"

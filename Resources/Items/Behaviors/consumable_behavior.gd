@@ -19,7 +19,7 @@ func update_states(_item: Item) -> void:
 		
 	if _item.has_state("cold") or _item.has_state("hot"):
 		can_decay = false
-	
 
 func use(_item: Item) -> void:
-	pass
+	super(_item)
+	_item.data.uses -= 1

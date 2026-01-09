@@ -5,7 +5,6 @@ class_name Item
 signal used
 signal item_changed
 
-
 @export var data : ItemData
 @export var condition : float = 100.0:
 	set(_v): 
@@ -30,7 +29,6 @@ func add_state(state : ItemState) -> void: ## Añade un estado, en caso de que y
 func update_states():
 	data.behavior.update_states(self)
 	item_changed.emit()
-	print(states)
 
 func apply_decay(minutes: int, env_conditions : Array[String]):
 	data.behavior.apply_base_decay(minutes,self,env_conditions)
@@ -62,11 +60,7 @@ func increase_condition_value(condition_name : String, value : float):
 	if custom != null:
 		custom.value += value
 		item_changed.emit()
-		
-func use():
-	var behavior = data.behavior
-	if not behavior.can_use(self): return
-	behavior.use(self)
+	
 
 func has_state(id : String) -> bool:
 	return states.has(id)

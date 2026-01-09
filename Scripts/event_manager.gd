@@ -5,6 +5,7 @@ const INIT_EVENTS_FOLDER_PATH : String = "res://Resources/Events/InitialEvents/"
 @warning_ignore_start("unused_signal")
 signal event_activated(event_name : String)
 signal event_deactivaded(event_name : String)
+signal event_create(event_name : String)
 
 @export var events : Array[Event] ## lista de eventos, no usar para saber cuales estan activos
 var stack_active_events : Array[Event]  ## lista de eventos activos
@@ -23,6 +24,8 @@ func load_default_events() -> void :
 #region API
 ## Carga un evento, usa trigger para disparar sus acciones
 func load_event(event : Event, trigger : bool = false) -> void :
+	if is_event_exist(event.event_unique_name) : return
+	
 	events.append(event)
 	
 	if event.destroy_at_end: 
@@ -37,11 +40,15 @@ func load_event(event : Event, trigger : bool = false) -> void :
 	if event is LapseEvent :
 		TimeManager.minutes_delta.connect(event.check_timer)
 	
+	event_create.emit(event.event_unique_name)
+	
 ## remueve un evento, usa end_trigger para disparar su acciones inversas/finales
 func remove_event(event : Event, trigger_end : bool = false) -> void :
 	if !events.has(event) : 
 		printerr(" No exite el evento para eliminar")
 		return
+	event_deactivaded.emit(event.event_unique_name)
+	stack_active_events.erase(event)
 	events.erase(event)
 	if trigger_end :
 		event.finished()
@@ -112,7 +119,7 @@ func is_event_exist(_event_unique_name : String) -> bool :
 	return false
 
 func create_lapse_event(_time_lapse : String, callable : Callable, event_unique_name : String, event_display_name : String, auto_restart : bool = false, _auto_destroy : bool = false, _auto_start_destroy : bool = false) -> void :
-	if get_event(event_unique_name) != null : return
+	if is_event_exist(event_unique_name) : return
 	var new_lapse_event = LapseEvent.new()
 	new_lapse_event.event_name = event_display_name
 	new_lapse_event.event_unique_name = event_unique_name

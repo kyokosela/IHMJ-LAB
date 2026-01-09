@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dp5owm80w2vqt" path="res://Prefabs/Workspace/Computer/Desktop.tscn" id="1_pcdlm"]
 [ext_resource type="Shader" uid="uid://7q3c2uor7gwr" path="res://Assets/Shaders/blur.gdshader" id="2_kx5bb"]
-[ext_resource type="Resource" uid="uid://d082lpjnncmgj" path="res://Resources/Computer/Profiles/mayui_pc.tres" id="3_kx5bb"]
+[ext_resource type="Resource" uid="uid://d082lpjnncmgj" path="res://Resources/Computer/Profiles/CreatedProfiles/mayui_pc.tres" id="3_kx5bb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ixvs8"]
 shader = ExtResource("2_kx5bb")

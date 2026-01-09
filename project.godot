@@ -32,6 +32,7 @@ TaskManager="*res://Scripts/task_manager.gd"
 ZoneManager="*res://Scripts/zone_manager.gd"
 PlayerUI="*res://UI/PLAYERUI/PlayerUI.tscn"
 TransitionManager="*res://UI/TransitionManager/TransitionManager.tscn"
+SaveManager="*res://Scripts/save_manager.gd"
 
 [dialogic]
 

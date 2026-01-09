@@ -28,8 +28,8 @@ func load_profile(profile: DesktopProfile):
 	if profile.wallpaper: 
 		wallpaper.texture = profile.wallpaper
 
-	for app_data in profile.installed_apps: 
-		create_icon(app_data)
+	for app_metadata in profile.installed_apps: 
+		create_icon(app_metadata)
 
 func _show_login():
 	var instance = login_screen.instantiate()
@@ -46,7 +46,7 @@ func _show_login():
 	# TODO: manejar el estado lockout
 	
 ## Crea instancias de iconos para las aplicaciones cargadas
-func create_icon(data: AppData):
+func create_icon(data: AppMetadata):
 	var btn = Button.new()
 	btn.text = data.app_name
 	btn.icon = data.icon
@@ -60,7 +60,7 @@ func create_icon(data: AppData):
 ## Crea la instancia de la aplicación.
 ## Si ya fue creada, muestra la misma.
 ## Si fue cerrada pero vuelto a abrir. Se vuelve a crear  
-func open_app(data: AppData):
+func open_app(data: AppMetadata):
 	if running_apps.has(data):
 		running_apps[data].focus()
 		return
@@ -70,17 +70,13 @@ func open_app(data: AppData):
 	spawn_new_window(data)
 
 ## Instancia la escena de la app en una ventana y añade una referencia a la barra de tareas
-func spawn_new_window(data: AppData):
-	var session = _get_session(data)
-	
+func spawn_new_window(data: AppMetadata):
 	var window = base_window.instantiate()
 	windows_root.add_child(window)
 	
-	window.app_data = data
+	window.app_metadata = data
 	running_apps[data] = window
 	window.bottom_margin = taskbar.size.y
-	
-	window.inject_session(session)
 	
 	var btn = Button.new()
 	btn.text = data.app_name
@@ -99,16 +95,7 @@ func spawn_new_window(data: AppData):
 	active_windows.add_child(btn)
 	
 	window.focus()
-
-# TODO: guardar la persistencia en disco
-func _get_session(data: AppData) -> AppSession:
-	if current_profile.app_states.has(data.app_name):
-		return current_profile.app_states[data.app_name]
 		
-	var new_session = data.session_script.new() if data.session_script else AppSession.new()
-	current_profile.app_states[data.app_name] = new_session
-	return new_session
-
 func _on_button_pressed(btn, window):
 	if btn.button_pressed:
 		window.focus()
@@ -122,4 +109,8 @@ func _set_button_pressed_state(btn: Button, is_pressed: bool):
 
 func set_brightness():
 	pass
+#endregion
+
+#region API
+# TODO: guardar la persistencia en disco local
 #endregion

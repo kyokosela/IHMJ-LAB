@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AppData" load_steps=4 format=3 uid="uid://cdluox22uiqji"]
 
-[ext_resource type="Script" uid="uid://bnv3nah4ycqtd" path="res://Resources/Computer/Apps/app_data.gd" id="1_2y2pk"]
+[ext_resource type="Script" uid="uid://bnv3nah4ycqtd" path="res://Resources/Computer/Apps/app_metadata.gd" id="1_2y2pk"]
 [ext_resource type="Texture2D" uid="uid://bjv6sibxm861c" path="res://Assets/temporalLogo.png" id="1_phpi4"]
 [ext_resource type="PackedScene" uid="uid://daeboh627voor" path="res://Prefabs/Workspace/Computer/Apps/Login/Login.tscn" id="3_1ssjm"]
 

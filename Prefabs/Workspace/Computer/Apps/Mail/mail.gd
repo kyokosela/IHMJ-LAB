@@ -1,4 +1,5 @@
-extends Control
+extends BaseApp
+class_name MailApp
 
 #region SETUP
 @onready var inbox: Panel = %Inbox
@@ -14,19 +15,26 @@ extends Control
 
 var cache := {}
 var current_wrapper: Control = null
+var save_finished_ids: Array = []
 
-func _ready() -> void:
+func _enter_tree() -> void:
+	app_id = "app:mail"
+
+func _on_app_ready() -> void:
 	while !mail_pool.is_empty():
 		spawn()
 		await timer.timeout
 #endregion
 
+#region LOGIC
 func spawn():
 	var mail_data = mail_pool.pop_at(randi() % mail_pool.size())
 	var mail_item = mail_item_scene.instantiate()
 	inbox.add_child(mail_item)
-	mail_item.setup(mail_data)
 	
+	if mail_data.resource_path in save_finished_ids: mail_data.finished = true
+	
+	mail_item.setup(mail_data)
 	mail_item.launch(inbox.get_spawn_pos())
 	mail_item.opened.connect(_handle_mail_content)
 
@@ -55,13 +63,18 @@ func _create_wrapper(data: MailEntry) -> void:
 	if data.finished: _show_solved(wrapper)
 	elif data.event:
 		data.event.execute(wrapper, data)
-		data.completed.connect(_on_mail_completed.bind(wrapper), CONNECT_ONE_SHOT)
+		data.completed.connect(_on_mail_completed.bind(wrapper, data), CONNECT_ONE_SHOT)
 	else:
 		_show_solved(wrapper)
 		
 	cache[data] = wrapper
 
-func _on_mail_completed(wrapper: Control) -> void:
+func _on_mail_completed(wrapper: Control, data: MailEntry) -> void:
+	var mail_id = data.resource_path
+	if mail_id not in save_finished_ids:
+		save_finished_ids.append(mail_id)
+		commit()
+	
 	for child in wrapper.get_children(): child.queue_free()
 	_show_solved(wrapper)
 	
@@ -74,3 +87,4 @@ func _show_solved(parent: Control) -> void:
 func _get_focus(wrapper: Control) -> void:
 	var next = wrapper.find_next_valid_focus()
 	if next: next.grab_focus()
+#endregion

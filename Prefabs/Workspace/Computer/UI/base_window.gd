@@ -12,10 +12,10 @@ class_name BaseWindow
 @onready var content: SubViewport = %Content
 
 ## Los datos de la app a cargar en la ventana.
-@export var app_data: AppData:
+@export var app_metadata: AppMetadata:
 	set(value):
-		app_data = value
-		_load_app_data()
+		app_metadata = value
+		_load_app_metadata()
 
 var is_maximized := false
 var is_dragging := false
@@ -35,20 +35,14 @@ func _ready() -> void:
 #endregion
 
 #region LOGIC
-func _load_app_data():
-	if not app_data: return
-	print(app_data.app_name)
-	title.text = app_data.app_name
-	titlebar_bg.color = app_data.titlebar_bg_color
-	title.add_theme_color_override("font_color", app_data.titlebar_text_color)
-	icon.texture = app_data.icon
-	content.add_child(app_data.window_scene.instantiate())
-
-func inject_session(session: AppSession):
-	if content.get_child_count() > 0:
-		var app = content.get_child(0)
-		if app.has_method("setup_session"):
-			app.setup_session(session)
+func _load_app_metadata():
+	if not app_metadata: return
+	print(app_metadata.app_name)
+	title.text = app_metadata.app_name
+	titlebar_bg.color = app_metadata.titlebar_bg_color
+	title.add_theme_color_override("font_color", app_metadata.titlebar_text_color)
+	icon.texture = app_metadata.icon
+	content.add_child(app_metadata.window_scene.instantiate())
 
 func close():
 	closed.emit()
@@ -96,4 +90,8 @@ func drag(event: InputEvent):
 		new_pos.y = clamp(new_pos.y, 0, screen_size.y - size.y)
 		
 		global_position = new_pos
+#endregion
+
+#region API
+
 #endregion

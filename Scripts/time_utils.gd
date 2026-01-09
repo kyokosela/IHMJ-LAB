@@ -71,3 +71,13 @@ static func is_lower(time : String, time_query : String) -> bool : ## compara si
 	var time_minutes = get_minutes(time)
 	var query_minutes = get_minutes(time_query)
 	return query_minutes < time_minutes
+
+static func is_greater(time : String, time_query : String) -> bool : ## compara si el tiempo query es menor al tiempo enviado
+	var time_minutes = get_minutes(time)
+	var query_minutes = get_minutes(time_query)
+	return query_minutes > time_minutes
+
+static func is_greater_or_equal(time : String, time_query : String) -> bool : ## compara si el tiempo query es menor al tiempo enviado
+	var time_minutes = get_minutes(time)
+	var query_minutes = get_minutes(time_query)
+	return query_minutes >= time_minutes

@@ -3,23 +3,22 @@
 [ext_resource type="Script" uid="uid://cbs8bskt5bfsp" path="res://Scenes/playground.gd" id="1_u6rxl"]
 [ext_resource type="PackedScene" uid="uid://ctagwp38abn4u" path="res://Prefabs/walls/floors.tscn" id="2_npy7o"]
 [ext_resource type="PackedScene" uid="uid://b2w4stq2ucdlo" path="res://Prefabs/walls/walls.tscn" id="3_u6rxl"]
+[ext_resource type="Script" uid="uid://b7onn6eqa0glu" path="res://Scripts/HouseInteracts/bed.gd" id="5_ipdnw"]
 [ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="5_npy7o"]
-[ext_resource type="Script" uid="uid://c13pr1gbe31et" path="res://Prefabs/Interactable/Task/interactable_task.gd" id="6_u6rxl"]
 [ext_resource type="Script" uid="uid://c2qbhsn6tgmrc" path="res://Resources/StringChain/string_chain.gd" id="7_fikvc"]
 [ext_resource type="Script" uid="uid://big4o7sjh0g0y" path="res://Scripts/HouseInteracts/bathe.gd" id="7_ipdnw"]
 [ext_resource type="Script" uid="uid://cdqqyuliu6jyp" path="res://Resources/StringChain/string_chain_array.gd" id="8_ipdnw"]
 [ext_resource type="Script" uid="uid://c5tmcnj0wdxvt" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="9_ipdnw"]
 
-[sub_resource type="Resource" id="Resource_ipdnw"]
+[sub_resource type="Resource" id="Resource_7rk4w"]
 script = ExtResource("8_ipdnw")
-string_list = Array[String](["ALGUIEN AYUDE A JOTA", "MENSAJE 2", "MENSAJE 3"])
+string_list = Array[String](["YA ME DORMI PUTA MIERDA", "DEJA DE INSISTIR PERRA"])
 metadata/_custom_type_script = "uid://cdqqyuliu6jyp"
 
-[sub_resource type="Resource" id="Resource_7cqfn"]
+[sub_resource type="Resource" id="Resource_yhss4"]
 script = ExtResource("7_fikvc")
-string_list = Array[ExtResource("8_ipdnw")]([SubResource("Resource_ipdnw")])
-cooldown_message = "COOLDOWN"
-apply_energy = false
+string_list = Array[ExtResource("8_ipdnw")]([SubResource("Resource_7rk4w")])
+cooldown_message = "TEN TEN TEN TEN"
 metadata/_custom_type_script = "uid://c2qbhsn6tgmrc"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u6rxl"]
@@ -56,7 +55,7 @@ optional_camera_node = NodePath("Camera2D")
 metadata/_custom_type_script = "uid://mni1cq3j7l53"
 
 [node name="DebugPanel" parent="." instance=ExtResource("5_npy7o")]
-position = Vector2i(5, 210)
+position = Vector2i(5, 89)
 
 [node name="floors" parent="." instance=ExtResource("2_npy7o")]
 tile_map_data = PackedByteArray("AAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAkAAAAAAAAAAAABAAMAAAAAAAAAAAABAAQAAAAAAAAAAAABAAUAAAAAAAAAAAABAAYAAAAAAAAAAAABAAcAAAAAAAAAAAABAAgAAAAAAAAAAAABAAkAAAAAAAAAAAACAAMAAAAAAAAAAAACAAQAAAAAAAAAAAACAAUAAAAAAAAAAAACAAYAAAAAAAAAAAACAAcAAAAAAAAAAAACAAgAAAAAAAAAAAACAAkAAAAAAAAAAAADAAMAAAAAAAAAAAADAAQAAAAAAAAAAAADAAUAAAAAAAAAAAADAAYAAAAAAAAAAAADAAcAAAAAAAAAAAADAAgAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAEAAUAAAAAAAAAAAAEAAYAAAAAAAAAAAAEAAcAAAAAAAAAAAAEAAgAAAAAAAAAAAAEAAkAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAUAAAAAAAAAAAAFAAYAAAAAAAAAAAAFAAcAAAAAAAAAAAAFAAgAAAAAAAAAAAAFAAkAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAAGAAUAAAAAAAAAAAAGAAYAAAAAAAAAAAAGAAcAAAAAAAAAAAAGAAgAAAAAAAAAAAAGAAkAAAAAAAAAAAAHAAMAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAUAAAAAAAAAAAAHAAYAAAAAAAAAAAAHAAcAAAAAAAAAAAAHAAgAAAAAAAAAAAAHAAkAAAAAAAAAAAAIAAMAAAAAAAAAAAAIAAQAAAAAAAAAAAAIAAUAAAAAAAAAAAAIAAYAAAAAAAAAAAAIAAcAAAAAAAAAAAAIAAgAAAAAAAAAAAAIAAkAAAAAAAAAAAAJAAMAAAAAAAAAAAAJAAQAAAAAAAAAAAAJAAUAAAAAAAAAAAAJAAYAAAAAAAAAAAAJAAcAAAAAAAAAAAAJAAgAAAAAAAAAAAAJAAkAAAAAAAAAAAA=")
@@ -64,18 +63,19 @@ tile_map_data = PackedByteArray("AAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAA
 [node name="Walls" parent="." instance=ExtResource("3_u6rxl")]
 tile_map_data = PackedByteArray("AAAAAAAAAAADAAAAAAAAAAEAAAADAAEAAAAAAAIAAAAIAAYAAAAAAAMAAAAIAAIAAAAAAAQAAAAIAAMAAAAAAAUAAAADAAAAAAAAAAYAAAADAAEAAAAAAAcAAAADAAIAAAAAAAgAAAADAAMAAAAAAAkAAAAJAAIAAAABAAAAAAABAAAAAAABAAEAAAABAAEAAAABAAIAAAABAAIAAAABAAkAAAABAAYAAAACAAAAAAABAAAAAAACAAEAAAABAAEAAAACAAIAAAABAAIAAAADAAAAAAABAAAAAAADAAEAAAABAAEAAAADAAIAAAABAAIAAAAEAAAAAAABAAAAAAAEAAEAAAABAAEAAAAEAAIAAAABAAIAAAAFAAAAAAABAAAAAAAFAAEAAAABAAEAAAAFAAIAAAABAAIAAAAGAAAAAAABAAAAAAAGAAEAAAABAAEAAAAGAAIAAAABAAIAAAAGAAkAAAABAAYAAAAHAAAAAAABAAAAAAAHAAEAAAABAAEAAAAHAAIAAAABAAIAAAAHAAkAAAABAAYAAAAIAAAAAAABAAAAAAAIAAEAAAABAAEAAAAIAAIAAAABAAIAAAAIAAkAAAABAAYAAAAJAAAAAAAEAAAAAAAJAAEAAAAEAAEAAAAJAAIAAAAEAAIAAAAJAAMAAAAEAAMAAAAJAAQAAAAEAAMAAAAJAAUAAAAEAAMAAAAJAAYAAAAEAAMAAAAJAAcAAAAEAAMAAAAJAAgAAAAEAAMAAAAJAAkAAAAKAAIAAAADAAUAAAAIAAAAAAADAAkAAAABAAYAAAACAAkAAAABAAYAAAACAAUAAAAHAAAAAAACAAYAAAACAAEAAAACAAcAAAACAAIAAAABAAcAAAABAAIAAAABAAYAAAABAAEAAAABAAUAAAABAAAAAAAEAAYAAAAAAAEAAAAEAAcAAAAAAAIAAAAFAAYAAAAEAAEAAAAFAAUAAAAEAAAAAAAEAAUAAAAJAAAAAAAFAAcAAAAEAAIAAAAFAAgAAAAEAAMAAAAEAAkAAAABAAYAAAAFAAkAAAAEAAcAAAA=")
 
-[node name="Label" type="Label" parent="."]
+[node name="Cama" type="Label" parent="."]
 offset_left = 224.0
 offset_top = 80.0
 offset_right = 271.0
 offset_bottom = 103.0
 text = "CAMA"
 
-[node name="InteractableAction" type="Area2D" parent="Label"]
+[node name="InteractableAction" type="Area2D" parent="Cama"]
 position = Vector2(27.53714, 15.200859)
-script = ExtResource("6_u6rxl")
-event_list = Array[String](["NIGHT"])
-event_messages = SubResource("Resource_7cqfn")
+script = ExtResource("5_ipdnw")
+interaction_name = "BED"
+is_cooldown_at_execute = true
+cooldown_timer_message = SubResource("Resource_yhss4")
 shape = SubResource("RectangleShape2D_u6rxl")
 display_text = "Interactuacion con la perrisima cama"
 children_visible = true
@@ -101,7 +101,7 @@ text = "DUCHA"
 [node name="InteractableAction" type="Area2D" parent="ducha"]
 position = Vector2(18.73706, 7.414772)
 script = ExtResource("7_ipdnw")
-interaction_name = "ISBATH"
+interaction_name = "BATH"
 is_cooldown_at_execute = true
 cooldown_timer_message = SubResource("Resource_st1l6")
 stat_req_list = Dictionary[String, int]({

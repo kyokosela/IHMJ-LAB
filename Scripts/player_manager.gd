@@ -32,6 +32,55 @@ enum SANITY_STATES {
 	DISTURBED
 }
 
+#region ACTIONS
+
+var minimun_hours_ranges : Dictionary = {
+	15 : "10:00",30 : "09:00",
+	50 : "08:00",70 : "07:00",
+	100 : "06:00"
+}
+
+var mininum_energy_ranges : Dictionary = {
+	"06:00" : 20,"07:00" : 30,
+	"08:00" : 35,"09:00" : 40,
+	"10:00" : 42
+}
+
+func sleep(hour_deal : String = "00:00") -> void :
+	var minimun_hours : String = "00:00"
+	
+	var current_energy : float = PlayerManager.get_stat_value("ENERGY")
+	for x in minimun_hours_ranges :
+		print(x)
+		if current_energy <= x :
+			print(" se selecciono ", x)
+			minimun_hours = minimun_hours_ranges[x]
+			break
+	
+	if TimeUtils.is_greater_or_equal(minimun_hours, hour_deal) :
+		return
+	
+	if minimun_hours == "00:00" : return
+	if hour_deal == "00:00" : hour_deal = minimun_hours
+	
+	var base_energy = mininum_energy_ranges[minimun_hours]
+	var hour_deal_value = TimeUtils.get_minutes(hour_deal)
+	var minimun_hour_value = TimeUtils.get_minutes(minimun_hours)
+	
+	var difference = minimun_hour_value - hour_deal_value
+	if difference <= 0 : difference = 1
+	
+	var energy_deal = (base_energy) / (difference)
+	print(hour_deal)
+	TransitionManager.fadeIn(3)
+	await TransitionManager.transition_finished
+	TimeManager.add_to_current_time(hour_deal)
+	TransitionManager.fadeOut(3)
+	PlayerManager.increase_stat("ENERGY", energy_deal)
+	await TransitionManager.transition_finished
+
+#endregion
+
 #region LOGIC
 
 func _ready() -> void:
@@ -73,12 +122,7 @@ func auto_energy_effects(_new_value : float) -> void :
 		nothing = false
 	elif _new_value <= 0 :
 		nothing = false
-		TransitionManager.fadeIn(5)
-		await TransitionManager.transition_finished
-		TimeManager.add_to_current_time("08:00")
-		TransitionManager.fadeOut(5)
-		await TransitionManager.transition_finished
-		## TODO aplicar efecto debilitambiento
+		sleep()
 	elif _new_value <= 15 :
 		nothing = false
 		add_effect(energy_effects.tired)
@@ -97,21 +141,15 @@ func apply_effects(_effect_name : String = "") -> void:
 	for stat in stats:
 		stat.value = get_stat_change_total(stat.stat_unique_name)
 
-func get_stat_change_total(unique_stat_name: String) -> float:
-	var total : float = 0
-	for effect in effects:
-		total += effect.stat_change_total(unique_stat_name)
-	return total
+#endregion
+
+#region EFFECTS API
 
 func get_cost_with_effects(unique_stat_name: String, _custom_num : float = 0) -> float :
 	var total : float = _custom_num
 	for effect in effects:
 		total = effect.get_stat_change_total(unique_stat_name, _custom_num)
 	return total
-
-#endregion
-
-#region EFFECTS API
 
 func add_effect(effect : Effect) -> void :
 	if has_effect(effect.effect_unique_name) :
@@ -146,6 +184,12 @@ func get_effect_res(unique_effect_name : String) -> Effect : ## Obten el recurso
 
 #region STATS API
 
+func get_stat_change_total(unique_stat_name: String) -> float:
+	var total : float = 0
+	for effect in effects:
+		total += effect.stat_change_total(unique_stat_name)
+	return total
+
 func get_stat_connections(unique_stat_name : String, connection_parameter: CONNECTION_PARAM = CONNECTION_PARAM.SIGNAL) -> Array:
 	var stat : Stat = get_stat_res(unique_stat_name)
 	var connections = stat.value_changed.get_connections()
@@ -174,6 +218,9 @@ func get_sanity_state() -> SANITY_STATES : ## Obten el estado mental del jugador
 		return SANITY_STATES.NEUTRAL
 	else :
 		return SANITY_STATES.DISTURBED
+
+func get_sanity_value() -> float :
+	return sanity_value
 
 func decrease_stat(unique_stat_name : String, value : float) -> void : ## Disminuye una estadistica, usa el nombre unico/identificador
 	var stat : Stat = get_stat_res(unique_stat_name)

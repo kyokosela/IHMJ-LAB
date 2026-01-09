@@ -34,7 +34,7 @@ func custom_execute():
 		if tired.time_changes.OPERATION == TimeChanger.OPERATION_CASE.MULTIPLIER :
 			time_cost = TimeUtils.multiply_time(time_cost, tired.time_changes.time_value)
 	
-	TimeManager.add_to_current_time(time_cost)
+	if TimeUtils.is_valid_format(time_cost) : TimeManager.add_to_current_time(time_cost)
 	
 	if is_cooldown_at_execute :
 		if !TimeUtils.is_valid_format(cooldown_time) : printerr(" error con el formato del tiempo en cooldown");return

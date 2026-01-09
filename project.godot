@@ -18,6 +18,7 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="IHMJ"
 config/features=PackedStringArray("4.5")
 boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/image="uid://breasnkcg6mek"
 config/icon="uid://bjv6sibxm861c"
 
 [autoload]
@@ -30,7 +31,6 @@ PlayerManager="*res://Scripts/player_manager.gd"
 TaskManager="*res://Scripts/task_manager.gd"
 ZoneManager="*res://Scripts/zone_manager.gd"
 PlayerUI="*res://UI/PLAYERUI/PlayerUI.tscn"
-PlayerUi="*res://UI/PLAYERUI/PlayerUI.tscn"
 TransitionManager="*res://UI/TransitionManager/TransitionManager.tscn"
 
 [dialogic]

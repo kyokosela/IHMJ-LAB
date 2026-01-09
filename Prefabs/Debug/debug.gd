@@ -46,7 +46,7 @@ func _ready() -> void:
 		world_initial_setup()
 	setup_stats()
 	PlayerManager.stat_connection_added.connect(update_stats)
-	EventManager.event_activated.connect(_on_event_active)
+	EventManager.event_create.connect(_on_event_active)
 	EventManager.event_deactivaded.connect(_on_event_deactive)
 	TimeManager.time_changed.connect(time_debug)
 	PlayerManager.effect_added.connect(_on_effect_active)

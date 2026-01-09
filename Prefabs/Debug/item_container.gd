@@ -26,7 +26,7 @@ func update():
 	Item Condition: {condition}
 	Item States: {states}
 	Item Type: {type}
-	Item Quality: {type}
+	Item Quality: {quality}
 	Item Behavior: {behavior}
 	Item Modifier: {modifiers}
 	Base Decay: {decay}
@@ -35,7 +35,8 @@ func update():
 		"unique": data.item_unique_name,
 		"condition": item.condition,
 		"states": item.states.keys(),
-		"type": data.item_type,
+		"type": ItemData.TYPE.keys()[data.item_type],
+		"quality": ItemData.QUALITY.keys()[data.item_quality],
 		"behavior" : data.behavior,
 		"modifiers" : data.get_modifiers_applies(),
 		"decay": data.base_decay_time

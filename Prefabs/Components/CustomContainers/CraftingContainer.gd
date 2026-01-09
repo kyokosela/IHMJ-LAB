@@ -6,9 +6,7 @@ class_name CraftingContainer
 var result : Item
 
 func _ready():
-	if inventory == null:
-		inventory = InventoryComponent.new(3)
-		add_child(inventory)
+	super()
 
 func get_craft_preview() -> Item:
 	var current_items : Array[Item] = get_all_items()
@@ -88,4 +86,11 @@ func order_craft(crafts : Crafts, items : Array[Item]) -> Array[int]:
 			return [] 
 	return used_indices
 	
+
+func return_result(container : InventoryContainer):
+	if result == null or container == null: return
 	
+	add_item(result)
+	transfer_to(container,result)
+	
+	result = null

@@ -14,6 +14,7 @@ func update_states(_item: Item) -> void:
 	
 	for condition in conditions:
 		condition.update_states(_item) 
+	_item.item_changed.emit()
 
 func apply_base_decay(minutes:int,item: Item, env_conditions: Array[String]):
 	if !can_decay: return

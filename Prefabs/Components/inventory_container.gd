@@ -1,14 +1,16 @@
 extends Component
 class_name InventoryContainer
 
-@export var inventory: InventoryComponent
+var inventory: InventoryComponent
 @export var rules: ContainerRules
 @export var environment : ContainerEnvironment
 
 func _ready():
-	if inventory == null:
-		inventory = InventoryComponent.new()
-		add_child(inventory)
+	for child in get_children():
+		if child is InventoryComponent:
+			inventory = child
+			break
+	assert(inventory != null, "InventoryContainer en '" + name + "' necesita un InventoryComponent (asignado o como hijo)")
 	TimeManager.minutes_delta.connect(apply_decay)
 
 #region LOGIC
@@ -85,6 +87,16 @@ func get_slot(index: int) -> InventorySlot:
 	if index < 0 or index >= inventory.slots.size():
 		return null
 	return inventory.slots[index]
+
+func use_item_at(slot_index: int):
+	var slot : InventorySlot = get_slot(slot_index)
+	var item = slot.item
+	var behavior = item.data.behavior
+	if not behavior.can_use(item) or item.data.uses <= 0 or item == null: return
+	behavior.use(item)
+	if item.data.uses <= 0:
+		if item.data.consume_after_use:
+			inventory.remove_item_at(slot_index)
 
 func get_slots() -> Array[InventorySlot]:
 	return inventory.slots

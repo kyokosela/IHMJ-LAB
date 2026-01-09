@@ -22,7 +22,10 @@ func _ready() -> void:
 	entity_ready.emit()
 
 func _initialize():
-	pass
+	fsm = get_component("FSMComponent")
+	movement = get_component("MovementComponent")
+	sprite = get_component("SpriteComponent")
+	inventory = get_component("InventoryContainer")
 #endregion
 
 #region Entity API

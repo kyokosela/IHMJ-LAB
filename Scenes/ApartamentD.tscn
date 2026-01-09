@@ -1,13 +1,10 @@
-[gd_scene load_steps=26 format=4 uid="uid://vv6n4521k5rq"]
+[gd_scene load_steps=24 format=4 uid="uid://vv6n4521k5rq"]
 
 [ext_resource type="Script" uid="uid://mni1cq3j7l53" path="res://Scripts/world.gd" id="1_8uipv"]
 [ext_resource type="PackedScene" uid="uid://ctagwp38abn4u" path="res://Prefabs/walls/floors.tscn" id="2_r2ipe"]
 [ext_resource type="PackedScene" uid="uid://b2w4stq2ucdlo" path="res://Prefabs/walls/walls.tscn" id="3_h6v0i"]
 [ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="5_yw1yi"]
 [ext_resource type="Script" uid="uid://cit1v6ktt3yrn" path="res://Prefabs/Interactable/wardrobe.gd" id="6_ox6iw"]
-[ext_resource type="Script" uid="uid://bswuea3inx1i8" path="res://Resources/SpriteStacks/Mayui/sprite_preset.gd" id="7_hcjjt"]
-[ext_resource type="Resource" uid="uid://cgiarn82yn77y" path="res://Resources/SpriteStacks/Mayui/mayui_work.tres" id="8_sl7m2"]
-[ext_resource type="Resource" uid="uid://c4vlc21elx4fq" path="res://Resources/SpriteStacks/Mayui/mayui_towel.tres" id="9_mx67u"]
 [ext_resource type="Script" uid="uid://dvc4ajwmih83o" path="res://Prefabs/Components/inventory_container.gd" id="10_i0syb"]
 [ext_resource type="Script" uid="uid://ckwswawlru4js" path="res://Resources/Containers/container_rules.gd" id="10_ox6iw"]
 [ext_resource type="Script" uid="uid://bo45lmkm6yiet" path="res://Resources/Containers/container_environment.gd" id="11_hcjjt"]
@@ -19,11 +16,13 @@
 [ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="14_i0syb"]
 [ext_resource type="Script" uid="uid://c5tmcnj0wdxvt" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="15_qad6c"]
 [ext_resource type="Script" uid="uid://ctwvwqkrwenys" path="res://Prefabs/Components/inventory_component.gd" id="17_53t5c"]
+[ext_resource type="PackedScene" uid="uid://dd0p5w6n0rqyj" path="res://UI/Containers/wardrobe_ui.tscn" id="20_53t5c"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ox6iw"]
 
 [sub_resource type="Resource" id="Resource_53t5c"]
 script = ExtResource("10_ox6iw")
+allowed_types = Array[int]([2])
 metadata/_custom_type_script = "uid://ckwswawlru4js"
 
 [sub_resource type="Resource" id="Resource_24hpn"]
@@ -56,13 +55,11 @@ position = Vector2(80, 80)
 zoom = Vector2(2, 2)
 
 [node name="DebugPanel" parent="." node_paths=PackedStringArray("world") instance=ExtResource("5_yw1yi")]
-visible = false
 world = NodePath("..")
 
 [node name="Wardrobe" type="Area2D" parent="."]
 position = Vector2(128, 40)
 script = ExtResource("6_ox6iw")
-presets = Array[ExtResource("7_hcjjt")]([ExtResource("8_sl7m2"), ExtResource("9_mx67u")])
 shape = SubResource("RectangleShape2D_ox6iw")
 reusable = true
 is_solid = true
@@ -111,3 +108,15 @@ position = Vector2(80, 80)
 script = ExtResource("15_qad6c")
 entity = "Player"
 metadata/_custom_type_script = "uid://c5tmcnj0wdxvt"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="WardrobeUI" parent="CanvasLayer" instance=ExtResource("20_53t5c")]
+visible = false
+
+[node name="Kitchen" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

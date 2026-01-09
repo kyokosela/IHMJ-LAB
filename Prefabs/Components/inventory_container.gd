@@ -28,6 +28,7 @@ func apply_decay(minutes: int):
 #endregion
 
 #region API
+
 func add_item_by_data(data: ItemData) -> bool:
 	if rules and not rules.can_store(data): return false
 		
@@ -92,6 +93,7 @@ func use_item_at(slot_index: int):
 	var slot : InventorySlot = get_slot(slot_index)
 	var item = slot.item
 	var behavior = item.data.behavior
+	print(item == null)
 	if not behavior.can_use(item) or item.data.uses <= 0 or item == null: return
 	behavior.use(item)
 	if item.data.uses <= 0:

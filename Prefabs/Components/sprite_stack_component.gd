@@ -5,6 +5,9 @@ class_name SpriteComponent
 @export var animation_player : AnimationPlayer
 @export var custom_presets : Array[SpritePreset]
 
+#TODO: Verificar cada layer de mayui con un preset para condicion de si ppuede ir al traqbajo por ejemplo
+#de esta manera es posible hacer que mayui pueda usar distintas capas de diferentes presets o texturas
+
 @export var current_preset: SpritePreset:
 	set(v):
 		current_preset = v

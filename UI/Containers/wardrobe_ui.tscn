@@ -1,0 +1,310 @@
+[gd_scene load_steps=30 format=3 uid="uid://dd0p5w6n0rqyj"]
+
+[ext_resource type="Script" uid="uid://dfn7rhufpg4au" path="res://UI/Containers/wardrobe_ui.gd" id="1_1r4s0"]
+[ext_resource type="Texture2D" uid="uid://pmc6kpm5dlqn" path="res://Assets/UI/Wardrobe/wardrobe.png" id="2_bbh5u"]
+[ext_resource type="Script" uid="uid://bwwsmokf0q8y2" path="res://Scripts/entity.gd" id="2_jqbpu"]
+[ext_resource type="Script" uid="uid://dxbbffiau4vqt" path="res://Prefabs/Components/sprite_stack_component.gd" id="3_d6yee"]
+[ext_resource type="Texture2D" uid="uid://dh0tkdxcjyod2" path="res://Assets/UI/Wardrobe/blouse_clean.png" id="3_sh32p"]
+[ext_resource type="Texture2D" uid="uid://b7o185qgevqge" path="res://Assets/UI/Wardrobe/basket_full.png" id="4_cwatp"]
+[ext_resource type="Script" uid="uid://bswuea3inx1i8" path="res://Resources/SpriteStacks/Mayui/sprite_preset.gd" id="4_h23nu"]
+[ext_resource type="Resource" uid="uid://cgiarn82yn77y" path="res://Resources/SpriteStacks/Mayui/mayui_work.tres" id="5_ncci6"]
+[ext_resource type="Texture2D" uid="uid://m536wj2mt2j" path="res://Assets/UI/Wardrobe/uniform_clean.png" id="5_vxjan"]
+[ext_resource type="Resource" uid="uid://c4vlc21elx4fq" path="res://Resources/SpriteStacks/Mayui/mayui_towel.tres" id="6_fifye"]
+[ext_resource type="Texture2D" uid="uid://cyvj3a00s2wbf" path="res://Assets/UI/Wardrobe/uniform_selection.png" id="6_oosw4"]
+[ext_resource type="Texture2D" uid="uid://o384ea47yxv5" path="res://Assets/Mayui/mayui_work_legs.png" id="7_kdcjt"]
+[ext_resource type="Texture2D" uid="uid://cxmgoxewya4il" path="res://Assets/Mayui/mayui_work_body.png" id="8_1ryp7"]
+[ext_resource type="Texture2D" uid="uid://7ywufu1mplt2" path="res://Assets/Mayui/mayui_face.png" id="9_08ng1"]
+[ext_resource type="Texture2D" uid="uid://ci8n5ia3dji02" path="res://Assets/Mayui/mayui_hair.png" id="10_6eac2"]
+[ext_resource type="Texture2D" uid="uid://bhkln5nq45lwf" path="res://Assets/Mayui/mayui_eyes.png" id="11_nu4ag"]
+[ext_resource type="Texture2D" uid="uid://c7xrwleix05oo" path="res://Assets/Mayui/mayui_accesories.png" id="12_es8mf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d53a4"]
+size = Vector2(8, 9.599998)
+
+[sub_resource type="Animation" id="Animation_tl25y"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:sync_frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_us0jv"]
+resource_name = "idle_down"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:sync_frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
+[sub_resource type="Animation" id="Animation_hxf3l"]
+resource_name = "idle_left"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:sync_frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+
+[sub_resource type="Animation" id="Animation_03ewh"]
+resource_name = "idle_right"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:sync_frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_21evy"]
+resource_name = "idle_up"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:sync_frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [3]
+}
+
+[sub_resource type="Animation" id="Animation_2lcig"]
+resource_name = "walk_down"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:sync_frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [5, 6, 7, 6]
+}
+
+[sub_resource type="Animation" id="Animation_h0qm3"]
+resource_name = "walk_left"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:sync_frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.49999997, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [13, 14, 15, 14]
+}
+
+[sub_resource type="Animation" id="Animation_8ipit"]
+resource_name = "walk_right"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:sync_frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [9, 10, 11, 10]
+}
+
+[sub_resource type="Animation" id="Animation_3j425"]
+resource_name = "walk_up"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:sync_frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [17, 18, 19, 18]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_21ku0"]
+_data = {
+&"RESET": SubResource("Animation_tl25y"),
+&"idle_down": SubResource("Animation_us0jv"),
+&"idle_left": SubResource("Animation_hxf3l"),
+&"idle_right": SubResource("Animation_03ewh"),
+&"idle_up": SubResource("Animation_21evy"),
+&"walk_down": SubResource("Animation_2lcig"),
+&"walk_left": SubResource("Animation_h0qm3"),
+&"walk_right": SubResource("Animation_8ipit"),
+&"walk_up": SubResource("Animation_3j425")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sl1xo"]
+size = Vector2(12.799998, 24.800001)
+
+[node name="WardrobeUI" type="Control" node_paths=PackedStringArray("entity")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1r4s0")
+entity = NodePath("Entity")
+
+[node name="Entity" type="CharacterBody2D" parent="."]
+position = Vector2(376.00003, 544.00006)
+scale = Vector2(10, 10)
+script = ExtResource("2_jqbpu")
+metadata/_custom_type_script = "uid://bwwsmokf0q8y2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entity"]
+position = Vector2(0, -8)
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("RectangleShape2D_d53a4")
+
+[node name="SpriteComponent" type="Node2D" parent="Entity" node_paths=PackedStringArray("animation_player")]
+script = ExtResource("3_d6yee")
+animation_player = NodePath("AnimationPlayer")
+custom_presets = Array[ExtResource("4_h23nu")]([ExtResource("5_ncci6"), ExtResource("6_fifye")])
+current_preset = ExtResource("5_ncci6")
+sync_hframes = 20
+sync_offset = Vector2(0, -10)
+metadata/_custom_type_script = "uid://dxbbffiau4vqt"
+
+[node name="legs" type="Sprite2D" parent="Entity/SpriteComponent"]
+texture = ExtResource("7_kdcjt")
+offset = Vector2(0, -10)
+hframes = 20
+
+[node name="body" type="Sprite2D" parent="Entity/SpriteComponent"]
+texture = ExtResource("8_1ryp7")
+offset = Vector2(0, -10)
+hframes = 20
+
+[node name="head" type="Sprite2D" parent="Entity/SpriteComponent"]
+texture = ExtResource("9_08ng1")
+offset = Vector2(0, -10)
+hframes = 20
+
+[node name="hair" type="Sprite2D" parent="Entity/SpriteComponent"]
+texture = ExtResource("10_6eac2")
+offset = Vector2(0, -10)
+hframes = 20
+
+[node name="eyes" type="Sprite2D" parent="Entity/SpriteComponent"]
+texture = ExtResource("11_nu4ag")
+offset = Vector2(0, -10)
+hframes = 20
+
+[node name="accesories" type="Sprite2D" parent="Entity/SpriteComponent"]
+texture = ExtResource("12_es8mf")
+offset = Vector2(0, -10)
+hframes = 20
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Entity/SpriteComponent"]
+libraries = {
+&"": SubResource("AnimationLibrary_21ku0")
+}
+speed_scale = 1.5
+
+[node name="Area2D" type="Area2D" parent="Entity"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entity/Area2D"]
+position = Vector2(0, -9.200001)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_sl1xo")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bbh5u")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_sh32p")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_cwatp")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_vxjan")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="TextureRect2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_oosw4")
+expand_mode = 3
+stretch_mode = 5

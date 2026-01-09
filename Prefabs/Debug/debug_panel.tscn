@@ -81,9 +81,12 @@ fit_content = true
 autowrap_mode = 2
 
 [node name="ActiveEntities" type="FoldableContainer" parent="MarginContainer/TabContainer/EntityInfo/ScrollContainer/VBoxContainer"]
-unique_name_in_owner = true
 layout_mode = 2
 title = "Active Entities"
+
+[node name="ActiveEntities" type="VBoxContainer" parent="MarginContainer/TabContainer/EntityInfo/ScrollContainer/VBoxContainer/ActiveEntities"]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="TimeManager" type="MarginContainer" parent="MarginContainer/TabContainer"]
 visible = false

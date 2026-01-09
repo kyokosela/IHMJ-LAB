@@ -9,7 +9,6 @@ class_name DebugPanel
 @onready var game_info: RichTextLabel = %GameInfo
 @onready var current_entity_label: RichTextLabel = %EntityLabel
 @onready var entity_info: MarginContainer = %EntityInfo
-@onready var active_entities: FoldableContainer = %ActiveEntities
 @onready var entity_info_label: RichTextLabel = %EntityInfoLabel
 @onready var stat_list: VBoxContainer = %StatList
 @onready var event_manager : MarginContainer = %EventManager
@@ -19,6 +18,7 @@ class_name DebugPanel
 @onready var current_week: RichTextLabel = %CurrentWeek
 @onready var current_week_day: RichTextLabel = %CurrentWeekDay
 @onready var item_list: VBoxContainer = %ItemList
+@onready var active_entities: VBoxContainer = %ActiveEntities
 
 var entity_widgets : Dictionary = {}
 var stat_widgets : Array[StatContainerDebug]

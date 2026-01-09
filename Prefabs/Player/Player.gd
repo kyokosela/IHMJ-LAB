@@ -9,11 +9,8 @@ func _ready() -> void:
 	add_to_group("Player")
 
 func _initialize() -> void:
-	fsm = get_component("FSMComponent")
-	movement = get_component("MovementComponent")
-	sprite = get_component("SpriteComponent")
+	super()
 	interaction = get_component("InteractionComponent")
-	inventory = get_component("InventoryContainer")
 	
 	Dialogic.timeline_started.connect(_on_dialogic_timeline_started)
 	Dialogic.timeline_ended.connect(_on_dialogic_timeline_ended)
@@ -26,6 +23,7 @@ func _on_dialogic_timeline_ended():
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("test"):
+		add_item_by_data(preload("uid://xyia21ce8x85"))
 		add_item_by_data(preload("uid://b364ksxd3tlh0"))
 	if event.is_action_pressed("test_2"):
 		var item = get_items()

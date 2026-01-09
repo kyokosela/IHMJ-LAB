@@ -2,6 +2,11 @@
 extends InteractableContainer
 class_name Wardrobe
 
+
+#TODO: Quizas move todo esto a los items ya que estos contienen el preset y de esta m anera inventory container
+#controla todo, ademas podria hacer que inventory container llame al ui y el ui pide de este,
+#manejar los presets con los items cloth
+
 signal preset_added(preset : SpritePreset)
 signal preset_removed(preset : SpritePreset)
 signal preset_swapped( player_preset : SpritePreset,wardrobe_preset : SpritePreset)

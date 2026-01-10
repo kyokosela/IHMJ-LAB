@@ -29,10 +29,10 @@ func custom_execute():
 		var test = PlayerManager.get_cost_with_effects(stat_name, stat_req_list[stat_name])
 		PlayerManager.decrease_stat(stat_name, test)
 	
-	if PlayerManager.has_effect("TIRED") :
-		var tired : Effect = PlayerManager.get_effect_res("TIRED")
-		if tired.time_changes.OPERATION == TimeChanger.OPERATION_CASE.MULTIPLIER :
-			time_cost = TimeUtils.multiply_time(time_cost, tired.time_changes.time_value)
+	for effect : Effect in PlayerManager.effects :
+		if effect.time_changes == null : continue
+		if effect.time_changes.OPERATION == TimeChanger.OPERATION_CASE.MULTIPLIER :
+			time_cost = TimeUtils.multiply_time(time_cost, effect.time_changes.time_value)
 	
 	if TimeUtils.is_valid_format(time_cost) : TimeManager.add_to_current_time(time_cost)
 	

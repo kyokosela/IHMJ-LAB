@@ -34,15 +34,18 @@ enum SANITY_STATES {
 
 #region ACTIONS
 
-var minimun_hours_ranges : Dictionary = {
-	15 : "10:00",30 : "09:00",
-	50 : "08:00",70 : "07:00",
-	100 : "06:00"
-}
+var minimun_hours_ranges := [
+	{ "energy": 15, "hours": "10:00" },
+	{ "energy": 30, "hours": "09:00" },
+	{ "energy": 50, "hours": "08:00" },
+	{ "energy": 70, "hours": "07:00" },
+	{ "energy": 100, "hours": "06:00" }
+]
 
 var mininum_energy_ranges : Dictionary = {
-	"06:00" : 20,"07:00" : 30,
-	"08:00" : 35,"09:00" : 40,
+	"01:00" : 5, "02:00" : 8, "03:00" : 10,
+	"04:00" : 12,"05:00" : 15,"06:00" : 20,
+	"07:00" : 30,"08:00" : 35,"09:00" : 40,
 	"10:00" : 42
 }
 
@@ -50,15 +53,14 @@ func sleep(hour_deal : String = "00:00") -> void :
 	var minimun_hours : String = "00:00"
 	
 	var current_energy : float = PlayerManager.get_stat_value("ENERGY")
-	for x in minimun_hours_ranges :
-		print(x)
-		if current_energy <= x :
-			print(" se selecciono ", x)
-			minimun_hours = minimun_hours_ranges[x]
+
+	for r in minimun_hours_ranges:
+		if current_energy <= r.energy:
+			minimun_hours = r.hours
 			break
 	
 	if TimeUtils.is_greater_or_equal(minimun_hours, hour_deal) :
-		return
+		hour_deal = minimun_hours
 	
 	if minimun_hours == "00:00" : return
 	if hour_deal == "00:00" : hour_deal = minimun_hours
@@ -67,16 +69,18 @@ func sleep(hour_deal : String = "00:00") -> void :
 	var hour_deal_value = TimeUtils.get_minutes(hour_deal)
 	var minimun_hour_value = TimeUtils.get_minutes(minimun_hours)
 	
-	var difference = minimun_hour_value - hour_deal_value
-	if difference <= 0 : difference = 1
-	
-	var energy_deal = (base_energy) / (difference)
-	print(hour_deal)
+	var ratio := float(hour_deal_value) / float(minimun_hour_value)
+	ratio = clamp(ratio, 0.0, 1.0)
+
+	var energy_deal = base_energy * ratio
+
+	print("energia negociada ", energy_deal)
 	TransitionManager.fadeIn(3)
 	await TransitionManager.transition_finished
 	TimeManager.add_to_current_time(hour_deal)
 	TransitionManager.fadeOut(3)
 	PlayerManager.increase_stat("ENERGY", energy_deal)
+
 	await TransitionManager.transition_finished
 
 #endregion
@@ -123,6 +127,7 @@ func auto_energy_effects(_new_value : float) -> void :
 	elif _new_value <= 0 :
 		nothing = false
 		sleep()
+		PlayerManager.add_effect(load("res://Resources/Effects/Effects/weak.tres"))
 	elif _new_value <= 15 :
 		nothing = false
 		add_effect(energy_effects.tired)
@@ -158,8 +163,9 @@ func add_effect(effect : Effect) -> void :
 	else :
 		effect_added.emit(effect)
 		effects.append(effect)
+		
 		if effect is TemporalEffect :
-			TimeManager.connect_with_res(effect.duration, remove_effect.bind(effect.effect_unique_name))
+			EventManager.create_lapse_event(effect.duration, remove_effect.bind(effect.effect_unique_name), "REMOVE_WEAK_AUTOMATICALLY", "", false, true, true)
 	
 func remove_effect(unique_effect_name : String) -> void : ## Remueve un efecto, usa el nombre unico/identificador
 	var effect : Effect = get_effect_res(unique_effect_name)

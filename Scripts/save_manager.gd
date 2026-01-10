@@ -29,7 +29,7 @@ func save_data():
 		if !is_instance_valid(comp):
 			_active_components.remove_at(i)
 			continue
-			
+
 		if !comp.uid.is_empty():
 			_global[comp.uid] = comp.get_data()
 	

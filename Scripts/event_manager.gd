@@ -41,12 +41,16 @@ func load_event(event : Event, trigger : bool = false) -> void :
 	event_create.emit(event.event_unique_name)
 	
 	if event.destroy_at_start:
-		event.event_executed.connect(remove_event.bind(event))
+		event.event_executed.connect(remove_event.bind(event.event_unique_name))
 	if event.destroy_at_end: 
-		event.event_finished.connect(remove_event.bind(event))
+		event.event_finished.connect(remove_event.bind(event.event_unique_name))
 	
 ## remueve un evento, usa end_trigger para disparar su acciones inversas/finales
-func remove_event(event : Event, trigger_end : bool = false) -> void :
+func remove_event(event_unique_name : String, trigger_end : bool = false) -> void :
+	var event = get_event(event_unique_name)
+	
+	if event == null : return
+	
 	if !events.has(event) : 
 		printerr(" No exite el evento para eliminar")
 		return

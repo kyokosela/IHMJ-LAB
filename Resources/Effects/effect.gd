@@ -8,6 +8,8 @@ class_name Effect
 @export var render : bool
 @export var stat_changes : Array[StatChanger]
 @export var time_changes : TimeChanger
+@export var icon : Texture2D
+
 
 func stat_changes_list(unique_stat_name : String) -> Array[StatChanger]:
 	var stats_changers : Array[StatChanger]= []

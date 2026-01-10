@@ -31,6 +31,7 @@ func create_effect_slot(effect : Effect) -> void :
 	if !effect.render or node != null : return
 	
 	var effect_slot : TextureRect = effect_slot_scene.instantiate()
+	if effect.icon != null : effect_slot.texture = effect.icon
 	effect_slot.name = effect.effect_unique_name
 	effect_slot.tooltip_text = effect.effect_display_name
 	effect_list.add_child(effect_slot)

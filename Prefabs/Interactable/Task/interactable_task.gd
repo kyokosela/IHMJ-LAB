@@ -44,7 +44,7 @@ func custom_execute():
 
 func _ready() -> void:
 	super()
-	if EventManager.is_event_exist( interaction_name.to_upper() + "_COOLDOWN") : is_cooldown = true
+	if EventManager.is_event_exist(interaction_name.to_upper() + "_COOLDOWN") : is_cooldown = true
 	if effect_messages : effect_messages.end_chain.connect(_on_end_chain)
 	if event_messages : event_messages.end_chain.connect(_on_end_chain)
 	if stat_messages : stat_messages.end_chain.connect(_on_end_chain)

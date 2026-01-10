@@ -2,6 +2,7 @@ extends Resource
 class_name Crafts
 
 @export var check_order : bool
+@export var needed_time : String
 
 @export_group("Recipe")
 @export var needed_items : Array[CraftSlot]

@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://ci8n5ia3dji02" path="res://Assets/Mayui/mayui_hair.png" id="10_6eac2"]
 [ext_resource type="Texture2D" uid="uid://bhkln5nq45lwf" path="res://Assets/Mayui/mayui_eyes.png" id="11_nu4ag"]
 [ext_resource type="Texture2D" uid="uid://c7xrwleix05oo" path="res://Assets/Mayui/mayui_accesories.png" id="12_es8mf"]
+[ext_resource type="Script" uid="uid://ci5gg5jsrh87o" path="res://UI/Containers/clothes_drag.gd" id="15_d6yee"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d53a4"]
 size = Vector2(8, 9.599998)
@@ -177,9 +178,6 @@ _data = {
 &"walk_up": SubResource("Animation_3j425")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_sl1xo"]
-size = Vector2(12.799998, 24.800001)
-
 [node name="WardrobeUI" type="Control" node_paths=PackedStringArray("entity")]
 layout_mode = 3
 anchors_preset = 15
@@ -187,6 +185,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_1r4s0")
 entity = NodePath("Entity")
 
@@ -195,6 +194,12 @@ position = Vector2(376.00003, 544.00006)
 scale = Vector2(10, 10)
 script = ExtResource("2_jqbpu")
 metadata/_custom_type_script = "uid://bwwsmokf0q8y2"
+
+[node name="TextureRect5" type="TextureRect" parent="Entity"]
+offset_left = -9.600004
+offset_top = -26.400005
+offset_right = 8.799995
+offset_bottom = 6.39999
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entity"]
 position = Vector2(0, -8)
@@ -246,13 +251,6 @@ libraries = {
 }
 speed_scale = 1.5
 
-[node name="Area2D" type="Area2D" parent="Entity"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Entity/Area2D"]
-position = Vector2(0, -9.200001)
-scale = Vector2(0.99999976, 0.99999976)
-shape = SubResource("RectangleShape2D_sl1xo")
-
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -260,6 +258,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("2_bbh5u")
 expand_mode = 3
 stretch_mode = 5
@@ -274,6 +273,7 @@ grow_vertical = 2
 texture = ExtResource("3_sh32p")
 expand_mode = 3
 stretch_mode = 5
+script = ExtResource("15_d6yee")
 
 [node name="TextureRect4" type="TextureRect" parent="."]
 layout_mode = 1

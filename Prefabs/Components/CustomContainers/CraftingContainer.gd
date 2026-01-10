@@ -2,7 +2,7 @@ extends InventoryContainer
 class_name CraftingContainer
 
 @export var available_crafts : Array[Crafts]
-
+var current_craft : Crafts
 var result : Item
 
 func _ready():
@@ -35,10 +35,16 @@ func craft() -> void:
 		else: match_indices = unorder_craft(crafts, items)
 	
 		if match_indices.size() > 0:
-			_execute_craft(crafts, match_indices)
+			if crafts.needed_time != "00:00":
+				if current_craft != crafts: EventManager.remove_event("COOKING_TIME")
+				EventManager.create_lapse_event(crafts.needed_time,_execute_craft,"COOKING_TIME", "Cooking",false, true, true)
+				current_craft = crafts
+			else:
+				_execute_craft(crafts, match_indices)
 			return
-
-func _execute_craft(recipe, match_indices):
+	if EventManager.is_event_active("COOKING_TIME"): EventManager.remove_event("COOKING_TIME")
+	
+func _execute_craft(recipe : Crafts, match_indices):
 	for i in range(recipe.needed_items.size()):
 		var slot_index : int = match_indices[i]
 		var req : CraftSlot = recipe.needed_items[i]
@@ -56,6 +62,7 @@ func _execute_craft(recipe, match_indices):
 		final_result.add_state(recipe.result_state)
 	
 	result = final_result
+	current_craft = null
 	print("crafteo exitoso: ", result.data.item_unique_name)
 
 func unorder_craft(crafts: Crafts, items: Array[Item]) -> Array[int]:
@@ -85,7 +92,6 @@ func order_craft(crafts : Crafts, items : Array[Item]) -> Array[int]:
 		else:
 			return [] 
 	return used_indices
-	
 
 func return_result(container : InventoryContainer):
 	if result == null or container == null: return

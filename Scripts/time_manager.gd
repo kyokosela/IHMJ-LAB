@@ -6,8 +6,8 @@ enum TIMES {HOUR,MINUTE}
 
 signal time_changed(month : TimeUtils.MONTHS, week: TimeUtils.WEEKDAY, day: int, minutes: int)
 
-signal minutes_changed(minutes_value : int) ## se emite cuando el tiempo cambia
-signal minutes_delta(delta_minutes : int)
+signal minutes_changed(minutes_value : int) ## se emite cuando el tiempo cambia, retorna los minutos totales
+signal minutes_delta(delta_minutes : int) ## se emite cuando el tiempo cambia, retorna el tiempo que paso 
 
 signal day_changed(day_value : int) ## se emite cuando el dia cambia
 signal week_changed(week_value : int) ## se emite cada vez que la semana cambia, automaticamente los dias 7

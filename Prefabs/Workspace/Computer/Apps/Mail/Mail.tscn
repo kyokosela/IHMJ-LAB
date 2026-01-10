@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://v8c6vu22yl43"]
+[gd_scene load_steps=12 format=3 uid="uid://v8c6vu22yl43"]
 
 [ext_resource type="Script" uid="uid://cicrbvcub4q4r" path="res://Prefabs/Workspace/Computer/Apps/Mail/mail.gd" id="1_ecqxk"]
 [ext_resource type="PackedScene" uid="uid://b40tk8ekcmjxa" path="res://Prefabs/Workspace/Computer/Apps/Mail/UI/MailItem/MailItem.tscn" id="2_21y06"]
@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://cx4bw0bdqif63" path="res://Resources/Computer/Apps/Mail/Entries/choice_mail.tres" id="5_7q6ax"]
 [ext_resource type="Resource" uid="uid://1tovieatr17g" path="res://Resources/Computer/Apps/Mail/Entries/leave_mail.tres" id="6_72h35"]
 [ext_resource type="Resource" uid="uid://cbk31vix22a1c" path="res://Resources/Computer/Apps/Mail/Entries/type_mail.tres" id="7_cdg4n"]
+[ext_resource type="Script" uid="uid://dpxpbvvq6y80g" path="res://Prefabs/Components/save_component.gd" id="9_cdg4n"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dtwwy"]
 friction = 0.0
@@ -26,7 +27,12 @@ grow_vertical = 2
 script = ExtResource("1_ecqxk")
 mail_item_scene = ExtResource("2_21y06")
 mail_pool = Array[ExtResource("3_7q6ax")]([ExtResource("5_7q6ax"), ExtResource("4_nwne3"), ExtResource("6_72h35"), ExtResource("7_cdg4n")])
-metadata/_custom_type_script = "uid://okko5fxm3sdv"
+
+[node name="SaveComponent" type="Node" parent="."]
+script = ExtResource("9_cdg4n")
+uid = "app:mail"
+props_to_save = Array[String](["finished_mails"])
+metadata/_custom_type_script = "uid://dpxpbvvq6y80g"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(696, 340)

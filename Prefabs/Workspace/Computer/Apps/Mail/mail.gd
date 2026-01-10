@@ -1,4 +1,4 @@
-extends BaseApp
+extends Control
 class_name MailApp
 
 #region SETUP
@@ -13,14 +13,12 @@ class_name MailApp
 @export var mail_item_scene: PackedScene
 @export var mail_pool: Array[MailEntry]
 
+var finished_mails: Array = []
+
 var cache := {}
 var current_wrapper: Control = null
-var save_finished_ids: Array = []
 
-func _enter_tree() -> void:
-	app_id = "app:mail"
-
-func _on_app_ready() -> void:
+func _ready() -> void:
 	while !mail_pool.is_empty():
 		spawn()
 		await timer.timeout
@@ -31,9 +29,11 @@ func spawn():
 	var mail_data = mail_pool.pop_at(randi() % mail_pool.size())
 	var mail_item = mail_item_scene.instantiate()
 	inbox.add_child(mail_item)
-	
-	if mail_data.resource_path in save_finished_ids: mail_data.finished = true
-	
+
+	# TODO: Reemplazar a futuro con UIDs unicas manualmente escritas
+	var uid =  ResourceLoader.get_resource_uid(mail_data.resource_path)
+	if uid in finished_mails:  mail_data.finished = true
+
 	mail_item.setup(mail_data)
 	mail_item.launch(inbox.get_spawn_pos())
 	mail_item.opened.connect(_handle_mail_content)
@@ -70,10 +70,11 @@ func _create_wrapper(data: MailEntry) -> void:
 	cache[data] = wrapper
 
 func _on_mail_completed(wrapper: Control, data: MailEntry) -> void:
-	var mail_id = data.resource_path
-	if mail_id not in save_finished_ids:
-		save_finished_ids.append(mail_id)
-		commit()
+	var uid = ResourceLoader.get_resource_uid(data.resource_path)
+	
+	if uid not in finished_mails:
+		finished_mails.append(uid)
+		SaveManager.save_data()
 	
 	for child in wrapper.get_children(): child.queue_free()
 	_show_solved(wrapper)

@@ -3,6 +3,9 @@ class_name  MailEntry
 
 signal completed
 
+@export_category("Identifier")
+@export var id: String = ""
+
 @export_category("Header")
 @export var sender := "Coso"
 @export var mail := "default@hola.com"

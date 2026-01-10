@@ -23,11 +23,11 @@ func apply_base_decay(minutes:int,item: Item, env_conditions: Array[String]):
 	var quality : float = item.data.get_quality_percentage()
 	var modifiers : Array[ConditionModifier] = item.data.modifiers
 	
-	decay_value = round( (minutes / (base_decay + (base_decay * quality)) * 100) )
+	decay_value = round( (minutes * get_base_decay_factor(base_decay,quality) ))
 	
 	for modifier : ConditionModifier in modifiers:
 		if modifier.applies_to in env_conditions:
-			decay_value = round( (minutes / (base_decay + (base_decay * quality)) * 100) * modifier.multiplier )
+			decay_value = round( (minutes / get_base_decay_factor(base_decay,quality)) * modifier.multiplier )
 	
 	item.condition -= decay_value 
 	update_states(item)
@@ -44,14 +44,17 @@ func apply_enviroment(minutes:int,item: Item, env_properties: Array[String]):
 		var modifiers : Array[ConditionModifier] = condition.modifiers
 		var env_conditions : Array[String] = env_properties
 		
-		decay_value = round( (minutes / (base_decay + (base_decay * quality)) * 100) )
+		decay_value = round( (minutes * get_base_decay_factor(base_decay,quality)) )
 		
 		for modifier : ConditionModifier in modifiers:
 			if modifier.applies_to in env_conditions:
-				decay_value = round( (minutes / (base_decay + (base_decay * quality)) * 100) * modifier.multiplier )
+				decay_value = round( (minutes * get_base_decay_factor(base_decay,quality) * modifier.multiplier))
 		
 		condition.value -= decay_value
 		
 		
 	update_states(item)
 	
+
+func get_base_decay_factor(base_decay_time, quality : float ) -> float:
+	return 100.0 / (base_decay_time + (base_decay_time * quality))

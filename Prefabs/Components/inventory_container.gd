@@ -14,9 +14,9 @@ func _ready():
 	TimeManager.minutes_delta.connect(apply_decay)
 
 #region LOGIC
-#TODO: mover a container manager
+#TODO: mover a container manager para que maneje el decay fuera de la escena
 func apply_decay(minutes: int):
-	var items = get_all_items()
+	var items : Array[Item] = get_all_items()
 	if items.is_empty(): return 
 	
 	var env_conditions : Array[String] = environment.get_conditions()

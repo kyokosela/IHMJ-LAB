@@ -3,7 +3,7 @@ extends Interactable
 class_name InteractableContainer
 
 @export_group("Inventory")
-@export var initial_items: Dictionary[ItemData, int]
+@export var initial_items: Array[ItemData]
 @export var container_ui : ContainerUI
 var container: InventoryContainer
 
@@ -23,7 +23,6 @@ func _find_container():
 			return
 	container = null
 
-
 func open_ui():
 	if !container_ui: return
 	container_ui.open(self)
@@ -31,8 +30,4 @@ func open_ui():
 func custom_execute():
 	#container.open_container o algo para que salga la UI y que esta se encargue
 	#de usar la api para cosas etc
-	var craft_container = container as CraftingContainer
-	var player : Player = area_ref.get_parent().host
-	player.transfer_slot_to(container,0)
-	craft_container.craft()
-	craft_container.return_result(player.inventory)
+	open_ui()

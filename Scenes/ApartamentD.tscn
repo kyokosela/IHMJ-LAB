@@ -1,10 +1,12 @@
-[gd_scene load_steps=24 format=4 uid="uid://vv6n4521k5rq"]
+[gd_scene load_steps=26 format=4 uid="uid://vv6n4521k5rq"]
 
 [ext_resource type="Script" uid="uid://mni1cq3j7l53" path="res://Scripts/world.gd" id="1_8uipv"]
 [ext_resource type="PackedScene" uid="uid://ctagwp38abn4u" path="res://Prefabs/walls/floors.tscn" id="2_r2ipe"]
 [ext_resource type="PackedScene" uid="uid://b2w4stq2ucdlo" path="res://Prefabs/walls/walls.tscn" id="3_h6v0i"]
 [ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="5_yw1yi"]
-[ext_resource type="Script" uid="uid://cit1v6ktt3yrn" path="res://Prefabs/Interactable/wardrobe.gd" id="6_ox6iw"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="6_4dip4"]
+[ext_resource type="Resource" uid="uid://xyia21ce8x85" path="res://Resources/Items/Data/towel_cloth.tres" id="7_53t5c"]
+[ext_resource type="Resource" uid="uid://cmva81pyqiyry" path="res://Resources/Items/Data/work_cloth.tres" id="7_i0syb"]
 [ext_resource type="Script" uid="uid://dvc4ajwmih83o" path="res://Prefabs/Components/inventory_container.gd" id="10_i0syb"]
 [ext_resource type="Script" uid="uid://ckwswawlru4js" path="res://Resources/Containers/container_rules.gd" id="10_ox6iw"]
 [ext_resource type="Script" uid="uid://bo45lmkm6yiet" path="res://Resources/Containers/container_environment.gd" id="11_hcjjt"]
@@ -55,11 +57,14 @@ position = Vector2(80, 80)
 zoom = Vector2(2, 2)
 
 [node name="DebugPanel" parent="." node_paths=PackedStringArray("world") instance=ExtResource("5_yw1yi")]
+visible = false
 world = NodePath("..")
 
-[node name="Wardrobe" type="Area2D" parent="."]
+[node name="Wardrobe" type="Area2D" parent="." node_paths=PackedStringArray("container_ui")]
 position = Vector2(128, 40)
-script = ExtResource("6_ox6iw")
+script = ExtResource("13_sl7m2")
+initial_items = Array[ExtResource("6_4dip4")]([ExtResource("7_53t5c"), ExtResource("7_i0syb")])
+container_ui = NodePath("../CanvasLayer/WardrobeUI")
 shape = SubResource("RectangleShape2D_ox6iw")
 reusable = true
 is_solid = true
@@ -67,7 +72,7 @@ consume_time = true
 dialog = ExtResource("12_hcjjt")
 time_consumption = "01:00"
 random_time_range = false
-metadata/_custom_type_script = "uid://cit1v6ktt3yrn"
+metadata/_custom_type_script = "uid://btpm0l5mnnxxf"
 
 [node name="InventoryContainer" type="Node2D" parent="Wardrobe"]
 script = ExtResource("10_i0syb")

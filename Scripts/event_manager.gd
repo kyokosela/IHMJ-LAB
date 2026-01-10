@@ -147,4 +147,6 @@ func reset_lapse_event(event_unique_name : String) -> void : ## Asegurate de que
 	if event is not LapseEvent : printerr(" el evento que se quiere resetear no es de tipo LapseEvent");return
 	event.reset_lapse()
 
+
+
 #endregion

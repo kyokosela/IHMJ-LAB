@@ -46,8 +46,8 @@ func new_game() -> void :
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
 	
 	EventManager.create_lapse_event("16:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/smelly.tres")), "AUTO_SMELLY_LAPSE", "SMELLY_TIMER", true)
-	EventManager.create_lapse_event("06:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/hunger.tres")), "AUTO_HUNGER_LAPSE", "HUNGER_TIMER",true)
-	EventManager.create_lapse_event("03:00", print.bind("hola"), "SEX", "SEX", true, false, false)
+	EventManager.create_lapse_event("06:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/hunger.tres")), "AUTO_HUNGER_LAPSE", "HUNGER_TIMER", true)
+	EventManager.create_lapse_event("16:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/sleepy.tres")), "AUTO_SLEEPY_LAPSE", "SLEEPY_TIMER", true)
 	
 func load_file(save_id : int) -> void : ## MAX 2 en el parametro
 	var file = FileAccess.open(SAVE_PATHS[save_id], FileAccess.READ)

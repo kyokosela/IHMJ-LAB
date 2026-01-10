@@ -52,7 +52,7 @@ var mininum_energy_ranges : Dictionary = {
 func sleep(hour_deal : String = "00:00") -> void :
 	var minimun_hours : String = "00:00"
 	
-	var current_energy : float = PlayerManager.get_stat_value("ENERGY")
+	var current_energy : float = get_stat_value("ENERGY")
 
 	for r in minimun_hours_ranges:
 		if current_energy <= r.energy:
@@ -74,13 +74,16 @@ func sleep(hour_deal : String = "00:00") -> void :
 
 	var energy_deal = base_energy * ratio
 
-	print("energia negociada ", energy_deal)
 	TransitionManager.fadeIn(3)
 	await TransitionManager.transition_finished
 	TimeManager.add_to_current_time(hour_deal)
 	TransitionManager.fadeOut(3)
-	PlayerManager.increase_stat("ENERGY", energy_deal)
-
+	
+	increase_stat("ENERGY", energy_deal)
+	decrease_control_effect_hour("SLEEPY", hour_deal)
+	EventManager.reset_lapse_event("AUTO_SLEEPY_LAPSE")
+	
+	
 	await TransitionManager.transition_finished
 
 #endregion
@@ -185,6 +188,20 @@ func get_effect_res(unique_effect_name : String) -> Effect : ## Obten el recurso
 		if effect.effect_unique_name == unique_effect_name :
 			return effect
 	return null
+
+func decrease_control_effect_hour(effect_unique_name : String, decrease_time : String) -> void : ## usar el formato HH:MM
+	var effect : Effect = get_effect_res(effect_unique_name)
+	if effect == null : return
+	if effect is EffectHourControl and TimeUtils.is_valid_format(decrease_time):
+		effect.substract_time(decrease_time)
+	else : return
+
+func increase_control_effect_hour(effect_unique_name : String, increase_time : String) -> void : ## usar el formato HH:MM
+	var effect : Effect = get_effect_res(effect_unique_name)
+	if effect == null : return
+	if effect is EffectHourControl and TimeUtils.is_valid_format(increase_time):
+		effect.add_time(increase_time)
+	else : return
 
 #endregion
 

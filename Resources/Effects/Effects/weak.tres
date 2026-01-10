@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="TemporalEffect" load_steps=6 format=3 uid="uid://b1regvog0e5nl"]
+[gd_resource type="Resource" script_class="TemporalEffect" load_steps=7 format=3 uid="uid://b1regvog0e5nl"]
 
 [ext_resource type="Script" uid="uid://cxwrfm5erroju" path="res://Resources/Effects/temporalEffect.gd" id="1_7wyev"]
+[ext_resource type="Texture2D" uid="uid://mma80df2cs8c" path="res://Assets/UI/effects/weak.png" id="1_26wfe"]
 [ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_26wfe"]
 [ext_resource type="Script" uid="uid://cy3erp2xhtbpv" path="res://Resources/Effects/time_changer.gd" id="3_agjk3"]
 
@@ -25,4 +26,5 @@ effect_display_name = "_EFFECT_WEAK_"
 render = true
 stat_changes = Array[ExtResource("2_26wfe")]([SubResource("Resource_26wfe")])
 time_changes = SubResource("Resource_hurv1")
+icon = ExtResource("1_26wfe")
 metadata/_custom_type_script = "uid://cxwrfm5erroju"

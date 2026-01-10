@@ -7,15 +7,16 @@ class_name InteractableAction
 @export var cooldown_time : String = "05:00"
 @export var cooldown_timer_message : StringChain
 @export_group("Requeriments")
-@export var task_lists : Array[String]
-@export var effect_list : Array[String]
-@export var effect_messages : StringChain
+@export var task_lists : Array[String] ## Lista de tareas por hacer
+@export var effect_list : Array[String] ## Lista de efectos requeridos
+@export var effect_messages : StringChain 
 @export var event_list : Array[String]
 @export var event_messages : StringChain
 @export_group("Cost values")
 @export var stat_req_list : Dictionary[String, int] ## usar nombre unico como por ejemplo ENERGY
 @export var stat_messages : StringChain
 @export var time_cost : String
+@export var weak_messages : StringChain
 
 var is_cooldown : bool
 var cooldown_executed : bool
@@ -55,7 +56,7 @@ func _on_end_chain() -> void :
 
 func execute() -> void :
 	can_interact = false
-
+	
 	for task_list in task_lists :
 		if TaskManager.is_task_list_active(task_list) and !TaskManager.is_task_list_done(task_list) :
 			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], TaskManager.get_task_list_message(task_list))
@@ -81,7 +82,6 @@ func execute() -> void :
 		return
 	
 	if cooldown_executed :
-		print("test")
 		if cooldown_timer_message != null:
 			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], cooldown_timer_message.get_message())
 			Dialogic.timeline_ended.connect(_on_ended_message, CONNECT_ONE_SHOT)
@@ -109,7 +109,6 @@ func disable_cooldown() -> void :
 	can_interact = true
 	cooldown_executed = false
 
-
 func check_effects() -> bool :
 	for effect : String in effect_list :
 		if !PlayerManager.has_effect(effect) : return false
@@ -122,6 +121,13 @@ func check_events() -> bool :
 
 func check_stats() -> bool :
 	for stat in stat_req_list :
-		if PlayerManager.get_stat_value(stat) < (PlayerManager.get_cost_with_effects(stat, stat_req_list[stat])) :
+		print(" hola " , stat)
+		var value = PlayerManager.get_stat_value(stat)
+		
+		if stat == "ENERGY" and PlayerManager.has_effect("WEAK") and stat_req_list[stat] >= 15 :
 			return false
+		
+		if value < (PlayerManager.get_cost_with_effects(stat, stat_req_list[stat])) :
+			return false
+				
 	return true

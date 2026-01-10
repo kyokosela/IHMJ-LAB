@@ -83,7 +83,6 @@ func set_current_time(_target_time : String) -> void:
 func is_time_higher(_query_time : String) -> bool:
 	assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
 	var times : int = get_minutes(_query_time)
-	print("comparando ", minutes, " con ", times, " da ", times > minutes)
 	return times >= minutes
 
 ## Comprueba con el parametro si el tiempo establecido es el mismo al tiempo actual del juego
@@ -96,7 +95,6 @@ func is_equal_time(_query_time : String) -> bool :
 func is_time_lower(_query_time : String) -> bool :
 	assert(TimeUtils.is_valid_format(_query_time), "Time should have a valid format")
 	var times : int = get_minutes(_query_time)
-	print("Current minutes: ",minutes, " Query Minutes: ", times )
 	return times <= minutes 
 
 ## Comprueba si el tiempo actual del juego esta dentro del rango start y end

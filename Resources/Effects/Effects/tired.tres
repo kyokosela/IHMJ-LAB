@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="Effect" load_steps=6 format=3 uid="uid://d0axcqpbpmydr"]
+[gd_resource type="Resource" script_class="Effect" load_steps=7 format=3 uid="uid://d0axcqpbpmydr"]
 
+[ext_resource type="Texture2D" uid="uid://diexq4ie2e2xs" path="res://Assets/UI/effects/tired.png" id="1_lpwx8"]
 [ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_oipsc"]
 [ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_sccih"]
 [ext_resource type="Script" uid="uid://cy3erp2xhtbpv" path="res://Resources/Effects/time_changer.gd" id="3_sccih"]
@@ -24,4 +25,5 @@ effect_display_name = "_EFFECT_TIRED_"
 render = true
 stat_changes = Array[ExtResource("2_sccih")]([SubResource("Resource_oipsc")])
 time_changes = SubResource("Resource_lpwx8")
+icon = ExtResource("1_lpwx8")
 metadata/_custom_type_script = "uid://b7krqqvmfg6wr"

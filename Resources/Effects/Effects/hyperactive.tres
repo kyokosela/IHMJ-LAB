@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Effect" load_steps=5 format=3 uid="uid://bjjg72x4dps63"]
 
-[ext_resource type="Texture2D" uid="uid://b1efx68j3npvd" path="res://Assets/UI/effects/TEST_ENERGIZED.png" id="1_f861h"]
+[ext_resource type="Texture2D" uid="uid://bp6bccl85fbs5" path="res://Assets/UI/effects/ENERGIZED.png" id="1_f861h"]
 [ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_vblmv"]
 [ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_f861h"]
 

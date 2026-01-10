@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="Effect" load_steps=4 format=3 uid="uid://ctefxi51nsxx3"]
+[gd_resource type="Resource" script_class="Effect" load_steps=5 format=3 uid="uid://ctefxi51nsxx3"]
 
+[ext_resource type="Texture2D" uid="uid://cqlmosrfc4mcu" path="res://Assets/UI/effects/hunger.png" id="1_75jho"]
 [ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_nvdfj"]
 [ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_xfa77"]
 
@@ -16,4 +17,5 @@ effect_unique_name = "HUNGER"
 effect_display_name = "_EFFECT_HUNGER_"
 render = true
 stat_changes = Array[ExtResource("2_xfa77")]([SubResource("Resource_jpd7d")])
+icon = ExtResource("1_75jho")
 metadata/_custom_type_script = "uid://b7krqqvmfg6wr"

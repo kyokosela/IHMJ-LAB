@@ -29,12 +29,16 @@ func _on_passwd_submitted(passwd: String) -> void:
 	_attempts += 1
 	input.grab_focus()
 	
+	SaveManager.save_data()
+	
 	var remaining = MAX_ATTEMPTS - _attempts
 	if remaining <= 0: _lockout()
 	else: _show_err("Coso incorrecto. Quedan %d intentos" % remaining)
 	
 	
 func _unlock() -> void:
+	_attempts = 0
+	SaveManager.save_data()
 	unlocked.emit()
 	queue_free()
 

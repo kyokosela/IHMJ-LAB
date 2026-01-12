@@ -14,6 +14,10 @@ var _attempts = 0
 const MAX_ATTEMPTS = 5
 
 func _ready() -> void:
+	if _attempts >= MAX_ATTEMPTS:
+		_lockout()
+		return
+	
 	input.grab_focus()
 	input.text_submitted.connect(_on_passwd_submitted)
 	submit_btn.pressed.connect(func(): _on_passwd_submitted(input.text))
@@ -29,8 +33,6 @@ func _on_passwd_submitted(passwd: String) -> void:
 	_attempts += 1
 	input.grab_focus()
 	
-	SaveManager.save_data()
-	
 	var remaining = MAX_ATTEMPTS - _attempts
 	if remaining <= 0: _lockout()
 	else: _show_err("Coso incorrecto. Quedan %d intentos" % remaining)
@@ -38,7 +40,6 @@ func _on_passwd_submitted(passwd: String) -> void:
 	
 func _unlock() -> void:
 	_attempts = 0
-	SaveManager.save_data()
 	unlocked.emit()
 	queue_free()
 

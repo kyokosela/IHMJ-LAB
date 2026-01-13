@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="CoffeeBehavior" load_steps=2 format=3 uid="uid://ca6a1omrxj1f8"]
+
+[ext_resource type="Script" uid="uid://b2slnwsdswgck" path="res://Resources/Items/Behaviors/coffee_behavior.gd" id="1_mn5b7"]
+
+[resource]
+script = ExtResource("1_mn5b7")
+metadata/_custom_type_script = "uid://b2slnwsdswgck"

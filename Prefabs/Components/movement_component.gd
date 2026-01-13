@@ -57,7 +57,6 @@ func _initialize():
 func _ready() -> void:
 	super()
 	tile_destination = entity.global_position
-	entity = host
 	call_deferred("_initialize")
 
 func _physics_process(delta: float):

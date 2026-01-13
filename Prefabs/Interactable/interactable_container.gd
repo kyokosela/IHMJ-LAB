@@ -30,4 +30,20 @@ func open_ui():
 func custom_execute():
 	#container.open_container o algo para que salga la UI y que esta se encargue
 	#de usar la api para cosas etc
-	open_ui()
+	
+	#craft testing, remover luego
+	var crafting_container = container as CraftingContainer
+	
+	var player : Player = area_ref.get_parent().host
+	
+	
+	player.transfer_slot_to(crafting_container,player.test_index)
+	crafting_container.craft("chopping_board")
+	crafting_container.craft("sink")
+	crafting_container.craft("stove")
+	crafting_container.craft()
+	crafting_container.return_result(player.inventory)
+	
+	
+	
+	#open_ui()

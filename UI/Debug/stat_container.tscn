@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bgpho3743di65"]
 
-[ext_resource type="Script" uid="uid://fqwv3iq6kll" path="res://Prefabs/Debug/stat_container.gd" id="1_nwwnc"]
+[ext_resource type="Script" uid="uid://fqwv3iq6kll" path="res://UI/Debug/stat_container.gd" id="1_nwwnc"]
 
 [node name="StatContainer" type="FoldableContainer" node_paths=PackedStringArray("stat_info")]
 folded = true

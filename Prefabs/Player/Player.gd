@@ -2,7 +2,9 @@ extends Entity
 class_name Player
 
 var interaction : InteractionComponent
-const MAYUI_WORK_BODY_TEST = preload("uid://cnwqcbdmj2h5j")
+@onready var spin_box: SpinBox = $CanvasLayer/Control/SpinBox
+
+var test_index = 0
 
 func _ready() -> void:
 	super()
@@ -21,17 +23,25 @@ func _on_dialogic_timeline_started():
 func _on_dialogic_timeline_ended():
 	movement.can_move = true
 
+
+#TODO: borrar this shit :sob:
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("test"):
-		add_item_by_data(preload("uid://xyia21ce8x85"))
-		add_item_by_data(preload("uid://b364ksxd3tlh0"))
 	if event.is_action_pressed("test_2"):
-		var item = get_items()
-		if !item.is_empty():
-			inventory.use_item_at(0)
+		add_item_by_data(preload("uid://dd0yw2ehhs2s5"))
+		add_item_by_data(preload("uid://bmt41wvyxm0ut"))
+		add_item_by_data(preload("uid://dn6xorxxwrnh3"))
+	if event.is_action_pressed("test"):
+		inventory.use_item_at(test_index)
+
 
 func _process(_delta: float) -> void:
 	pass
+
+func _on_spin_box_value_changed(value: float) -> void:
+	test_index = value
+	spin_box.focus_exited.emit()
+	
+
 
 # MEME
 #func random_color() -> Color:

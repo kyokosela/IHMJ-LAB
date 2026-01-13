@@ -26,19 +26,18 @@ var stat_widgets : Array[StatContainerDebug]
 var item_widgets : Dictionary[Item, ItemContainerDebug]
 
 const ENTITY_BUTTON = preload("uid://dyv1qmo2clngj") # UID MIEDO
-const STAT_CONTAINER = preload("res://Prefabs/Debug/stat_container.tscn") # UID MIEDO
+const STAT_CONTAINER = preload("uid://bgpho3743di65") # UID MIEDO
 const ITEM_CONTAINER = preload("uid://cuu2mriq75id7") # UID MIEDO
 
 var current_entity : Entity:
 	set(_v):
+		if _v._has_inventory():
+			initial_item_setup(_v)
 		current_entity = _v
-		if current_entity._has_inventory():
-			initial_item_setup(current_entity)
 
 var frame_time_ms := 0.0
 var playtime := 0.0
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	close_requested.connect(hide)
 	if !world: entity_info.hide()
@@ -53,6 +52,7 @@ func _ready() -> void:
 	PlayerManager.effect_removed.connect(_on_effect_remove)
 
 func initial_item_setup(entity: Entity) -> void:
+	if current_entity == entity: return
 	entity.inventory_container().inventory.item_added.connect(on_item_added)
 	entity.inventory_container().inventory.item_removed.connect(on_item_removed)
 	entity.inventory_container().inventory.inventory_changed.connect(item_update)
@@ -64,7 +64,6 @@ func initial_item_setup(entity: Entity) -> void:
 	
 
 func on_item_added(item: Item) -> void:
-	
 	print("ello")
 	if item_widgets.has(item):
 		return
@@ -85,7 +84,6 @@ func on_item_removed(item: Item) -> void:
 func item_update() -> void:
 	for x : ItemContainerDebug in item_widgets.values():
 		x.update()
-		
 
 func _on_effect_active(effect : Effect) -> void :
 	var _label := Label.new()

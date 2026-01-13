@@ -1,0 +1,125 @@
+[gd_resource type="Resource" script_class="Crafts" load_steps=32 format=3 uid="uid://0d6wlye7spvj"]
+
+[ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="1_m8bsf"]
+[ext_resource type="Script" uid="uid://d1u4chvj2k7me" path="res://Resources/Items/States/item_state.gd" id="2_lea86"]
+[ext_resource type="Script" uid="uid://do0pdg85om6vq" path="res://Resources/Items/Behaviors/consumable_behavior.gd" id="3_lxx08"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="4_hjjfm"]
+[ext_resource type="Resource" uid="uid://b5crwa3qm72eu" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_no_prep.tres" id="5_qdisv"]
+[ext_resource type="Script" uid="uid://2ayeg7yj87f6" path="res://Resources/Items/Conditions/condition_threshold.gd" id="6_6t8te"]
+[ext_resource type="Script" uid="uid://df2q5ei6ve3yq" path="res://Resources/Items/Conditions/threshold_entry.gd" id="7_yt80b"]
+[ext_resource type="Resource" uid="uid://dmk8i8fxtpbyx" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_prep.tres" id="8_x747k"]
+[ext_resource type="Resource" uid="uid://dm4jblotjlc1k" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_cooked.tres" id="9_4sc1p"]
+[ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="10_35x4l"]
+[ext_resource type="Resource" uid="uid://c3gi4rg1obavi" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_fresh.tres" id="11_y473m"]
+[ext_resource type="Resource" uid="uid://otjo218bj3mf" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_hot.tres" id="12_nncxy"]
+[ext_resource type="Resource" uid="uid://b18f3g76hqy6t" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_cold.tres" id="13_l88tb"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="14_not80"]
+[ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="15_2k4dx"]
+
+[sub_resource type="Resource" id="Resource_siwnq"]
+script = ExtResource("1_m8bsf")
+item_id = "water_pot"
+metadata/_custom_type_script = "uid://bh8urv85cwvl5"
+
+[sub_resource type="Resource" id="Resource_wr5e0"]
+script = ExtResource("3_lxx08")
+metadata/_custom_type_script = "uid://do0pdg85om6vq"
+
+[sub_resource type="Resource" id="Resource_xtnmp"]
+script = ExtResource("7_yt80b")
+state = ExtResource("5_qdisv")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_bygl2"]
+script = ExtResource("7_yt80b")
+max_value = 1.0
+state = ExtResource("8_x747k")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_6477j"]
+script = ExtResource("7_yt80b")
+max_value = 2.0
+state = ExtResource("9_4sc1p")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_6owe1"]
+script = ExtResource("6_6t8te")
+thresholds = Array[ExtResource("7_yt80b")]([SubResource("Resource_xtnmp"), SubResource("Resource_bygl2"), SubResource("Resource_6477j")])
+default_state = ExtResource("5_qdisv")
+metadata/_custom_type_script = "uid://2ayeg7yj87f6"
+
+[sub_resource type="Resource" id="Resource_brd70"]
+script = ExtResource("4_hjjfm")
+condition = "preparation"
+value = 0.0
+condition_threshold = SubResource("Resource_6owe1")
+metadata/_custom_type_script = "uid://dbp4u6dyakclb"
+
+[sub_resource type="Resource" id="Resource_tc4vf"]
+script = ExtResource("7_yt80b")
+max_value = 30.0
+state = ExtResource("12_nncxy")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_5l67o"]
+script = ExtResource("7_yt80b")
+max_value = 75.0
+state = ExtResource("11_y473m")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_56yky"]
+script = ExtResource("7_yt80b")
+max_value = 100.0
+state = ExtResource("13_l88tb")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_4u0ix"]
+script = ExtResource("6_6t8te")
+thresholds = Array[ExtResource("7_yt80b")]([SubResource("Resource_tc4vf"), SubResource("Resource_5l67o"), SubResource("Resource_56yky")])
+default_state = ExtResource("11_y473m")
+metadata/_custom_type_script = "uid://2ayeg7yj87f6"
+
+[sub_resource type="Resource" id="Resource_e8y0x"]
+script = ExtResource("10_35x4l")
+applies_to = "cold"
+multiplier = -1.0
+metadata/_custom_type_script = "uid://wotj3baput20"
+
+[sub_resource type="Resource" id="Resource_c83td"]
+script = ExtResource("10_35x4l")
+applies_to = "hot"
+metadata/_custom_type_script = "uid://wotj3baput20"
+
+[sub_resource type="Resource" id="Resource_c8hwb"]
+script = ExtResource("10_35x4l")
+applies_to = "fresh"
+multiplier = 0.0
+metadata/_custom_type_script = "uid://wotj3baput20"
+
+[sub_resource type="Resource" id="Resource_hawq2"]
+script = ExtResource("4_hjjfm")
+condition = "coldness"
+value = 0.0
+enviroment_condition = "temperature"
+modifiers = Array[ExtResource("10_35x4l")]([SubResource("Resource_e8y0x"), SubResource("Resource_c83td"), SubResource("Resource_c8hwb")])
+condition_threshold = SubResource("Resource_4u0ix")
+can_decay = true
+metadata/_custom_type_script = "uid://dbp4u6dyakclb"
+
+[sub_resource type="Resource" id="Resource_qfdhf"]
+script = ExtResource("14_not80")
+item_name = "_WATER_POT_"
+item_unique_name = "water_pot"
+item_type = 1
+behavior = SubResource("Resource_wr5e0")
+can_use = false
+custom_conditions = Array[ExtResource("4_hjjfm")]([SubResource("Resource_brd70"), SubResource("Resource_hawq2")])
+metadata/_custom_type_script = "uid://b03xnf82gb26a"
+
+[resource]
+script = ExtResource("15_2k4dx")
+needed_time = "00:45"
+needed_items = Array[ExtResource("1_m8bsf")]([SubResource("Resource_siwnq")])
+needed_util = "stove"
+result_item = SubResource("Resource_qfdhf")
+metadata/_custom_type_script = "uid://de0p0f0ihls31"

@@ -4,7 +4,7 @@ class_name ItemBehavior
 @export var can_decay : bool = true
 
 func can_use(_item: Item) -> bool:
-	return false
+	return _item.data.can_use
 
 func use(_item: Item) -> void:
 	_item.used.emit()

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://5ldxs58tuofb"]
 
-[ext_resource type="Script" uid="uid://yrrqtf82bla1" path="res://Prefabs/Debug/debug.gd" id="1_0gw8d"]
+[ext_resource type="Script" uid="uid://yrrqtf82bla1" path="res://UI/Debug/debug.gd" id="1_0gw8d"]
 
 [node name="DebugPanel" type="Window"]
 oversampling_override = 1.0

@@ -50,7 +50,7 @@ func close():
 	
 func minimize():
 	hide()
-	minimized.emit()	
+	minimized.emit()
 
 func maximize():
 	if is_maximized:

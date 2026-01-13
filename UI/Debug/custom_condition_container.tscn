@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b0f7lqvnstjs2"]
 
-[ext_resource type="Script" uid="uid://bf8tlrnlkhmb5" path="res://Prefabs/Debug/custom_condition_container.gd" id="1_sg50u"]
+[ext_resource type="Script" uid="uid://bf8tlrnlkhmb5" path="res://UI/Debug/custom_condition_container.gd" id="1_sg50u"]
 
 [node name="FoldableContainer" type="FoldableContainer"]
 folded = true

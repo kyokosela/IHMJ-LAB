@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://o384ea47yxv5" path="res://Assets/Mayui/mayui_work_legs.png" id="8_h0qm3"]
 [ext_resource type="Resource" uid="uid://c4vlc21elx4fq" path="res://Resources/SpriteStacks/Mayui/mayui_towel.tres" id="8_us0jv"]
 [ext_resource type="Texture2D" uid="uid://7ywufu1mplt2" path="res://Assets/Mayui/mayui_face.png" id="10_3j425"]
-[ext_resource type="Texture2D" uid="uid://cnwqcbdmj2h5j" path="res://Assets/Mayui/mayui_work_body-test.png" id="11_3j425"]
+[ext_resource type="Texture2D" uid="uid://cxmgoxewya4il" path="res://Assets/Mayui/mayui_work_body.png" id="11_3j425"]
 [ext_resource type="Texture2D" uid="uid://ci8n5ia3dji02" path="res://Assets/Mayui/mayui_hair.png" id="11_us0jv"]
 [ext_resource type="Texture2D" uid="uid://bhkln5nq45lwf" path="res://Assets/Mayui/mayui_eyes.png" id="12_03ewh"]
 [ext_resource type="Texture2D" uid="uid://c7xrwleix05oo" path="res://Assets/Mayui/mayui_accesories.png" id="13_hxf3l"]
@@ -214,7 +214,7 @@ metadata/_custom_type_script = "uid://ctwvwqkrwenys"
 script = ExtResource("2_8ipit")
 animation_player = NodePath("AnimationPlayer")
 custom_presets = Array[ExtResource("7_3j425")]([ExtResource("7_2lcig"), ExtResource("8_us0jv")])
-current_preset = ExtResource("8_us0jv")
+current_preset = ExtResource("7_2lcig")
 sync_hframes = 20
 sync_offset = Vector2(0, -10)
 metadata/_custom_type_script = "uid://dxbbffiau4vqt"
@@ -278,3 +278,21 @@ metadata/_custom_type_script = "uid://ducauixn8n82c"
 [node name="PlayerWalk" type="Node" parent="FSMComponent"]
 script = ExtResource("5_5virf")
 metadata/_custom_type_script = "uid://cgylbrtu8pte4"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpinBox" type="SpinBox" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_right = 86.5625
+offset_bottom = 31.0
+focus_behavior_recursive = 1
+
+[connection signal="value_changed" from="CanvasLayer/Control/SpinBox" to="." method="_on_spin_box_value_changed"]

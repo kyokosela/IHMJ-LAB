@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=16 format=3 uid="uid://dd0yw2ehhs2s5"]
+
+[ext_resource type="Script" uid="uid://do0pdg85om6vq" path="res://Resources/Items/Behaviors/consumable_behavior.gd" id="1_25cod"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="2_mmgdg"]
+[ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="3_olymb"]
+[ext_resource type="Resource" uid="uid://b5crwa3qm72eu" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_no_prep.tres" id="3_qu57g"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="4_7cv4k"]
+[ext_resource type="Script" uid="uid://2ayeg7yj87f6" path="res://Resources/Items/Conditions/condition_threshold.gd" id="4_hw52g"]
+[ext_resource type="Script" uid="uid://df2q5ei6ve3yq" path="res://Resources/Items/Conditions/threshold_entry.gd" id="5_4afty"]
+[ext_resource type="Resource" uid="uid://dmk8i8fxtpbyx" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_prep.tres" id="6_inj6a"]
+[ext_resource type="Resource" uid="uid://dm4jblotjlc1k" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_cooked.tres" id="7_ob6km"]
+
+[sub_resource type="Resource" id="Resource_abfwp"]
+script = ExtResource("1_25cod")
+metadata/_custom_type_script = "uid://do0pdg85om6vq"
+
+[sub_resource type="Resource" id="Resource_xtnmp"]
+script = ExtResource("5_4afty")
+state = ExtResource("3_qu57g")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_bygl2"]
+script = ExtResource("5_4afty")
+max_value = 1.0
+state = ExtResource("6_inj6a")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_6477j"]
+script = ExtResource("5_4afty")
+max_value = 2.0
+state = ExtResource("7_ob6km")
+metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
+
+[sub_resource type="Resource" id="Resource_6owe1"]
+script = ExtResource("4_hw52g")
+thresholds = Array[ExtResource("5_4afty")]([SubResource("Resource_xtnmp"), SubResource("Resource_bygl2"), SubResource("Resource_6477j")])
+default_state = ExtResource("3_qu57g")
+metadata/_custom_type_script = "uid://2ayeg7yj87f6"
+
+[sub_resource type="Resource" id="Resource_u84f8"]
+script = ExtResource("2_mmgdg")
+condition = "preparation"
+value = 0.0
+condition_threshold = SubResource("Resource_6owe1")
+metadata/_custom_type_script = "uid://dbp4u6dyakclb"
+
+[resource]
+script = ExtResource("4_7cv4k")
+item_name = "_COFFEE_BAG_"
+item_unique_name = "coffee_bag"
+item_type = 1
+behavior = SubResource("Resource_abfwp")
+base_decay_time = 360
+can_use = false
+custom_conditions = Array[ExtResource("2_mmgdg")]([SubResource("Resource_u84f8")])
+metadata/_custom_type_script = "uid://b03xnf82gb26a"

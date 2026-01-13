@@ -111,6 +111,12 @@ func get_time_left_to_start(_event_unique_name : String) -> String :
 		return ""
 	return TimeManager.time_left_to(event.hour)
 
+func get_time_left_to_end(_event_unique_name: String) -> String:
+	var event : LapseEvent = get_event(_event_unique_name)
+	if event == null or event is not LapseEvent:
+		return ""
+	return event.timer_count
+
 ## Establece como hecho un evento
 func check_event(_event_unique_name : String) -> void :
 	var event = get_event(_event_unique_name)
@@ -146,7 +152,5 @@ func reset_lapse_event(event_unique_name : String) -> void : ## Asegurate de que
 	var event = get_event(event_unique_name)
 	if event is not LapseEvent : printerr(" el evento que se quiere resetear no es de tipo LapseEvent");return
 	event.reset_lapse()
-
-
 
 #endregion

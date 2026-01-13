@@ -5,9 +5,6 @@ const CONDITION_GOOD = preload("uid://xgsygm562hoc")
 const CONDITION_BAD = preload("uid://bnjmcea38ho8i")
 const CONDITION_ROTTEN = preload("uid://bilf2i6cga502")
 
-func can_use(_item: Item) -> bool:
-	return true
-
 func update_states(_item: Item) -> void:
 	super(_item)
 	if _item.condition > 40: _item.add_state(CONDITION_GOOD)
@@ -21,5 +18,6 @@ func update_states(_item: Item) -> void:
 		can_decay = false
 
 func use(_item: Item) -> void:
+	if !can_use(_item): return
 	super(_item)
 	_item.data.uses -= 1

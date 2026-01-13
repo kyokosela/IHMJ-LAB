@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ctagwp38abn4u" path="res://Prefabs/walls/floors.tscn" id="2_npy7o"]
 [ext_resource type="PackedScene" uid="uid://b2w4stq2ucdlo" path="res://Prefabs/walls/walls.tscn" id="3_u6rxl"]
 [ext_resource type="Script" uid="uid://b7onn6eqa0glu" path="res://Scripts/HouseInteracts/bed.gd" id="5_ipdnw"]
-[ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="5_npy7o"]
+[ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://UI/Debug/debug_panel.tscn" id="5_npy7o"]
 [ext_resource type="Script" uid="uid://c2qbhsn6tgmrc" path="res://Resources/StringChain/string_chain.gd" id="7_fikvc"]
 [ext_resource type="Script" uid="uid://big4o7sjh0g0y" path="res://Scripts/HouseInteracts/bathe.gd" id="7_ipdnw"]
 [ext_resource type="Script" uid="uid://cdqqyuliu6jyp" path="res://Resources/StringChain/string_chain_array.gd" id="8_ipdnw"]

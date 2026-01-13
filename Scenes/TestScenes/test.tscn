@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://tcey4tkkfvd8" path="res://Prefabs/Player/Player.tscn" id="3_ks5fe"]
 [ext_resource type="Script" uid="uid://btpm0l5mnnxxf" path="res://Prefabs/Interactable/interactable_container.gd" id="4_porce"]
 [ext_resource type="Resource" uid="uid://bf77bgsmc4sua" path="res://DialoguePlugin/TIMELINE/test.dtl" id="5_l3fqk"]
-[ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://Prefabs/Debug/debug_panel.tscn" id="7_sdauk"]
+[ext_resource type="PackedScene" uid="uid://5ldxs58tuofb" path="res://UI/Debug/debug_panel.tscn" id="7_sdauk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7bjt1"]
 texture = ExtResource("2_55kiy")

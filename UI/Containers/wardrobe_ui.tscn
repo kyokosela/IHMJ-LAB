@@ -190,7 +190,7 @@ script = ExtResource("1_1r4s0")
 entity = NodePath("Entity")
 
 [node name="Entity" type="CharacterBody2D" parent="."]
-position = Vector2(376.00003, 544.00006)
+position = Vector2(520, 650)
 scale = Vector2(10, 10)
 script = ExtResource("2_jqbpu")
 metadata/_custom_type_script = "uid://bwwsmokf0q8y2"
@@ -264,6 +264,7 @@ expand_mode = 3
 stretch_mode = 5
 
 [node name="TextureRect3" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -276,6 +277,7 @@ stretch_mode = 5
 script = ExtResource("15_d6yee")
 
 [node name="TextureRect4" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

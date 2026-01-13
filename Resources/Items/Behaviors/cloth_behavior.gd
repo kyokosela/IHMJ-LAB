@@ -1,7 +1,6 @@
 extends ItemBehavior
 class_name ClothBehavior
 
-#@export var cloth_data : ClothData
 @export var preset : SpritePreset
 
 func can_use(_item: Item) -> bool:
@@ -9,6 +8,7 @@ func can_use(_item: Item) -> bool:
 	return player != null
 
 func use(_item: Item):
+	if !can_use(_item): return
 	super(_item)
 	PlayerManager.player.change_preset(preset)
 

@@ -67,7 +67,7 @@ func remove_item(item: Item) -> bool:
 	return _has_inventory() and inventory.remove_item(item)
 	
 func has_item(item_data: ItemData) -> bool:
-	return _has_inventory() and inventory.has_item(item_data, 1)
+	return _has_inventory() and inventory.has_item(item_data)
 
 func get_item_by_name(unique_name: String) -> Item:
 	return inventory.get_item_instance_by_name(unique_name) if _has_inventory() else null
@@ -95,7 +95,6 @@ func transfer_item_to(target: InventoryContainer, item: Item) -> bool:
 	
 func transfer_slot_to(target: InventoryContainer, index: int) -> bool:
 	return _has_inventory() and inventory.transfer_slot_to(target, index)
-
 
 func clear_inventory() -> void:
 	if _has_inventory(): inventory.clear()

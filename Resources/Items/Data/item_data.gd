@@ -26,6 +26,7 @@ enum QUALITY {
 @export var base_decay_time : int = 1 ## Determina el tiempo base en el que un objeto se deteriorara en condiciones bases (minutos).
 @export var modifiers : Array[ConditionModifier] ## Modificadores por ambientes que aplicara este item
 @export var consume_after_use : bool = false
+@export var can_use : bool = true
 @export var uses : int = 1
 @export var unique_item : bool = false
 @export var custom_conditions : Array[CustomCondition]

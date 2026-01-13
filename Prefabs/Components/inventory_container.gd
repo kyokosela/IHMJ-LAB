@@ -73,8 +73,8 @@ func transfer_slot_to(target: InventoryContainer, slot_index: int) -> bool:
 func get_all_items() -> Array[Item]:
 	return inventory.get_items()
 	
-func has_item(data: ItemData, amount := 1) -> bool:
-	return inventory.count_item_data(data) >= amount
+func has_item(data: ItemData) -> bool:
+	return inventory.has_item_data(data) 
 
 func count_item(data: ItemData) -> int:
 	return inventory.count_item_data(data)
@@ -92,9 +92,10 @@ func get_slot(index: int) -> InventorySlot:
 func use_item_at(slot_index: int):
 	var slot : InventorySlot = get_slot(slot_index)
 	var item = slot.item
+	if item == null: return
 	var behavior = item.data.behavior
-	print(item == null)
-	if not behavior.can_use(item) or item.data.uses <= 0 or item == null: return
+	print(behavior.can_use(item))
+	if not behavior.can_use(item) or item.data.uses <= 0: return
 	behavior.use(item)
 	if item.data.uses <= 0:
 		if item.data.consume_after_use:

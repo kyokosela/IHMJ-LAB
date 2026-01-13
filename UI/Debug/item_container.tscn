@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cuu2mriq75id7"]
 
-[ext_resource type="Script" uid="uid://coy8mlwtnhgva" path="res://Prefabs/Debug/item_container.gd" id="1_xw451"]
+[ext_resource type="Script" uid="uid://coy8mlwtnhgva" path="res://UI/Debug/item_container.gd" id="1_xw451"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_k4n5k"]
 

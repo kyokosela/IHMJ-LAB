@@ -74,8 +74,7 @@ func _on_mail_completed(wrapper: Control, data: MailEntry) -> void:
 	
 	if uid not in finished_mails:
 		finished_mails.append(uid)
-		SaveManager.save_data()
-	
+		
 	for child in wrapper.get_children(): child.queue_free()
 	_show_solved(wrapper)
 	

@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://daeboh627voor"]
+[gd_scene load_steps=5 format=3 uid="uid://daeboh627voor"]
 
 [ext_resource type="Script" uid="uid://drw6wke2i3kw1" path="res://Prefabs/Workspace/Computer/Apps/Login/login.gd" id="1_xmxxw"]
 [ext_resource type="Shader" uid="uid://7q3c2uor7gwr" path="res://Assets/Shaders/blur.gdshader" id="2_ernab"]
+[ext_resource type="Script" uid="uid://dpxpbvvq6y80g" path="res://Prefabs/Components/save_component.gd" id="2_ykq1l"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ykq1l"]
 shader = ExtResource("2_ernab")
@@ -10,6 +11,12 @@ shader_parameter/tint_color = Color(0, 0, 0, 0.78431374)
 
 [node name="Login" type="CanvasLayer"]
 script = ExtResource("1_xmxxw")
+
+[node name="SaveComponent" type="Node" parent="."]
+script = ExtResource("2_ykq1l")
+uid = "app:login"
+props_to_save = Array[String](["_attempts"])
+metadata/_custom_type_script = "uid://dpxpbvvq6y80g"
 
 [node name="Blur" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_ykq1l")

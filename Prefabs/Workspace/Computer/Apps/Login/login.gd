@@ -14,6 +14,10 @@ var _attempts = 0
 const MAX_ATTEMPTS = 5
 
 func _ready() -> void:
+	if _attempts >= MAX_ATTEMPTS:
+		_lockout()
+		return
+	
 	input.grab_focus()
 	input.text_submitted.connect(_on_passwd_submitted)
 	submit_btn.pressed.connect(func(): _on_passwd_submitted(input.text))
@@ -35,6 +39,7 @@ func _on_passwd_submitted(passwd: String) -> void:
 	
 	
 func _unlock() -> void:
+	_attempts = 0
 	unlocked.emit()
 	queue_free()
 

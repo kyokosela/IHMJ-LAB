@@ -20,28 +20,18 @@ var is_on_tutorial : bool
 func _ready() -> void:
 	if create_log :
 		var array = Time.get_date_dict_from_system().values() + Time.get_time_dict_from_system().values()
-		log_file_name = str("res://log/" + "%s-%s-%s-%s (%sh%sm%ss)" % array) + ".txt"
+		log_file_name = str("user://log/" + "%s-%s-%s-%s (%sh%sm%ss)" % array) + ".txt"
 		setup_log()
 
 func _process(_delta: float) -> void:
 	fps = Engine.get_frames_per_second()
 
 #region FILE SYSTEM
-
-# FILE  CONTROL
-const SAVE_PATHS : Array[String] = [
-	"user://saves/save1.sv",
-	"user://saves/save2.sv",
-	"user://saves/save3.sv"
-]
-
-var file_count = 0
-var current_file_path : String
-var game_data : Dictionary
-
-func new_game() -> void :
-	#TODO creacion de archivos
+func new_game() -> void:
 	is_on_tutorial = true
+	
+	SaveManager._global.clear()
+	
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
 	
@@ -49,24 +39,17 @@ func new_game() -> void :
 	EventManager.create_lapse_event("06:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/hunger.tres")), "AUTO_HUNGER_LAPSE", "HUNGER_TIMER", true)
 	EventManager.create_lapse_event("16:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/sleepy.tres")), "AUTO_SLEEPY_LAPSE", "SLEEPY_TIMER", true)
 	
-func load_file(save_id : int) -> void : ## MAX 2 en el parametro
-	var file = FileAccess.open(SAVE_PATHS[save_id], FileAccess.READ)
-	var data : Dictionary = file.get_var(true)
-	if data.is_empty() :
-		game_data = {
-		}
-	file.close()
+## Inicia a partir de 1 2
+func save_file(slot_id : int) -> void:
+	var slot_name = "save_%d" % (slot_id + 1)
+	SaveManager.save_to_disk(slot_name)
 
-func save_file(save_id : int) -> void :
-	if game_data.is_empty() : return
-	var file = FileAccess.open(SAVE_PATHS[save_id], FileAccess.WRITE)
-	file.store_var(game_data, true)
-	file.close()
-
+func load_file(slot_id : int) -> void :
+	var slot_name = "save_%d" % (slot_id + 1)
+	SaveManager.load_from_disk(slot_name)
 #endregion
 
 #region DEBUG SYSTEM
-
 var current_sesion : FileAccess
 
 func setup_log() -> void :
@@ -97,9 +80,21 @@ func write_line_log(line : String) -> void : ## escribe una linea a registrar en
 	
 #endregion
 
+#region UTILS
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST :
 		if create_log and current_sesion != null:
 			write_line_log("END CORRECTLY")
 			current_sesion.close()
 			current_sesion = null
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not OS.is_debug_build(): return
+	
+	if event.is_action_pressed("debug_save"):
+		save_file(0)
+		
+	if event.is_action_pressed("debug_load"):
+		load_file(0)
+		get_tree().reload_current_scene()
+#endregion

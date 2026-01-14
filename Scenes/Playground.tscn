@@ -106,7 +106,7 @@ interaction_name = "BATH"
 is_cooldown_at_execute = true
 cooldown_timer_message = SubResource("Resource_st1l6")
 stat_req_list = Dictionary[String, int]({
-"ENERGY": 10
+"ENERGY": 5
 })
 stat_messages = SubResource("Resource_jefqp")
 time_cost = "00:20"

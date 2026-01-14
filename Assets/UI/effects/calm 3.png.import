@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b1efx68j3npvd"
-path="res://.godot/imported/TEST_ENERGIZED.png-9e4e24b1bcb6774b9bcf6329f5ebd9af.ctex"
+uid="uid://ba5vgdeehqagn"
+path="res://.godot/imported/calm 3.png-57e54417b1280552a34cd252abf958bf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI/effects/TEST_ENERGIZED.png"
-dest_files=["res://.godot/imported/TEST_ENERGIZED.png-9e4e24b1bcb6774b9bcf6329f5ebd9af.ctex"]
+source_file="res://Assets/UI/effects/calm 3.png"
+dest_files=["res://.godot/imported/calm 3.png-57e54417b1280552a34cd252abf958bf.ctex"]
 
 [params]
 

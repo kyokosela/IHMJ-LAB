@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="Effect" load_steps=3 format=3 uid="uid://bnne5oxs1330j"]
+[gd_resource type="Resource" script_class="Effect" load_steps=4 format=3 uid="uid://bnne5oxs1330j"]
 
+[ext_resource type="Texture2D" uid="uid://dfekgu27u8oms" path="res://Assets/UI/effects/dirty.png" id="1_pi13k"]
 [ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_u0ugd"]
 [ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_ilrkb"]
 
@@ -8,4 +9,5 @@ script = ExtResource("1_u0ugd")
 effect_unique_name = "SMELLY"
 effect_display_name = "_EFFECT_SMELLY_"
 render = true
+icon = ExtResource("1_pi13k")
 metadata/_custom_type_script = "uid://b7krqqvmfg6wr"

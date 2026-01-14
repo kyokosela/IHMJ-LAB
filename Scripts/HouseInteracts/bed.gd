@@ -4,4 +4,4 @@ extends InteractableAction
 func custom_execute():
 	super()
 	
-	PlayerManager.sleep()
+	PlayerManager.sleep("01:00")

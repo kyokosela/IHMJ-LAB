@@ -1,60 +1,78 @@
 extends InventoryContainer
 class_name CraftingContainer
 
-signal _crafting_changed
+@warning_ignore("unused_signal")
+signal crafting_changed
+signal craft_completed(result: Item)
 
 @export var available_crafts : Array[Crafts]
 @export var crafting_utils : Array[String]
 
 var current_craft : Crafts
-		
 var result : Item
+
+#TODO: añadir los fokin return item de llos coffee mug (la olla desaparece mrc)
 
 func _ready():
 	super()
 
-func get_craft_preview(util : String = "") -> Item:
-	var current_items : Array[Item] = get_all_items()
+func find_matching_craft(items: Array[Item], util: String = "") -> Dictionary:
 	for recipe in available_crafts:
-		var matched_indices : Array[int] = []
-		var util_check : bool
+		var indices : Array[int] = []
 		
-		if recipe.check_order:
-			matched_indices = ordered_craft(recipe, current_items)
-		else:
-			matched_indices = unordered_craft(recipe, current_items)
+		if recipe.check_order: indices = ordered_craft(recipe, items)
+		else: indices = unordered_craft(recipe, items)
 		
-		util_check = util == recipe.needed_util
+		if indices.is_empty(): continue
 		
-		if matched_indices.size() > 0 and util_check:
-			var preview_item = recipe.result_item.duplicate()
-			return preview_item
-	return null
+		if not _check_util(recipe, util): continue
+		
+		return {
+			"recipe": recipe,
+			"indices": indices
+		}
+	return {}
 
-func craft(util : String = "") -> void:
-	var items : Array[Item] = get_all_items()
-	for crafts in available_crafts:
-		var match_indices : Array[int] = []
-		var util_check : bool
-		
-		if crafts.check_order: match_indices = ordered_craft(crafts, items)
-		else: match_indices = unordered_craft(crafts, items)
-		
-		util_check = util == crafts.needed_util and util in crafting_utils
-		if util == "" and crafts.needed_util == "": util_check = true
-		
-		print(crafts.result_item.item_name, match_indices,util_check)
-		
-		if match_indices.size() >= crafts.needed_items.size() and util_check:
-			if crafts.needed_time != "00:00":
-				if current_craft != crafts: EventManager.remove_event("COOKING_TIME")
-				EventManager.create_lapse_event(crafts.needed_time,_execute_craft.bind(crafts,match_indices),"COOKING_TIME", "Cooking",false, true, true)
-				current_craft = crafts
-			else:
-				EventManager.remove_event("COOKING_TIME")
-				_execute_craft(crafts, match_indices)
-			return
-	if EventManager.is_event_active("COOKING_TIME"): EventManager.remove_event("COOKING_TIME")
+func craft(util: String = "") -> void:
+	var matched = find_matching_craft(get_all_items(), util)
+	
+	if matched.is_empty():
+		_cancel_cooking()
+		return
+	
+	var recipe : Crafts = matched.recipe
+	var indices : Array[int] = matched.indices
+	
+	if recipe.needed_time != "00:00":
+		_start_cooking(recipe, indices)
+	else:
+		_execute_craft(recipe, indices)
+
+func _start_cooking(recipe: Crafts, indices: Array[int]):
+	if current_craft == recipe and EventManager.is_event_active("COOKING_TIME"):
+		return
+	
+	EventManager.remove_event("COOKING_TIME")
+	EventManager.create_lapse_event(
+		recipe.needed_time,
+		_execute_craft.bind(recipe, indices),
+		"COOKING_TIME",
+		"Cooking",
+		false,
+		true,
+		true
+	)
+	current_craft = recipe
+
+func _cancel_cooking():
+	if EventManager.is_event_active("COOKING_TIME"):
+		EventManager.remove_event("COOKING_TIME")
+	current_craft = null
+
+func _check_util(recipe: Crafts, util: String) -> bool:
+	if recipe.needed_util == "" and util == "":
+		return true
+	return util == recipe.needed_util and util in crafting_utils
 
 func _execute_craft(recipe : Crafts, match_indices):
 	for i in range(recipe.needed_items.size()):
@@ -74,6 +92,7 @@ func _execute_craft(recipe : Crafts, match_indices):
 	
 	result = final_result
 	current_craft = null
+	craft_completed.emit(result)
 	print("crafteo exitoso: ", result.data.item_unique_name)
 
 func unordered_craft(crafts: Crafts, items: Array[Item]) -> Array[int]:

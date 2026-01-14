@@ -13,7 +13,6 @@ metadata/_custom_type_script = "uid://bh8urv85cwvl5"
 
 [resource]
 script = ExtResource("1_vq45f")
-needed_time = "10:00"
 needed_items = Array[ExtResource("1_xqb5t")]([SubResource("Resource_u81w5")])
 needed_util = "chopping_board"
 result_item = ExtResource("2_u81w5")

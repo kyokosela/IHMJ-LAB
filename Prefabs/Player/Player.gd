@@ -30,6 +30,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		add_item_by_data(preload("uid://dd0yw2ehhs2s5"))
 		add_item_by_data(preload("uid://bmt41wvyxm0ut"))
 		add_item_by_data(preload("uid://dn6xorxxwrnh3"))
+		sprite.change_layer("body",preload("uid://cnwqcbdmj2h5j"))
 	if event.is_action_pressed("test"):
 		inventory.use_item_at(test_index)
 

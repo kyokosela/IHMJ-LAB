@@ -7,7 +7,6 @@ signal slot_changed(slot_index: int)
 signal inventory_changed
 
 @export var size : int = 10
-var equipment_slots : Array
 var slots : Array[InventorySlot] = []
 
 func _ready() -> void:

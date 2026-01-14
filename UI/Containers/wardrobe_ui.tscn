@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dd0p5w6n0rqyj"]
+[gd_scene load_steps=28 format=3 uid="uid://dd0p5w6n0rqyj"]
 
 [ext_resource type="Script" uid="uid://dfn7rhufpg4au" path="res://UI/Containers/wardrobe_ui.gd" id="1_1r4s0"]
 [ext_resource type="Texture2D" uid="uid://pmc6kpm5dlqn" path="res://Assets/UI/Wardrobe/wardrobe.png" id="2_bbh5u"]
@@ -10,16 +10,12 @@
 [ext_resource type="Resource" uid="uid://cgiarn82yn77y" path="res://Resources/SpriteStacks/Mayui/mayui_work.tres" id="5_ncci6"]
 [ext_resource type="Texture2D" uid="uid://m536wj2mt2j" path="res://Assets/UI/Wardrobe/uniform_clean.png" id="5_vxjan"]
 [ext_resource type="Resource" uid="uid://c4vlc21elx4fq" path="res://Resources/SpriteStacks/Mayui/mayui_towel.tres" id="6_fifye"]
-[ext_resource type="Texture2D" uid="uid://cyvj3a00s2wbf" path="res://Assets/UI/Wardrobe/uniform_selection.png" id="6_oosw4"]
 [ext_resource type="Texture2D" uid="uid://o384ea47yxv5" path="res://Assets/Mayui/mayui_work_legs.png" id="7_kdcjt"]
 [ext_resource type="Texture2D" uid="uid://cxmgoxewya4il" path="res://Assets/Mayui/mayui_work_body.png" id="8_1ryp7"]
 [ext_resource type="Texture2D" uid="uid://7ywufu1mplt2" path="res://Assets/Mayui/mayui_face.png" id="9_08ng1"]
 [ext_resource type="Texture2D" uid="uid://ci8n5ia3dji02" path="res://Assets/Mayui/mayui_hair.png" id="10_6eac2"]
 [ext_resource type="Texture2D" uid="uid://bhkln5nq45lwf" path="res://Assets/Mayui/mayui_eyes.png" id="11_nu4ag"]
 [ext_resource type="Texture2D" uid="uid://c7xrwleix05oo" path="res://Assets/Mayui/mayui_accesories.png" id="12_es8mf"]
-[ext_resource type="Script" uid="uid://ci5gg5jsrh87o" path="res://UI/Containers/clothes_drag.gd" id="15_d6yee"]
-[ext_resource type="Texture2D" uid="uid://j7iyywrr7a5v" path="res://Assets/UI/Wardrobe/blouse_selection.png" id="16_ncci6"]
-[ext_resource type="Texture2D" uid="uid://bpw8nabdqttjf" path="res://Assets/UI/Wardrobe/basket_full_selection.png" id="19_fifye"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d53a4"]
 size = Vector2(8, 9.599998)
@@ -180,7 +176,7 @@ _data = {
 &"walk_up": SubResource("Animation_3j425")
 }
 
-[node name="WardrobeUI" type="Control" node_paths=PackedStringArray("entity")]
+[node name="WardrobeUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -188,12 +184,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_1r4s0")
-entity = NodePath("Entity")
 
 [node name="Entity" type="CharacterBody2D" parent="."]
-position = Vector2(520, 650)
-scale = Vector2(10, 10)
+position = Vector2(612, 831)
+scale = Vector2(20.384626, 20.384626)
 script = ExtResource("2_jqbpu")
 metadata/_custom_type_script = "uid://bwwsmokf0q8y2"
 
@@ -253,7 +247,7 @@ libraries = {
 }
 speed_scale = 1.5
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="WardrobeImage" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -265,27 +259,56 @@ texture = ExtResource("2_bbh5u")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="UniformContour" type="Sprite2D" parent="."]
-position = Vector2(1397, 592)
-texture = ExtResource("6_oosw4")
+[node name="UniformSlot" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_1r4s0")
 
-[node name="Uniform" type="Sprite2D" parent="UniformContour"]
+[node name="UniformContour" type="Control" parent="UniformSlot"]
+anchors_preset = 0
+offset_left = 1408.0
+offset_top = 594.0
+offset_right = 1408.0
+offset_bottom = 594.0
+mouse_filter = 2
+
+[node name="Uniform" type="Sprite2D" parent="UniformSlot/UniformContour"]
 position = Vector2(31, -2)
 texture = ExtResource("5_vxjan")
 
-[node name="BlouseContour" type="Sprite2D" parent="."]
-position = Vector2(1639, 616)
-texture = ExtResource("16_ncci6")
+[node name="BlouseSlot" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_1r4s0")
 
-[node name="Blouse" type="Sprite2D" parent="BlouseContour"]
+[node name="BlouseContour" type="Control" parent="BlouseSlot"]
+anchors_preset = 0
+offset_left = 1639.0
+offset_top = 616.0
+offset_right = 1639.0
+offset_bottom = 616.0
+mouse_filter = 2
+
+[node name="Blouse" type="Sprite2D" parent="BlouseSlot/BlouseContour"]
 position = Vector2(28, -39)
 texture = ExtResource("3_sh32p")
-script = ExtResource("15_d6yee")
 
-[node name="BasketContour" type="Sprite2D" parent="."]
-position = Vector2(1370, 988)
-texture = ExtResource("19_fifye")
+[node name="BasketSlot" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_1r4s0")
 
-[node name="Basket" type="Sprite2D" parent="BasketContour"]
+[node name="BasketContour" type="Control" parent="BasketSlot"]
+anchors_preset = 0
+offset_left = 1370.0
+offset_top = 988.0
+offset_right = 1370.0
+offset_bottom = 988.0
+mouse_filter = 2
+
+[node name="Basket" type="Sprite2D" parent="BasketSlot/BasketContour"]
 position = Vector2(1, 10)
 texture = ExtResource("4_cwatp")

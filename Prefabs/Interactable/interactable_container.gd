@@ -5,6 +5,8 @@ class_name InteractableContainer
 @export_group("Inventory")
 @export var initial_items: Array[ItemData]
 @export var container_ui : ContainerUI
+
+var entity_container_ref : InventoryContainer
 var container: InventoryContainer
 
 func _ready() -> void:
@@ -35,7 +37,8 @@ func custom_execute():
 	var crafting_container = container as CraftingContainer
 	
 	var player : Player = area_ref.get_parent().host
-	
+	entity_container_ref = player.inventory
+	crafting_container.entity_container_ref = entity_container_ref
 	
 	player.transfer_slot_to(crafting_container,player.test_index)
 	crafting_container.craft("chopping_board")

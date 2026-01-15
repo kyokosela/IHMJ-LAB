@@ -8,6 +8,7 @@ signal craft_completed(result: Item)
 @export var available_crafts : Array[Crafts]
 @export var crafting_utils : Array[String]
 
+var entity_container_ref : InventoryContainer
 var current_craft : Crafts
 var result : Item
 
@@ -15,6 +16,14 @@ var result : Item
 
 func _ready():
 	super()
+
+func add_util(util : String = ""):
+	if util == "" or util in crafting_utils: return
+	crafting_utils.append(util)
+
+func remove_util(util : String = ""):
+	if util == "" or util not in crafting_utils: return
+	crafting_utils.erase(util)
 
 func find_matching_craft(items: Array[Item], util: String = "") -> Dictionary:
 	for recipe in available_crafts:
@@ -34,6 +43,7 @@ func find_matching_craft(items: Array[Item], util: String = "") -> Dictionary:
 	return {}
 
 func craft(util: String = "") -> void:
+	if entity_container_ref == null: return
 	var matched = find_matching_craft(get_all_items(), util)
 	
 	if matched.is_empty():
@@ -51,7 +61,6 @@ func craft(util: String = "") -> void:
 func _start_cooking(recipe: Crafts, indices: Array[int]):
 	if current_craft == recipe and EventManager.is_event_active("COOKING_TIME"):
 		return
-	
 	EventManager.remove_event("COOKING_TIME")
 	EventManager.create_lapse_event(
 		recipe.needed_time,
@@ -75,23 +84,25 @@ func _check_util(recipe: Crafts, util: String) -> bool:
 	return util == recipe.needed_util and util in crafting_utils
 
 func _execute_craft(recipe : Crafts, match_indices):
+	if result != null: print("craft override!!")
 	for i in range(recipe.needed_items.size()):
 		var slot_index : int = match_indices[i]
 		var req : CraftSlot = recipe.needed_items[i]
 		
 		if req.item_return != null:
-			var return_obj = req.item_return.duplicate()
-			if req.state_return != null:
-				return_obj.add_state(req.state_return)
+			var return_obj = Item.new(req.item_return.duplicate())
+			var custom_conditions = get_slot(slot_index).item.data.custom_conditions
+			return_obj.data.custom_conditions = custom_conditions
 			get_slot(slot_index).item = return_obj
+			transfer_slot_to(entity_container_ref,slot_index)
 		else:
 			get_slot(slot_index).clear()
 			
 	var final_result = Item.new(recipe.result_item.duplicate())
 	
-	
 	result = final_result
 	current_craft = null
+	
 	craft_completed.emit(result)
 	print("crafteo exitoso: ", result.data.item_unique_name)
 
@@ -127,7 +138,6 @@ func ordered_craft(crafts : Crafts, items : Array[Item]) -> Array[int]:
 func return_result(container : InventoryContainer):
 	if result == null or container == null: return
 	
-	add_item(result)
-	transfer_to(container,result)
+	container.add_item(result)
 	
 	result = null

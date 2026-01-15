@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="Crafts" load_steps=21 format=3 uid="uid://co6yb11tybr8j"]
+[gd_resource type="Resource" script_class="Crafts" load_steps=20 format=3 uid="uid://co6yb11tybr8j"]
 
 [ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="1_7rryt"]
-[ext_resource type="Script" uid="uid://d1u4chvj2k7me" path="res://Resources/Items/States/item_state.gd" id="2_nyioe"]
 [ext_resource type="Script" uid="uid://do0pdg85om6vq" path="res://Resources/Items/Behaviors/consumable_behavior.gd" id="3_r62n2"]
 [ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="4_odnih"]
 [ext_resource type="Resource" uid="uid://b5crwa3qm72eu" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_no_prep.tres" id="5_uvcci"]

@@ -64,6 +64,7 @@ position = Vector2(80, 80)
 zoom = Vector2(2, 2)
 
 [node name="DebugPanel" parent="." node_paths=PackedStringArray("world") instance=ExtResource("5_yw1yi")]
+visible = false
 world = NodePath("..")
 
 [node name="Wardrobe" type="Area2D" parent="." node_paths=PackedStringArray("container_ui")]

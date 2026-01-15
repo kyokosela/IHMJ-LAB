@@ -3,8 +3,7 @@ class_name CraftSlot
 
 @export var item_id : String
 @export var required_states: Array[String]
-@export var item_return : Item
-@export var state_return : Array[ItemState]
+@export var item_return : ItemData
 
 func matches(item: Item)-> bool:
 	if item.data.item_unique_name != item_id:

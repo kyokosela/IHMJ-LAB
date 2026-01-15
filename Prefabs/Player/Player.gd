@@ -23,7 +23,6 @@ func _on_dialogic_timeline_started():
 func _on_dialogic_timeline_ended():
 	movement.can_move = true
 
-
 #TODO: borrar this shit :sob:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("test_2"):

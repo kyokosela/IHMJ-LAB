@@ -85,7 +85,6 @@ func sleep(hour_deal : String = "00:00") -> void :
 	
 	
 	await TransitionManager.transition_finished
-
 #endregion
 
 #region LOGIC

@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="Crafts" load_steps=33 format=3 uid="uid://tg6dv6m30ggn"]
+[gd_resource type="Resource" script_class="Crafts" load_steps=32 format=3 uid="uid://tg6dv6m30ggn"]
 
 [ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="1_uhfak"]
-[ext_resource type="Script" uid="uid://d1u4chvj2k7me" path="res://Resources/Items/States/item_state.gd" id="2_sx8h5"]
 [ext_resource type="Script" uid="uid://do0pdg85om6vq" path="res://Resources/Items/Behaviors/consumable_behavior.gd" id="3_ufoxw"]
 [ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="4_h6yfb"]
 [ext_resource type="Resource" uid="uid://b5crwa3qm72eu" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_no_prep.tres" id="5_5cxfa"]
@@ -31,26 +30,26 @@ metadata/_custom_type_script = "uid://bh8urv85cwvl5"
 script = ExtResource("3_ufoxw")
 metadata/_custom_type_script = "uid://do0pdg85om6vq"
 
-[sub_resource type="Resource" id="Resource_xtnmp"]
+[sub_resource type="Resource" id="Resource_uhfak"]
 script = ExtResource("7_xftcu")
 state = ExtResource("5_5cxfa")
 metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
 
-[sub_resource type="Resource" id="Resource_bygl2"]
+[sub_resource type="Resource" id="Resource_sx8h5"]
 script = ExtResource("7_xftcu")
 max_value = 1.0
 state = ExtResource("8_hjfye")
 metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
 
-[sub_resource type="Resource" id="Resource_6477j"]
+[sub_resource type="Resource" id="Resource_ufoxw"]
 script = ExtResource("7_xftcu")
 max_value = 2.0
 state = ExtResource("9_4iu8j")
 metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
 
-[sub_resource type="Resource" id="Resource_6owe1"]
+[sub_resource type="Resource" id="Resource_h6yfb"]
 script = ExtResource("6_ntmba")
-thresholds = Array[ExtResource("7_xftcu")]([SubResource("Resource_xtnmp"), SubResource("Resource_bygl2"), SubResource("Resource_6477j")])
+thresholds = Array[ExtResource("7_xftcu")]([SubResource("Resource_uhfak"), SubResource("Resource_sx8h5"), SubResource("Resource_ufoxw")])
 default_state = ExtResource("5_5cxfa")
 metadata/_custom_type_script = "uid://2ayeg7yj87f6"
 
@@ -58,45 +57,45 @@ metadata/_custom_type_script = "uid://2ayeg7yj87f6"
 script = ExtResource("4_h6yfb")
 condition = "preparation"
 value = 0.0
-condition_threshold = SubResource("Resource_6owe1")
+condition_threshold = SubResource("Resource_h6yfb")
 metadata/_custom_type_script = "uid://dbp4u6dyakclb"
 
-[sub_resource type="Resource" id="Resource_tc4vf"]
+[sub_resource type="Resource" id="Resource_5cxfa"]
 script = ExtResource("7_xftcu")
 max_value = 30.0
 state = ExtResource("12_m6f28")
 metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
 
-[sub_resource type="Resource" id="Resource_5l67o"]
+[sub_resource type="Resource" id="Resource_ntmba"]
 script = ExtResource("7_xftcu")
 max_value = 75.0
 state = ExtResource("11_0jga0")
 metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
 
-[sub_resource type="Resource" id="Resource_56yky"]
+[sub_resource type="Resource" id="Resource_xftcu"]
 script = ExtResource("7_xftcu")
 max_value = 100.0
 state = ExtResource("13_iwuhk")
 metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
 
-[sub_resource type="Resource" id="Resource_4u0ix"]
+[sub_resource type="Resource" id="Resource_hjfye"]
 script = ExtResource("6_ntmba")
-thresholds = Array[ExtResource("7_xftcu")]([SubResource("Resource_tc4vf"), SubResource("Resource_5l67o"), SubResource("Resource_56yky")])
+thresholds = Array[ExtResource("7_xftcu")]([SubResource("Resource_5cxfa"), SubResource("Resource_ntmba"), SubResource("Resource_xftcu")])
 default_state = ExtResource("11_0jga0")
 metadata/_custom_type_script = "uid://2ayeg7yj87f6"
 
-[sub_resource type="Resource" id="Resource_e8y0x"]
+[sub_resource type="Resource" id="Resource_4iu8j"]
 script = ExtResource("10_6d00x")
 applies_to = "cold"
 multiplier = -1.0
 metadata/_custom_type_script = "uid://wotj3baput20"
 
-[sub_resource type="Resource" id="Resource_c83td"]
+[sub_resource type="Resource" id="Resource_6d00x"]
 script = ExtResource("10_6d00x")
 applies_to = "hot"
 metadata/_custom_type_script = "uid://wotj3baput20"
 
-[sub_resource type="Resource" id="Resource_c8hwb"]
+[sub_resource type="Resource" id="Resource_0jga0"]
 script = ExtResource("10_6d00x")
 applies_to = "fresh"
 multiplier = 0.0
@@ -108,8 +107,8 @@ condition = "coldness"
 value = 0.0
 base_decay_time = 720
 enviroment_condition = "temperature"
-modifiers = Array[ExtResource("10_6d00x")]([SubResource("Resource_e8y0x"), SubResource("Resource_c83td"), SubResource("Resource_c8hwb")])
-condition_threshold = SubResource("Resource_4u0ix")
+modifiers = Array[ExtResource("10_6d00x")]([SubResource("Resource_4iu8j"), SubResource("Resource_6d00x"), SubResource("Resource_0jga0")])
+condition_threshold = SubResource("Resource_hjfye")
 metadata/_custom_type_script = "uid://dbp4u6dyakclb"
 
 [sub_resource type="Resource" id="Resource_furwg"]

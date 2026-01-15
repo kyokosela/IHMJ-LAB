@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ClothingData" load_steps=4 format=3 uid="uid://sbvpak06qogm"]
+
+[ext_resource type="Script" uid="uid://dcv5vn3vb7u0w" path="res://Resources/Clothing/clothingdata.gd" id="1_ow84y"]
+[ext_resource type="Texture2D" uid="uid://dw4abnu6emish" path="res://Assets/UI/Wardrobe/basket_empty.png" id="1_x4i3i"]
+[ext_resource type="Texture2D" uid="uid://b7o185qgevqge" path="res://Assets/UI/Wardrobe/basket_full.png" id="2_ij53q"]
+
+[resource]
+script = ExtResource("1_ow84y")
+empty = ExtResource("1_x4i3i")
+full = ExtResource("2_ij53q")
+metadata/_custom_type_script = "uid://dcv5vn3vb7u0w"

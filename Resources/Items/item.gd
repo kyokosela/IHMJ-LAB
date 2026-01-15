@@ -61,6 +61,5 @@ func increase_condition_value(condition_name : String, value : float):
 		custom.value += value
 		item_changed.emit()
 	
-
 func has_state(id : String) -> bool:
 	return states.has(id)

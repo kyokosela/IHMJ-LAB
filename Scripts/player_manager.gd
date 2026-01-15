@@ -49,6 +49,8 @@ var mininum_energy_ranges : Dictionary = {
 	"10:00" : 42
 }
 
+var hour_debt : String = "00:00"
+
 func sleep(hour_deal : String = "00:00") -> void :
 	var minimun_hours : String = "00:00"
 	
@@ -60,10 +62,17 @@ func sleep(hour_deal : String = "00:00") -> void :
 			break
 	
 	if TimeUtils.is_greater_or_equal(minimun_hours, hour_deal) :
+		
+		var debt_pay = TimeUtils.decrease_time(hour_deal, minimun_hours)
+		decrease_control_effect_hour("SLEEPY", debt_pay)
+		
 		hour_deal = minimun_hours
 	
-	if minimun_hours == "00:00" : return
+	if minimun_hours == "00:00" : return #prevencion de error aunque lo veo imposible
 	if hour_deal == "00:00" : hour_deal = minimun_hours
+	
+	if !has_effect("SLEEPY") and !has_effect("INSOMNIA") : 
+		hour_debt = TimeUtils.increase_time(hour_debt, TimeUtils.decrease_time(minimun_hours, hour_deal))
 	
 	var base_energy = mininum_energy_ranges[minimun_hours]
 	var hour_deal_value = TimeUtils.get_minutes(hour_deal)
@@ -80,9 +89,16 @@ func sleep(hour_deal : String = "00:00") -> void :
 	TransitionManager.fadeOut(3)
 	
 	increase_stat("ENERGY", energy_deal)
-	decrease_control_effect_hour("SLEEPY", hour_deal)
+	if !has_effect("INSOMNIA") :
+		decrease_control_effect_hour("SLEEPY", hour_deal)
 	EventManager.reset_lapse_event("AUTO_SLEEPY_LAPSE")
 	
+	if TimeUtils.is_greater_or_equal("06:00", hour_debt) and !has_effect("SLEEPY") and !has_effect("INSOMNIA"): # las 6 horas indican cuanto se debe acumular para aplicar sueño
+		add_effect(load("res://Resources/Effects/Effects/sleepy.tres"))
+		var sleepy : EffectHourControl = get_effect_res("SLEEPY")
+		sleepy.time = hour_debt
+		hour_debt = "00:00"
+		
 	
 	await TransitionManager.transition_finished
 #endregion
@@ -99,7 +115,19 @@ func _ready() -> void:
 		"tired" : load("res://Resources/Effects/Effects/tired.tres"),
 	}
 	stat_decrease.connect(energy_spend_handler)
+	TimeManager.day_changed.connect(day_change)
 
+var auto_insomnia_count = 3
+
+func day_change(_day_value) -> void :
+	if has_effect("SLEEPY") and !has_effect("INSOMNIA") :
+		auto_insomnia_count -=1
+		if auto_insomnia_count <= 0 :
+			#add_effect(load()) aqui va insomnio
+			remove_effect("SLEEPY")
+	else :
+		auto_insomnia_count = 3
+	
 #recorre el recurso que contiene las stats y carga su valor
 func load_default_stats() -> void :
 	for stat_res in DirAccess.get_files_at(STATS_FOLDER_PATH):
@@ -119,7 +147,6 @@ func energy_spend_handler(stat : Stat, _decrease_value : float) -> void :
 			PlayerManager.add_effect(load("res://Resources/Effects/Effects/hunger.tres"))
 			hungry_energy_log -= hungry_energy
 	
-
 func auto_energy_effects(_new_value : float) -> void :
 	var nothing : bool = true
 	if _new_value >= 90 :

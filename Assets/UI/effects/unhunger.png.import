@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqlmosrfc4mcu"
-path="res://.godot/imported/hunger.png-39ee98c34882dc76d5f5214cf5a28f35.ctex"
+uid="uid://cjktjytdhksvd"
+path="res://.godot/imported/unhunger.png-b2a24441c5db2a0556240b657c4af721.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI/effects/hunger.png"
-dest_files=["res://.godot/imported/hunger.png-39ee98c34882dc76d5f5214cf5a28f35.ctex"]
+source_file="res://Assets/UI/effects/unhunger.png"
+dest_files=["res://.godot/imported/unhunger.png-b2a24441c5db2a0556240b657c4af721.ctex"]
 
 [params]
 

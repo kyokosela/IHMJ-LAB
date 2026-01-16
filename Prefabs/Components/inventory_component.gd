@@ -10,7 +10,7 @@ signal inventory_changed
 var slots : Array[InventorySlot] = []
 
 func _ready() -> void:
-	_initialize_slots()
+	if slots.is_empty(): _initialize_slots()
 
 func _initialize_slots():
 	slots.clear()

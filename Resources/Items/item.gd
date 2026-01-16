@@ -9,13 +9,13 @@ signal item_changed
 @export var condition : float = 100.0:
 	set(_v): 
 		condition = clamp(_v, 0.0, 100.0)
-		update_states()
+		if data: update_states()
 
 var states : Dictionary[String, ItemState]
 
-func _init(p_data : ItemData) -> void:
+func _init(p_data : ItemData = null) -> void:
 	data = p_data
-	update_states()
+	if data: update_states()
 	
 func add_state(state : ItemState) -> void: ## Añade un estado, en caso de que ya contenga un estado de un grupo exclusivo, se reemplazara por el nuevo estado
 	if state == null: return
@@ -27,6 +27,7 @@ func add_state(state : ItemState) -> void: ## Añade un estado, en caso de que y
 	item_changed.emit()
 
 func update_states():
+	if not data or not data.behavior: return 
 	data.behavior.update_states(self)
 	item_changed.emit()
 

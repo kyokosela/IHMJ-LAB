@@ -1,8 +1,8 @@
-extends RefCounted
+extends Resource
 class_name InventorySlot
 
-var item: Item
-var slot_type : Array[ItemData.TYPE]
+@export var item: Item
+@export var slot_type : Array[ItemData.TYPE]
 
 func _init(p_item : Item = null, p_slot_type : Array[ItemData.TYPE] = [ItemData.TYPE.UNDEFINED]) -> void:
 	item = p_item

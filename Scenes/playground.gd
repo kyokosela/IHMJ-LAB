@@ -4,4 +4,3 @@ extends World
 func _ready() -> void:
 	super()
 	TimeManager.minutes = 360
-	GameManager.new_game()

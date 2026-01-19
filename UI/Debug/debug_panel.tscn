@@ -25,7 +25,7 @@ theme_override_constants/margin_bottom = 0
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer"]
 layout_mode = 2
-current_tab = 1
+current_tab = 4
 
 [node name="GameInfo" type="MarginContainer" parent="MarginContainer/TabContainer"]
 visible = false
@@ -51,6 +51,7 @@ fit_content = true
 
 [node name="EntityInfo" type="MarginContainer" parent="MarginContainer/TabContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
@@ -196,7 +197,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PlayerManager" type="ScrollContainer" parent="MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 4
 
@@ -219,6 +219,47 @@ title = "Stats"
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="sanity" type="FoldableContainer" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer"]
+layout_mode = 2
+title = "Sanity"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/sanity"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/sanity/MarginContainer"]
+layout_mode = 2
+
+[node name="sanityValue" type="Label" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/sanity/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "value"
+
+[node name="sanityName" type="Label" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/sanity/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="sanitySpinBox" type="SpinBox" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/sanity/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/sanity/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SanityIncrease" type="Button" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/sanity/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Increase"
+
+[node name="SanityDecrease" type="Button" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/sanity/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Decrease"
+
 [node name="effects" type="FoldableContainer" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer"]
 layout_mode = 2
 title = "Effects"
@@ -238,3 +279,5 @@ layout_mode = 2
 [connection signal="pressed" from="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer/HBoxContainer/Add Time" to="." method="_on_add_time_pressed"]
 [connection signal="pressed" from="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer/HBoxContainer/Remove Time" to="." method="_on_remove_time_pressed"]
 [connection signal="pressed" from="MarginContainer/TabContainer/TimeManager/ScrollContainer/VBoxContainer/HBoxContainer/Set Time" to="." method="_on_set_time_pressed"]
+[connection signal="pressed" from="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/sanity/MarginContainer/VBoxContainer/HBoxContainer/SanityIncrease" to="." method="_on_sanity_increase_pressed"]
+[connection signal="pressed" from="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/sanity/MarginContainer/VBoxContainer/HBoxContainer/SanityDecrease" to="." method="_on_sanity_decrease_pressed"]

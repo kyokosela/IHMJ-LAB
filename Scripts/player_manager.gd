@@ -4,6 +4,7 @@ signal effect_added(effect : Effect)
 signal effect_removed(effect : Effect)
 
 signal stat_connection_added
+signal sanity_changed(_new_value : float, old_value : float)
 
 @warning_ignore_start("unused_signal")
 signal stat_value_changed(stat : Stat, new_value : float)
@@ -23,7 +24,12 @@ const STATS_FOLDER_PATH : String = "res://Resources/Stats/stats/"
 
 var stats : Array[Stat]
 var effects : Array[Effect]
-var sanity_value : float = 50.0
+var sanity_value : float = 50.0 :
+	set(_value) :
+		var prev_san : float = sanity_value
+		sanity_value = clamp(_value, 0, 100)
+		sanity_changed.emit(sanity_value, prev_san)
+
 var money : int = 250
 
 enum SANITY_STATES {
@@ -31,77 +37,6 @@ enum SANITY_STATES {
 	NEUTRAL,
 	DISTURBED
 }
-
-#region ACTIONS
-
-var minimun_hours_ranges := [
-	{ "energy": 15, "hours": "10:00" },
-	{ "energy": 30, "hours": "09:00" },
-	{ "energy": 50, "hours": "08:00" },
-	{ "energy": 70, "hours": "07:00" },
-	{ "energy": 100, "hours": "06:00" }
-]
-
-var mininum_energy_ranges : Dictionary = {
-	"01:00" : 5, "02:00" : 8, "03:00" : 10,
-	"04:00" : 12,"05:00" : 15,"06:00" : 20,
-	"07:00" : 30,"08:00" : 35,"09:00" : 40,
-	"10:00" : 42
-}
-
-var hour_debt : String = "00:00"
-
-func sleep(hour_deal : String = "00:00") -> void :
-	var minimun_hours : String = "00:00"
-	
-	var current_energy : float = get_stat_value("ENERGY")
-
-	for r in minimun_hours_ranges:
-		if current_energy <= r.energy:
-			minimun_hours = r.hours
-			break
-	
-	if TimeUtils.is_greater_or_equal(minimun_hours, hour_deal) :
-		
-		var debt_pay = TimeUtils.decrease_time(hour_deal, minimun_hours)
-		decrease_control_effect_hour("SLEEPY", debt_pay)
-		
-		hour_deal = minimun_hours
-	
-	if minimun_hours == "00:00" : return #prevencion de error aunque lo veo imposible
-	if hour_deal == "00:00" : hour_deal = minimun_hours
-	
-	if !has_effect("SLEEPY") and !has_effect("INSOMNIA") : 
-		hour_debt = TimeUtils.increase_time(hour_debt, TimeUtils.decrease_time(minimun_hours, hour_deal))
-	
-	var base_energy = mininum_energy_ranges[minimun_hours]
-	var hour_deal_value = TimeUtils.get_minutes(hour_deal)
-	var minimun_hour_value = TimeUtils.get_minutes(minimun_hours)
-	
-	var ratio := float(hour_deal_value) / float(minimun_hour_value)
-	ratio = clamp(ratio, 0.0, 1.0)
-
-	var energy_deal = base_energy * ratio
-
-	TransitionManager.fadeIn(3)
-	await TransitionManager.transition_finished
-	TimeManager.add_to_current_time(hour_deal)
-	TransitionManager.fadeOut(3)
-	
-	increase_stat("ENERGY", energy_deal)
-	if !has_effect("INSOMNIA") :
-		decrease_control_effect_hour("SLEEPY", hour_deal)
-	EventManager.reset_lapse_event("AUTO_SLEEPY_LAPSE")
-	
-	if TimeUtils.is_greater_or_equal("06:00", hour_debt) and !has_effect("SLEEPY") and !has_effect("INSOMNIA"): # las 6 horas indican cuanto se debe acumular para aplicar sueño
-		add_effect(load("res://Resources/Effects/Effects/sleepy.tres"))
-		var sleepy : EffectHourControl = get_effect_res("SLEEPY")
-		sleepy.time = hour_debt
-		hour_debt = "00:00"
-		
-	
-	await TransitionManager.transition_finished
-#endregion
 
 #region LOGIC
 
@@ -144,7 +79,7 @@ func energy_spend_handler(stat : Stat, _decrease_value : float) -> void :
 	if stat.stat_unique_name == "ENERGY" : 
 		hungry_energy_log += _decrease_value
 		if hungry_energy_log >= hungry_energy :
-			PlayerManager.add_effect(load("res://Resources/Effects/Effects/hunger.tres"))
+			add_effect(load("res://Resources/Effects/Effects/hunger.tres"))
 			hungry_energy_log -= hungry_energy
 	
 func auto_energy_effects(_new_value : float) -> void :
@@ -156,7 +91,7 @@ func auto_energy_effects(_new_value : float) -> void :
 	elif _new_value <= 0 :
 		nothing = false
 		sleep()
-		PlayerManager.add_effect(load("res://Resources/Effects/Effects/weak.tres"))
+		add_effect(load("res://Resources/Effects/Effects/weak.tres"))
 	elif _new_value <= 15 :
 		nothing = false
 		add_effect(energy_effects.tired)
@@ -178,6 +113,33 @@ func apply_effects(_effect_name : String = "") -> void:
 #endregion
 
 #region EFFECTS API
+
+func add_level_effect(effect : EffectLevel, chances : float) -> void :
+	if effect.
+
+func decrease_level_effect(unique_effect_name : String, _value : int) -> void : ## Disminuye el nivel de un efecto de tipo nivel
+	var effect = get_effect_res(unique_effect_name)
+	if effect is EffectLevel :
+		effect.change_level_value(effect.level + 1)
+	else : return
+
+func increase_level_effect(unique_effect_name : String, _value : int) -> void : ## Aumenta el nivel de un efecto de tipo nivel
+	var effect = get_effect_res(unique_effect_name)
+	if effect is EffectLevel :
+		effect.change_level_value(effect.level - 1)
+	else : return
+
+func get_effect_level(unique_effect_name : String) -> String : ## obten el nombre del efecto, sera el nombre de este
+	var effect = get_effect_res(unique_effect_name)
+	if effect is EffectLevel :
+		return tr(effect.get_level_display())
+	else : return ""
+
+func get_effect_level_value(unique_effect_name : String) -> float : ## obten el valor numerico del efecto, no empieza en 0
+	var effect = get_effect_res(unique_effect_name)
+	if effect is EffectLevel :
+		return effect.level
+	else : return -0.1
 
 func get_cost_with_effects(unique_stat_name: String, _custom_num : float = 0) -> float :
 	var total : float = _custom_num
@@ -271,6 +233,9 @@ func get_sanity_state() -> SANITY_STATES : ## Obten el estado mental del jugador
 func get_sanity_value() -> float :
 	return sanity_value
 
+func is_on_sanity_range(_min : float, _max : float) -> bool : ## Retorna verdadero si el nivel de cordura se encuentra dentro de el rango enviado
+	return sanity_value >= _min and sanity_value <= _max
+
 func decrease_stat(unique_stat_name : String, value : float) -> void : ## Disminuye una estadistica, usa el nombre unico/identificador
 	var stat : Stat = get_stat_res(unique_stat_name)
 	if stat == null or not stat: 
@@ -297,4 +262,75 @@ func get_stat_value(unique_stat_name : String) -> float : ## Obten el valor de u
 		return -1.0
 	return stat.value
 
+#endregion
+
+#region ACTIONS
+
+var minimun_hours_ranges := [
+	{ "energy": 15, "hours": "10:00" },
+	{ "energy": 30, "hours": "09:00" },
+	{ "energy": 50, "hours": "08:00" },
+	{ "energy": 70, "hours": "07:00" },
+	{ "energy": 100, "hours": "06:00" }
+]
+
+var mininum_energy_ranges : Dictionary = {
+	"01:00" : 5, "02:00" : 8, "03:00" : 10,
+	"04:00" : 12,"05:00" : 15,"06:00" : 20,
+	"07:00" : 30,"08:00" : 35,"09:00" : 40,
+	"10:00" : 42
+}
+
+var hour_debt : String = "00:00"
+
+func sleep(hour_deal : String = "00:00") -> void :
+	var minimun_hours : String = "00:00"
+	
+	var current_energy : float = get_stat_value("ENERGY")
+
+	for r in minimun_hours_ranges:
+		if current_energy <= r.energy:
+			minimun_hours = r.hours
+			break
+	
+	if TimeUtils.is_greater_or_equal(minimun_hours, hour_deal) :
+		
+		var debt_pay = TimeUtils.decrease_time(hour_deal, minimun_hours)
+		decrease_control_effect_hour("SLEEPY", debt_pay)
+		
+		hour_deal = minimun_hours
+	
+	if minimun_hours == "00:00" : return #prevencion de error aunque lo veo imposible
+	if hour_deal == "00:00" : hour_deal = minimun_hours
+	
+	if !has_effect("SLEEPY") and !has_effect("INSOMNIA") : 
+		hour_debt = TimeUtils.increase_time(hour_debt, TimeUtils.decrease_time(minimun_hours, hour_deal))
+	
+	var base_energy = mininum_energy_ranges[minimun_hours]
+	var hour_deal_value = TimeUtils.get_minutes(hour_deal)
+	var minimun_hour_value = TimeUtils.get_minutes(minimun_hours)
+	
+	var ratio := float(hour_deal_value) / float(minimun_hour_value)
+	ratio = clamp(ratio, 0.0, 1.0)
+
+	var energy_deal = base_energy * ratio
+
+	TransitionManager.fadeIn(3)
+	await TransitionManager.transition_finished
+	TimeManager.add_to_current_time(hour_deal)
+	TransitionManager.fadeOut(3)
+	
+	increase_stat("ENERGY", energy_deal)
+	if !has_effect("INSOMNIA") :
+		decrease_control_effect_hour("SLEEPY", hour_deal)
+	EventManager.reset_lapse_event("AUTO_SLEEPY_LAPSE")
+	
+	if TimeUtils.is_greater_or_equal("06:00", hour_debt) and !has_effect("SLEEPY") and !has_effect("INSOMNIA"): # las 6 horas indican cuanto se debe acumular para aplicar sueño
+		add_effect(load("res://Resources/Effects/Effects/sleepy.tres"))
+		var sleepy : EffectHourControl = get_effect_res("SLEEPY")
+		sleepy.time = hour_debt
+		hour_debt = "00:00"
+		
+	
+	await TransitionManager.transition_finished
 #endregion

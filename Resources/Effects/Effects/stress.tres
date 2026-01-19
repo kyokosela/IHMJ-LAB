@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EffectLevel" load_steps=6 format=3 uid="uid://brtyu57ne67bd"]
+
+[ext_resource type="Texture2D" uid="uid://wo0btcx0ignm" path="res://Assets/UI/effects/stress 1.png" id="1_71gvb"]
+[ext_resource type="Script" uid="uid://d3vj00ox60wjp" path="res://Resources/Effects/level_effect.gd" id="1_dipy0"]
+[ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_e45yc"]
+[ext_resource type="Texture2D" uid="uid://cnyp6rfhtivka" path="res://Assets/UI/effects/Stress 2.png" id="2_mtp7c"]
+[ext_resource type="Texture2D" uid="uid://dupf2sa3ai2sx" path="res://Assets/UI/effects/Stress 3.png" id="3_yr2d8"]
+
+[resource]
+script = ExtResource("1_dipy0")
+level_display_list = Array[String](["_EFFECT_STRESS_1_"])
+icons = Array[CompressedTexture2D]([ExtResource("1_71gvb"), ExtResource("2_mtp7c"), ExtResource("3_yr2d8")])
+effect_unique_name = "STRESS"
+effect_display_name = "_EFFECT_STRESS_"
+metadata/_custom_type_script = "uid://d3vj00ox60wjp"

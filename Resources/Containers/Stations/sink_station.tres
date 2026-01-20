@@ -19,9 +19,9 @@ script = ExtResource("1_craft")
 needed_items = Array[ExtResource("2_slot")]([SubResource("Resource_slot_pot")])
 result_item = ExtResource("3_cooking_pot")
 result_held_item = ExtResource("4_water")
-result_held_item_conditions = {
+result_held_item_conditions = Dictionary[String, float]({
 "coldness": 50.0
-}
+})
 metadata/_custom_type_script = "uid://de0p0f0ihls31"
 
 [resource]

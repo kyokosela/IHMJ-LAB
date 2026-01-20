@@ -21,7 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://dd0p5w6n0rqyj" path="res://UI/Containers/wardrobe_ui.tscn" id="20_53t5c"]
 [ext_resource type="Resource" uid="uid://bx86vtfaagc6" path="res://Resources/Containers/Stations/sink_station.tres" id="20_rdqgv"]
 [ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="20_siwnq"]
-[ext_resource type="Resource" uid="uid://c87phvhm6ujj0" path="res://Resources/Items/Data/Meals/home_meal.tres" id="21_5hvqo"]
+[ext_resource type="Resource" uid="uid://c87phvhm6ujj0" path="res://Resources/Items/Data/home_meal.tres" id="21_5hvqo"]
 [ext_resource type="PackedScene" uid="uid://cktm7n04xp2qy" path="res://UI/Containers/KitchenMultiUI.tscn" id="21_24hpn"]
 [ext_resource type="Resource" uid="uid://bc21aexaviphi" path="res://Resources/Containers/Stations/cutting_station.tres" id="21_oo0rr"]
 [ext_resource type="Script" uid="uid://dvjyhvtl4cau5" path="res://Resources/Crafts/craft_result.gd" id="22_awvmh"]

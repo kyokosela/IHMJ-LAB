@@ -104,7 +104,7 @@ func apply_effects(_effect_name : String = "") -> void:
 #region EFFECTS API
 
 func add_level_effect(effect : EffectLevel, chances : float) -> void :
-	if effect.
+	pass
 
 func decrease_level_effect(unique_effect_name : String, _value : int) -> void : ## Disminuye el nivel de un efecto de tipo nivel
 	var effect = get_effect_res(unique_effect_name)

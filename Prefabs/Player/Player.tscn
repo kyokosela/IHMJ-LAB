@@ -211,10 +211,16 @@ environment = SubResource("Resource_21ku0")
 script = ExtResource("2_rcqut")
 metadata/_custom_type_script = "uid://ctwvwqkrwenys"
 
-[node name="SaveComponent" type="Node" parent="InventoryContainer/InventoryComponent"]
+[node name="SaveComponent" type="Node" parent="PlayerInventoryContainer/InventoryComponent"]
 script = ExtResource("6_us0jv")
-uid = "player:inventory"
+uid = "player_inventory"
 props_to_save = Array[String](["slots"])
+metadata/_custom_type_script = "uid://dpxpbvvq6y80g"
+
+[node name="SaveComponent" type="Node" parent="PlayerInventoryContainer"]
+script = ExtResource("6_us0jv")
+uid = "player_container"
+props_to_save = Array[String](["id:container_id", "rules", "environment", "bag_size:_bag_size", "has_bag:_has_bag"])
 metadata/_custom_type_script = "uid://dpxpbvvq6y80g"
 
 [node name="SpriteComponent" type="Node2D" parent="." node_paths=PackedStringArray("animation_player")]

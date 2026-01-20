@@ -7,10 +7,10 @@ signal craft_requested(station_id: String)
 signal overflow_resolution_needed(items: Array[Item])
 
 @export_group("Station Grids")
-@export var station_containers: Dictionary[String,GridContainer] = {}  ## {"stove": Container, "sink": Container, ...}
-@export var station_labels: Dictionary[String,Label] = {}  ## {"stove": Label, ...}
-@export var station_progress_bars: Dictionary[String,ProgressBar] = {}  ## {"stove": ProgressBar, ...}
-@export var station_craft_buttons: Dictionary[String,Button] = {}  ## {"stove": Button, "sink": Button, ...}
+@export var station_containers: Dictionary[String,GridContainer] = {}
+@export var station_labels: Dictionary[String,Label] = {}
+@export var station_progress_bars: Dictionary[String,ProgressBar] = {}
+@export var station_craft_buttons: Dictionary[String,Button] = {}
 
 @export_group("Simple Craft")
 @export var simple_craft_input_grid: Container
@@ -134,10 +134,8 @@ func _update_kitchen_ui():
 func _update_stations_ui():
 	for station in kitchen.stations:
 		var container = station_containers.get(station.station_id)
-		print("Station: ", station.station_id, " Container: ", container, " Valid: ", is_instance_valid(container) if container else false)
 		if not container or not is_instance_valid(container): continue
 		
-		print("  -> Clearing and adding slot to: ", container.name if container else "null")
 		_clear_grid(container)
 		
 		var item = kitchen.get_station_item(station.station_id)
@@ -258,7 +256,6 @@ func _create_slot_ui(item: Item, slot_index: int) -> Control:
 	if slot_ui.has_method("set_item"):
 		slot_ui.set_item(item)
 	
-	# Marcar como bloqueado si está en una estación bloqueada
 	var slot_type = kitchen.get_slot_type(slot_index)
 	if slot_type == "station":
 		var station = kitchen.get_station_for_slot(slot_index)
@@ -303,15 +300,12 @@ func _clear_grid(grid: Container):
 
 #region Event Handlers
 func _on_station_craft_started(station_id: String, _recipe: Crafts):
-	print("KitchenUI: Craft started at ", station_id)
 	_update_stations_ui()
 
 func _on_station_craft_completed(station_id: String, result: Item):
-	print("KitchenUI: Craft completed at ", station_id, " - ", result.data.item_name)
 	_update_kitchen_ui()
 
 func _on_station_craft_failed(station_id: String, reason: String):
-	print("KitchenUI: Craft failed at ", station_id, " - ", reason)
 	# TODO: Mostrar mensaje al player
 	_update_kitchen_ui()
 

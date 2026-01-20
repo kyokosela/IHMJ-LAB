@@ -86,6 +86,7 @@ func _disconnect_current_entity():
 func _connect_entity_inventory(entity: Entity) -> void:
 	var inv = entity.inventory_container().inventory
 	_connected_inventory = inv
+	if _connected_inventory == null: return
 	
 	inv.item_added.connect(on_item_added)
 	inv.item_removed.connect(on_item_removed)

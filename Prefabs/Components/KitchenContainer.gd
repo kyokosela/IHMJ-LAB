@@ -40,8 +40,7 @@ func _ready():
 	if inventory:
 		inventory.inventory_changed.connect(_on_inventory_changed)
 
-func _setup_slot_structure():
-	## Calcula el tamaño total necesario
+func _setup_slot_structure(): ## Calcula el tamaño total necesario
 	var total_slots = stations.size() + 3 + storage_size  # stations + simple craft (2+1) + storage
 	
 	if inventory:
@@ -105,18 +104,15 @@ func start_station_craft(station_id: String, recipe: Crafts = null) -> bool:
 	var item = get_station_item(station_id)
 	if item == null: return false
 	
-	# Buscar receta válida si no se especificó
 	if recipe == null:
 		recipe = station.find_valid_recipe([item])
 	
 	if recipe == null: return false
 	
-	# Verificar rotura por estrés
 	if _check_breakage([item]):
 		station_craft_failed.emit(station_id, "ITEM_BROKEN")
 		return false
 	
-	# Crear evento de tiempo si es necesario
 	if recipe.needed_time != "00:00" and recipe.needed_time != "":
 		var event_name = "CRAFT_%s_%s_%d" % [station_id, recipe.result_item.item_unique_name, Time.get_ticks_msec()]
 		
@@ -133,13 +129,11 @@ func start_station_craft(station_id: String, recipe: Crafts = null) -> bool:
 		station_craft_started.emit(station_id, recipe)
 		return true
 	else:
-		# Craft instantáneo
 		_execute_station_craft(station, recipe, [item])
 		return true
 
 ## Callback cuando el timer del craft de estación termina
 func _on_station_craft_timer_complete(station_id: String, recipe: Crafts, items: Array[Item]):
-	print("KitchenContainer: Craft timer complete for ", station_id)
 	var station = get_station(station_id)
 	if station == null: return
 	
@@ -156,25 +150,20 @@ func _on_station_craft_complete(station_id: String, recipe: Crafts, items: Array
 func _execute_station_craft(station: Station, recipe: Crafts, items: Array[Item]):
 	var slot_index = get_station_slot_index(station.station_id)
 	
-	# Crear resultado usando el nuevo sistema
 	var result = recipe.create_result(items)
-	result.update_states()  # Asegurar estados actualizados
-	
-	# Manejar returns usando el nuevo sistema de CraftSlot
+	result.update_states()
 	for i in range(mini(recipe.needed_items.size(), items.size())):
 		var craft_slot: CraftSlot = recipe.needed_items[i]
 		var original_item = items[i] if i < items.size() else null
 		
 		var return_item = craft_slot.create_return_item(original_item)
 		if return_item != null:
-			return_item.update_states()  # Asegurar estados actualizados
+			return_item.update_states()
 			inventory.slots[slot_index].item = return_item
 		else:
 			inventory.slots[slot_index].clear()
 	
-	# Intentar colocar resultado
 	if not _try_place_result(result):
-		# No hay espacio - manejar overflow
 		overflow_detected.emit([result])
 	
 	station_craft_completed.emit(station.station_id, result)
@@ -208,11 +197,9 @@ func check_simple_craft() -> Crafts:
 	
 	for recipe in simple_craft_recipes:
 		if _simple_craft_matches(recipe, items):
-			# Solo actualizar cache si cambió
 			if _pending_simple_craft != recipe:
 				_pending_simple_craft = recipe
 				_pending_simple_craft_items = items
-				# Emitir señal solo cuando hay un NUEVO craft disponible
 				simple_craft_available.emit(recipe)
 			return recipe
 	
@@ -245,17 +232,14 @@ func execute_simple_craft() -> Item:
 	var recipe = _pending_simple_craft
 	var items = _pending_simple_craft_items.duplicate()
 	
-	# Verificar rotura
 	if _check_breakage(items):
 		_pending_simple_craft = null
 		_pending_simple_craft_items.clear()
 		return null
 	
-	# Crear resultado usando el nuevo sistema
 	var result = recipe.create_result(items)
-	result.update_states()  # Asegurar estados actualizados
+	result.update_states()
 	
-	# Consumir inputs y manejar returns usando el nuevo sistema
 	var input_indices = get_simple_craft_input_indices()
 	for i in range(mini(recipe.needed_items.size(), items.size())):
 		var craft_slot: CraftSlot = recipe.needed_items[i]
@@ -266,7 +250,7 @@ func execute_simple_craft() -> Item:
 		var return_item = craft_slot.create_return_item(original_item)
 		
 		if return_item != null:
-			return_item.update_states()  # Asegurar estados actualizados
+			return_item.update_states()
 			inventory.slots[slot_idx].item = return_item
 		else:
 			inventory.slots[slot_idx].clear()
@@ -290,7 +274,6 @@ func return_simple_craft_items(target: InventoryContainer) -> Array[Item]:
 		
 		var item = slot.item
 		slot.clear()
-		
 		# Intentar mover al target
 		if target.has_space_for(item.data):
 			target.add_item(item)
@@ -370,7 +353,6 @@ func start_manual_station_craft(station_id: String) -> bool:
 	if recipe == null:
 		return false
 	
-	# Ejecutar el craft
 	_execute_station_craft_with_time(station, recipe, [item])
 	return true
 
@@ -384,10 +366,7 @@ func _execute_station_craft_with_time(station: Station, recipe: Crafts, items: A
 	
 	station_craft_started.emit(station.station_id, recipe)
 	
-	# Verificar si tiene tiempo de cocción
-	print("KitchenContainer: Starting craft with time '", recipe.needed_time, "'")
 	if recipe.needed_time != "" and recipe.needed_time != "00:00":
-		# Crear evento de tiempo
 		EventManager.create_lapse_event(
 			recipe.needed_time,
 			_on_station_craft_timer_complete.bind(station.station_id, recipe, items),

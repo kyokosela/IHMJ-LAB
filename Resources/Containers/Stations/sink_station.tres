@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="Station" load_steps=9 format=3 uid="uid://bx86vtfaagc6"]
+
+[ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="1_craft"]
+[ext_resource type="Script" uid="uid://rjxff1x2nc58" path="res://Resources/Containers/station.gd" id="1_station"]
+[ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="2_slot"]
+[ext_resource type="Resource" uid="uid://bmt41wvyxm0ut" path="res://Resources/Items/Data/KitchenUtils/cooking_pot.tres" id="3_cooking_pot"]
+[ext_resource type="Script" uid="uid://dvjyhvtl4cau5" path="res://Resources/Crafts/craft_result.gd" id="4_6dkp4"]
+[ext_resource type="Resource" uid="uid://dmuopci1q6wu7" path="res://Resources/Items/Data/Liquids/water.tres" id="4_water"]
+
+[sub_resource type="Resource" id="Resource_slot_pot"]
+script = ExtResource("2_slot")
+item_id = "cooking_pot"
+exclude_if_has_held_item = true
+excluded_held_item_states = Array[String]([""])
+metadata/_custom_type_script = "uid://bh8urv85cwvl5"
+
+[sub_resource type="Resource" id="Resource_craft_fill_pot"]
+script = ExtResource("1_craft")
+needed_items = Array[ExtResource("2_slot")]([SubResource("Resource_slot_pot")])
+result_item = ExtResource("3_cooking_pot")
+result_held_item = ExtResource("4_water")
+result_held_item_conditions = {
+"coldness": 50.0
+}
+metadata/_custom_type_script = "uid://de0p0f0ihls31"
+
+[resource]
+script = ExtResource("1_station")
+station_id = "sink"
+station_name = "Sink"
+inherent_util = "water"
+available_crafts = Array[ExtResource("1_craft")]([SubResource("Resource_craft_fill_pot")])
+blocked_states = Array[String]([])

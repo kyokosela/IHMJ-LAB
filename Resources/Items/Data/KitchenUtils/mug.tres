@@ -1,109 +1,24 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=27 format=3 uid="uid://dn6xorxxwrnh3"]
+[gd_resource type="Resource" script_class="ItemData" load_steps=6 format=3 uid="uid://dn6xorxxwrnh3"]
 
 [ext_resource type="Script" uid="uid://do0pdg85om6vq" path="res://Resources/Items/Behaviors/consumable_behavior.gd" id="1_uipfv"]
-[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="2_yrch3"]
-[ext_resource type="Resource" uid="uid://c3gi4rg1obavi" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_fresh.tres" id="3_xpqyt"]
-[ext_resource type="Script" uid="uid://2ayeg7yj87f6" path="res://Resources/Items/Conditions/condition_threshold.gd" id="4_nqobu"]
-[ext_resource type="Script" uid="uid://df2q5ei6ve3yq" path="res://Resources/Items/Conditions/threshold_entry.gd" id="5_bsomg"]
-[ext_resource type="Resource" uid="uid://otjo218bj3mf" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_hot.tres" id="6_5im4v"]
-[ext_resource type="Resource" uid="uid://b18f3g76hqy6t" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_cold.tres" id="7_vvfdp"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="2_2kw42"]
 [ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="8_4b1ou"]
-[ext_resource type="Resource" uid="uid://b5crwa3qm72eu" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_no_prep.tres" id="9_f4bcx"]
-[ext_resource type="Resource" uid="uid://dmk8i8fxtpbyx" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_prep.tres" id="10_6meka"]
-[ext_resource type="Resource" uid="uid://dm4jblotjlc1k" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_cooked.tres" id="11_5gt7o"]
 [ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="12_dwkmp"]
 
 [sub_resource type="Resource" id="Resource_182fq"]
 script = ExtResource("1_uipfv")
 metadata/_custom_type_script = "uid://do0pdg85om6vq"
 
-[sub_resource type="Resource" id="Resource_tc4vf"]
-script = ExtResource("5_bsomg")
-max_value = 30.0
-state = ExtResource("6_5im4v")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_5l67o"]
-script = ExtResource("5_bsomg")
-max_value = 75.0
-state = ExtResource("3_xpqyt")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_56yky"]
-script = ExtResource("5_bsomg")
-max_value = 100.0
-state = ExtResource("7_vvfdp")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_4u0ix"]
-script = ExtResource("4_nqobu")
-thresholds = Array[ExtResource("5_bsomg")]([SubResource("Resource_tc4vf"), SubResource("Resource_5l67o"), SubResource("Resource_56yky")])
-default_state = ExtResource("3_xpqyt")
-metadata/_custom_type_script = "uid://2ayeg7yj87f6"
-
-[sub_resource type="Resource" id="Resource_e8y0x"]
-script = ExtResource("8_4b1ou")
-applies_to = "cold"
-multiplier = -1.0
-metadata/_custom_type_script = "uid://wotj3baput20"
-
-[sub_resource type="Resource" id="Resource_c83td"]
-script = ExtResource("8_4b1ou")
-applies_to = "hot"
-metadata/_custom_type_script = "uid://wotj3baput20"
-
-[sub_resource type="Resource" id="Resource_c8hwb"]
-script = ExtResource("8_4b1ou")
-applies_to = "fresh"
-multiplier = 0.0
-metadata/_custom_type_script = "uid://wotj3baput20"
-
-[sub_resource type="Resource" id="Resource_jwk0b"]
-script = ExtResource("2_yrch3")
-condition = "coldness"
-value = 50.0
-base_decay_time = 45
-enviroment_condition = "temperature"
-modifiers = Array[ExtResource("8_4b1ou")]([SubResource("Resource_e8y0x"), SubResource("Resource_c83td"), SubResource("Resource_c8hwb")])
-condition_threshold = SubResource("Resource_4u0ix")
-metadata/_custom_type_script = "uid://dbp4u6dyakclb"
-
-[sub_resource type="Resource" id="Resource_xtnmp"]
-script = ExtResource("5_bsomg")
-state = ExtResource("9_f4bcx")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_bygl2"]
-script = ExtResource("5_bsomg")
-max_value = 1.0
-state = ExtResource("10_6meka")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_6477j"]
-script = ExtResource("5_bsomg")
-max_value = 2.0
-state = ExtResource("11_5gt7o")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_6owe1"]
-script = ExtResource("4_nqobu")
-thresholds = Array[ExtResource("5_bsomg")]([SubResource("Resource_xtnmp"), SubResource("Resource_bygl2"), SubResource("Resource_6477j")])
-default_state = ExtResource("9_f4bcx")
-metadata/_custom_type_script = "uid://2ayeg7yj87f6"
-
-[sub_resource type="Resource" id="Resource_dachf"]
-script = ExtResource("2_yrch3")
-condition = "preparation"
-value = 0.0
-condition_threshold = SubResource("Resource_6owe1")
-metadata/_custom_type_script = "uid://dbp4u6dyakclb"
-
 [resource]
 script = ExtResource("12_dwkmp")
 item_name = "_MUG_"
 item_unique_name = "mug"
-item_type = 1
+item_type = 4
 behavior = SubResource("Resource_182fq")
 can_use = false
-custom_conditions = Array[ExtResource("2_yrch3")]([SubResource("Resource_jwk0b"), SubResource("Resource_dachf")])
+provided_utils = Array[String](["drinkware", "container"])
+is_holder = true
+holdable_types = Array[int]([1])
+can_break = true
+break_chance = 0.15
 metadata/_custom_type_script = "uid://b03xnf82gb26a"

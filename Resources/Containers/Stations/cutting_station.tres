@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Station" load_steps=3 format=3 uid="uid://bc21aexaviphi"]
+
+[ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="1_ab475"]
+[ext_resource type="Script" uid="uid://rjxff1x2nc58" path="res://Resources/Containers/station.gd" id="1_station"]
+
+[resource]
+script = ExtResource("1_station")
+station_id = "cutting"
+station_name = "Tabla de Picar"
+inherent_util = "cutting"
+required_provided_utils = Array[String](["cuttable"])

@@ -5,7 +5,9 @@ enum TYPE{
 	UNDEFINED,
 	CONSUMABLE,
 	CLOTH,
-	OBJECT
+	OBJECT,
+	TOOL,       ## Items que proveen utils (pot, pan, knife)
+	CONTAINER   ## Items que pueden contener otros (mug, plate)
 }
 enum QUALITY {
 	A,
@@ -31,6 +33,23 @@ enum QUALITY {
 @export var unique_item : bool = false
 @export var custom_conditions : Array[CustomCondition]
 
+@export_group("Utils")
+## Utils que este item provee (ej: pot = ["cookware", "container"])
+## Usado para validar si puede entrar en ciertas estaciones
+@export var provided_utils : Array[String] = []
+
+@export_group("Holder")
+## Si este item puede contener otros items (ej: mug, plate)
+@export var is_holder : bool = false
+## Tipos de items que puede contener (vacío = cualquiera)
+@export var holdable_types : Array[TYPE] = []
+
+@export_group("Durability")
+## Si este item puede romperse cuando el player tiene estrés
+@export var can_break : bool = false
+## Probabilidad base de rotura (0.0 - 1.0) cuando el player tiene estrés
+@export_range(0.0, 1.0) var break_chance : float = 0.1
+
 func get_quality_percentage() -> float:
 	match item_quality:
 		QUALITY.A: return 0.75
@@ -43,3 +62,14 @@ func get_modifiers_applies() -> Array[String]: ##Debug
 	for x in modifiers:
 		value.append(x.applies_to)
 	return value
+
+## Verifica si este item provee un util específico
+func has_util(util_name: String) -> bool:
+	return util_name in provided_utils
+
+## Verifica si este item provee alguno de los utils requeridos
+func has_any_util(required_utils: Array[String]) -> bool:
+	for util in required_utils:
+		if util in provided_utils:
+			return true
+	return false

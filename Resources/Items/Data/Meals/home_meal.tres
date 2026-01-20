@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=7 format=3 uid="uid://c87phvhm6ujj0"]
+
+[ext_resource type="Script" uid="uid://i1ah5yuictan" path="res://Resources/Items/Behaviors/ingredients.gd" id="1_e2e47"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="2_8kduh"]
+[ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="2_e2e47"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="3_8kduh"]
+
+[sub_resource type="Resource" id="Resource_8kduh"]
+script = ExtResource("1_e2e47")
+metadata/_custom_type_script = "uid://i1ah5yuictan"
+
+[sub_resource type="Resource" id="Resource_v3yab"]
+script = ExtResource("2_e2e47")
+applies_to = "cold"
+multiplier = 0.0
+metadata/_custom_type_script = "uid://wotj3baput20"
+
+[resource]
+script = ExtResource("3_8kduh")
+item_name = "Home Meal"
+item_unique_name = "home_meal"
+item_description = "A cooked home made meal"
+item_type = 1
+behavior = SubResource("Resource_8kduh")
+modifiers = Array[ExtResource("2_e2e47")]([SubResource("Resource_v3yab")])
+consume_after_use = true
+metadata/_custom_type_script = "uid://b03xnf82gb26a"

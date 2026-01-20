@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cx06pj7isyhot" path="res://Prefabs/Components/movement_component.gd" id="2_1cl7s"]
 [ext_resource type="Script" uid="uid://crlr2he6ydrsf" path="res://Prefabs/Components/interaction_component.gd" id="2_5virf"]
 [ext_resource type="Script" uid="uid://dxbbffiau4vqt" path="res://Prefabs/Components/sprite_stack_component.gd" id="2_8ipit"]
-[ext_resource type="Script" uid="uid://dvc4ajwmih83o" path="res://Prefabs/Components/inventory_container.gd" id="2_21ku0"]
+[ext_resource type="Script" uid="uid://dvbeuxqwuh0t8" path="res://Prefabs/Components/PlayerInventoryContainer.gd" id="2_21ku0"]
 [ext_resource type="Script" uid="uid://ctwvwqkrwenys" path="res://Prefabs/Components/inventory_component.gd" id="2_rcqut"]
 [ext_resource type="Script" uid="uid://dghcs7x1a73jn" path="res://Prefabs/Components/state_machine_component.gd" id="3_c4lgr"]
 [ext_resource type="Script" uid="uid://ckwswawlru4js" path="res://Resources/Containers/container_rules.gd" id="3_mvuy7"]
@@ -26,7 +26,7 @@ size = Vector2(5, 5)
 
 [sub_resource type="Resource" id="Resource_vbwbj"]
 script = ExtResource("3_mvuy7")
-allowed_types = Array[int]([1, 2, 3])
+allowed_types = Array[int]([1, 2, 3, 5, 4])
 metadata/_custom_type_script = "uid://ckwswawlru4js"
 
 [sub_resource type="Resource" id="Resource_21ku0"]
@@ -200,13 +200,13 @@ entity_group = "Player"
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_h0qm3")
 
-[node name="InventoryContainer" type="Node2D" parent="."]
+[node name="PlayerInventoryContainer" type="Node2D" parent="."]
 script = ExtResource("2_21ku0")
+container_id = "player_inventory"
 rules = SubResource("Resource_vbwbj")
 environment = SubResource("Resource_21ku0")
-metadata/_custom_type_script = "uid://dvc4ajwmih83o"
 
-[node name="InventoryComponent" type="Node2D" parent="InventoryContainer"]
+[node name="InventoryComponent" type="Node2D" parent="PlayerInventoryContainer"]
 script = ExtResource("2_rcqut")
 metadata/_custom_type_script = "uid://ctwvwqkrwenys"
 
@@ -280,7 +280,6 @@ script = ExtResource("5_5virf")
 metadata/_custom_type_script = "uid://cgylbrtu8pte4"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3

@@ -4,11 +4,8 @@ extends CanvasLayer
 @onready var health_bar : TextureProgressBar = %HealthBar
 @onready var time_label : Label = %TimeLabel
 @onready var effect_list : HBoxContainer = %EffectList
-@onready var energy_container : TextureRect = %EnergyCover
 
 const effect_slot_scene : Resource = preload("res://UI/PLAYERUI/effect_slot.tscn")
-
-@export var tween_time : float = 2
 
 func _ready() -> void:
 	energy_bar.value = PlayerManager.get_stat_value("ENERGY")
@@ -21,12 +18,7 @@ func _ready() -> void:
 	PlayerManager.effect_removed.connect(remove_effect_slot)
 	
 func _on_energy_changed(_new_value):
-	var tw = create_tween()
-	tw.tween_property(energy_container, "modulate:a", 1, tween_time)
-	tw.parallel().tween_property(energy_bar, "value", _new_value, tween_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
-	tw.tween_interval(tween_time)
-	tw.tween_property(energy_container, "modulate:a", 0, tween_time)
-	
+	energy_bar.value = _new_value
 	
 func _on_health_changed(_new_value):
 	health_bar.value = _new_value

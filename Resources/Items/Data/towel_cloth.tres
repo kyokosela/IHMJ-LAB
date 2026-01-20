@@ -2,7 +2,7 @@
 
 [ext_resource type="Resource" uid="uid://c4vlc21elx4fq" path="res://Resources/SpriteStacks/Mayui/mayui_towel.tres" id="1_3cfi0"]
 [ext_resource type="Script" uid="uid://bhvlc64o0ato" path="res://Resources/Items/Behaviors/cloth_behavior.gd" id="2_cb0tm"]
-[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="3_5sg6u"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="3_3cfi0"]
 [ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="4_h3gi5"]
 [ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="5_8kkfk"]
 

@@ -31,7 +31,7 @@ static func increase_time(time : String, addition_time : String) -> String :
 	var time_val = get_minutes(time)
 	var addition_time_val = get_minutes(addition_time)
 	
-	var res = clamp(time_val + addition_time_val, 0, INF)
+	var res = time_val + addition_time_val
 	return TimeManager.format_minutes(res)
 
 static func decrease_time(time : String, substract_time : String) -> String :
@@ -39,7 +39,7 @@ static func decrease_time(time : String, substract_time : String) -> String :
 	var time_val = get_minutes(time)
 	var new_substract_time_val = get_minutes(substract_time)
 	
-	var res = clamp(time_val - new_substract_time_val, 0, INF)
+	var res = time_val - new_substract_time_val
 	if res <= 0 : return "00:00"
 	return TimeManager.format_minutes(res)
 

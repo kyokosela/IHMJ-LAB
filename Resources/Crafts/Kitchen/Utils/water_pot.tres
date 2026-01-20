@@ -1,17 +1,9 @@
-[gd_resource type="Resource" script_class="Crafts" load_steps=31 format=3 uid="uid://bvrxia2jdo0tb"]
+[gd_resource type="Resource" script_class="Crafts" load_steps=10 format=3 uid="uid://bvrxia2jdo0tb"]
 
 [ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="1_hupub"]
 [ext_resource type="Script" uid="uid://do0pdg85om6vq" path="res://Resources/Items/Behaviors/consumable_behavior.gd" id="3_84gin"]
-[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="4_hafqq"]
-[ext_resource type="Resource" uid="uid://b5crwa3qm72eu" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_no_prep.tres" id="5_veam2"]
-[ext_resource type="Script" uid="uid://2ayeg7yj87f6" path="res://Resources/Items/Conditions/condition_threshold.gd" id="6_sr4y0"]
-[ext_resource type="Script" uid="uid://df2q5ei6ve3yq" path="res://Resources/Items/Conditions/threshold_entry.gd" id="7_dhdel"]
-[ext_resource type="Resource" uid="uid://dmk8i8fxtpbyx" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_prep.tres" id="8_jhxy0"]
-[ext_resource type="Resource" uid="uid://dm4jblotjlc1k" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_cooked.tres" id="9_ryv5t"]
+[ext_resource type="Script" uid="uid://dvjyhvtl4cau5" path="res://Resources/Crafts/craft_result.gd" id="6_nw5su"]
 [ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="10_j8408"]
-[ext_resource type="Resource" uid="uid://c3gi4rg1obavi" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_fresh.tres" id="11_tuq1o"]
-[ext_resource type="Resource" uid="uid://otjo218bj3mf" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_hot.tres" id="12_agccg"]
-[ext_resource type="Resource" uid="uid://b18f3g76hqy6t" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_cold.tres" id="13_1sdjp"]
 [ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="14_qvmh1"]
 [ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="15_ckagx"]
 
@@ -24,87 +16,6 @@ metadata/_custom_type_script = "uid://bh8urv85cwvl5"
 script = ExtResource("3_84gin")
 metadata/_custom_type_script = "uid://do0pdg85om6vq"
 
-[sub_resource type="Resource" id="Resource_xtnmp"]
-script = ExtResource("7_dhdel")
-state = ExtResource("5_veam2")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_bygl2"]
-script = ExtResource("7_dhdel")
-max_value = 1.0
-state = ExtResource("8_jhxy0")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_6477j"]
-script = ExtResource("7_dhdel")
-max_value = 2.0
-state = ExtResource("9_ryv5t")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_6owe1"]
-script = ExtResource("6_sr4y0")
-thresholds = Array[ExtResource("7_dhdel")]([SubResource("Resource_xtnmp"), SubResource("Resource_bygl2"), SubResource("Resource_6477j")])
-default_state = ExtResource("5_veam2")
-metadata/_custom_type_script = "uid://2ayeg7yj87f6"
-
-[sub_resource type="Resource" id="Resource_brd70"]
-script = ExtResource("4_hafqq")
-condition = "preparation"
-value = 0.0
-condition_threshold = SubResource("Resource_6owe1")
-metadata/_custom_type_script = "uid://dbp4u6dyakclb"
-
-[sub_resource type="Resource" id="Resource_tc4vf"]
-script = ExtResource("7_dhdel")
-max_value = 30.0
-state = ExtResource("12_agccg")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_5l67o"]
-script = ExtResource("7_dhdel")
-max_value = 75.0
-state = ExtResource("11_tuq1o")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_56yky"]
-script = ExtResource("7_dhdel")
-max_value = 100.0
-state = ExtResource("13_1sdjp")
-metadata/_custom_type_script = "uid://df2q5ei6ve3yq"
-
-[sub_resource type="Resource" id="Resource_4u0ix"]
-script = ExtResource("6_sr4y0")
-thresholds = Array[ExtResource("7_dhdel")]([SubResource("Resource_tc4vf"), SubResource("Resource_5l67o"), SubResource("Resource_56yky")])
-default_state = ExtResource("11_tuq1o")
-metadata/_custom_type_script = "uid://2ayeg7yj87f6"
-
-[sub_resource type="Resource" id="Resource_e8y0x"]
-script = ExtResource("10_j8408")
-applies_to = "cold"
-multiplier = -1.0
-metadata/_custom_type_script = "uid://wotj3baput20"
-
-[sub_resource type="Resource" id="Resource_c83td"]
-script = ExtResource("10_j8408")
-applies_to = "hot"
-metadata/_custom_type_script = "uid://wotj3baput20"
-
-[sub_resource type="Resource" id="Resource_c8hwb"]
-script = ExtResource("10_j8408")
-applies_to = "fresh"
-multiplier = 0.0
-metadata/_custom_type_script = "uid://wotj3baput20"
-
-[sub_resource type="Resource" id="Resource_hawq2"]
-script = ExtResource("4_hafqq")
-condition = "coldness"
-value = 50.0
-enviroment_condition = "temperature"
-modifiers = Array[ExtResource("10_j8408")]([SubResource("Resource_e8y0x"), SubResource("Resource_c83td"), SubResource("Resource_c8hwb")])
-condition_threshold = SubResource("Resource_4u0ix")
-can_decay = true
-metadata/_custom_type_script = "uid://dbp4u6dyakclb"
-
 [sub_resource type="Resource" id="Resource_hupub"]
 script = ExtResource("14_qvmh1")
 item_name = "_WATER_POT_"
@@ -112,7 +23,6 @@ item_unique_name = "water_pot"
 item_type = 1
 behavior = SubResource("Resource_wr5e0")
 can_use = false
-custom_conditions = Array[ExtResource("4_hafqq")]([SubResource("Resource_brd70"), SubResource("Resource_hawq2")])
 metadata/_custom_type_script = "uid://b03xnf82gb26a"
 
 [resource]

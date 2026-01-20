@@ -1,0 +1,319 @@
+[gd_scene load_steps=3 format=3 uid="uid://cktm7n04xp2qy"]
+
+[ext_resource type="Script" uid="uid://bcu07g38u7lmb" path="res://UI/Containers/kitchen_multi_ui.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://dck78dejn3w0l" path="res://UI/Containers/InventorySlot.tscn" id="2_slot"]
+
+[node name="KitchenMultiUI" type="Control" node_paths=PackedStringArray("station_containers", "station_labels", "station_progress_bars", "station_craft_buttons", "simple_craft_input_grid", "simple_craft_result_grid", "craft_button", "craft_preview_label", "storage_grid", "player_hands_grid", "player_bag_grid", "overflow_dialog", "overflow_items_grid", "overflow_target_grid")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+station_containers = {
+"cutting": NodePath("Panel/MainContainer/StationsSection/CuttingStation/VBox/CuttingGrid"),
+"sink": NodePath("Panel/MainContainer/StationsSection/SinkStation/VBox/SinkGrid"),
+"stove": NodePath("Panel/MainContainer/StationsSection/StoveStation/VBox/StoveGrid")
+}
+station_labels = {
+"cutting": NodePath("Panel/MainContainer/StationsSection/CuttingStation/VBox/Label"),
+"sink": NodePath("Panel/MainContainer/StationsSection/SinkStation/VBox/Label"),
+"stove": NodePath("Panel/MainContainer/StationsSection/StoveStation/VBox/Label")
+}
+station_progress_bars = {
+"cutting": NodePath("Panel/MainContainer/StationsSection/CuttingStation/VBox/CuttingProgress"),
+"sink": NodePath("Panel/MainContainer/StationsSection/SinkStation/VBox/SinkProgress"),
+"stove": NodePath("Panel/MainContainer/StationsSection/StoveStation/VBox/StoveProgress")
+}
+station_craft_buttons = {
+"cutting": NodePath("Panel/MainContainer/StationsSection/CuttingStation/VBox/CuttingCraftButton"),
+"sink": NodePath("Panel/MainContainer/StationsSection/SinkStation/VBox/SinkCraftButton"),
+"stove": NodePath("Panel/MainContainer/StationsSection/StoveStation/VBox/StoveCraftButton")
+}
+simple_craft_input_grid = NodePath("Panel/MainContainer/CraftSection/SimpleCraft/VBox/InputContainer/InputGrid")
+simple_craft_result_grid = NodePath("Panel/MainContainer/CraftSection/SimpleCraft/VBox/ResultContainer/ResultGrid")
+craft_button = NodePath("Panel/MainContainer/CraftSection/SimpleCraft/VBox/CraftButton")
+craft_preview_label = NodePath("Panel/MainContainer/CraftSection/SimpleCraft/VBox/CraftPreview")
+storage_grid = NodePath("Panel/MainContainer/StorageSection/VBox/StorageGrid")
+player_hands_grid = NodePath("Panel/MainContainer/PlayerSection/VBox/HandsContainer/HandsGrid")
+player_bag_grid = NodePath("Panel/MainContainer/PlayerSection/VBox/BagContainer/BagGrid")
+overflow_dialog = NodePath("OverflowDialog")
+overflow_items_grid = NodePath("OverflowDialog/Panel/VBox/OverflowItemsGrid")
+overflow_target_grid = NodePath("OverflowDialog/Panel/VBox/TargetGrid")
+slot_scene = ExtResource("2_slot")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="Panel/MainContainer"]
+layout_mode = 2
+text = "Kitchen"
+horizontal_alignment = 1
+
+[node name="StationsSection" type="HBoxContainer" parent="Panel/MainContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="StoveStation" type="PanelContainer" parent="Panel/MainContainer/StationsSection"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel/MainContainer/StationsSection/StoveStation"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MainContainer/StationsSection/StoveStation/VBox"]
+layout_mode = 2
+text = "Stove"
+horizontal_alignment = 1
+
+[node name="StoveGrid" type="GridContainer" parent="Panel/MainContainer/StationsSection/StoveStation/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StoveProgress" type="ProgressBar" parent="Panel/MainContainer/StationsSection/StoveStation/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+value = 50.0
+
+[node name="StoveCraftButton" type="Button" parent="Panel/MainContainer/StationsSection/StoveStation/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Cook"
+
+[node name="SinkStation" type="PanelContainer" parent="Panel/MainContainer/StationsSection"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel/MainContainer/StationsSection/SinkStation"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MainContainer/StationsSection/SinkStation/VBox"]
+layout_mode = 2
+text = "Sink"
+horizontal_alignment = 1
+
+[node name="SinkGrid" type="GridContainer" parent="Panel/MainContainer/StationsSection/SinkStation/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SinkProgress" type="ProgressBar" parent="Panel/MainContainer/StationsSection/SinkStation/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+value = 50.0
+
+[node name="SinkCraftButton" type="Button" parent="Panel/MainContainer/StationsSection/SinkStation/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Use"
+
+[node name="CuttingStation" type="PanelContainer" parent="Panel/MainContainer/StationsSection"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel/MainContainer/StationsSection/CuttingStation"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MainContainer/StationsSection/CuttingStation/VBox"]
+layout_mode = 2
+text = "Cutting"
+horizontal_alignment = 1
+
+[node name="CuttingGrid" type="GridContainer" parent="Panel/MainContainer/StationsSection/CuttingStation/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CuttingProgress" type="ProgressBar" parent="Panel/MainContainer/StationsSection/CuttingStation/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+value = 50.0
+
+[node name="CuttingCraftButton" type="Button" parent="Panel/MainContainer/StationsSection/CuttingStation/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Cut"
+
+[node name="CraftSection" type="HBoxContainer" parent="Panel/MainContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SimpleCraft" type="PanelContainer" parent="Panel/MainContainer/CraftSection"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel/MainContainer/CraftSection/SimpleCraft"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MainContainer/CraftSection/SimpleCraft/VBox"]
+layout_mode = 2
+text = "Combine Items"
+horizontal_alignment = 1
+
+[node name="InputContainer" type="HBoxContainer" parent="Panel/MainContainer/CraftSection/SimpleCraft/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="InputGrid" type="GridContainer" parent="Panel/MainContainer/CraftSection/SimpleCraft/VBox/InputContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 2
+
+[node name="CraftPreview" type="Label" parent="Panel/MainContainer/CraftSection/SimpleCraft/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="ResultContainer" type="HBoxContainer" parent="Panel/MainContainer/CraftSection/SimpleCraft/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="ResultGrid" type="GridContainer" parent="Panel/MainContainer/CraftSection/SimpleCraft/VBox/ResultContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CraftButton" type="Button" parent="Panel/MainContainer/CraftSection/SimpleCraft/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Craft"
+
+[node name="StorageSection" type="PanelContainer" parent="Panel/MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="VBox" type="VBoxContainer" parent="Panel/MainContainer/StorageSection"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MainContainer/StorageSection/VBox"]
+layout_mode = 2
+text = "Storage"
+horizontal_alignment = 1
+
+[node name="StorageGrid" type="GridContainer" parent="Panel/MainContainer/StorageSection/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 6
+
+[node name="Spacer" type="Control" parent="Panel/MainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerSection" type="PanelContainer" parent="Panel/MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="VBox" type="VBoxContainer" parent="Panel/MainContainer/PlayerSection"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MainContainer/PlayerSection/VBox"]
+layout_mode = 2
+text = "Your Inventory"
+horizontal_alignment = 1
+
+[node name="HandsContainer" type="HBoxContainer" parent="Panel/MainContainer/PlayerSection/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="HandsLabel" type="Label" parent="Panel/MainContainer/PlayerSection/VBox/HandsContainer"]
+layout_mode = 2
+text = "Hands:"
+
+[node name="HandsGrid" type="GridContainer" parent="Panel/MainContainer/PlayerSection/VBox/HandsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 2
+
+[node name="BagContainer" type="HBoxContainer" parent="Panel/MainContainer/PlayerSection/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="BagLabel" type="Label" parent="Panel/MainContainer/PlayerSection/VBox/BagContainer"]
+layout_mode = 2
+text = "Bag:"
+
+[node name="BagGrid" type="GridContainer" parent="Panel/MainContainer/PlayerSection/VBox/BagContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 5
+
+[node name="OverflowDialog" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="OverflowDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Panel" type="PanelContainer" parent="OverflowDialog"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="OverflowDialog/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="OverflowDialog/Panel/VBox"]
+layout_mode = 2
+text = "No Space Available!"
+horizontal_alignment = 1
+
+[node name="Info" type="Label" parent="OverflowDialog/Panel/VBox"]
+layout_mode = 2
+text = "Select an item to drop:"
+horizontal_alignment = 1
+
+[node name="OverflowItemsGrid" type="GridContainer" parent="OverflowDialog/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 3
+
+[node name="TargetLabel" type="Label" parent="OverflowDialog/Panel/VBox"]
+layout_mode = 2
+text = "Or drop one of these:"
+horizontal_alignment = 1
+
+[node name="TargetGrid" type="GridContainer" parent="OverflowDialog/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 3

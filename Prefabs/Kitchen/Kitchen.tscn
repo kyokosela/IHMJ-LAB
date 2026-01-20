@@ -1,0 +1,40 @@
+[gd_scene load_steps=13 format=3 uid="uid://dk8tc7l2xnyef"]
+
+[ext_resource type="Script" uid="uid://btpm0l5mnnxxf" path="res://Prefabs/Interactable/interactable_container.gd" id="1_kitchen"]
+[ext_resource type="Script" uid="uid://cbskl252oro" path="res://Prefabs/Components/KitchenContainer.gd" id="2_kitchen"]
+[ext_resource type="Script" uid="uid://rjxff1x2nc58" path="res://Resources/Containers/station.gd" id="3_k4gwr"]
+[ext_resource type="Script" uid="uid://ctwvwqkrwenys" path="res://Prefabs/Components/inventory_component.gd" id="3_kitchen"]
+[ext_resource type="Script" uid="uid://ckwswawlru4js" path="res://Resources/Containers/container_rules.gd" id="4_kitchen"]
+[ext_resource type="Script" uid="uid://bo45lmkm6yiet" path="res://Resources/Containers/container_environment.gd" id="5_kitchen"]
+[ext_resource type="Resource" uid="uid://ixynr0bols3u" path="res://Resources/Containers/Stations/stove_station.tres" id="6_stove"]
+[ext_resource type="Resource" uid="uid://bx86vtfaagc6" path="res://Resources/Containers/Stations/sink_station.tres" id="7_sink"]
+[ext_resource type="Resource" uid="uid://bc21aexaviphi" path="res://Resources/Containers/Stations/cutting_station.tres" id="8_cutting"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kitchen"]
+size = Vector2(48, 32)
+
+[sub_resource type="Resource" id="Resource_rules"]
+script = ExtResource("4_kitchen")
+allowed_types = Array[int]([1, 3, 4])
+metadata/_custom_type_script = "uid://ckwswawlru4js"
+
+[sub_resource type="Resource" id="Resource_env"]
+script = ExtResource("5_kitchen")
+metadata/_custom_type_script = "uid://bo45lmkm6yiet"
+
+[node name="Kitchen" type="Area2D" groups=["Interactable"]]
+script = ExtResource("1_kitchen")
+shape = SubResource("RectangleShape2D_kitchen")
+reusable = true
+is_solid = true
+
+[node name="KitchenContainer" type="Node2D" parent="."]
+script = ExtResource("2_kitchen")
+stations = Array[ExtResource("3_k4gwr")]([ExtResource("6_stove"), ExtResource("7_sink"), ExtResource("8_cutting")])
+container_id = "kitchen_multi"
+rules = SubResource("Resource_rules")
+environment = SubResource("Resource_env")
+
+[node name="InventoryComponent" type="Node2D" parent="KitchenContainer"]
+script = ExtResource("3_kitchen")
+size = 12

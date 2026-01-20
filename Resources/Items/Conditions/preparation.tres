@@ -34,6 +34,6 @@ metadata/_custom_type_script = "uid://2ayeg7yj87f6"
 [resource]
 script = ExtResource("7_xg1mo")
 condition = "preparation"
-value = 0.0
+value = 1.0
 condition_threshold = SubResource("Resource_6owe1")
 metadata/_custom_type_script = "uid://dbp4u6dyakclb"

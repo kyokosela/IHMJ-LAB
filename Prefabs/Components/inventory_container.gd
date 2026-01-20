@@ -2,6 +2,7 @@ extends Component
 class_name InventoryContainer
 
 var inventory: InventoryComponent
+@export var container_id: String = "" ## Unique ID for persistence. If empty, state is not saved.
 @export var rules: ContainerRules
 @export var environment : ContainerEnvironment
 
@@ -12,9 +13,20 @@ func _ready():
 			break
 	assert(inventory != null, "InventoryContainer en '" + name + "' necesita un InventoryComponent (asignado o como hijo)")
 	TimeManager.minutes_delta.connect(apply_decay)
+	
+	# Register with ContainerManager if available
+	if container_id != "":
+		# We use a deferred call or just direct access if we assume it's an Autoload
+		# Checking if the global variable exists is safer for now
+		if Engine.has_singleton("ContainerManager") or get_tree().root.has_node("ContainerManager"):
+			# Assuming Autoload name is ContainerManager
+			get_node("/root/ContainerManager").register_container(self)
+
+func _exit_tree():
+	if container_id != "" and get_tree().root.has_node("ContainerManager"):
+		get_node("/root/ContainerManager").save_container(self)
 
 #region LOGIC
-#TODO: mover a container manager para que maneje el decay fuera de la escena
 func apply_decay(minutes: int):
 	var items : Array[Item] = get_all_items()
 	if items.is_empty(): return 

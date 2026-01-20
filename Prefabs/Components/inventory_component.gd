@@ -9,6 +9,10 @@ signal inventory_changed
 @export var size : int = 10
 var slots : Array[InventorySlot] = []
 
+## Flag para diferir la emisión de inventory_changed
+var _defer_inventory_signal: bool = false
+var _pending_inventory_signal: bool = false
+
 func _ready() -> void:
 	_initialize_slots()
 
@@ -16,6 +20,25 @@ func _initialize_slots():
 	slots.clear()
 	for i in range(size):
 		slots.append(InventorySlot.new(null,[ItemData.TYPE.UNDEFINED]))
+
+## Inicia un batch de operaciones (no emite inventory_changed hasta end_batch)
+func begin_batch():
+	_defer_inventory_signal = true
+	_pending_inventory_signal = false
+
+## Termina el batch y emite inventory_changed si hubo cambios
+func end_batch():
+	_defer_inventory_signal = false
+	if _pending_inventory_signal:
+		_pending_inventory_signal = false
+		inventory_changed.emit()
+
+## Emite inventory_changed o lo marca como pendiente si estamos en batch
+func _emit_inventory_changed():
+	if _defer_inventory_signal:
+		_pending_inventory_signal = true
+	else:
+		inventory_changed.emit()
 
 #region ADD / REMOVE
 func add_item(data: ItemData) -> bool:
@@ -29,14 +52,26 @@ func add_item_instance(item: Item) -> bool:
 	slots[slot_index].item = item
 	item_added.emit(item)
 	slot_changed.emit(slot_index)
-	inventory_changed.emit()
+	_emit_inventory_changed()
+	return true
+
+func add_item_at(index: int, item: Item) -> bool:
+	if index < 0 or index >= slots.size(): return false
+	if not slots[index].is_empty(): return false
+	
+	slots[index].item = item
+	item_added.emit(item)
+	slot_changed.emit(index)
+	_emit_inventory_changed()
 	return true
 
 func _add_instances(instances: Array[Item]) -> bool:
+	begin_batch()
 	var all_added = true
 	for item in instances:
 		if not add_item_instance(item):
 			all_added = false
+	end_batch()
 	return all_added
 
 func remove_item_instance(item: Item) -> bool:
@@ -45,7 +80,7 @@ func remove_item_instance(item: Item) -> bool:
 			slots[i].clear()
 			item_removed.emit(item)
 			slot_changed.emit(i)
-			inventory_changed.emit()
+			_emit_inventory_changed()
 			return true
 	return false
 
@@ -58,7 +93,7 @@ func remove_item_at(index: int) -> bool:
 	slot.clear()
 	item_removed.emit(item)
 	slot_changed.emit(index)
-	inventory_changed.emit()
+	_emit_inventory_changed()
 	return true
 
 #endregion
@@ -136,14 +171,35 @@ func swap_slots(slot_a: int, slot_b: int) -> bool:
 	
 	slot_changed.emit(slot_a)
 	slot_changed.emit(slot_b)
-	inventory_changed.emit()
+	_emit_inventory_changed()
+	return true
+
+func interact_inventory(my_index: int, other_inventory: InventoryComponent, other_index: int) -> bool:
+	if my_index < 0 or my_index >= slots.size(): return false
+	if other_index < 0 or other_index >= other_inventory.slots.size(): return false
+	
+	var my_item = slots[my_index].item
+	var other_item = other_inventory.slots[other_index].item
+	
+	# Simple swap/move logic
+	slots[my_index].item = other_item
+	other_inventory.slots[other_index].item = my_item
+	
+	# Emit signals
+	slot_changed.emit(my_index)
+	other_inventory.slot_changed.emit(other_index)
+	_emit_inventory_changed()
+	other_inventory._emit_inventory_changed()
+	
 	return true
 
 func clear():
+	begin_batch()
 	for i in range(slots.size()):
-		slots[i].item.clear()
-		slot_changed.emit(i)
-	inventory_changed.emit()
+		if not slots[i].is_empty():
+			slots[i].clear()
+			slot_changed.emit(i)
+	end_batch()
 
 #endregion
 
@@ -160,6 +216,7 @@ func to_dict() -> Dictionary:
 			data.slots.append({
 				"item_unique_name": item.data.item_unique_name,
 				"condition": item.condition,
+				"uses_left": item.uses_left
 			})
 		else:
 			data.slots.append(null)
@@ -169,6 +226,7 @@ func from_dict(dict_data: Dictionary, item_database: Dictionary):
 	size = dict_data.get("size", size)
 	_initialize_slots()
 	
+	begin_batch()
 	var slot_data = dict_data.get("slots", [])
 	for i in range(min(slot_data.size(), slots.size())):
 		var entry = slot_data[i]
@@ -177,8 +235,8 @@ func from_dict(dict_data: Dictionary, item_database: Dictionary):
 			if item_database.has(unique_name):
 				var new_item = Item.new(item_database[unique_name])
 				new_item.condition = entry.get("condition", 100.0)
+				new_item.uses_left = entry.get("uses_left", new_item.data.uses)
 				slots[i].item = new_item
-	
-	inventory_changed.emit()
+	end_batch()
 
 #endregion

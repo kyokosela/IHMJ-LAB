@@ -4,140 +4,242 @@ class_name CraftingContainer
 @warning_ignore("unused_signal")
 signal crafting_changed
 signal craft_completed(result: Item)
+signal recipes_updated
 
 @export var available_crafts : Array[Crafts]
-@export var crafting_utils : Array[String]
+@export var inherent_utils : Array[String] ## Utils provided by the furniture itself (e.g. "sink", "stove")
 
 var entity_container_ref : InventoryContainer
-var current_craft : Crafts
-var result : Item
-
-#TODO: añadir los fokin return item de llos coffee mug (la olla desaparece mrc)
+var active_crafts : Dictionary = {} # event_name -> Dictionary { recipe, indices, util_index }
+var locked_indices : Array[int] = [] # Indices of items currently being used in a craft
 
 func _ready():
 	super()
+	if inventory:
+		inventory.inventory_changed.connect(func(): recipes_updated.emit())
 
-func add_util(util : String = ""):
-	if util == "" or util in crafting_utils: return
-	crafting_utils.append(util)
+func _exit_tree():
+	# If we leave the scene, we should ideally cancel or save state.
+	# For now, we clean up the events to avoid crashes.
+	cancel_all_crafts()
 
-func remove_util(util : String = ""):
-	if util == "" or util not in crafting_utils: return
-	crafting_utils.erase(util)
+# Gets all utils available (both from the furniture and from items inside), checking locks
+func find_util_index(util_name: String, exclude_indices: Array[int] = []) -> int:
+	if util_name == "": return -1
+	
+	# Check inherent first (always available and index is -1)
+	if util_name in inherent_utils:
+		return -1
+		
+	# Check items
+	for i in range(inventory.slots.size()):
+		if i in exclude_indices or i in locked_indices: continue
+		
+		var slot = inventory.slots[i]
+		if not slot.is_empty() and slot.item.data.has_util(util_name):
+			return i
+			
+	return -2 # Not found
 
-func find_matching_craft(items: Array[Item], util: String = "") -> Dictionary:
+# Returns a list of all recipes that can be crafted right now
+func get_valid_recipes() -> Array[Dictionary]:
+	var valid_recipes : Array[Dictionary] = []
+	var available_items = get_available_item_slots()
+	
 	for recipe in available_crafts:
+		var util_idx = find_util_index(recipe.needed_util)
+		if util_idx == -2 and recipe.needed_util != "": continue # Util missing
+			
 		var indices : Array[int] = []
-		
-		if recipe.check_order: indices = ordered_craft(recipe, items)
-		else: indices = unordered_craft(recipe, items)
-		
-		if indices.is_empty(): continue
-		
-		if not _check_util(recipe, util): continue
-		
-		return {
-			"recipe": recipe,
-			"indices": indices
-		}
-	return {}
+		if recipe.check_order: 
+			indices = ordered_craft(recipe, available_items)
+		else: 
+			indices = unordered_craft(recipe, available_items)
+			
+		if not indices.is_empty():
+			valid_recipes.append({
+				"recipe": recipe,
+				"indices": indices
+			})
+			
+	return valid_recipes
 
-func craft(util: String = "") -> void:
+# Helper to get items that are NOT locked
+func get_available_item_slots() -> Array[Dictionary]:
+	var list : Array[Dictionary] = []
+	for i in range(inventory.slots.size()):
+		if i in locked_indices: continue
+		
+		var slot = inventory.slots[i]
+		if not slot.is_empty():
+			list.append({ "item": slot.item, "index": i })
+	return list
+
+func craft(recipe: Crafts = null) -> void:
 	if entity_container_ref == null: return
-	var matched = find_matching_craft(get_all_items(), util)
+	
+	var matched : Dictionary = {}
+	var available_items = get_available_item_slots()
+	
+	if recipe:
+		# Verify specific recipe
+		var util_idx = find_util_index(recipe.needed_util)
+		if util_idx == -2 and recipe.needed_util != "": 
+			return
+			
+		var indices : Array[int] = []
+		if recipe.check_order: indices = ordered_craft(recipe, available_items)
+		else: indices = unordered_craft(recipe, available_items)
+		
+		if not indices.is_empty():
+			matched = {"recipe": recipe, "indices": indices, "util_index": util_idx}
 	
 	if matched.is_empty():
-		_cancel_cooking()
 		return
 	
-	var recipe : Crafts = matched.recipe
-	var indices : Array[int] = matched.indices
+	start_craft(matched.recipe, matched.indices, matched.util_index)
+
+func start_craft(recipe: Crafts, indices: Array[int], util_index: int):
+	# Generate unique event name
+	var event_name = "CRAFT_%s_%d" % [recipe.result_item.item_unique_name, Time.get_ticks_msec() + randi()]
+	
+	# Lock resources
+	locked_indices.append_array(indices)
+	if util_index != -1:
+		locked_indices.append(util_index)
+	
+	var craft_data = {
+		"recipe": recipe,
+		"indices": indices,
+		"util_index": util_index
+	}
+	active_crafts[event_name] = craft_data
+	
+	recipes_updated.emit() # Update UI to show locks
 	
 	if recipe.needed_time != "00:00":
-		_start_cooking(recipe, indices)
+		EventManager.create_lapse_event(
+			recipe.needed_time,
+			_execute_craft.bind(recipe, indices, util_index, event_name),
+			event_name,
+			"Cooking " + recipe.result_item.item_name,
+			false,
+			true,
+			true
+		)
 	else:
-		_execute_craft(recipe, indices)
+		_execute_craft(recipe, indices, util_index, event_name)
 
-func _start_cooking(recipe: Crafts, indices: Array[int]):
-	if current_craft == recipe and EventManager.is_event_active("COOKING_TIME"):
-		return
-	EventManager.remove_event("COOKING_TIME")
-	EventManager.create_lapse_event(
-		recipe.needed_time,
-		_execute_craft.bind(recipe, indices),
-		"COOKING_TIME",
-		"Cooking",
-		false,
-		true,
-		true
-	)
-	current_craft = recipe
+func cancel_all_crafts():
+	for event_name in active_crafts.keys():
+		EventManager.remove_event(event_name)
+	active_crafts.clear()
+	locked_indices.clear()
+	recipes_updated.emit()
 
-func _cancel_cooking():
-	if EventManager.is_event_active("COOKING_TIME"):
-		EventManager.remove_event("COOKING_TIME")
-	current_craft = null
+func _execute_craft(recipe : Crafts, match_indices: Array[int], util_index: int, event_name: String):
+	# Cleanup state
+	if active_crafts.has(event_name):
+		active_crafts.erase(event_name)
+	
+	# Unlock indices
+	for i in match_indices:
+		locked_indices.erase(i)
+	if util_index != -1:
+		locked_indices.erase(util_index)
+	
+	# Consume Util if it was an item
+	if util_index != -1:
+		var slot = inventory.slots[util_index]
+		if not slot.is_empty():
+			slot.item.uses_left -= 1
+			slot.item.item_changed.emit()
+			if slot.item.uses_left <= 0:
+				inventory.remove_item_at(util_index)
 
-func _check_util(recipe: Crafts, util: String) -> bool:
-	if recipe.needed_util == "" and util == "":
-		return true
-	return util == recipe.needed_util and util in crafting_utils
-
-func _execute_craft(recipe : Crafts, match_indices):
-	if result != null: print("craft override!!")
+	# Consume Ingredients & Handle Returns
 	for i in range(recipe.needed_items.size()):
 		var slot_index : int = match_indices[i]
 		var req : CraftSlot = recipe.needed_items[i]
 		
 		if req.item_return != null:
-			var return_obj = Item.new(req.item_return.duplicate())
-			var custom_conditions = get_slot(slot_index).item.data.custom_conditions
-			return_obj.data.custom_conditions = custom_conditions
+			var original_item = get_slot(slot_index).item
+			var return_obj = req.create_return_item(original_item)
+			if return_obj != null:
+				return_obj.update_states()  # Asegurar estados actualizados
 			get_slot(slot_index).item = return_obj
-			transfer_slot_to(entity_container_ref,slot_index)
 		else:
 			get_slot(slot_index).clear()
 			
-	var final_result = Item.new(recipe.result_item.duplicate())
+	# Create Result
+	var final_result = recipe.create_result(_get_items_from_indices(match_indices))
+	final_result.update_states()  # Asegurar estados actualizados
 	
-	result = final_result
-	current_craft = null
+	# Try to place result in Slot 2 (Result Slot) if empty, otherwise any slot
+	if not _try_add_result(final_result):
+		print("CraftingContainer: No space for result! Dropping/Destroying (TODO: Drop)")
 	
-	craft_completed.emit(result)
-	print("crafteo exitoso: ", result.data.item_unique_name)
+	craft_completed.emit(final_result)
+	print("Craft success: ", final_result.data.item_unique_name)
+	recipes_updated.emit()
+	inventory.inventory_changed.emit()
 
-func unordered_craft(crafts: Crafts, items: Array[Item]) -> Array[int]:
-	if items.size() < crafts.needed_items.size(): return []
-	var recipe_reqs = crafts.needed_items
-	var used_indices : Array[int] = []
+func _try_add_result(item: Item) -> bool:
+	# Try specific result slot (Index 2)
+	if inventory.size > 2 and inventory.slots[2].is_empty():
+		inventory.slots[2].item = item
+		inventory.slot_changed.emit(2)
+		return true
 	
-	for req : CraftSlot in recipe_reqs:
+	# Fallback to standard add
+	return inventory.add_item_instance(item)
+
+# Logic using Dictionary {item, index}
+func unordered_craft(crafts: Crafts, available_items: Array[Dictionary]) -> Array[int]:
+	if available_items.size() < crafts.needed_items.size(): return []
+	
+	var used_slot_indices : Array[int] = []
+	var used_avail_indices : Array[int] = [] # Indices in available_items array
+	
+	for req : CraftSlot in crafts.needed_items:
 		var found = false
-		for j in range(items.size()):
-			if j in used_indices: continue 
+		for j in range(available_items.size()):
+			if j in used_avail_indices: continue 
 			
-			if req.matches(items[j]):
-				used_indices.append(j)
+			if req.matches(available_items[j].item):
+				used_avail_indices.append(j)
+				used_slot_indices.append(available_items[j].index)
 				found = true
 				break 
 				
 		if not found: return []
-	return used_indices
+	return used_slot_indices
 
-func ordered_craft(crafts : Crafts, items : Array[Item]) -> Array[int]:
-	if items.size() < crafts.needed_items.size(): return []
+func ordered_craft(crafts : Crafts, available_items : Array[Dictionary]) -> Array[int]:
+	if available_items.size() < crafts.needed_items.size(): return []
 	
-	var used_indices : Array[int] = []
+	# Ordered implies sequence in the *available* list? 
+	# Or strict mapping? "Ordered" usually means "Shape" in grid.
+	# Here we assume strict sequence in the provided list.
+	# But available_items might be [Slot0, Slot3, Slot5].
+	# If recipe needs [A, B]. Slot0=A, Slot3=B -> Valid.
+	
+	var used_slot_indices : Array[int] = []
+	
 	for i in range(crafts.needed_items.size()):
-		if crafts.needed_items[i].matches(items[i]):
-			used_indices.append(i)
+		if crafts.needed_items[i].matches(available_items[i].item):
+			used_slot_indices.append(available_items[i].index)
 		else:
 			return [] 
-	return used_indices
+	return used_slot_indices
 
-func return_result(container : InventoryContainer):
-	if result == null or container == null: return
-	
-	container.add_item(result)
-	
-	result = null
+func get_locked_indices() -> Array[int]:
+	return locked_indices
+
+func _get_items_from_indices(indices: Array[int]) -> Array[Item]:
+	var items: Array[Item] = []
+	for idx in indices:
+		var slot = get_slot(idx)
+		if slot and not slot.is_empty():
+			items.append(slot.item)
+	return items

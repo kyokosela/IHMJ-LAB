@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="CustomCondition" load_steps=9 format=3]
+
+[ext_resource type="Resource" uid="uid://b3f5am2y78fhd" path="res://Resources/Items/States/ClothStates/cleanliness_clean.tres" id="1_clean"]
+[ext_resource type="Script" uid="uid://2ayeg7yj87f6" path="res://Resources/Items/Conditions/condition_threshold.gd" id="2_threshold"]
+[ext_resource type="Script" uid="uid://df2q5ei6ve3yq" path="res://Resources/Items/Conditions/threshold_entry.gd" id="3_entry"]
+[ext_resource type="Resource" uid="uid://pakkdkw1rrxv" path="res://Resources/Items/States/ClothStates/cleanliness_dirty.tres" id="4_dirty"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="5_cc"]
+
+[sub_resource type="Resource" id="Resource_dirty_threshold"]
+script = ExtResource("3_entry")
+max_value = 50.0
+state = ExtResource("4_dirty")
+
+[sub_resource type="Resource" id="Resource_clean_threshold"]
+script = ExtResource("3_entry")
+max_value = 100.0
+state = ExtResource("1_clean")
+
+[sub_resource type="Resource" id="Resource_threshold"]
+script = ExtResource("2_threshold")
+thresholds = Array[ExtResource("3_entry")]([SubResource("Resource_dirty_threshold"), SubResource("Resource_clean_threshold")])
+default_state = ExtResource("1_clean")
+
+[resource]
+script = ExtResource("5_cc")
+condition = "cleanliness"
+value = 100.0
+base_decay_time = 0
+enviroment_condition = "washing"
+condition_threshold = SubResource("Resource_threshold")
+can_decay = false

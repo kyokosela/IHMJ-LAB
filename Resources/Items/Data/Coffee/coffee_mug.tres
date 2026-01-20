@@ -101,4 +101,6 @@ item_type = 1
 behavior = ExtResource("1_ajf85")
 base_decay_time = 360
 custom_conditions = Array[ExtResource("2_k1sii")]([SubResource("Resource_jwk0b"), SubResource("Resource_dachf")])
+is_holder = true
+holdable_types = Array[int]([1])
 metadata/_custom_type_script = "uid://b03xnf82gb26a"

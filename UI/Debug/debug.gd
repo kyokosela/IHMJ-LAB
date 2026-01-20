@@ -31,12 +31,24 @@ const ITEM_CONTAINER = preload("uid://cuu2mriq75id7") # UID MIEDO
 
 var current_entity : Entity:
 	set(_v):
-		if _v._has_inventory():
-			initial_item_setup(_v)
+		_disconnect_current_entity()
 		current_entity = _v
+		if _v and _v._has_inventory():
+			_connect_entity_inventory(_v)
+
+var _connected_inventory: InventoryComponent = null
 
 var frame_time_ms := 0.0
 var playtime := 0.0
+
+## Throttle para updates - no actualizar más de X veces por segundo
+var _item_update_pending: bool = false
+var _last_item_update_time: float = 0.0
+const ITEM_UPDATE_THROTTLE: float = 0.1  # 100ms mínimo entre updates
+
+## Throttle para game_info - no actualizar cada frame
+var _game_info_timer: float = 0.0
+const GAME_INFO_UPDATE_INTERVAL: float = 0.1  # 100ms
 
 func _ready() -> void:
 	close_requested.connect(hide)
@@ -51,27 +63,41 @@ func _ready() -> void:
 	PlayerManager.effect_added.connect(_on_effect_active)
 	PlayerManager.effect_removed.connect(_on_effect_remove)
 
-func initial_item_setup(entity: Entity) -> void:
-	if current_entity == entity: return
-	entity.inventory_container().inventory.item_added.connect(on_item_added)
-	entity.inventory_container().inventory.item_removed.connect(on_item_removed)
-	entity.inventory_container().inventory.inventory_changed.connect(item_update)
+func _disconnect_current_entity():
+	if _connected_inventory and is_instance_valid(_connected_inventory):
+		if _connected_inventory.item_added.is_connected(on_item_added):
+			_connected_inventory.item_added.disconnect(on_item_added)
+		if _connected_inventory.item_removed.is_connected(on_item_removed):
+			_connected_inventory.item_removed.disconnect(on_item_removed)
+		if _connected_inventory.inventory_changed.is_connected(_on_inventory_changed):
+			_connected_inventory.inventory_changed.disconnect(_on_inventory_changed)
+	_connected_inventory = null
 	
+	# Limpiar widgets de items
+	for widget in item_widgets.values():
+		if is_instance_valid(widget):
+			widget.queue_free()
+	item_widgets.clear()
+
+func _connect_entity_inventory(entity: Entity) -> void:
+	var inv = entity.inventory_container().inventory
+	_connected_inventory = inv
+	
+	inv.item_added.connect(on_item_added)
+	inv.item_removed.connect(on_item_removed)
+	inv.inventory_changed.connect(_on_inventory_changed)
+	
+	# Setup inicial de items
 	for x in entity.inventory.get_all_items():
 		on_item_added(x)
-	
-	item_update()
-	
 
 func on_item_added(item: Item) -> void:
-	print("ello")
 	if item_widgets.has(item):
 		return
 	var widget : ItemContainerDebug = ITEM_CONTAINER.instantiate()
 	widget.item = item
 	item_widgets[item] = widget
 	item_list.add_child(widget)
-	
 	widget.update()
 
 func on_item_removed(item: Item) -> void:
@@ -79,11 +105,68 @@ func on_item_removed(item: Item) -> void:
 		return
 	var widget = item_widgets[item]
 	item_widgets.erase(item)
-	widget.queue_free()
+	if is_instance_valid(widget):
+		widget.queue_free()
 
-func item_update() -> void:
-	for x : ItemContainerDebug in item_widgets.values():
-		x.update()
+func _on_inventory_changed() -> void:
+	# Marcar para update
+	_item_update_pending = true
+	
+		# Sincronizar orden visual con el inventario
+	if _connected_inventory:
+		# Mapear item -> slot_index
+		var item_slots = {}
+		var ordered_items = []
+		
+		for i in range(_connected_inventory.slots.size()):
+			var slot = _connected_inventory.slots[i]
+			if not slot.is_empty():
+				item_slots[slot.item] = i
+				ordered_items.append(slot.item)
+		
+		# Eliminar widgets de items que ya no están
+		var items_to_remove = []
+		for item in item_widgets.keys():
+			if not item_slots.has(item):
+				items_to_remove.append(item)
+		
+		for item in items_to_remove:
+			on_item_removed(item)
+			
+		# Añadir o mover widgets y actualizar slot info
+		for i in range(ordered_items.size()):
+			var item = ordered_items[i]
+			if not item_widgets.has(item):
+				on_item_added(item)
+			
+			var widget = item_widgets[item]
+			
+			# Mover visualmente
+			if widget.get_parent() == item_list:
+				item_list.move_child(widget, i)
+			
+			# Actualizar slot index en el widget
+			if widget.has_method("set_slot_index"):
+				widget.set_slot_index(item_slots[item])
+
+func _process_item_updates():
+	if not _item_update_pending:
+		return
+	
+	var current_time_ms = Time.get_ticks_msec() / 1000.0
+	if current_time_ms - _last_item_update_time < ITEM_UPDATE_THROTTLE:
+		return  # Esperar más tiempo
+	
+	_item_update_pending = false
+	_last_item_update_time = current_time_ms
+	
+	# Solo actualizar widgets visibles
+	if not visible:
+		return
+	
+	for widget in item_widgets.values():
+		if is_instance_valid(widget):
+			widget.update()
 
 func _on_effect_active(effect : Effect) -> void :
 	var _label := Label.new()
@@ -110,7 +193,6 @@ func world_initial_setup():
 	world.entity_removed.connect(_on_entity_removed)
 
 func _on_entity_added(entity: Entity) -> void:
-	print("ola")
 	if entity_widgets.has(entity):
 		return
 	var widget = ENTITY_BUTTON.instantiate()
@@ -127,10 +209,8 @@ func setup_stats() -> void:
 		widget.info_update()
 
 func update_stats() -> void:
-	print("ol")
 	for x in stat_widgets:
 		x.info_update()
-	
 
 func _on_entity_removed(entity: Entity) -> void:
 	if not entity_widgets.has(entity):
@@ -139,16 +219,30 @@ func _on_entity_removed(entity: Entity) -> void:
 	var widget = entity_widgets[entity]
 	entity_widgets.erase(entity)
 
-	widget.queue_free()
+	if is_instance_valid(widget):
+		widget.queue_free()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	game_info_update(_delta)
-	entity_info_update(_delta)
 	if not get_tree().paused:
-		playtime+= _delta
+		playtime += _delta
+	
+	# Solo actualizar UI si el panel está visible
+	if not visible:
+		return
+	
+	# Procesar updates pendientes de items (throttled)
+	_process_item_updates()
+	
+	# Throttle game_info updates
+	_game_info_timer += _delta
+	if _game_info_timer >= GAME_INFO_UPDATE_INTERVAL:
+		_game_info_timer = 0.0
+		game_info_update(_delta)
+		entity_info_update(_delta)
 
 func time_debug(_m,_w,_d,_r,_wi) -> void:
+	if not visible:
+		return
 	current_time.text = "Current Timer: %s" % TimeManager.get_current_time()
 	current_day.text = "Current Day: %s" % TimeManager.day
 	current_week.text = "Current Week: %s" % TimeManager.week

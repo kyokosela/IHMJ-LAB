@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://tcey4tkkfvd8"]
+[gd_scene load_steps=36 format=3 uid="uid://tcey4tkkfvd8"]
 
 [ext_resource type="Script" uid="uid://76eoxychonuw" path="res://Prefabs/Player/Player.gd" id="1_t5con"]
 [ext_resource type="Script" uid="uid://cx06pj7isyhot" path="res://Prefabs/Components/movement_component.gd" id="2_1cl7s"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://bo45lmkm6yiet" path="res://Resources/Containers/container_environment.gd" id="4_3opp6"]
 [ext_resource type="Script" uid="uid://ducauixn8n82c" path="res://Prefabs/Player/States/player_idle.gd" id="4_hnr8y"]
 [ext_resource type="Script" uid="uid://cgylbrtu8pte4" path="res://Prefabs/Player/States/player_walk.gd" id="5_5virf"]
+[ext_resource type="Script" uid="uid://dpxpbvvq6y80g" path="res://Prefabs/Components/save_component.gd" id="6_us0jv"]
 [ext_resource type="Resource" uid="uid://cgiarn82yn77y" path="res://Resources/SpriteStacks/Mayui/mayui_work.tres" id="7_2lcig"]
 [ext_resource type="Script" uid="uid://bswuea3inx1i8" path="res://Resources/SpriteStacks/Mayui/sprite_preset.gd" id="7_3j425"]
 [ext_resource type="Texture2D" uid="uid://o384ea47yxv5" path="res://Assets/Mayui/mayui_work_legs.png" id="8_h0qm3"]
@@ -209,6 +210,12 @@ environment = SubResource("Resource_21ku0")
 [node name="InventoryComponent" type="Node2D" parent="PlayerInventoryContainer"]
 script = ExtResource("2_rcqut")
 metadata/_custom_type_script = "uid://ctwvwqkrwenys"
+
+[node name="SaveComponent" type="Node" parent="InventoryContainer/InventoryComponent"]
+script = ExtResource("6_us0jv")
+uid = "player:inventory"
+props_to_save = Array[String](["slots"])
+metadata/_custom_type_script = "uid://dpxpbvvq6y80g"
 
 [node name="SpriteComponent" type="Node2D" parent="." node_paths=PackedStringArray("animation_player")]
 script = ExtResource("2_8ipit")

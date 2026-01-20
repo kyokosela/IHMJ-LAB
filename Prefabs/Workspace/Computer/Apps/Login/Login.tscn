@@ -15,7 +15,7 @@ script = ExtResource("1_xmxxw")
 [node name="SaveComponent" type="Node" parent="."]
 script = ExtResource("2_ykq1l")
 uid = "app:login"
-props_to_save = Array[String](["_attempts"])
+props_to_save = Array[String](["retries:_attempts"])
 metadata/_custom_type_script = "uid://dpxpbvvq6y80g"
 
 [node name="Blur" type="ColorRect" parent="."]

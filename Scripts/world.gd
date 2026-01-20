@@ -11,7 +11,6 @@ signal entity_created(entity : Entity)
 signal entity_removed(entity : Entity)
 
 func _ready() -> void:
-	GameManager.new_game()
 	ZoneManager.zone_node = self
 	if player_enabled : 
 		PlayerManager.player.reparent(self, false)

@@ -14,7 +14,7 @@ var _defer_inventory_signal: bool = false
 var _pending_inventory_signal: bool = false
 
 func _ready() -> void:
-	_initialize_slots()
+	if slots.is_empty(): _initialize_slots()
 
 func _initialize_slots():
 	slots.clear()

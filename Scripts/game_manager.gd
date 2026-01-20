@@ -30,7 +30,7 @@ func _process(_delta: float) -> void:
 func new_game() -> void:
 	is_on_tutorial = true
 	
-	SaveManager._global.clear()
+	SaveManager.clear()
 	
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
@@ -92,9 +92,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not OS.is_debug_build(): return
 	
 	if event.is_action_pressed("debug_save"):
+		print("saving...")
 		save_file(0)
 		
 	if event.is_action_pressed("debug_load"):
+		print("loading...")
 		load_file(0)
 		get_tree().reload_current_scene()
+		
+	if event.is_action_pressed("debug_print_save_runtime"):
+		print("printing...")
+		SaveManager.debug_print()
 #endregion

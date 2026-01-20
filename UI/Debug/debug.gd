@@ -19,6 +19,9 @@ class_name DebugPanel
 @onready var current_week_day: RichTextLabel = %CurrentWeekDay
 @onready var item_list: VBoxContainer = %ItemList
 @onready var active_entities: VBoxContainer = %ActiveEntities
+@onready var sanity_value : Label = %sanityValue
+@onready var sanity_spin_box : SpinBox = %sanitySpinBox
+@onready var sanity_name : Label = %sanityName
 
 var entity_widgets : Dictionary = {}
 var stat_widgets : Array[StatContainerDebug]
@@ -62,6 +65,7 @@ func _ready() -> void:
 	TimeManager.time_changed.connect(time_debug)
 	PlayerManager.effect_added.connect(_on_effect_active)
 	PlayerManager.effect_removed.connect(_on_effect_remove)
+	PlayerManager.sanity_changed.connect(_sanity_changed)
 
 func _disconnect_current_entity():
 	if _connected_inventory and is_instance_valid(_connected_inventory):
@@ -99,6 +103,16 @@ func on_item_added(item: Item) -> void:
 	item_widgets[item] = widget
 	item_list.add_child(widget)
 	widget.update()
+
+func _sanity_changed(_value, _old_val) -> void :
+	sanity_value.text = str(_value)
+	match PlayerManager.get_sanity_state() :
+		PlayerManager.SANITY_STATES.DOCILE :
+			sanity_name.text = "Docile"
+		PlayerManager.SANITY_STATES.NEUTRAL :
+			sanity_name.text = "Neutral"
+		PlayerManager.SANITY_STATES.DISTURBED :
+			sanity_name.text = "Disturbed"
 
 func on_item_removed(item: Item) -> void:
 	if not item_widgets.has(item):
@@ -300,8 +314,6 @@ func game_info_update(_delta : float)->void:
 		"scale": Engine.time_scale
 	})
 
-
-
 func _on_add_time_pressed() -> void:
 	if TimeUtils.is_valid_format(line_edit.text):
 		TimeManager.add_to_current_time(line_edit.text)
@@ -313,3 +325,9 @@ func _on_remove_time_pressed() -> void:
 func _on_set_time_pressed() -> void:
 	if TimeUtils.is_valid_format(line_edit.text):
 		TimeManager.set_current_time(line_edit.text)
+
+func _on_sanity_increase_pressed() -> void:
+	PlayerManager.sanity_value += sanity_spin_box.value
+
+func _on_sanity_decrease_pressed() -> void:
+	PlayerManager.sanity_value -= sanity_spin_box.value

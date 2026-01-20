@@ -195,12 +195,6 @@ scale = Vector2(10, 10)
 script = ExtResource("2_jqbpu")
 metadata/_custom_type_script = "uid://bwwsmokf0q8y2"
 
-[node name="TextureRect5" type="TextureRect" parent="Entity"]
-offset_left = -9.600004
-offset_top = -26.400005
-offset_right = 8.799995
-offset_bottom = 6.39999
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entity"]
 position = Vector2(0, -8)
 scale = Vector2(0.99999994, 0.99999994)

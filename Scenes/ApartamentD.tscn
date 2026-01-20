@@ -77,11 +77,10 @@ zoom = Vector2(2, 2)
 [node name="DebugPanel" parent="." node_paths=PackedStringArray("world") instance=ExtResource("5_yw1yi")]
 world = NodePath("..")
 
-[node name="Wardrobe" type="Area2D" parent="." node_paths=PackedStringArray("container_ui")]
+[node name="Wardrobe" type="Area2D" parent="."]
 position = Vector2(128, 40)
 script = ExtResource("13_sl7m2")
 initial_items = Array[ExtResource("6_4dip4")]([ExtResource("7_53t5c"), ExtResource("7_i0syb")])
-container_ui = NodePath("../CanvasLayer/WardrobeUI")
 shape = SubResource("RectangleShape2D_ox6iw")
 reusable = true
 is_solid = true

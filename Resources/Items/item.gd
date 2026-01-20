@@ -10,7 +10,7 @@ signal held_item_changed
 @export var condition : float = 100.0:
 	set(_v): 
 		condition = clamp(_v, 0.0, 100.0)
-		update_states()
+		if data: update_states()
 
 var states : Dictionary[String, ItemState]
 var uses_left : int = 1

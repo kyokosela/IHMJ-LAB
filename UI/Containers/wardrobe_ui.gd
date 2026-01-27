@@ -1,5 +1,8 @@
 extends Control
 
+#hice merge de estos cambios que antes ustedes no habían pulleado
+#bila necesito que me ayudes a ajustar los controls para hacer el drag and drop
+
 enum STATE {CLEAN, DIRTY, WET, EMPTY, FULL}
 
 @export var preset: ClothingData:

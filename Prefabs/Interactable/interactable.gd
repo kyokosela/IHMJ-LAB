@@ -10,12 +10,12 @@ enum SIGNAL_TYPE {AREA, BODY}
 enum TOGGLE_MODE {TOGGLE,SHOW,HIDE}
 var collshape : CollisionShape2D
 #booleana para codigo de seguridad
-# Fix: Added Engine.is_editor_hint() check to prevent accessing GameManager in @tool mode before autoloads are ready
+# Fix: Añadido Engine.is_editor_hint() para evitar acceder a GameManager en @tool mode antes de que los autoloads estén listos
 var index_code: bool = GameManager.index_code if GameManager and not Engine.is_editor_hint() else false
 
 ## Rango de interaccion
 @export_group("Behaviour")
-# Fix: Added collshape null check to prevent shape assignment errors when collshape is not yet initialized
+# Fix: Añadido null check de collshape para prevenir errores de asignación de shape cuando collshape aún no está inicializado
 @export var shape : Shape2D : 
 	set(value) : shape = value; if Engine.is_editor_hint() and collshape: collshape.shape = shape
 @export var display_text : String ## default: _INTERACT_BASE_MESSAGE_, Texto que se mostrara en pantalla al entrar en el rango del area, si esta vacio no mostrara nada

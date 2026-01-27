@@ -45,11 +45,14 @@ func custom_execute():
 
 func _ready() -> void:
 	super()
-	if EventManager.is_event_exist(interaction_name.to_upper() + "_COOLDOWN") : is_cooldown = true
-	if effect_messages : effect_messages.end_chain.connect(_on_end_chain)
-	if event_messages : event_messages.end_chain.connect(_on_end_chain)
-	if stat_messages : stat_messages.end_chain.connect(_on_end_chain)
-	if cooldown_timer_message : cooldown_timer_message.end_chain.connect(set_cooldown, true)
+	# Fix: Añadido Engine.is_editor_hint() para evitar acceder a EventManager en @tool mode antes de que los autoloads estén listos
+	if EventManager and not Engine.is_editor_hint() and EventManager.is_event_exist(interaction_name.to_upper() + "_COOLDOWN") : is_cooldown = true
+	
+	# Fix: Añadidos checks para evitar acceder a la señal end_chain en instancias Resource placeholder en @tool mode
+	if effect_messages and not Engine.is_editor_hint(): effect_messages.end_chain.connect(_on_end_chain)
+	if event_messages and not Engine.is_editor_hint(): event_messages.end_chain.connect(_on_end_chain)
+	if stat_messages and not Engine.is_editor_hint(): stat_messages.end_chain.connect(_on_end_chain)
+	if cooldown_timer_message and not Engine.is_editor_hint(): cooldown_timer_message.end_chain.connect(set_cooldown, true)
 
 func _on_end_chain() -> void :
 	set_cooldown()

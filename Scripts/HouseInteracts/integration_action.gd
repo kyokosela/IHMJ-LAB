@@ -85,6 +85,7 @@ enum ActionType {
 @export var action_type: ActionType = ActionType.OPEN_WORKSPACE
 @export var event_name: String = ""
 @export var flag_name: String = ""
+@export var bed_type: int = PlayerManager.BED_TYPE.TYPE_C
 
 func custom_execute() -> void:
 	super()
@@ -247,7 +248,7 @@ func _simulate_zone_change(zone_id: int) -> void:
 
 func _do_sleep() -> void:
 	# Use PlayerManager's built-in sleep function
-	PlayerManager.sleep()
+	PlayerManager.sleep("00:00", bed_type)
 	_show_feedback("Dormiste hasta las 06:30")
 
 func _do_bathe() -> void:

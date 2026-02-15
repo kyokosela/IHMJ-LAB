@@ -80,6 +80,17 @@ const INSOMNIA_LEVEL2_SLEEP_MAX_HOURS : int = 6
 const INSOMNIA_LEVEL3_SLEEP_MIN_HOURS : int = 0
 const INSOMNIA_LEVEL3_SLEEP_MAX_HOURS : int = 3
 const INSOMNIA_RECOVERY_REQUIRED_PROPER_SLEEPS : int = 2
+const SLEEP_STRESS_BASE_REDUCTION_PERCENT : float = 8.0
+const SLEEP_STRESS_BED_A_BONUS_PERCENT : float = 6.0
+const SLEEP_STRESS_BED_B_BONUS_PERCENT : float = 2.0
+const SLEEP_ALARM_OVERRIDE_FLAG : String = "sleep_alarm_hours_override"
+const SLEEP_ALARM_ACCESS_FLAGS : Array[String] = ["has_alarm_clock", "has_alarm_phone"]
+
+enum BED_TYPE {
+	TYPE_C,
+	TYPE_B,
+	TYPE_A
+}
 
 var primary_reached_lv3 : Dictionary[String, bool] = {
 	"STRESS": false,
@@ -358,13 +369,13 @@ var minimun_hours_ranges := [
 var mininum_energy_ranges : Dictionary = {
 	"01:00" : 5, "02:00" : 8, "03:00" : 10,
 	"04:00" : 12,"05:00" : 15,"06:00" : 20,
-	"07:00" : 30,"08:00" : 35,"09:00" : 40,
-	"10:00" : 42
+	"07:00" : 30,"08:00" : 35,"09:00" : 38,
+	"10:00" : 40
 }
 
 var hour_debt : String = "00:00"
 
-func sleep(hour_deal : String = "00:00") -> void :
+func sleep(hour_deal : String = "00:00", bed_type: int = BED_TYPE.TYPE_C) -> void :
 	var minimun_hours : String = "00:00"
 	
 	var current_energy : float = get_stat_value("ENERGY")
@@ -377,7 +388,17 @@ func sleep(hour_deal : String = "00:00") -> void :
 	if minimun_hours == "00:00" :
 		return
 
+	minimun_hours = _get_adjusted_minimum_sleep(minimun_hours, bed_type)
+
 	var requested_sleep : String = hour_deal
+	if requested_sleep == "00:00" and _can_use_alarm_override():
+		var override_hours : Variant = NarrativeFlags.get_value(SLEEP_ALARM_OVERRIDE_FLAG, "00:00")
+		if override_hours is String and TimeUtils.is_valid_format(override_hours):
+			requested_sleep = override_hours
+
+	if requested_sleep != "00:00" and !_can_use_alarm_override():
+		requested_sleep = "00:00"
+
 	if requested_sleep == "00:00":
 		requested_sleep = minimun_hours
 
@@ -398,14 +419,8 @@ func sleep(hour_deal : String = "00:00") -> void :
 	if !has_effect("SLEEPY") and !has_effect("INSOMNIA") : 
 		hour_debt = TimeUtils.increase_time(hour_debt, TimeUtils.decrease_time(minimun_hours, actual_sleep))
 	
-	var base_energy = mininum_energy_ranges[minimun_hours]
-	var hour_deal_value = TimeUtils.get_minutes(actual_sleep)
-	var minimun_hour_value = TimeUtils.get_minutes(minimun_hours)
-	
-	var ratio := float(hour_deal_value) / float(minimun_hour_value)
-	ratio = clamp(ratio, 0.0, 1.0)
-
-	var energy_deal = base_energy * ratio
+	var base_energy : float = _get_base_energy_for_hours(actual_sleep)
+	var energy_deal : float = base_energy * _get_bed_energy_multiplier(bed_type)
 
 	TransitionManager.fadeIn(3)
 	await TransitionManager.transition_finished
@@ -413,10 +428,14 @@ func sleep(hour_deal : String = "00:00") -> void :
 	TransitionManager.fadeOut(3)
 	
 	increase_stat("ENERGY", energy_deal)
+	_apply_sleep_stress_reduction(bed_type)
 	if !has_effect("INSOMNIA") :
 		decrease_control_effect_hour("SLEEPY", actual_sleep)
 	else:
 		_register_insomnia_sleep_quality(minimun_hours, actual_sleep)
+
+	if !has_effect("INSOMNIA") and !TimeUtils.is_greater_or_equal(minimun_hours, actual_sleep):
+		add_effect(EFFECT_INSOMNIA.duplicate())
 	EventManager.reset_lapse_event("AUTO_SLEEPY_LAPSE")
 	
 	if TimeUtils.is_greater_or_equal("06:00", hour_debt) and !has_effect("SLEEPY") and !has_effect("INSOMNIA"): # las 6 horas indican cuanto se debe acumular para aplicar sueño
@@ -454,6 +473,87 @@ func _register_insomnia_sleep_quality(minimum_hours: String, actual_sleep: Strin
 
 	insomnia_bad_sleep_days += 1
 	insomnia_proper_sleep_streak = 0
+
+func _get_adjusted_minimum_sleep(base_minimum_hours: String, bed_type: int) -> String:
+	var reduction_minutes : int = _get_bed_time_reduction_minutes(bed_type)
+	if reduction_minutes <= 0:
+		return base_minimum_hours
+
+	var reduced_minutes : int = maxi(TimeUtils.get_minutes(base_minimum_hours) - reduction_minutes, 0)
+	return TimeManager.format_minutes(reduced_minutes)
+
+func _get_bed_time_reduction_minutes(bed_type: int) -> int:
+	match bed_type:
+		BED_TYPE.TYPE_A:
+			return 60
+		BED_TYPE.TYPE_B:
+			return 30
+	return 0
+
+func _get_bed_energy_multiplier(bed_type: int) -> float:
+	match bed_type:
+		BED_TYPE.TYPE_A:
+			return 1.10
+		BED_TYPE.TYPE_B:
+			return 1.05
+	return 1.0
+
+func _get_base_energy_for_hours(sleep_time: String) -> float:
+	var sleep_minutes : int = TimeUtils.get_minutes(sleep_time)
+	if sleep_minutes <= 0:
+		return 0.0
+
+	var sleep_hours : float = float(sleep_minutes) / 60.0
+	if sleep_hours >= 10.0:
+		return 40.0
+
+	var lower_hour : int = maxi(int(floor(sleep_hours)), 1)
+	var upper_hour : int = mini(int(ceili(sleep_hours)), 10)
+	var lower_key : String = "%02d:00" % lower_hour
+	var upper_key : String = "%02d:00" % upper_hour
+	var lower_value : float = float(mininum_energy_ranges.get(lower_key, 0.0))
+	var upper_value : float = float(mininum_energy_ranges.get(upper_key, lower_value))
+
+	if lower_hour == upper_hour:
+		return lower_value
+
+	var t : float = clamp(sleep_hours - float(lower_hour), 0.0, 1.0)
+	return lerpf(lower_value, upper_value, t)
+
+func _get_sleep_stress_reduction_percent(bed_type: int) -> float:
+	var reduction : float = SLEEP_STRESS_BASE_REDUCTION_PERCENT
+	match bed_type:
+		BED_TYPE.TYPE_A:
+			reduction += SLEEP_STRESS_BED_A_BONUS_PERCENT
+		BED_TYPE.TYPE_B:
+			reduction += SLEEP_STRESS_BED_B_BONUS_PERCENT
+	return reduction
+
+func _apply_sleep_stress_reduction(bed_type: int) -> void:
+	## Deterministic stress reduction on sleep.
+	## Design: base -8% + bed bonus (A: +6%, B: +2%, C: +0%).
+	## Mapped to STRESS effect levels: always attempt to reduce 1 level.
+	## Floor rule: if worked today, cannot remove STRESS entirely (keeps Lv1 minimum).
+	var stress_effect : EffectLevel = get_effect_res("STRESS") as EffectLevel
+	if stress_effect == null:
+		return
+
+	var worked_today : bool = AttendanceManager.arrived_today
+
+	# Floor rule: if worked today and at Lv1, do not remove
+	if worked_today and stress_effect.level <= 0:
+		return
+
+	# At Lv1 and did not work today -> remove entirely
+	if stress_effect.level <= 0:
+		remove_effect("STRESS")
+		return
+
+	# Reduce by 1 level
+	stress_effect.change_level_value(stress_effect.level - 1)
+
+func _can_use_alarm_override() -> bool:
+	return NarrativeFlags.has_any_flag(SLEEP_ALARM_ACCESS_FLAGS)
 #endregion
 
 #region WORK TASK SUCCESS PENALTY
@@ -588,11 +688,6 @@ func _grant_opposite_primary_effect(removed_effect_name: String) -> void:
 
 func _update_insomnia_days() -> void:
 	var insomnia_effect : EffectLevel = get_effect_res("INSOMNIA") as EffectLevel
-
-	# Trigger insomnia from low sanity if not active
-	if insomnia_effect == null and sanity_value < INSOMNIA_TRIGGER_SANITY_MAX:
-		add_effect(EFFECT_INSOMNIA.duplicate())
-		insomnia_effect = get_effect_res("INSOMNIA") as EffectLevel
 
 	if insomnia_effect == null:
 		insomnia_days_active = 0

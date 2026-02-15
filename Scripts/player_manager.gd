@@ -86,6 +86,14 @@ const SLEEP_STRESS_BED_B_BONUS_PERCENT : float = 2.0
 const SLEEP_ALARM_OVERRIDE_FLAG : String = "sleep_alarm_hours_override"
 const SLEEP_ALARM_ACCESS_FLAGS : Array[String] = ["has_alarm_clock", "has_alarm_phone"]
 
+## INSOMNIA trigger constants (from design doc)
+const INSOMNIA_COFFEE_ENERGY_THRESHOLD : float = 90.0
+const INSOMNIA_HYPERACTIVE_HEALTH_PENALTY : float = 5.0
+const SLEEPY_LEVEL3_FOR_INSOMNIA : int = 2  # 0-indexed, so level 2 = Lv3
+
+## Hyperactive stacking tracker
+var hyperactive_stack_count : int = 0
+
 enum BED_TYPE {
 	TYPE_C,
 	TYPE_B,
@@ -239,6 +247,10 @@ func add_effect(effect : Effect) -> void :
 				_reduce_or_remove_primary_effect(opposite_effect)
 				return
 
+	# HYPERACTIVE stacking trigger: two consecutive applications -> INSOMNIA
+	if effect.effect_unique_name == "HYPERACTIVE":
+		_handle_hyperactive_stacking()
+
 	if has_effect(effect.effect_unique_name) :
 		if effect is EffectLevel:
 			increase_level_effect(effect.effect_unique_name, 1)
@@ -246,6 +258,12 @@ func add_effect(effect : Effect) -> void :
 	else :
 		effect_added.emit(effect)
 		effects.append(effect)
+		
+		# Check INSOMNIA + HYPERACTIVE combo -> health penalty
+		if effect.effect_unique_name == "HYPERACTIVE" and has_effect("INSOMNIA"):
+			_apply_insomnia_hyperactive_health_penalty()
+		elif effect.effect_unique_name == "INSOMNIA" and has_effect("HYPERACTIVE"):
+			_apply_insomnia_hyperactive_health_penalty()
 		
 		if effect is TemporalEffect :
 			EventManager.create_lapse_event(effect.duration, remove_effect.bind(effect.effect_unique_name), "REMOVE_WEAK_AUTOMATICALLY", "", false, true, true)
@@ -554,6 +572,47 @@ func _apply_sleep_stress_reduction(bed_type: int) -> void:
 
 func _can_use_alarm_override() -> bool:
 	return NarrativeFlags.has_any_flag(SLEEP_ALARM_ACCESS_FLAGS)
+
+#region INSOMNIA TRIGGER MATRIX
+
+## Hyperactive stacking: two consecutive HYPERACTIVE applications trigger INSOMNIA
+func _handle_hyperactive_stacking() -> void:
+	if has_effect("HYPERACTIVE"):
+		# Already have hyperactive, this is second application
+		hyperactive_stack_count += 1
+		if hyperactive_stack_count >= 2 and not has_effect("INSOMNIA"):
+			add_effect(EFFECT_INSOMNIA.duplicate())
+			hyperactive_stack_count = 0
+	else:
+		hyperactive_stack_count = 1
+
+## Reset hyperactive stack when effect is removed
+func _reset_hyperactive_stack() -> void:
+	hyperactive_stack_count = 0
+
+## INSOMNIA + HYPERACTIVE combo: apply health penalty
+func _apply_insomnia_hyperactive_health_penalty() -> void:
+	var health_stat : Stat = get_stat_res("HEALTH")
+	if health_stat != null:
+		decrease_stat("HEALTH", INSOMNIA_HYPERACTIVE_HEALTH_PENALTY)
+
+## Coffee at high energy (>= 90%) triggers INSOMNIA
+## Call this when coffee is consumed
+func check_coffee_insomnia_trigger() -> void:
+	var current_energy : float = get_stat_value("ENERGY")
+	if current_energy >= INSOMNIA_COFFEE_ENERGY_THRESHOLD and not has_effect("INSOMNIA"):
+		add_effect(EFFECT_INSOMNIA.duplicate())
+
+## SLEEPY III + day without proper sleep triggers INSOMNIA
+func _check_sleepy_insomnia_trigger() -> void:
+	var sleepy_effect : EffectLevel = get_effect_res("SLEEPY") as EffectLevel
+	if sleepy_effect == null:
+		return
+	
+	if sleepy_effect.level >= SLEEPY_LEVEL3_FOR_INSOMNIA and insomnia_bad_sleep_days >= 1:
+		if not has_effect("INSOMNIA"):
+			add_effect(EFFECT_INSOMNIA.duplicate())
+
 #endregion
 
 #region WORK TASK SUCCESS PENALTY
@@ -689,6 +748,16 @@ func _grant_opposite_primary_effect(removed_effect_name: String) -> void:
 func _update_insomnia_days() -> void:
 	var insomnia_effect : EffectLevel = get_effect_res("INSOMNIA") as EffectLevel
 
+	# Trigger insomnia from low sanity if not active (design: Cordura < 30%)
+	if insomnia_effect == null and sanity_value < INSOMNIA_TRIGGER_SANITY_MAX:
+		add_effect(EFFECT_INSOMNIA.duplicate())
+		insomnia_effect = get_effect_res("INSOMNIA") as EffectLevel
+
+	# Trigger insomnia from SLEEPY III + bad sleep day
+	if insomnia_effect == null:
+		_check_sleepy_insomnia_trigger()
+		insomnia_effect = get_effect_res("INSOMNIA") as EffectLevel
+
 	if insomnia_effect == null:
 		insomnia_days_active = 0
 		return
@@ -716,6 +785,9 @@ func _on_effect_removed(effect: Effect) -> void:
 		insomnia_proper_sleep_streak = 0
 		if has_effect("ATENTA"):
 			remove_effect("ATENTA")
+
+	if effect.effect_unique_name == "HYPERACTIVE":
+		_reset_hyperactive_stack()
 
 	if effect.effect_unique_name == "STRESS" or effect.effect_unique_name == "CALM":
 		primary_reached_lv3[effect.effect_unique_name] = false

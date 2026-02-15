@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/trivia_event_default.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "RRHH"
+subject = "VERIFICACION DE IDENTIDAD"
+content = "M-21:\n\nNecesitamos que confirmes que eres quien dices ser.\n\nSi, sabemos que parece redundante. Es obligatorio igual.\n\nComplete el formulario adjunto para verificar su identidad como empleado activo de esta organizacion.\n\n— RRHH\n\n*Nadie leyo esto antes de enviarlo.*"
+event = ExtResource("1")
+email_id = "email_01"
+day_available = 1
+sender_type = "CORPORATE"
+is_conditional = false
+required_flags = Array[String]([])
+excluded_flags = Array[String]([])

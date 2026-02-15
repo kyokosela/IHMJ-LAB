@@ -1,0 +1,15 @@
+Mayui: (El telefono suena. Es el casero.) #id:1
+Casero: M-21. #id:2
+Casero: Mañana vence la renta. S/230. #id:3
+Casero: No quiero tener que recordartelo de nuevo. #id:4
+- Lo se. Estare lista.
+	Mayui: Lo se. Estare lista. #id:5
+	Casero: Bien. Eso espero. #id:6
+- ¿Y si necesito mas tiempo?
+	Mayui: ¿Y si necesito un poco mas de tiempo? #id:7
+	Casero: No hay mas tiempo. El viernes es el viernes. #id:8
+	Casero: Despues de eso... el domingo es la ultima oportunidad. #id:9
+	Casero: Y no quieres llegar a eso. Creeme. #id:10
+Casero: Hasta mañana. #id:11
+Mayui: (Cuelga sin despedirse.) #id:12
+[signal arg="rent_reminder_complete"]

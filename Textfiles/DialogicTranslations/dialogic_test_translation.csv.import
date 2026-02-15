@@ -15,3 +15,5 @@ dest_files=["res://Textfiles/DialogicTranslations/dialogic_test_translation.es.t
 
 compress=true
 delimiter=0
+unescape_keys=false
+unescape_translations=true

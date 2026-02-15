@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/leave_event.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "M-45"
+subject = "la impresora otra vez"
+content = "¿alguien mas tiene problemas con la impresora del pasillo?\n\nllevo tres dias intentando imprimir un documento\ncada vez me da error diferente\n\nsi alguien sabe como arreglarla avisen pls\n\n— M-45"
+event = ExtResource("1")
+email_id = "email_32"
+day_available = 2
+sender_type = "SYSTEM"
+is_conditional = true
+required_flags = Array[String](["spam_printer"])
+excluded_flags = Array[String]([])

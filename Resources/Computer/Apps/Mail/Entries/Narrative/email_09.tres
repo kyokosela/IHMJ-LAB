@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/leave_event.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "M-33"
+subject = "mi lonchera"
+content = "es la tercera vez esta semana\n\ntiene mi nombre. marcador permanente. grande.\n\nno la toquen por favor\n\n— M-33\n\npd: si la tienen y la devuelven no pregunto nada"
+event = ExtResource("1")
+email_id = "email_09"
+day_available = 2
+sender_type = "NPC"
+is_conditional = false
+required_flags = Array[String]([])
+excluded_flags = Array[String]([])

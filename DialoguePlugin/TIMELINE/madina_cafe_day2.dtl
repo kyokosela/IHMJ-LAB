@@ -1,0 +1,15 @@
+Madina: ¡¡M-21!! ¿Puedo sentarme? #id:1
+- Claro, adelante.
+	Mayui: Claro, adelante. #id:2
+	Madina: ¡¡Gracias!! Es que... no me gusta comer sola jajaj #id:3
+- Prefiero estar sola.
+	Mayui: Prefiero estar sola, la verdad. #id:4
+	Madina: Oh... ok, perdon!! Otro dia entonces... #id:5
+	[signal arg="rejected_madina_day2"]
+Madina: Oye... ¿como te ha parecido todo? #id:6
+Madina: Las cosas han cambiado mucho desde que llegue... #id:7
+Mayui: ¿Cambiado como? #id:8
+Madina: No se... el ambiente. La gente esta mas... tensa? #id:9
+Madina: Pero bueno!! Seguro son imaginaciones mias jajaj #id:10
+Madina: Come, come. El almuerzo se pasa volando aqui... #id:11
+[signal arg="madina_cafe_complete"]

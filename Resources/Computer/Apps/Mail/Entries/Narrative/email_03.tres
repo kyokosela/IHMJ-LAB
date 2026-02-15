@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/differences_event_default.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "Administracion"
+subject = "REVISION DE DISCREPANCIAS"
+content = "M-21:\n\nDos versiones del formulario semana 22.\nSeñale discrepancias.\n\nNo es emocionante. Hagalo de todas formas.\n\n— Administracion\n\nNota: Version A indica 47 empleados activos. Version B indica 46. Esto puede o no ser relevante."
+event = ExtResource("1")
+email_id = "email_03"
+day_available = 1
+sender_type = "CORPORATE"
+is_conditional = false
+required_flags = Array[String]([])
+excluded_flags = Array[String]([])

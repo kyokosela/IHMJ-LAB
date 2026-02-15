@@ -1,0 +1,907 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://Scenes/playground_integration.gd" id="1"]
+[ext_resource type="Script" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
+[ext_resource type="PackedScene" path="res://UI/Debug/debug_panel.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://UI/PLAYERUI/PlayerUI.tscn" id="4"]
+[ext_resource type="Script" path="res://Scripts/HouseInteracts/integration_action.gd" id="5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a1"]
+size = Vector2(54, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a2"]
+size = Vector2(80, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a3"]
+size = Vector2(62, 32)
+
+[node name="PlaygroundIntegration" type="Node2D" node_paths=PackedStringArray("optional_camera_node")]
+script = ExtResource("1")
+optional_camera_node = NodePath("Camera2D")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
+position_smoothing_enabled = true
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(760, 170)
+script = ExtResource("2")
+entity = "Player"
+
+[node name="HeaderNarrative" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 90.0
+offset_right = 980.0
+offset_bottom = 113.0
+text = "NARRATIVE"
+
+[node name="HeaderTravel" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 160.0
+offset_right = 980.0
+offset_bottom = 183.0
+text = "ZONE TRAVEL"
+
+[node name="HeaderActions" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 230.0
+offset_right = 980.0
+offset_bottom = 253.0
+text = "APARTMENT ACTIONS"
+
+[node name="HeaderPrimary" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 300.0
+offset_right = 1060.0
+offset_bottom = 323.0
+text = "PRIMARY AND BASE EFFECTS"
+
+[node name="HeaderUtility" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 370.0
+offset_right = 1060.0
+offset_bottom = 393.0
+text = "UTILITY AND SANITY"
+
+[node name="HeaderSecondary" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 440.0
+offset_right = 1060.0
+offset_bottom = 463.0
+text = "SECONDARY EFFECTS"
+
+[node name="CaseroNPC" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 120.0
+offset_right = 855.0
+offset_bottom = 143.0
+text = "CASERO"
+
+[node name="InteractableAction" type="Area2D" parent="CaseroNPC"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Hablar con casero"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "NPC_CASERO"
+action_type = 8
+
+[node name="MadinaNPC" type="Label" parent="."]
+offset_left = 860.0
+offset_top = 120.0
+offset_right = 985.0
+offset_bottom = 143.0
+text = "MADINA"
+
+[node name="InteractableAction" type="Area2D" parent="MadinaNPC"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Hablar con Madina"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "NPC_MADINA"
+action_type = 9
+
+[node name="ZoneApartment" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 190.0
+offset_right = 855.0
+offset_bottom = 213.0
+text = "APARTMENT"
+
+[node name="InteractableAction" type="Area2D" parent="ZoneApartment"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Ir al Apartamento"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "ZONE_APT"
+action_type = 14
+
+[node name="ZoneLobby" type="Label" parent="."]
+offset_left = 860.0
+offset_top = 190.0
+offset_right = 985.0
+offset_bottom = 213.0
+text = "LOBBY"
+
+[node name="InteractableAction" type="Area2D" parent="ZoneLobby"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Ir al Lobby"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "ZONE_LOBBY"
+action_type = 15
+
+[node name="ZoneOffice" type="Label" parent="."]
+offset_left = 990.0
+offset_top = 190.0
+offset_right = 1130.0
+offset_bottom = 213.0
+text = "OFFICE (S/10)"
+
+[node name="InteractableAction" type="Area2D" parent="ZoneOffice"]
+position = Vector2(42, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Ir a la Oficina"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "ZONE_OFFICE"
+action_type = 16
+
+[node name="ZoneCommercial" type="Label" parent="."]
+offset_left = 1140.0
+offset_top = 190.0
+offset_right = 1300.0
+offset_bottom = 213.0
+text = "COMMERCIAL (S/10)"
+
+[node name="InteractableAction" type="Area2D" parent="ZoneCommercial"]
+position = Vector2(50, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Ir a Zona Comercial"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "ZONE_COMMERCIAL"
+action_type = 17
+
+[node name="BedStation" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 260.0
+offset_right = 855.0
+offset_bottom = 283.0
+text = "BED (Sleep)"
+
+[node name="InteractableAction" type="Area2D" parent="BedStation"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Dormir"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "BED_SLEEP"
+action_type = 18
+
+[node name="BathStation" type="Label" parent="."]
+offset_left = 860.0
+offset_top = 260.0
+offset_right = 985.0
+offset_bottom = 283.0
+text = "BATH (Bathe)"
+
+[node name="InteractableAction" type="Area2D" parent="BathStation"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Banarse"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "BATH"
+action_type = 19
+
+[node name="ClosetStation" type="Label" parent="."]
+offset_left = 990.0
+offset_top = 260.0
+offset_right = 1130.0
+offset_bottom = 283.0
+text = "CLOSET"
+
+[node name="InteractableAction" type="Area2D" parent="ClosetStation"]
+position = Vector2(42, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Cambiar ropa"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "CLOSET"
+action_type = 20
+
+[node name="HungerStation" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 330.0
+offset_right = 855.0
+offset_bottom = 353.0
+text = "HUNGER"
+
+[node name="InteractableAction" type="Area2D" parent="HungerStation"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Aplicar hambre"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "EFF_HUNGER"
+action_type = 21
+
+[node name="SleepyStation" type="Label" parent="."]
+offset_left = 860.0
+offset_top = 330.0
+offset_right = 985.0
+offset_bottom = 353.0
+text = "SLEEPY"
+
+[node name="InteractableAction" type="Area2D" parent="SleepyStation"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Aplicar somnolencia"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "EFF_SLEEPY"
+action_type = 22
+
+[node name="SmellyStation" type="Label" parent="."]
+offset_left = 990.0
+offset_top = 330.0
+offset_right = 1130.0
+offset_bottom = 353.0
+text = "SMELLY"
+
+[node name="InteractableAction" type="Area2D" parent="SmellyStation"]
+position = Vector2(42, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Aplicar mal olor"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "EFF_SMELLY"
+action_type = 23
+
+[node name="StressStation" type="Label" parent="."]
+offset_left = 1140.0
+offset_top = 330.0
+offset_right = 1270.0
+offset_bottom = 353.0
+text = "STRESS"
+
+[node name="InteractableAction" type="Area2D" parent="StressStation"]
+position = Vector2(40, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a3")
+display_text = "Aumentar estres"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "EFF_STRESS"
+action_type = 24
+
+[node name="CalmStation" type="Label" parent="."]
+offset_left = 1280.0
+offset_top = 330.0
+offset_right = 1400.0
+offset_bottom = 353.0
+text = "CALM"
+
+[node name="InteractableAction" type="Area2D" parent="CalmStation"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Aplicar calma"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "EFF_CALM"
+action_type = 38
+
+[node name="ClearEffectsStation" type="Label" parent="."]
+offset_left = 1420.0
+offset_top = 330.0
+offset_right = 1560.0
+offset_bottom = 353.0
+text = "CLEAR EFFECTS"
+
+[node name="InteractableAction" type="Area2D" parent="ClearEffectsStation"]
+position = Vector2(42, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Limpiar efectos"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "EFF_CLEAR"
+action_type = 33
+
+[node name="InsomniaStation" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 400.0
+offset_right = 855.0
+offset_bottom = 423.0
+text = "INSOMNIA"
+
+[node name="InteractableAction" type="Area2D" parent="InsomniaStation"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Aplicar insomnio"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "EFF_INSOMNIA"
+action_type = 25
+
+[node name="RemoveHungerStation" type="Label" parent="."]
+offset_left = 860.0
+offset_top = 400.0
+offset_right = 1010.0
+offset_bottom = 423.0
+text = "REMOVE HUNGER"
+
+[node name="InteractableAction" type="Area2D" parent="RemoveHungerStation"]
+position = Vector2(45, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Quitar hambre"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "REMOVE_HUNGER"
+action_type = 29
+
+[node name="SanityDownStation" type="Label" parent="."]
+offset_left = 1030.0
+offset_top = 400.0
+offset_right = 1160.0
+offset_bottom = 423.0
+text = "SANITY -10"
+
+[node name="InteractableAction" type="Area2D" parent="SanityDownStation"]
+position = Vector2(40, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a3")
+display_text = "Bajar cordura"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "SANITY_DOWN"
+action_type = 34
+
+[node name="SanityUpStation" type="Label" parent="."]
+offset_left = 1180.0
+offset_top = 400.0
+offset_right = 1290.0
+offset_bottom = 423.0
+text = "SANITY +10"
+
+[node name="InteractableAction" type="Area2D" parent="SanityUpStation"]
+position = Vector2(40, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a3")
+display_text = "Subir cordura"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "SANITY_UP"
+action_type = 35
+
+[node name="RemoveCalmStation" type="Label" parent="."]
+offset_left = 1330.0
+offset_top = 400.0
+offset_right = 1450.0
+offset_bottom = 423.0
+text = "REMOVE CALM"
+
+[node name="InteractableAction" type="Area2D" parent="RemoveCalmStation"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Quitar calma"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "REMOVE_CALM"
+action_type = 39
+
+[node name="AdvanceDayStation" type="Label" parent="."]
+offset_left = 990.0
+offset_top = 470.0
+offset_right = 1120.0
+offset_bottom = 493.0
+text = "+1 DAY"
+
+[node name="InteractableAction" type="Area2D" parent="AdvanceDayStation"]
+position = Vector2(40, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a3")
+display_text = "Avanzar dia"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "ADVANCE_DAY"
+action_type = 40
+
+[node name="InapetenciaStation" type="Label" parent="."]
+offset_left = 1140.0
+offset_top = 470.0
+offset_right = 1300.0
+offset_bottom = 493.0
+text = "INAPETENCIA"
+
+[node name="InteractableAction" type="Area2D" parent="InapetenciaStation"]
+position = Vector2(50, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Aplicar inapetencia"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "EFF_INAPETENCIA"
+action_type = 41
+
+[node name="HipersomniaStation" type="Label" parent="."]
+offset_left = 1320.0
+offset_top = 470.0
+offset_right = 1490.0
+offset_bottom = 493.0
+text = "HIPERSOMNIA"
+
+[node name="InteractableAction" type="Area2D" parent="HipersomniaStation"]
+position = Vector2(52, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Aplicar hipersomnia"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "EFF_HIPERSOMNIA"
+action_type = 42
+
+[node name="AtentaStation" type="Label" parent="."]
+offset_left = 730.0
+offset_top = 540.0
+offset_right = 855.0
+offset_bottom = 563.0
+text = "ATENTA"
+
+[node name="InteractableAction" type="Area2D" parent="AtentaStation"]
+position = Vector2(35, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Aplicar atenta"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "EFF_ATENTA"
+action_type = 43
+
+[node name="RemoveInapetenciaStation" type="Label" parent="."]
+offset_left = 880.0
+offset_top = 540.0
+offset_right = 1060.0
+offset_bottom = 563.0
+text = "REMOVE INAPETENCIA"
+
+[node name="InteractableAction" type="Area2D" parent="RemoveInapetenciaStation"]
+position = Vector2(55, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Quitar inapetencia"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "REMOVE_INAPETENCIA"
+action_type = 44
+
+[node name="RemoveHipersomniaStation" type="Label" parent="."]
+offset_left = 1080.0
+offset_top = 540.0
+offset_right = 1265.0
+offset_bottom = 563.0
+text = "REMOVE HIPERSOMNIA"
+
+[node name="InteractableAction" type="Area2D" parent="RemoveHipersomniaStation"]
+position = Vector2(58, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Quitar hipersomnia"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "REMOVE_HIPERSOMNIA"
+action_type = 45
+
+[node name="RemoveAtentaStation" type="Label" parent="."]
+offset_left = 1280.0
+offset_top = 540.0
+offset_right = 1430.0
+offset_bottom = 563.0
+text = "REMOVE ATENTA"
+
+[node name="InteractableAction" type="Area2D" parent="RemoveAtentaStation"]
+position = Vector2(45, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Quitar atenta"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "REMOVE_ATENTA"
+action_type = 46
+
+[node name="PlayerUI" parent="." instance=ExtResource("4")]
+
+[node name="DebugPanel" parent="." instance=ExtResource("3")]
+position = Vector2i(10, 10)
+size = Vector2i(400, 350)
+visible = false
+
+[node name="WorkspaceMount" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="HarnessUI" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="Panel" type="PanelContainer" parent="HarnessUI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -420.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 590.0
+grow_horizontal = 0
+
+[node name="Margin" type="MarginContainer" parent="HarnessUI/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Root" type="VBoxContainer" parent="HarnessUI/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+text = "Integration Harness"
+
+[node name="StatusLabel" type="RichTextLabel" parent="HarnessUI/Panel/Margin/Root"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_active = true
+
+[node name="ActionLabel" type="Label" parent="HarnessUI/Panel/Margin/Root"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Last action: none"
+
+[node name="MainButtons" type="HBoxContainer" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+
+[node name="BootstrapButton" type="Button" parent="HarnessUI/Panel/Margin/Root/MainButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Bootstrap"
+
+[node name="RefreshButton" type="Button" parent="HarnessUI/Panel/Margin/Root/MainButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh"
+
+[node name="ToggleDebugButton" type="Button" parent="HarnessUI/Panel/Margin/Root/MainButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Debug"
+
+[node name="TimeRow" type="HBoxContainer" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+
+[node name="DaySpin" type="SpinBox" parent="HarnessUI/Panel/Margin/Root/TimeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 30.0
+step = 1.0
+
+[node name="TimeInput" type="LineEdit" parent="HarnessUI/Panel/Margin/Root/TimeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "HH:MM"
+text = "07:30"
+
+[node name="ApplyTimeButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TimeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Apply Time"
+
+[node name="AddHourButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TimeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+1 Hour"
+
+[node name="AttendanceRow" type="HBoxContainer" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+
+[node name="ClockInButton" type="Button" parent="HarnessUI/Panel/Margin/Root/AttendanceRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Clock In"
+
+[node name="ClockOutButton" type="Button" parent="HarnessUI/Panel/Margin/Root/AttendanceRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Clock Out"
+
+[node name="MarkAbsenceButton" type="Button" parent="HarnessUI/Panel/Margin/Root/AttendanceRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Record Absence"
+
+[node name="EconomyRow" type="HBoxContainer" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+
+[node name="AddMoneyButton" type="Button" parent="HarnessUI/Panel/Margin/Root/EconomyRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+S/100"
+
+[node name="PayRentButton" type="Button" parent="HarnessUI/Panel/Margin/Root/EconomyRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Pay Rent"
+
+[node name="CheckRentButton" type="Button" parent="HarnessUI/Panel/Margin/Root/EconomyRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Check Rent Due"
+
+[node name="BusFareButton" type="Button" parent="HarnessUI/Panel/Margin/Root/EconomyRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Pay Bus Fare"
+
+[node name="FlagRow" type="HBoxContainer" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+
+[node name="FlagInput" type="LineEdit" parent="HarnessUI/Panel/Margin/Root/FlagRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "flag_name"
+
+[node name="SetFlagButton" type="Button" parent="HarnessUI/Panel/Margin/Root/FlagRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Set Flag"
+
+[node name="ClearFlagButton" type="Button" parent="HarnessUI/Panel/Margin/Root/FlagRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Clear Flag"
+
+[node name="AppsRow" type="HBoxContainer" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+
+[node name="ToggleWorkspaceButton" type="Button" parent="HarnessUI/Panel/Margin/Root/AppsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Toggle Workspace"
+
+[node name="OpenPortalButton" type="Button" parent="HarnessUI/Panel/Margin/Root/AppsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Open Portal"
+
+[node name="OpenEvaluationButton" type="Button" parent="HarnessUI/Panel/Margin/Root/AppsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Open Evaluation"
+
+[node name="SaveRow" type="HBoxContainer" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="HarnessUI/Panel/Margin/Root/SaveRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save Slot"
+
+[node name="LoadButton" type="Button" parent="HarnessUI/Panel/Margin/Root/SaveRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load Slot"
+
+[node name="TriggerRow" type="HBoxContainer" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+
+[node name="TriggerEvalButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Trigger Eval Event"
+
+[node name="TriggerM88Button" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Enable M88 Email"
+
+[node name="TriggerWarning1Button" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Absence Warning 1"
+
+[node name="TriggerWarning2Button" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Absence Warning 2"
+
+[node name="PortalOverlay" type="Control" parent="HarnessUI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="HarnessUI/PortalOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.65)
+
+[node name="Window" type="PanelContainer" parent="HarnessUI/PortalOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -260.0
+offset_right = 420.0
+offset_bottom = 260.0
+
+[node name="VBox" type="VBoxContainer" parent="HarnessUI/PortalOverlay/Window"]
+layout_mode = 2
+
+[node name="ClosePortalButton" type="Button" parent="HarnessUI/PortalOverlay/Window/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close Portal"
+
+[node name="PortalHost" type="Control" parent="HarnessUI/PortalOverlay/Window/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 460)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EvaluationOverlay" type="Control" parent="HarnessUI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="HarnessUI/EvaluationOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.65)
+
+[node name="Window" type="PanelContainer" parent="HarnessUI/EvaluationOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -240.0
+offset_right = 360.0
+offset_bottom = 240.0
+
+[node name="VBox" type="VBoxContainer" parent="HarnessUI/EvaluationOverlay/Window"]
+layout_mode = 2
+
+[node name="CloseEvaluationButton" type="Button" parent="HarnessUI/EvaluationOverlay/Window/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close Evaluation"
+
+[node name="EvaluationHost" type="Control" parent="HarnessUI/EvaluationOverlay/Window/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="WorkspaceOverlay" type="Control" parent="HarnessUI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="HarnessUI/WorkspaceOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.75)
+
+[node name="Window" type="PanelContainer" parent="HarnessUI/WorkspaceOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -560.0
+offset_top = -340.0
+offset_right = 560.0
+offset_bottom = 340.0
+
+[node name="VBox" type="VBoxContainer" parent="HarnessUI/WorkspaceOverlay/Window"]
+layout_mode = 2
+
+[node name="HeaderRow" type="HBoxContainer" parent="HarnessUI/WorkspaceOverlay/Window/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HarnessUI/WorkspaceOverlay/Window/VBox/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Workspace (Computer)"
+
+[node name="CloseWorkspaceButton" type="Button" parent="HarnessUI/WorkspaceOverlay/Window/VBox/HeaderRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Cerrar"
+
+[node name="WorkspaceHost" type="SubViewportContainer" parent="HarnessUI/WorkspaceOverlay/Window/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1100, 620)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="HarnessUI/WorkspaceOverlay/Window/VBox/WorkspaceHost"]
+handle_input_locally = false
+size = Vector2i(1280, 720)
+size_2d_override = Vector2i(1280, 720)
+size_2d_override_stretch = true
+render_target_update_mode = 4

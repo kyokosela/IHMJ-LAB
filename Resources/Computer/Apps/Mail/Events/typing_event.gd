@@ -4,6 +4,9 @@ class_name TypingEvent
 @export_multiline var target_text: String ## esto es obvio
 @export var allow_errors := false ## cuando es falso ignora las teclas mal escritas
 
+## Track stress-induced typos for visual feedback
+var _stress_typo_count: int = 0
+
 func execute(container: Control, data: MailEntry) -> void:
 	var l = RichTextLabel.new()
 	l.bbcode_enabled = true
@@ -41,6 +44,15 @@ func execute(container: Control, data: MailEntry) -> void:
 			var target = target_text[curr_idx]
 			
 			if typed == target:
+				# Check for STRESS-induced typo before accepting correct keystroke
+				if check_stress_failure():
+					# STRESS caused a typo - flash feedback but don't advance
+					_stress_typo_count += 1
+					l.modulate = Color(1.0, 0.7, 0.5)  # Orange flash
+					await l.get_tree().create_timer(0.15).timeout
+					l.modulate = Color(1, 1, 1, 1)
+					return
+				
 				curr_idx += 1
 				l.set_meta("curr_idx", curr_idx)
 				_update(l, curr_idx)

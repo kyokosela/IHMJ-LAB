@@ -14,7 +14,7 @@ signal week_changed(week_value : int) ## se emite cada vez que la semana cambia,
 signal month_changed(month_value : int) ## se emite cada vez que el mes cambia, automaticamente los dias 30
 
 var julian_day = 0
-var scheduled_times : Dictionary[ScheduleConfig, Callable]
+var scheduled_times : Dictionary[ScheduleConfig, Callable] = {}
 
 var day : int = 1 :
 	set(_value) : 
@@ -48,7 +48,13 @@ func _ready() -> void:
 	minutes_changed.connect(func(_r): print("Minutes changed: "+ str(_r))) 
 
 func check_scheduled_times(_query_month : TimeUtils.MONTHS, _query_weekday: TimeUtils.WEEKDAY, _query_day: int, _query_minutes: int, _query_week : int) -> void :
-	for x : ScheduleConfig in scheduled_times:
+	var stale_configs : Array[ScheduleConfig] = []
+	for x : ScheduleConfig in scheduled_times.keys():
+		var scheduled_callable : Callable = scheduled_times.get(x, Callable())
+		if scheduled_callable.is_null() or !scheduled_callable.is_valid():
+			stale_configs.append(x)
+			continue
+
 		if !x.month.is_empty() and _query_month not in x.month:
 			continue
 		if !x.week_day.is_empty() and _query_weekday not in x.week_day:
@@ -57,8 +63,11 @@ func check_scheduled_times(_query_month : TimeUtils.MONTHS, _query_weekday: Time
 			continue
 		#TODO en caso de que el auimento de tiempo suba un dia, verificar tambien eso, quizas? no se
 		if is_time_lower(x.time) and x.triggered == false:
-			scheduled_times[x].call()
+			scheduled_callable.call()
 			x.triggered = true
+
+	for stale_config : ScheduleConfig in stale_configs:
+		scheduled_times.erase(stale_config)
 
 #endregion
 

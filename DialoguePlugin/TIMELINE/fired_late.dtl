@@ -1,0 +1,13 @@
+Veda: M-21. #id:1
+Veda: Tenemos un problema. #id:2
+Mayui: (Veda nunca usa la palabra "problema"...) #id:3
+Veda: Llegaste tarde. Repetidamente. #id:4
+Veda: Te advertimos. Documentamos. Dimos oportunidades. #id:5
+Veda: No las aprovechaste. #id:6
+Mayui: Yo... #id:7
+Veda: No hay excusas que me interesen. #id:8
+Veda: Tu contrato termina hoy. Entrega el brazalete en recepcion. #id:9
+Veda: — V. #id:10
+Mayui: (Se va. Sin mas.) #id:11
+Mayui: (...Se acabo.) #id:12
+[signal arg="game_over_fired"]

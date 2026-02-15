@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/trivia_event_default.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "RRHH"
+subject = "EVALUACION DE NORMATIVAS"
+content = "M-21:\n\nComplete la evaluacion sobre normativas internas.\n\nConsulte el manual actualizado para respuestas.\n\nNota: El manual esta en proceso de actualizacion. Use la version anterior mientras tanto.\n\n— RRHH\n\n*El contenido de este correo puede o no ser relevante para la evaluacion.*"
+event = ExtResource("1")
+email_id = "email_15"
+day_available = 3
+sender_type = "CORPORATE"
+is_conditional = false
+required_flags = Array[String]([])
+excluded_flags = Array[String]([])

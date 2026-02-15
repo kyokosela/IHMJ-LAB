@@ -1,0 +1,20 @@
+Casero: Ah. La nueva inquilina. #id:1
+Casero: M-21, ¿verdad? #id:2
+Mayui: (Asiente) #id:3
+Casero: Bien. Escucha, porque no lo voy a repetir. #id:4
+Casero: La renta son S/230. Se paga los viernes. #id:5
+Casero: Si no pagas el viernes, tienes hasta el domingo. #id:6
+Casero: Despues de eso... bueno. Ya sabes como funciona. #id:7
+Mayui: (Este tipo no pierde el tiempo...) #id:8
+Casero: El edificio tiene reglas. No ruido despues de las 22:00. No visitas sin aviso. #id:9
+Casero: Y no quiero problemas. ¿Entendido? #id:10
+- Entendido.
+	Mayui: Entendido. #id:11
+	Casero: Bien. #id:12
+- ¿Y si tengo preguntas?
+	Mayui: ¿Y si tengo preguntas sobre algo? #id:13
+	Casero: Pregunta rapido. No tengo todo el dia. #id:14
+	Casero: Pero la mayoria de cosas las resuelves tu sola. Asi funciona aqui. #id:15
+Casero: Bienvenida al edificio. #id:16
+Casero: ...Supongo. #id:17
+[signal arg="casero_intro_complete"]

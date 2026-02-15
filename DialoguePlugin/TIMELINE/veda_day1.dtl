@@ -1,0 +1,9 @@
+Mayui: (Una figura se acerca. Brazalete morado. Debe ser...) #id:1
+Veda: M-21. #id:2
+Mayui: (No saluda. Solo mi numero.) #id:3
+Veda: Primer dia. #id:4
+Veda: Espero que te adaptes. #id:5
+Veda: No todos lo logran. #id:6
+Mayui: (Se va sin esperar respuesta.) #id:7
+Mayui: (...¿Eso fue una bienvenida o una advertencia?) #id:8
+[signal arg="met_veda"]

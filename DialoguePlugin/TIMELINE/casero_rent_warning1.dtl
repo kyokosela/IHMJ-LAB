@@ -1,0 +1,16 @@
+Casero: M-21. #id:1
+Casero: El viernes paso. La renta no llego. #id:2
+Mayui: Lo se. Estoy trabajando en eso. #id:3
+Casero: "Trabajando en eso" no paga facturas. #id:4
+Casero: Tienes hasta mañana. Domingo. Mediodia. #id:5
+Casero: Despues de eso... no quieres saber que pasa. #id:6
+- Tendre el dinero.
+	Mayui: Tendre el dinero. Lo prometo. #id:7
+	Casero: Las promesas no valen nada aqui. Solo la savia. #id:8
+- ¿Que pasa si no pago?
+	Mayui: ¿Que pasa si no puedo pagar? #id:9
+	Casero: Entonces buscas otro lugar donde dormir. #id:10
+	Casero: Y en este invernadero... no hay muchos lugares para gente sin savia. #id:11
+Casero: Mañana. Mediodia. S/230. #id:12
+Casero: No lo olvides. #id:13
+[signal arg="rent_warning1_complete"]

@@ -1,23 +1,20 @@
 extends Panel
 
-@onready var collision: CollisionPolygon2D = %Collision
-@onready var spawn: Marker2D = %Spawn
+## Simple inbox panel with scrollable mail list
+## Replaces physics-based system with Control-based list
 
-# TODO: implement draggable logic
-func _ready() -> void:
-	_build_segments()
-	resized.connect(_build_segments)
+@onready var scroll_container: ScrollContainer = %ScrollContainer
+@onready var mail_list: VBoxContainer = %MailList
 
-func get_spawn_pos() -> Vector2:
-	return spawn.global_position
-	
-func _build_segments():
-	var w = size.x
-	var h = size.y
-	
-	collision.polygon = PackedVector2Array([
-		Vector2(0, 0), # inicia en top-left
-		Vector2(0, h), # va a bottom-left
-		Vector2(w, h), # va a bottom-right
-		Vector2(w, 0) # termina en top-right
-	])
+func add_mail_item(item: Control) -> void:
+	mail_list.add_child(item)
+	# Auto-scroll to show new mail (optional)
+	await get_tree().process_frame
+	scroll_container.scroll_vertical = 0  # Scroll to top for newest
+
+func get_mail_count() -> int:
+	return mail_list.get_child_count()
+
+func clear_all() -> void:
+	for child in mail_list.get_children():
+		child.queue_free()

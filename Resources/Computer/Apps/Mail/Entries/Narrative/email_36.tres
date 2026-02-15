@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/leave_event.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "Sistema Edificio"
+subject = "RECORDATORIO DE PAGO"
+content = "M-21:\n\nRecordatorio automatico:\n\nSu renta vence pronto.\nMonto: S/230\nFecha limite: Viernes\n\nEvite recargos pagando a tiempo.\n\n— Sistema Automatizado del Edificio"
+event = ExtResource("1")
+email_id = "email_36"
+day_available = 4
+sender_type = "CASERO"
+is_conditional = true
+required_flags = Array[String](["rent_reminder_active"])
+excluded_flags = Array[String]([])

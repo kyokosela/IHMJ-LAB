@@ -38,6 +38,28 @@ func new_game() -> void:
 	EventManager.create_lapse_event("16:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/smelly.tres")), "AUTO_SMELLY_LAPSE", "SMELLY_TIMER", true)
 	EventManager.create_lapse_event("06:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/hunger.tres")), "AUTO_HUNGER_LAPSE", "HUNGER_TIMER", true)
 	EventManager.create_lapse_event("16:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/sleepy.tres")), "AUTO_SLEEPY_LAPSE", "SLEEPY_TIMER", true)
+
+	_load_schedule_events()
+
+func _load_schedule_events() -> void:
+	var schedule_path : String = "res://Resources/Events/Schedule/"
+	var dir : DirAccess = DirAccess.open(schedule_path)
+
+	if dir == null:
+		push_warning("GameManager: Could not open schedule events directory")
+		return
+
+	dir.list_dir_begin()
+	var file_name : String = dir.get_next()
+
+	while file_name != "":
+		if file_name.ends_with(".tres") or file_name.ends_with(".res"):
+			var event : Resource = load(schedule_path + file_name)
+			if event is Event:
+				EventManager.load_event(event, false)
+		file_name = dir.get_next()
+
+	dir.list_dir_end()
 	
 ## Inicia a partir de 1 2
 func save_file(slot_id : int) -> void:

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/leave_event.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "Sistema"
+subject = "CIERRE SEMANAL"
+content = "════════════════════\nCIERRE SEMANAL\n════════════════════\n\nCorreos procesados: [XX]\nTareas completadas: [XX]\nTasa de eficiencia: [XX]%\n\nQue tenga un buen fin de semana.\n\n*(Este mensaje fue generado automaticamente.\nLa empresa no le desea realmente un buen fin de semana.\nEs una formalidad programada.)*\n════════════════════"
+event = ExtResource("1")
+email_id = "email_27"
+day_available = 5
+sender_type = "SYSTEM"
+is_conditional = false
+required_flags = Array[String]([])
+excluded_flags = Array[String]([])

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/leave_event.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "Piso 2"
+subject = "RECORDATORIO DE CONFIDENCIALIDAD"
+content = "A todos los empleados:\n\nLa informacion interna es confidencial.\n\nDiscutir asuntos laborales fuera de canales autorizados constituye una violacion al contrato.\n\nEste recordatorio no esta dirigido a nadie en particular.\n\n— Piso 2"
+event = ExtResource("1")
+email_id = "email_22"
+day_available = 4
+sender_type = "P2"
+is_conditional = false
+required_flags = Array[String]([])
+excluded_flags = Array[String]([])

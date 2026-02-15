@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/leave_event.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "Piso 2"
+subject = "DOCUMENTACION DE PERSONAL"
+content = "A: Supervision Piso 1\nCC: M-21\n\nRequerimos documentacion actualizada de empleados ACTIVOS.\n\nFormato estandar. Sin excepciones.\n\nEntregar antes del cierre de jornada.\n\n— Piso 2"
+event = ExtResource("1")
+email_id = "email_13"
+day_available = 3
+sender_type = "P2"
+is_conditional = false
+required_flags = Array[String]([])
+excluded_flags = Array[String]([])

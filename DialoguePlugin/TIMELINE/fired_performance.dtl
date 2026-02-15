@@ -1,0 +1,10 @@
+Mayui: (Un correo de Veda. Directo. Sin asunto.) #id:1
+Veda: M-21. #id:2
+Veda: Tu desempeño esta semana fue inaceptable. #id:3
+Veda: Los errores se acumularon. Las tareas no se completaron. #id:4
+Veda: No tenemos espacio para empleados que no cumplen el minimo. #id:5
+Veda: Tu contrato termina hoy. #id:6
+Veda: — V. #id:7
+Mayui: (Minimo. Ni siquiera llegue al minimo.) #id:8
+Mayui: (...¿Y ahora que?) #id:9
+[signal arg="game_over_fired"]

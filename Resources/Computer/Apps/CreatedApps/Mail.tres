@@ -9,6 +9,7 @@ script = ExtResource("1_olkew")
 app_name = "Mail Naguara"
 icon = ExtResource("1_qdlwy")
 window_scene = ExtResource("3_o5hl1")
+window_size = Vector2i(980, 560)
 titlebar_bg_color = Color(1, 1, 1, 1)
 titlebar_text_color = Color(0, 1, 0, 1)
 metadata/_custom_type_script = "uid://bnv3nah4ycqtd"

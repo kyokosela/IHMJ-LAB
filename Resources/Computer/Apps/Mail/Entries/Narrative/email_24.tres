@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/leave_event.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "V."
+subject = "RESULTADO"
+content = "M-21.\n\nLa evaluacion refleja exactamente lo que hizo. Nada mas.\n\nTiene potencial para estar en otro piso.\nSi decide usarlo, estara.\n\nSi no lo decide, tambien es una decision.\n\n— V."
+event = ExtResource("1")
+email_id = "email_24"
+day_available = 5
+sender_type = "VEDA"
+is_conditional = false
+required_flags = Array[String]([])
+excluded_flags = Array[String]([])

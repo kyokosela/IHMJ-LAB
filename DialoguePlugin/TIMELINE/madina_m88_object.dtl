@@ -1,0 +1,23 @@
+Madina: M-21... ¿tienes un momento? #id:1
+Madina: Es que... encontre algo... #id:2
+Mayui: ¿Que cosa? #id:3
+Madina: Del escritorio de M-88... #id:4
+Madina: Estaba limpiando y... bueno... #id:5
+Madina: Me pone nerviosa tenerlo... #id:6
+Mayui: (Madina saca un papel doblado. Parece una nota.) #id:7
+- Dejame verlo.
+	Mayui: Dejame verlo. #id:8
+	Madina: ¡¡Gracias!! Es que... no se que hacer con esto... #id:9
+	Madina: Ten. Pero... ten cuidado, ¿si? #id:10
+	[signal arg="received_m88_note"]
+- No quiero involucrarme.
+	Mayui: No quiero involucrarme en lo que sea que es esto. #id:11
+	Madina: Oh... ok... lo entiendo... #id:12
+	Madina: Supongo que lo tirare entonces... #id:13
+	[signal arg="rejected_m88_note"]
+Madina: M-88 era... era buena persona, ¿sabes? #id:14
+Madina: Llegaba tarde pero... siempre saludaba a todo el mundo... #id:15
+Madina: Un dia simplemente... no vino mas. #id:16
+Madina: Dijeron que fue "transferido" pero... #id:17
+Madina: ...bueno. No importa. #id:18
+[signal arg="madina_m88_complete"]

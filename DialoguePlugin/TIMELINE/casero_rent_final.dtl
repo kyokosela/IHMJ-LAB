@@ -1,0 +1,12 @@
+Casero: M-21. #id:1
+Casero: Es mediodia. Domingo. #id:2
+Casero: ¿Tienes mi dinero? #id:3
+Mayui: (No tengo suficiente...) #id:4
+Casero: Tu silencio me dice todo. #id:5
+Casero: Mira. No es personal. Es negocio. #id:6
+Casero: Tienes hasta mañana. Primera hora. S/230 o te vas. #id:7
+Casero: No hay mas extensiones. No hay mas charlas. #id:8
+Casero: Mañana. Primera hora. #id:9
+Mayui: (Se va. La puerta se cierra con un golpe seco.) #id:10
+Mayui: (...¿Que voy a hacer?) #id:11
+[signal arg="eviction_warning"]

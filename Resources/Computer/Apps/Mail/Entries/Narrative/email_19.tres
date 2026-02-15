@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/differences_event_default.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "Administracion"
+subject = "REVISION DE PERSONAL - URGENTE"
+content = "M-21:\n\nDos listas de personal adjuntas.\n\nLista A: 46 empleados.\nLista B: 47 empleados.\n\nIdentifique la discrepancia.\n\nNota: Si un empleado existe en papel pero no en la oficina, reportelo.\n\n— Administracion"
+event = ExtResource("1")
+email_id = "email_19"
+day_available = 4
+sender_type = "SYSTEM"
+is_conditional = false
+required_flags = Array[String]([])
+excluded_flags = Array[String]([])

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/differences_event_default.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "Administracion"
+subject = "REVISION DE CONTABILIDAD"
+content = "M-21:\n\nAdjuntos: Libro A (uso interno) y Libro B (reporte a direccion).\n\nIdentifique discrepancias entre ambas versiones.\n\nNota: Si los numeros no cuadran, no es su problema. Solo reportelo.\n\n— Administracion"
+event = ExtResource("1")
+email_id = "email_12"
+day_available = 3
+sender_type = "CORPORATE"
+is_conditional = false
+required_flags = Array[String]([])
+excluded_flags = Array[String]([])

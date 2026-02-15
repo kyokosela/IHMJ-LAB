@@ -1,0 +1,6 @@
+Mayui: (Veda pasa cerca de mi escritorio.) #id:1
+Mayui: (Se detiene. Me mira.) #id:2
+Mayui: (No dice nada.) #id:3
+Mayui: (Sigue caminando.) #id:4
+Mayui: (...¿Que fue eso?) #id:5
+[signal arg="veda_stare_complete"]

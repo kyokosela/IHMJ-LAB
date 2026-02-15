@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EventScheduled" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Resources/Events/event_scheduled.gd" id="1"]
+[ext_resource type="Script" path="res://Resources/Schedules/schedule_config.gd" id="2"]
+
+[sub_resource type="Resource" id="start_config"]
+script = ExtResource("2")
+day = 2
+time = "13:20"
+
+[resource]
+script = ExtResource("1")
+start = SubResource("start_config")
+event_name = "Madina en Cafeteria"
+event_unique_name = "DAY2_MADINA_CAFE"

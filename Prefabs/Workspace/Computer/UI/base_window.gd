@@ -32,17 +32,39 @@ func _ready() -> void:
 	minimize_btn.pressed.connect(minimize)
 	maximize_btn.pressed.connect(maximize)
 	close_btn.pressed.connect(close)
+	_load_app_metadata()
 #endregion
 
 #region LOGIC
 func _load_app_metadata():
 	if not app_metadata: return
+	if not is_node_ready():
+		return
 	print(app_metadata.app_name)
 	title.text = app_metadata.app_name
 	titlebar_bg.color = app_metadata.titlebar_bg_color
 	title.add_theme_color_override("font_color", app_metadata.titlebar_text_color)
 	icon.texture = app_metadata.icon
+	_apply_window_size(app_metadata.window_size)
 	content.add_child(app_metadata.window_scene.instantiate())
+
+func _apply_window_size(content_size: Vector2i) -> void:
+	var safe_size := content_size
+	if safe_size.x <= 0 or safe_size.y <= 0:
+		safe_size = Vector2i(696, 340)
+
+	content.size = safe_size
+	content.size_2d_override = safe_size
+
+	var titlebar_height := 32
+	var window_size := Vector2(safe_size.x, safe_size.y + titlebar_height)
+	custom_minimum_size = window_size
+	size = window_size
+
+	offset_left = -window_size.x * 0.5
+	offset_top = -window_size.y * 0.5
+	offset_right = window_size.x * 0.5
+	offset_bottom = window_size.y * 0.5
 
 func close():
 	closed.emit()

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/leave_event.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "RRHH"
+subject = "ADVERTENCIA SERIA - SEGUNDA AUSENCIA"
+content = "M-21:\n\nSe ha registrado una segunda ausencia no justificada.\n\nEsta es una advertencia seria.\n\nUna ausencia mas resultara en consecuencias economicas.\n\n— RRHH"
+event = ExtResource("1")
+email_id = "email_29"
+day_available = 3
+sender_type = "CORPORATE"
+is_conditional = true
+required_flags = Array[String](["absence_warning_2"])
+excluded_flags = Array[String]([])

@@ -37,16 +37,41 @@ ZoneManager="*res://Scripts/zone_manager.gd"
 PlayerUI="*res://UI/PLAYERUI/PlayerUI.tscn"
 TransitionManager="*res://UI/TransitionManager/TransitionManager.tscn"
 ContainerManager="*res://Scripts/container_manager.gd"
+EconomyManager="*res://Scripts/economy_manager.gd"
+AttendanceManager="*res://Scripts/attendance_manager.gd"
+RelationshipManager="*res://Scripts/relationship_manager.gd"
+NarrativeFlags="*res://Scripts/narrative_flags.gd"
+EmailPoolManager="*res://Scripts/email_pool_manager.gd"
+NarrativeEventHandler="*res://Scripts/narrative_event_handler.gd"
 
 [dialogic]
 
 directories/dch_directory={
+"Casero": "res://DialoguePlugin/CHARACTERS/Casero.dch",
+"Madina": "res://DialoguePlugin/CHARACTERS/Madina.dch",
 "Mayui": "res://DialoguePlugin/CHARACTERS/Mayui.dch",
+"Sativa": "res://DialoguePlugin/CHARACTERS/Sativa.dch",
+"Veda": "res://DialoguePlugin/CHARACTERS/Veda.dch",
 "test_char": "res://DialoguePlugin/CHARACTERS/test_char.dch"
 }
 directories/dtl_directory={
+"casero_intro": "res://DialoguePlugin/TIMELINE/casero_intro.dtl",
+"casero_rent_final": "res://DialoguePlugin/TIMELINE/casero_rent_final.dtl",
+"casero_rent_reminder": "res://DialoguePlugin/TIMELINE/casero_rent_reminder.dtl",
+"casero_rent_warning1": "res://DialoguePlugin/TIMELINE/casero_rent_warning1.dtl",
+"fired_absence": "res://DialoguePlugin/TIMELINE/fired_absence.dtl",
+"fired_late": "res://DialoguePlugin/TIMELINE/fired_late.dtl",
+"fired_performance": "res://DialoguePlugin/TIMELINE/fired_performance.dtl",
+"friday_evaluation": "res://DialoguePlugin/TIMELINE/friday_evaluation.dtl",
+"madina_cafe_day2": "res://DialoguePlugin/TIMELINE/madina_cafe_day2.dtl",
+"madina_m88_object": "res://DialoguePlugin/TIMELINE/madina_m88_object.dtl",
+"madina_tension": "res://DialoguePlugin/TIMELINE/madina_tension.dtl",
+"madina_warning": "res://DialoguePlugin/TIMELINE/madina_warning.dtl",
+"sunday_prep": "res://DialoguePlugin/TIMELINE/sunday_prep.dtl",
 "task": "res://DialoguePlugin/TIMELINE/task.dtl",
-"test": "res://DialoguePlugin/TIMELINE/test.dtl"
+"test": "res://DialoguePlugin/TIMELINE/test.dtl",
+"veda_day1": "res://DialoguePlugin/TIMELINE/veda_day1.dtl",
+"veda_stare": "res://DialoguePlugin/TIMELINE/veda_stare.dtl"
 }
 layout/style_directory={
 "": "res://DialoguePlugin/STYLE/test_style.tres",

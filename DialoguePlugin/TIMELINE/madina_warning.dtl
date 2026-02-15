@@ -1,0 +1,12 @@
+Mayui: (Un mensaje de Madina. Tarde en la noche.) #id:1
+Madina: M-21... ¿estas despierta? #id:2
+Madina: Perdona por escribir tan tarde... #id:3
+Madina: Es que... tengo un presentimiento raro. #id:4
+Madina: Ten cuidado mañana, ¿si? #id:5
+Madina: Algo se siente... raro. #id:6
+Madina: No se explicarlo... #id:7
+Madina: Solo... cuidate. #id:8
+Madina: Buenas noches. #id:9
+Mayui: (Madina siempre nota cosas antes que nadie...) #id:10
+Mayui: (...¿Que sabe que yo no se?) #id:11
+[signal arg="madina_warning_complete"]

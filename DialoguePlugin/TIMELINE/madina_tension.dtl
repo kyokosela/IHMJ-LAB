@@ -1,0 +1,16 @@
+Madina: Oye... M-21... #id:1
+Madina: ¿Has notado algo raro ultimamente? #id:2
+Mayui: ¿Raro como? #id:3
+Madina: No se... la gente esta mas tensa... #id:4
+Madina: Los correos de Piso 2 son mas... frios? #id:5
+Madina: Y ayer vi a Veda hablando con alguien de RRHH por como media hora... #id:6
+Mayui: (Madina nota cosas. Eso puede ser util... o peligroso.) #id:7
+- ¿Crees que pasa algo malo?
+	Mayui: ¿Crees que pasa algo malo? #id:8
+	Madina: No lo se!! Pero... ten cuidado, ¿si? #id:9
+	Madina: No quiero que te pase nada... #id:10
+- Probablemente no es nada.
+	Mayui: Probablemente no es nada. Las empresas siempre son asi. #id:11
+	Madina: Si... tienes razon... probablemente son imaginaciones mias... #id:12
+Madina: Bueno!! Volvamos al trabajo antes de que alguien nos vea... #id:13
+[signal arg="madina_tension_complete"]

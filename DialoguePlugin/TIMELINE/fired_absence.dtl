@@ -1,0 +1,9 @@
+Mayui: (Un correo de RRHH. Asunto: "Terminacion de contrato.") #id:1
+Mayui: (Lo abro. Ya se lo que dice.) #id:2
+Mayui: "M-21: Debido a ausencias repetidas y no justificadas..." #id:3
+Mayui: "...su contrato ha sido terminado con efecto inmediato." #id:4
+Mayui: "Por favor, devuelva su brazalete en recepcion." #id:5
+Mayui: "— RRHH" #id:6
+Mayui: (Ni siquiera una firma real. Solo tres letras.) #id:7
+Mayui: (...Esto es todo. Se acabo.) #id:8
+[signal arg="game_over_fired"]

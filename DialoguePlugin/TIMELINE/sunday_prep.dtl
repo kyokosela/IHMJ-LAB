@@ -1,0 +1,15 @@
+Mayui: (Mañana es lunes.) #id:1
+Mayui: (Otra semana. Otra ronda de correos, tareas, y la mirada de Veda.) #id:2
+Mayui: (¿Estoy lista?) #id:3
+- Si. Puedo con esto.
+	Mayui: (Si. Puedo con esto. Una semana mas.) #id:4
+	Mayui: (Solo tengo que seguir adelante.) #id:5
+- No lo se.
+	Mayui: (No lo se. Pero no tengo opcion.) #id:6
+	Mayui: (Dejar de trabajar no es una alternativa.) #id:7
+- Odio esto.
+	Mayui: (Odio esto. Pero el odio no paga la renta.) #id:8
+	Mayui: (Asi que aqui estamos.) #id:9
+Mayui: (Mañana es lunes.) #id:10
+Mayui: (...Vamos.) #id:11
+[signal arg="week_prep_complete"]

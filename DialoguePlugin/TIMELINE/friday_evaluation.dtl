@@ -1,0 +1,16 @@
+Veda: M-21. Sientate. #id:1
+Mayui: (La oficina de Veda. Minimalista. Fria. Como ella.) #id:2
+Veda: Tu primera semana. #id:3
+Veda: Revisemos. #id:4
+Mayui: (Veda abre una carpeta. Mis numeros. Mis errores. Todo documentado.) #id:5
+Veda: Correos procesados. Tareas completadas. Errores cometidos. #id:6
+Veda: Todo esta aqui. #id:7
+Veda: La evaluacion refleja exactamente lo que hiciste. Nada mas. #id:8
+Mayui: ¿Y... que significa eso para mi? #id:9
+Veda: Significa que tienes potencial para estar en otro piso. #id:10
+Veda: Si decides usarlo, estaras. #id:11
+Veda: Si no lo decides... tambien es una decision. #id:12
+Mayui: (Por primera vez, Veda dice algo que no es solo presion.) #id:13
+Veda: Puedes retirarte. #id:14
+Mayui: (Me levanto. La evaluacion termino.) #id:15
+[signal arg="evaluation_complete"]

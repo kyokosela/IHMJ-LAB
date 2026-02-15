@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="Effect" load_steps=7 format=3]
+
+[ext_resource type="Texture2D" path="res://Assets/UI/effects/energized2.png" id="1_0"]
+[ext_resource type="Script" path="res://Resources/Effects/effect.gd" id="1_1"]
+[ext_resource type="Script" path="res://Resources/Effects/time_changer.gd" id="2_0"]
+[ext_resource type="Script" path="res://Resources/Effects/stat_changer.gd" id="3_0"]
+
+[sub_resource type="Resource" id="time_change_atenta"]
+script = ExtResource("2_0")
+time_value = -0.25
+OPERATION = 2
+
+[sub_resource type="Resource" id="stat_change_energy_atenta"]
+script = ExtResource("3_0")
+stat_unique_name = "ENERGY"
+value = 0.25
+OPERATION = 2
+
+[resource]
+script = ExtResource("1_1")
+effect_unique_name = "ATENTA"
+effect_display_name = "_EFFECT_ATENTA_"
+render = true
+stat_changes = Array[ExtResource("3_0")]([SubResource("stat_change_energy_atenta")])
+time_changes = SubResource("time_change_atenta")
+icon = ExtResource("1_0")

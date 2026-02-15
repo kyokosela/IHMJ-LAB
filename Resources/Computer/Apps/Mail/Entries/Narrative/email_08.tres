@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/trivia_event_default.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "RRHH"
+subject = "EVALUACION DE PROTOCOLOS"
+content = "M-21:\n\nLos protocolos han sido actualizados.\n\nComplete la evaluacion adjunta.\n\nNota: los protocolos evaluados son los ANTERIORES a la actualizacion.\nLos nuevos entran en vigor el lunes.\n\nLo sentimos por la confusion. No la habra.\n\n— RRHH\n\n*Nadie reviso si esto tenia sentido.*"
+event = ExtResource("1")
+email_id = "email_08"
+day_available = 2
+sender_type = "CORPORATE"
+is_conditional = false
+required_flags = Array[String]([])
+excluded_flags = Array[String]([])

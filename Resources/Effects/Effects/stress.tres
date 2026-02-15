@@ -8,8 +8,10 @@
 
 [resource]
 script = ExtResource("1_dipy0")
-level_display_list = Array[String](["_EFFECT_STRESS_1_"])
+level_display_list = Array[String](["_EFFECT_STRESS_1_", "_EFFECT_STRESS_2_", "_EFFECT_STRESS_3_"])
 icons = Array[CompressedTexture2D]([ExtResource("1_71gvb"), ExtResource("2_mtp7c"), ExtResource("3_yr2d8")])
 effect_unique_name = "STRESS"
 effect_display_name = "_EFFECT_STRESS_"
+render = true
+time_cost_per_level = Array[float]([0.03, 0.08, 0.15])
 metadata/_custom_type_script = "uid://d3vj00ox60wjp"

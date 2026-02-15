@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MailEntry" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://Resources/Computer/Apps/Mail/Events/trivia_event_default.tres" id="1"]
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Entries/mail_entry.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+sender = "RRHH"
+subject = "ENCUESTA DE SATISFACCION"
+content = "M-21:\n\nPor favor complete la encuesta de satisfaccion adjunta.\n\nSus respuestas son anonimas.\n\nNota: Sus respuestas no son anonimas.\n\n— RRHH\n\n*Completar esta encuesta es \"voluntario\" pero altamente recomendado.*"
+event = ExtResource("1")
+email_id = "email_33"
+day_available = 3
+sender_type = "CORPORATE"
+is_conditional = true
+required_flags = Array[String](["survey_enabled"])
+excluded_flags = Array[String]([])

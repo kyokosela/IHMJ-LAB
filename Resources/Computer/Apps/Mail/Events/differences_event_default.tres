@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DifferencesEvent" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Resources/Computer/Apps/Mail/Events/differences_event.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+document_a = "Version A"
+document_b = "Version B"
+differences = Array[String](["discrepancia"])
+differences_to_find = 1

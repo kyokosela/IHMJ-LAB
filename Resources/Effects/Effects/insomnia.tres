@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EffectLevel" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://Assets/UI/effects/insomnia.png" id="1_0"]
+[ext_resource type="Script" path="res://Resources/Effects/level_effect.gd" id="1_1"]
+[ext_resource type="Texture2D" path="res://Assets/UI/effects/insomnia 2.png" id="2_0"]
+[ext_resource type="Texture2D" path="res://Assets/UI/effects/insomnia 3.png" id="3_0"]
+
+[resource]
+script = ExtResource("1_1")
+level_display_list = Array[String](["_EFFECT_INSOMNIA_1_", "_EFFECT_INSOMNIA_2_", "_EFFECT_INSOMNIA_3_"])
+icons = Array[CompressedTexture2D]([ExtResource("1_0"), ExtResource("2_0"), ExtResource("3_0")])
+effect_unique_name = "INSOMNIA"
+effect_display_name = "_EFFECT_INSOMNIA_"
+render = true

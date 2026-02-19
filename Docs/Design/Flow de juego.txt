@@ -1,0 +1,86 @@
+Termina intro, mayui despierta, spawn a lado de la cama. Aparece lista de tareas para cumplir objetivo en una de las esquinas. También se hace visibles los efectos iniciales. (Smelly, Hambre) Ayudan como indicativos para realización de tutorial. Jugador entenderá que ciertas acciones remueven efectos o aplican efectos durante las interacciones el tutorial.
+
+Mayui [Dialogo: ...] (visualmente agotada por levantarse temprano) aparece sprite indicando la emoción, sprite contiene la ropa actual (pijama)
+
+Al dejar pasar la pestaña de dialogo, el jugador ya puede explorar la habitación. De buenas a primeras se ve oscuro, es bastante temprano en la mañana. 
+
+La poca iluminación que contiene el cuarto proviene de la puerta del balcón. 
+
+El jugador tiene libertad de explorar toda la casa, podrá interactuar con el entorno pero mayui siempre tendrá un monologo mental que trata de redireccionar al jugador a cumplir el tutorial.
+
+La habitación está un poco desordenada. Esto debido a que a Mayui le dio pereza organizar todo el día anterior, se ven indicios de mudanza. Cajas con sus pertenencias, habitación casi vacía. 
+
+Los sonidos de la habitación son típicos de una mañana en un barrio de clase baja-media. Pajaros, vehiculo ocacional, hojas de los arboles rozandose. Sonidos tenues, anunciando que el día apenas está despertando.
+
+
+
+Preparate para el trabajo (tutorial pequeño de mecanicas del hogar)
+
+- Asearse: Jugador se acerca a la ducha, interactua con ella y aparece una transición, Dibujo de la silueta de Mayui a través de las cortinas del baño acompañado de su respectivo sonido, 
+un dialogo reflejará la falta de agua caliente en el momento [Monologo interno: Que frio.]
+ una vez afuera, la ropa inicial del jugador quedaria en uno de los slots de inventario y el sprite cambiaria a mayui en toalla, 
+Los renders de dialogo tambien reflejarian este estado. Dialogo que ocurre justo despues de salir de baño [Dialogo: 1. Achuu! 2. ... 3. Debería ir cambiarme si no quiero morir congelada]
+
+- Ponerse el uniforme de trabajo: Jugador interactua con el armario, armario abre una UI en donde se muestra un dibujo de mayui a la izquierda con el atuendo actual, 
+a la derecha se encontraría el dibujo de un armario y dentro, una cesta para la ropa sucia en la parte inferior, en la parte central superior se encontrarían los atuendos colgados en el armario.
+Al pasar el cursor sobre los atuendos, estos tendrían un bordeado blanco. Descripción de interacción con la UI por definir. Debido al tutorial, si el jugador intenta interactuar con atuendos ajenos
+al uniforme de trabajo, este se encontraría con dialogos que le indicarían seleccionar el atuendo requerido por el tutorial. [Monlogo/evento: *Estomago hace ruidos*, Mayui: 1. Es verdad, ayer no cene por estar organizando mis cosas... 2. Nadie me advirtio que mudarse eran tan complicado.] Mayui da el primer indicio para dirirse a la cocina.
+
+- Preparar algo de comer: Jugador interactua con la cocina, cocina abre interfaz propia con elemtos de fabricacion, preparacion y almacenamiento. 
+[Monologo interno: 1. Oh... 2.Cierto 3. Sobro cafe de ayer] habria ya algo de cafe preparado en la estufa en un coffe pot. [Monologo interno: Lo dejare calentando mientras preparo algo simple] Jugador sale de la interfaz de la cocina, se dirige a la nevera, en la nevera encuentra 3 latas de"comida instantanea" y un sobre de cafe abierto y 2 bolsas de ingredientes
+Al interactuar con items que no sean los indicados, debido al tutorial el jugador se encontrara con bloqueos de dialogo que lo redirigiran a seleccionar la comida instantanea, el jugador vuelve a la cocina, realiza crafteo de comida instantanea utilizando las herramientas presentes en la cocina, una vez con estos elementos ya preparados en el inventario, (ambas manos), el jugador consume cafe caliente y comida instantanea lista. La comida instantanea por lo general deja mal olor por lo que Mayui advertiria en forma de dialogo. [Mayui: 1.Puaj, odio estas cosas... 2. Pero el nombre no miente, realmente son instantaneas 3.Y aunque no saben a nada es gracioso que despues te dejan la boca oliendo a mierda 5. No dudaria si me dicen que es veneno para cucarachas. 6. ... 7. Me levare la boca antes de salir.] Jugador recibe el efecto smelly nuevamente. Se tiene pensado que el efecto smelly un comportamiento especifico para su eliminacion. Dependiendo del tipo de suciedad que se maneje el jugador tendra 2 maneras de eliminarlo. Si es mal olor por cuerpo, el efecto se elimina duchandose, si el jugador obtiene este efecto debido a la comida, entonces tendra que lavarse los dientes para deshacerse del efecto smelly. Este efecto tambien afecta interacciones con personajes y puede lograr que no se te acerquen o prefieran no sostener una conversacion contigo por tu mal olor. (aun queda abierto a propiedades mas especificas el efecto) 
+
+Lavarse los dientes: Ultimadamente el jugador se dirige al baño nuevamente, interactua con el lavamanos, el cual abre una UI donde se puede visualizar un espejo, el cepillo de mayui junto con crema dental y el propio lavamanos. Para el lavamanos existe la mecanica de poder revisar el estado de tu cordura en el reflejo del espejo. Cordura solo podra revisarse de manera narrativa y visual, nunca hay un medidor de cordura, pero el jugador se dara cuenta de como esta debido a los dialogos, efectos, eventos, y su ilustracion en el espejo, incluso la musica daria señales en sus melodías de acuerdo al nivel de estrés que se esté manejando en ese momento. Una vez el jugador interactue con el cepillo y crema dental, vera en el espejo como se cepilla en una breve animacion con pocos fotogramas, expresando que la accion de lavarse los dientes se ha completado.
+
+Una vez seguidas las acciones en este orden, al jugador se le permitirá salir por la puerta de su hogar. 
+
+Global question answers
+
+1. Hay efectos que ya por sí solos se aplican con el mero paso del tiempo. El jugador siempre conservará los efectos que lleve activados a no ser que cumpla con la condición para eliminarlos. Se puede revisar la misma lógica del juego para asegurarse de que los efectos contengan dichos comportamientos. 
+
+2. La cordura es mayormente afectada por eventos, items, dialogos y la obtención de efectos problemáticos como "WEAK" mantener una buena rutina de sueño como ya ha sido implementada para el efecto de sueño e insomnio, también ayudaría a subir la cordura en menor medida. Tener en cuenta que la cordura es un efecto que no se mueve tan fácilmente. Y suele ser más difícil afectarla que beneficiarla. 
+3. Ya está implementado que, al llegar al cielo, el jugador literalmente se desmayaría en el sitio en el que se encuentra, y de acuerdo a la formula del sueño, dormiría y recuperaría energía acordemente. 
+
+Economy
+
+4. Ir literalmente a numeros negativos no está pensado ni se piensa implementar. Sin embargo. Mayui podría tener deudas. Entonces estos valor negativos serían invisibles, exisitiría la variable pero seria una mecánica interna que también afectaría al jugador. De tal manera que, puede activar el efecto estrés dependiendo de qué tan negativo esté el valor que debe. Osea se, Mayui le debe dinero al banco, o a matones, o a amigos. Mientras más se siga sumando a ese número negativo. Este tendría sus efectos correspondientes según lo que está implementado. 
+
+5. Sí, se tiene pensado que el jugador pueda utilizar el bus o irse a pie hasta el trabajo de manera manual incluso. Existe ya una formula para la navegación entre escenas a pie, la cual aumenta exponencialmente por escena navegada. pero se reinicia cuando vuelves manualmente a la última escena que recorriste, Lo cual reiniciaría el calculo exponencial. Este cobro exponencial involucraría energía + tiempo. El juego probablemente ya tiene esta mecánica implementada. 
+
+6. Los que existen son solo consecuencias. La única manera de activar un Game Over para el jugador es muriendo. Osea, Health = 0, esta estadistica podría ser afectada por varios factores, no solo se limita a ser afectada por efectos o interacciones que la disminuyan, sino qué, pueden ocurrir eventos específicos manipulen este valor para disminuirlo. EJ: Cordura 0, habilita la acción de tirarse por el balcón del apartamento. Andar por zonas peligrosas te hace vulnerable a criminales que traten de robarte, ser arroyada por un carro, etc. Las consecuencias solo facilitan que llegues a morir por x o y. 
+
+7. El agua fría aplica estrés de acuerdo a probabilidad pero también podría activar ATENTA por un corto periodo de tiempo. 
+
+8. Los dialogos funcionarían como manera de avisarle al jugador indirectamente que tiene que seleccionar el uniforme.
+
+9. El café funciona tal cual lo menciones, el hecho de que genere insomnio a ese nivel de energía se debe a que el café por si solo activa ATENTA, el cual es un efecto que reduce el costo de energía de las acciones. Al volverse activar nuevamente, como consecuencia se activaría Insomnio. Esto ya está explicado en el la lógica del juego a través de los documentos que compartí. Muy posiblemente ya está implementado.
+
+10. La comida instatanea remueve hunger pero aplica la condición de smelly por alimento y existe una probabilida del 50% de que estrés sea activado al consumir.
+10. Cuando mayui sale de su apartamento, recorre los pasillos, baja por las escaleras y llega al lobby, el evento del casero hablando con ella se activaría, y en esa instancia se le explica cuanto y cuando se le cobra. Ya está implementado el evento y la justificación. El dialgo se editará según la situación.
+
+10. El clock in point se encuentra como una aplicación en la pc. En el tutorial del trabajo se le indicará todo lo que debe hacer. 
+12. Implicitamente ya existen emails que le enseñaran al jugador todo lo que podría aparecer en la instancia de trabajo. El estrés puede activarse pero por diferentes razones. primero se necesita tener el juego hecho para explorar y balancear esta acción. 
+
+13. Este evento se ejecutaría a través de dialgos. 
+
+14. El jugador puede volver a pie a su casa o en las rutas de bus que aún siguen activas. 
+
+15. En el juego se le quiere dar la libertad al jugador de poder hacer lo que se le de la gana, pero así mismo se encontraría con una serie de consecuencias si trata de romper rutinas establecidas para la supervivencia básica. Puede irse directamente a casa, explorar, hablar con npcs, comprar en tiendas, etc. Pero el juego estaría diseñado de tal forma que sea mejor estar en casa después de cierta hora. o más bien, que convenga más seguir la rutina que ignorarla. Los efectos jugarían en parte un gran rol en este sentido. 
+
+16. El juego no fuerza ninguna hora para dormir. El jugador elige, ya el mismo comportamiento del juego lo obligaría a utilizar el recurso de dormir para continuar eficientemente. Mayui [Dialogo: ...] (visualmente agotada por levantarse temprano) aparece sprite indicando la emoción, sprite contiene la ropa actual (pijama)
+
+Al dejar pasar la pestaña de dialogo, el jugador ya puede explorar la habitación. De buenas a primeras se ve oscuro, es bastante temprano en la mañana. 
+
+La poca iluminación que contiene el cuarto proviene de la puerta del balcón. 
+
+El jugador tiene libertad de explorar toda la casa, podrá interactuar con el entorno pero mayui siempre tendrá un monologo mental que trata de redireccionar al jugador a cumplir el tutorial.
+
+La habitación está un poco desordenada. Esto debido a que a Mayui le dio pereza organizar todo el día anterior, se ven indicios de mudanza. Cajas con sus pertenencias, habitación casi vacía. 
+
+Los sonidos de la habitación son típicos de una mañana en un barrio de clase baja-media. Pajaros, vehiculo ocacional, hojas de los arboles rozandose. Sonidos tenues, anunciando que el día apenas está despertando.
+
+
+
+
+ 
+

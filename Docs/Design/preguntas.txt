@@ -1,0 +1,77 @@
+1. El diseño aun no esta confirmado, pero, el juego contiene un pc interactuable y dicho pc tiene sus propias aplicaciones. Supongo que seria como una app de escritorio. Los colores corporativos y logos estan aun por decidirse. 
+2. Entiendo que aparecen, pero no sabria como utilizarlos. Aunque creo que hace referencia a los 4 tipos de minijuegos que existen en el juego. Solo se manejaria de esa manera, no veo los modulos siendo accedibles. Simplemenbte dentro del mismo correo activarias la interfaz del minijuego de acuerdo a lo que pida el mismo.
+3. No, Grower solo puede ser accesible desde la compu de la empresa. 
+4. Esto ya suena a demasiado, para la demo no lo veo propuesto. pero si el juego gana visibilidad en el futuro podria implementarse una mecanica a futuro.
+5. Rootnet ES internet.
+6. Puede acceder si tiene algun electrodomestico y paga RootNet dentro de la facturas del alquiler.
+7. No está incluído en la demo, pero, es una mecanica que se piensa implementar a futuro en caso de que el juego gane apoyo. Habría noticias de todo tipo (subidas en precios, clima, accidentes, notificas sobre celebridades dentro del invernadero, criminales, foros donde se habla de todo tipo de cosas. Algo así como en GTA V, pero en este caso serian NPCS reales lo que interactuan con todas estas paginas, las empresas tambien se promocionan en linea, tambien habria una red social donde podrias ver lo que hacen los personajes junto con ese sistema de chat para Mayui.
+8. Serviria para ver el salario, Ver resultados anteriores de las semanas, permisos, utilizar los tokens de ascension. Mas que nada todo lo relacionado a lo que ya existe y, tambien tendria que tener una interfaz bastante simple e intuitiva. 
+9. Si existe, la internet es global en tanto telefonos como en computadoras. La empresa prohibe utilizar telefonos para acceder a grower y mandar mensajes pero ella igual lo hace, suele ser regañada por esto. Mayui inicialmente no tendria ya que su situacion financiera esta un poco apretada, pero a futuro si podria conseguir un telefono o computadora.
+10. Se verian en los sprites y artes de personaje pero solo cuando estan en el trabajo, al llegar a la recepcion llevarian su ID, y con esta se les darian sus brazaletes correspondientes. Estos brazaletes, dependiendo de su color te garantizarian y/o prohibirian el acceso a ciertas areas de la empresa.
+11. Mayui entendería como funcionan y dependiendo de quien sea y que brazalete tenga ella sostendria una actitud especifica con ellos. Generalmente, los brazaletes superiores suelen ser mas autoritarios.
+12. Por lo general, los brazaletes tambien afectan tu estatus social, son reconocidos e incluso puede darte ventajas fuera de la vida laboral (descuentos, rutas con algunos personajes, desbloquear diferentes finales ligados no ligados a la empresa.
+13. Solo te dan el nuevo brazalete, eso sí, se les notifica por correo a todos los empleados cuando alguien asciende, ya que generalmente no es una tarea facil de cumplir. Usualmente en la empresa te evaluan por tus habilidades y asi mismo eres asignado a tu color correspondiente. Por eso la gente prefiere no usar los ascensores ya que estos suelen dejar marcas psicologicas fuertes y traumas que provocan que la gente quiera retirarse. Es por esto que dentro de la empresa, ascender por medio de los ascensores es una locura. 
+14. Se menciona pero mayui no tendria acceso de momento por ser nueva. Pero si funcionaria por los 7 días, una vez pasan los 7 días y tus resultados cumplen la flag, obtendrias el token de ascension.
+15. Por escaleras normales. Sí, no existe acceso a estos aún. 
+16. Hay varios, ya están ubicados en el mapa propuesto por el equipo.
+17. Son ascensores regulares, aunque se podría decidcir mejor diseño mas tarde durante el desarrollo.
+18. La manera en la que se piensa ejecutar es la siguiente: Accedes el ascensor y eres transportado a una escena específica, la cual tiene narrativa propia y mecanicas correspondientes. Miralo como si inciaras otro juego como el VVVVVVV o bomberman, o geometry dash. Se tiene pensado idea un minijuego propio que requiera habilidad. Y este solo tendría una oportunidad para ser completado. Si pierdes el token se pierde y sufres consecuencias fuertes como perdida de salud, efectos dificiles de remover e impacto en la cordura del personaje. Es por esto que se recomienda practicar en el arcade con los mock games antes de intentar ascender en el trabajo.
+19. El arcade posee versiones super simplificadas de los minijuegos de ascension. El nombre puede decidirse después o bien puedes dejar un placeholder. 
+20. El token se consigue completando al menos mas de 3 tareas extra al día. El impacto que tiene es meramente en el estrés del personaje. Poner a Mayui a trabajar mas de la cuenta tiene repercusiones en estrés y efectos peligrosos. En cuanto a su conexión con otros sistemas, intenta balancearlo de acuerdo a lo que tenemos estipulado. Después yo te diré que cambiar, o simplemente lo cambiaré yo mismo.
+21. Es una ciudad completa la cual ya tenemos planteada de manera ilustrada. Hay varios distritos y se dividen por estratos socioeconómicos. Las personas pueden ver que el cielo tiene las caracteristicas de un invernadero. 
+22. Se ve el exterior através del techo. Hay clima artificial.
+23. Sí, pero solo narrativamente, se puede decir que mayui se mudó a este invernadero. Se mencionan pero brevemente o en situaciones puntuales. 
+24. Se infiere su existencia pero ellos no saben que son humanos, son por así decirlo una fuerza mayor que ellos no pueden repeler. Como Dios, paralelismo con literatura lovecraftiana. En la azotea se puede ver como una mano llega a agarrar las frutas que estén en su fase final de maduración.
+25. Los nombres aún no existen, pero existen varios. El barrio de mayor, el cual es estrato 2. Zona comercial, la cual, es una zona central de comercio. Zona laboral, la cual es una zona conformada por varios edificios contribuyentes a la sociedad, policía, hospital, casa de cambio, etc. Y aún hay bastante espacios para más narrativa, por ejemplo. La zona más rica de la ciudad, la sola de clase media. Alguna zona verde muy grande. Etc, literal, Una ciudad con todas las caras de la sociedad. 
+26. Aún no está pensado, pero puedes dejar un placeholder modificable, generalo y luego lo usamos nosotros en el equipo si queda lo suficientemente bueno.
+27. Sí, definitivamente existen diferencias visuales según la zona en la que se esté.
+28. Simplemente es la zona más pobre de la ciudad, y la gente que entra ahí no suele salir.  o al menos esa es la narrativa propuesta.
+29. Normalmente serian completamente recorribles a pie o con metodos de transporte (bus, carro, etc) si hubiese un mapa tal vez sería una aplicación de teléfono que te muestra la ciudad y en donde estás en el momento, como en google maps.
+30. Mayui solo se referiria a él como el casero. 
+31. Es un rabano. Viejo, Gruñon y panzón. 
+32. La relación se iría volviendo pasivo agresiva con él al pasar del tiempo. 
+33. Existen más inquilinos en el edificio.
+34. Sativa tiene que ver a casi todos los empleados del lugar a diario para admitirlos según su brazalete asignado. No es como que recuerde a alguien en particular, ella está en automático haciendo su trabajo. Pero si recordaría si llegaras a tener conversaciones con ella más allá del trabajo. Como con Mayui, es estrictamente laboral. Pero tal vez por la personalidad de Madina ella sea más distingüible que el resto de los empleados, esto muy posiblemente porque Madina le lleve detallitos por pura amabilidad y por su forma de ser. 
+35. Estos eventos son totalmente placeholder. Narrativamente aún no existen arcos para ningún personaje. Por lo que tendría cuidado con este tipo interacciones. Esto podemos limpiarlo o dejarlo en un espacio para discusión más tarde.
+36. Era un banano
+37. No creo que haya que ahondar demasiado en su personalidad. Otro personaje placeholder para un evento placeholder.
+38. No está pensado.
+39. Los números son solo empresariales, pero solo sabría sus nombres en caso de interactuar con ellos y que te lo den personalmente, o que logres mirar su ID.
+40. Sprites visibles
+41. Aún por decidir, podrían haber 5 niveles como placeholder.
+42. Eventos específicos, Dialogos, favores, etc.
+43. Se indicaría narrativamente nada más.
+44. Si es posible. 
+45. El despertador es una ayuda para levantarse más temprano. El jugador por defecto siempre necesita unas horas específicas para dormir. El despertador es una ayuda para poder ignorar este umbral de horas oblogatorias, Mayui nunca se despierta antes si no tiene el despertador como ayuda. (Esta es una mecánica que ya tiene su propia lógica. Ya está implementada. 
+46. El jugador decide si lo hace o no. Pero las consecuencias como los efectos de suciedad se hacen ver, y con eso sus consecuencias narrativa y de jugabilidad.
+47. Café es como un booster, provee energía y un efecto que la preserva. (Ya está implementado en el juego como funciona) Sí, hay un sistema de preparación y crafteo que permite fabricar comidas como el desayuno, almuerzo o cena.
+48. Estas es una idea que aún no está confirmada, la ropa puede estar sucia, mojada y limpia. Pero aún no exploramos la opción de que se pueda dañar. Mayui tiene que lavar su ropa si está sucia y tiene que ponerla a secar si está mojada.
+49. Sí, existe penalización por llegar tarde al trabajo. Estas son llamados de atención acumulables que terminan en despidos y reducción progresiva del salario semanal. 
+50. El jugador puede usarlos durante su shift, pueden ser usados estratégicamente para evitar acumulación de estrés o realización de actividades ajenas al trabajo como conseguir documentos evitando a los guardias, o plantar camaras, microfonos, etc.
+51. Si se va antes perdería parte del salario que ganaría ese día. Si lo hace sin permiso se llevaría un llamado de atención acumulable también. 
+52. Mayui puede quedarse horas extra, pero estas no serían pagadas y realizar tareas faltantes, cumpliría la meta del día pero añadiría efectos negativos extra, por el hecho de estar trabajando fuera de horario laboral.
+53. La progresión de dificultad puede estar netamente ligada a la narrativa que se establezca. 
+54. Fallarlos simplemente entorpece tu eficiencia y te haría terminar más tarde. Hacerlos bien equivale a tener más tiempo para hacer los otros.
+55. El tiempo pasa por bloques de actividad e interacción. (ya implementado) Es parecido al ejemplo que planteas.
+56. Existe, es una barra. Y tiene su propia lógica que también está implementada. La energía es como la moneda de cambio para las acciones. Con poca energía consumes más ticks de tiempo. Se reduce la eficiencia del personaje y si se reduce a niveles peligrosos el jugador se puede desmayar. Todo esto ya está implementado.
+57. Mayui puede dormir en sitios específicos, pero normalmente sería de noche ya que es el único espacio en el que podrías elegir hacer esto sin intervenciones. 
+58. No. Son placeholder que aún no he mirado bien.
+59. No sé que es eso. Este es un evento placeholder del que tengo poco conocimiento.
+60. Sí, existe un inventario en el que mayui puede cargar cosas, principalmente si no tienes otro objeto que te deje cargar más cosas como un maletín o una bolsa. Tendrías solo 2 slots los cuales son las manos de Mayui. Tener las manos ocupadas bloquearía ciertas interacciones que las requieren.
+61. Si existen, esto para balancear la obtención de objetos y obligar al jugador a plantear bien cuando puede hacer algo y cuando no. La justificación que planteas es lo más acertado a la idea que tenemos.
+62. Las tiendas si tienen NPCS, y se tiene pensado que sea un solo NPC el que está a cargo de todas. O al menos que esté a cargo de una de las zonas específicas como la zora comercial o el barrio de Mayui.
+63. Sí,. Es común precisamente po lo que dices.
+64. Es como una pantalla de resultados. 
+65. Le llega un correo con el desempeño de la semana.
+66. No lo tengo claro.
+67. No lo tengo claro, no ha sido planteado. Placeholder IA.
+68. No lo tengo claro. placeholder IA.
+69. No está claro, nadie podría subir a la azotea a menos que sea para ascender. 
+70. Pueden haber modismos entre estratos y zonas de la ciuda. Con jergas específicas de los elementos del invernadero.
+71. Mezcla de ambos.
+72. Si existirían bandas musicales propias del invernadero con el ejemplo que aplicas, incluso se había pensado la existencia de una banda llamada "Citricos" en la cual solo hay frutas como Limones, Naranajas, Pomelos, ETC.
+73. Se planearían más tarde de acuerdo a la narrativa y construcción del mundo.
+74. Ambos? Realmente no lo sé. Ya lo está construyendo uno de los devs del team.
+75. Solo al final del día. Esto para evitar hacer el día perfecto abusando de los saves.
+76. Se ven los efectos si aplican, Hora, Energía, día y dinero. (Sujeto a cambios)
+77. No se ha pensado, pero tu placeholder no suena mal.

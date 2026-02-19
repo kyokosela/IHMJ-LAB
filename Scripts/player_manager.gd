@@ -433,6 +433,13 @@ func sleep(hour_deal : String = "00:00", bed_type: int = BED_TYPE.TYPE_C) -> voi
 		var insomnia_cap : String = _roll_insomnia_sleep_cap(insomnia_effect.level)
 		var sleep_minutes : int = mini(TimeUtils.get_minutes(requested_sleep), TimeUtils.get_minutes(insomnia_cap))
 		actual_sleep = TimeManager.format_minutes(sleep_minutes)
+
+	var slept_properly : bool = TimeUtils.is_greater_or_equal(minimun_hours, actual_sleep)
+	if insomnia_effect == null:
+		if slept_properly:
+			insomnia_bad_sleep_days = 0
+		else:
+			insomnia_bad_sleep_days += 1
 	
 	if !has_effect("SLEEPY") and !has_effect("INSOMNIA") : 
 		hour_debt = TimeUtils.increase_time(hour_debt, TimeUtils.decrease_time(minimun_hours, actual_sleep))
@@ -452,7 +459,7 @@ func sleep(hour_deal : String = "00:00", bed_type: int = BED_TYPE.TYPE_C) -> voi
 	else:
 		_register_insomnia_sleep_quality(minimun_hours, actual_sleep)
 
-	if !has_effect("INSOMNIA") and !TimeUtils.is_greater_or_equal(minimun_hours, actual_sleep):
+	if !has_effect("INSOMNIA") and !slept_properly:
 		add_effect(EFFECT_INSOMNIA.duplicate())
 	EventManager.reset_lapse_event("AUTO_SLEEPY_LAPSE")
 	

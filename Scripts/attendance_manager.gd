@@ -143,7 +143,7 @@ func _check_absence_consequences() -> void:
 		ABSENCE_WARNING_2:
 			warning_issued.emit("ABSENCE_2", 2)
 		ABSENCE_SALARY_CUT:
-			var deduction := 50
+			var deduction := 100
 			total_deductions_this_week += deduction
 			salary_deduction_applied.emit(deduction, "ABSENCES")
 			warning_issued.emit("ABSENCE_SALARY_CUT", 3)

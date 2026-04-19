@@ -744,7 +744,7 @@ func _check_level_escalation(effect: EffectLevel) -> void:
 	if current_level == 0 and days >= 1:
 		# Lv1 -> Lv2
 		effect.change_level_value(1)
-	elif current_level == 1 and days >= 2:
+	elif current_level == 1 and days >= 3:
 		# Lv2 -> Lv3
 		effect.change_level_value(2)
 		primary_reached_lv3[effect.effect_unique_name] = true

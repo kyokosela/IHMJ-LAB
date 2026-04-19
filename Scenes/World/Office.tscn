@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
-[ext_resource type="Script" path="res://Scripts/world.gd" id="1"]
+[ext_resource type="Script" path="res://Scripts/office.gd" id="1"]
 [ext_resource type="Script" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
 [ext_resource type="Script" path="res://Scripts/scene_changer.gd" id="3"]
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/integration_action.gd" id="4"]
 [ext_resource type="PackedScene" path="res://Prefabs/walls/floors.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://Prefabs/Workspace/Workspace.tscn" id="6"]
 
 [sub_resource type="RectangleShape2D" id="Shape_exit"]
 size = Vector2(32, 64)
@@ -24,6 +25,9 @@ zone_id = 2
 player_enabled = true
 
 [node name="Floors" parent="." instance=ExtResource("5")]
+
+[node name="Workspace" parent="." instance=ExtResource("6")]
+visible = false
 
 [node name="SpawnPoint" type="Marker2D" parent="." groups=["spawn_point"]]
 position = Vector2(100, 160)

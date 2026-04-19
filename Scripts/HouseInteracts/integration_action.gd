@@ -79,7 +79,9 @@ enum ActionType {
 	APPLY_ATENTA,
 	REMOVE_EFFECT_INAPETENCIA,
 	REMOVE_EFFECT_HYPERSOMNIA,
-	REMOVE_EFFECT_ATENTA
+	REMOVE_EFFECT_ATENTA,
+	# Food
+	EAT_FOOD,
 }
 
 @export var action_type: ActionType = ActionType.OPEN_WORKSPACE
@@ -218,6 +220,11 @@ func custom_execute() -> void:
 		ActionType.ADVANCE_DAY:
 			TimeManager.day += 1
 			_show_feedback("Avanzaste al dia %d" % TimeManager.day)
+		ActionType.EAT_FOOD:
+			PlayerManager.remove_effect("HUNGER")
+			PlayerManager.increase_stat("ENERGY", 10.0)
+			TimeManager.add_to_current_time("00:10")
+			_show_feedback("Comiste algo (+10 energía, 10 min)")
 
 func _call_scene_method(method_name: String) -> void:
 	var scene := get_tree().current_scene

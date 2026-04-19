@@ -400,10 +400,14 @@ const ALARM_UI_SCENE := preload("res://UI/Sleep/AlarmUI.tscn")
 func request_sleep(bed_type: int = BED_TYPE.TYPE_C) -> void:
 	if slept_today:
 		return
+	var canvas := CanvasLayer.new()
+	canvas.layer = 20
+	get_tree().root.add_child(canvas)
 	var ui : Control = ALARM_UI_SCENE.instantiate()
-	get_tree().root.add_child(ui)
+	canvas.add_child(ui)
 	ui.setup(bed_type)
 	var result : Array = await ui.sleep_confirmed
+	canvas.queue_free()
 	sleep(result[0], result[1])
 
 func sleep(hour_deal : String = "00:00", bed_type: int = BED_TYPE.TYPE_C) -> void :

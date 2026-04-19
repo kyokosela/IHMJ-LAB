@@ -118,6 +118,7 @@ func _bind_signals() -> void:
 	%TriggerM88Button.pressed.connect(func() -> void: NarrativeFlags.set_flag("email_37_available"))
 	%TriggerWarning1Button.pressed.connect(func() -> void: NarrativeFlags.set_flag("absence_warning_1"))
 	%TriggerWarning2Button.pressed.connect(func() -> void: NarrativeFlags.set_flag("absence_warning_2"))
+	%TestSleepButton.pressed.connect(func() -> void: PlayerManager.request_sleep(PlayerManager.BED_TYPE.TYPE_C))
 
 	TimeManager.time_changed.connect(_on_runtime_changed)
 	EconomyManager.money_changed.connect(_on_runtime_changed.bind())

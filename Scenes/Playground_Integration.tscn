@@ -767,6 +767,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Absence Warning 2"
 
+[node name="TestSleepButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Test Sleep (Alarm)"
+
 [node name="PortalOverlay" type="Control" parent="HarnessUI"]
 unique_name_in_owner = true
 visible = false

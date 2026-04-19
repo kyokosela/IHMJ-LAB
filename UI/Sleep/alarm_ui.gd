@@ -20,6 +20,7 @@ var _alarm_hours : int = 8
 @onready var no_alarm_button : Button = $Panel/VBox/Buttons/NoAlarmButton
 
 func _ready() -> void:
+	AudioManager.play_alarm()
 	_refresh_hour_display()
 	_refresh_wake_chance()
 	confirm_button.pressed.connect(_on_confirm)

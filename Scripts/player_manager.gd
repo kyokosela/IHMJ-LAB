@@ -409,6 +409,7 @@ func request_sleep(bed_type: int = BED_TYPE.TYPE_C) -> void:
 func sleep(hour_deal : String = "00:00", bed_type: int = BED_TYPE.TYPE_C) -> void :
 	if slept_today:
 		return
+	AudioManager.play_sleep()
 
 	var minimun_hours : String = "00:00"
 

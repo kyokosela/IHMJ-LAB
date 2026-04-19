@@ -43,6 +43,7 @@ RelationshipManager="*res://Scripts/relationship_manager.gd"
 NarrativeFlags="*res://Scripts/narrative_flags.gd"
 EmailPoolManager="*res://Scripts/email_pool_manager.gd"
 NarrativeEventHandler="*res://Scripts/narrative_event_handler.gd"
+AudioManager="*res://Scripts/audio_manager.gd"
 
 [dialogic]
 

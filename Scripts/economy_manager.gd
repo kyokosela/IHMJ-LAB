@@ -31,6 +31,7 @@ func _ready() -> void:
 func add_money(amount: int, reason: String) -> void:
 	_log_transaction(amount, reason)
 	money += amount
+	AudioManager.play_coin_gain()
 
 func spend_money(amount: int, reason: String) -> bool:
 	if money < amount:
@@ -38,6 +39,7 @@ func spend_money(amount: int, reason: String) -> bool:
 		return false
 	_log_transaction(-amount, reason)
 	money -= amount
+	AudioManager.play_coin_spend()
 	return true
 
 func can_afford(amount: int) -> bool:

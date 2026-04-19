@@ -101,6 +101,8 @@ func custom_execute() -> void:
 	if Engine.is_editor_hint():
 		return
 
+	AudioManager.play_click()
+
 	match action_type:
 		# Workspace & Apps
 		ActionType.OPEN_WORKSPACE:

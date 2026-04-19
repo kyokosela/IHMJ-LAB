@@ -247,9 +247,7 @@ func _simulate_zone_change(zone_id: int) -> void:
 	_process_street_risk_simulation()
 
 func _do_sleep() -> void:
-	# Use PlayerManager's built-in sleep function
-	PlayerManager.sleep("00:00", bed_type)
-	_show_feedback("Dormiste hasta las 06:30")
+	PlayerManager.request_sleep(bed_type)
 
 func _do_bathe() -> void:
 	TimeManager.add_to_current_time("00:30")

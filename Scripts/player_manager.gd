@@ -107,6 +107,7 @@ var primary_reached_lv3 : Dictionary[String, bool] = {
 var insomnia_days_active : int = 0
 var insomnia_bad_sleep_days : int = 0
 var insomnia_proper_sleep_streak : int = 0
+var slept_today : bool = false
 
 func _ready() -> void:
 	player = load("res://Prefabs/Player/Player.tscn").instantiate()
@@ -393,9 +394,24 @@ var mininum_energy_ranges : Dictionary = {
 
 var hour_debt : String = "00:00"
 
+const ALARM_UI_SCENE := preload("res://UI/Sleep/AlarmUI.tscn")
+
+## Punto de entrada para camas/interactables. Muestra AlarmUI y luego llama sleep().
+func request_sleep(bed_type: int = BED_TYPE.TYPE_C) -> void:
+	if slept_today:
+		return
+	var ui : Control = ALARM_UI_SCENE.instantiate()
+	get_tree().root.add_child(ui)
+	ui.setup(bed_type)
+	var result : Array = await ui.sleep_confirmed
+	sleep(result[0], result[1])
+
 func sleep(hour_deal : String = "00:00", bed_type: int = BED_TYPE.TYPE_C) -> void :
+	if slept_today:
+		return
+
 	var minimun_hours : String = "00:00"
-	
+
 	var current_energy : float = get_stat_value("ENERGY")
 
 	for r in minimun_hours_ranges:
@@ -462,14 +478,15 @@ func sleep(hour_deal : String = "00:00", bed_type: int = BED_TYPE.TYPE_C) -> voi
 	if !has_effect("INSOMNIA") and !slept_properly:
 		add_effect(EFFECT_INSOMNIA.duplicate())
 	EventManager.reset_lapse_event("AUTO_SLEEPY_LAPSE")
-	
+	slept_today = true
+
 	if TimeUtils.is_greater_or_equal("06:00", hour_debt) and !has_effect("SLEEPY") and !has_effect("INSOMNIA"): # las 6 horas indican cuanto se debe acumular para aplicar sueño
 		add_effect(load("res://Resources/Effects/Effects/sleepy.tres"))
 		var sleepy : EffectHourControl = get_effect_res("SLEEPY")
 		sleepy.time = hour_debt
 		hour_debt = "00:00"
-		
-	
+
+
 	await TransitionManager.transition_finished
 
 func _roll_insomnia_sleep_cap(insomnia_level: int) -> String:
@@ -662,6 +679,7 @@ func get_work_failure_chance() -> float:
 
 ## Called daily to handle primary effect spawning, escalation, and probability checks
 func _on_day_changed_primary_effects(_day: int) -> void:
+	slept_today = false
 	_update_insomnia_days()
 
 	var sanity : float = sanity_value

@@ -29,8 +29,9 @@ func _process(_delta: float) -> void:
 #region FILE SYSTEM
 func new_game() -> void:
 	is_on_tutorial = true
-	
+
 	SaveManager.clear()
+	TimeManager.minutes = 480  # 08:00
 	
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)

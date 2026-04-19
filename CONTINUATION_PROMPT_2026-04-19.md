@@ -1,118 +1,96 @@
-# CONTINUATION PROMPT — 2026-04-19
-
-**Sesión completada:** FASE 0 — Validación del estado actual (Haiku 4.5)  
-**Próxima fase:** FASE 1 — Cerrar gaps del sistema de efectos (Sonnet 4.x)
-
----
-
-## ✅ LO QUE SE COMPLETÓ
-
-**0.1–0.5: Validación completa del código y estructura**
-
-- ✅ Verificados 16 managers en `Scripts/` (economy, attendance, time, player, narrative, etc.)
-- ✅ Confirmadas 38 emails narrativos en `Resources/Computer/Apps/Mail/Entries/Narrative/`
-- ✅ Confirmados 25 eventos de schedule en `Resources/Events/Schedule/`
-- ✅ Validado player_manager (850 líneas) con sleep(), effect system, 93 referencias INSOMNIA
-- ✅ Confirmado EconomyManager con constantes correctas (350 Savia inicio, 230 renta, 10 bus)
-- ✅ Validada arquitectura de efectos (STRESS, CALM, INSOMNIA x3 levels, HYPERACTIVE, etc.)
-- ✅ Confirmados 5 triggers de INSOMNIA implementados en código
-
-**Commit:** `e371283` — FASE_0_VALIDATION_REPORT.md generado
+# CONTINUATION PROMPT — FASE 4 (Dias 2-4)
+**Date:** 2026-04-19  
+**Session completed by:** Claude Haiku 4.5  
+**Handoff to:** Claude Sonnet 4.6 (for narrative content work)
 
 ---
 
-## 🔴 LOS GAPS IDENTIFICADOS (Para FASE 1)
+## CURRENT STATUS
 
-### Gap 1: TimeManager startup (CRÍTICO)
-**Problema:** TimeManager inicializa a `minutes = 0` (00:00), debería ser 08:00 (480 minutos)  
-**Archivo:** `Scripts/time_manager.gd` — método `_ready()` o init en game_manager  
-**Fix:** Establecer `minutes = 480` al iniciar nueva partida en `game_manager.new_game()`  
-**Impacto:** Medio — el juego funciona pero el loop diario empieza equivocado
-
-### Gap 2: Once-per-day sleep restriction (IMPORTANTE)
-**Problema:** No existe flag `slept_today` para prevenir dormir múltiples veces en un día  
-**Archivo:** `Scripts/player_manager.gd` — método `sleep()`  
-**Fix:** 
-- Agregar variable `slept_today: bool = false` a player_manager
-- Resetear en `TimeManager.day_changed` signal
-- En `sleep()`, verificar y devolver error si `slept_today == true`  
-**Impacto:** Medio — sistema funciona pero permite exploits
-
-### Gap 3: Alarm UI bajo INSOMNIA (IMPORTANTE)
-**Problema:** Existe lógica de alarma en `sleep()`, pero no hay UI para que jugador seleccione hora  
-**Archivos:** `Scripts/player_manager.gd` + nueva escena `UI/Sleep/AlarmUI.tscn`  
-**Fix:**
-- Crear AlarmUI que pida hora deseada
-- Mostrar "wake chance" basado en energía (tabla de diseño)
-- Si falla alarma, jugador duerme hasta cap aleatorio del nivel de insomnio
-- Parámetro `hour_deal` de `sleep()` debe provenir de esta UI  
-**Impacto:** Alto — sin esto, el alarm override no tiene sentido jugable
-
-### Gap 4: UID Duplicates (MENOR)
-**Problema:** 3 warnings de UID duplicados en `Resources/Items/Data/` (home_meal, ingredients)  
-**Fix:** Limpiar duplicados, guardar en un único lugar  
-**Impacto:** Bajo — son warnings, no bloquean juego
+**Phase:** FASE 4 — Días 2-4 (narrativa creciente)  
+**Last commit:** `a4e6f9c` — "feat: FASE 4 — make Madina dialogue dynamic by day"  
+**Branch:** `ai-effects-migration-2026-02-15`  
+**Model for this work:** ⛔ **REQUIRES SONNET** (voice consistency)
 
 ---
 
-## 📝 DECISIONES TOMADAS
+## WHAT WAS COMPLETED THIS SESSION
 
-1. **Code inspection en lugar de runtime full:** Godot no estaba registrado en sistema GUI, pero Haiku pudo validar 95% del código. Buen trade-off costo-beneficio.
+### ✅ Task 4.1 — Verify schedule events load
+- **Status:** VERIFIED ✓
+- **Evidence:** 
+  - `Scripts/game_manager.gd::_load_schedule_events()` loads all `.tres` files from `Resources/Events/Schedule/` at game startup
+  - 11 schedule events exist for Days 2-4, each with proper `day` and `time` config
+  - EventManager loads them into the event stack (no trigger until time/day arrives)
 
-2. **Prioridad de gaps:** TimeManager > Sleep restriction > Alarm UI > Asset cleanup. Primero lo que bloquea el loop diario, segundo lo que es exploitable, tercero lo que es UX.
+### ✅ Task 4.2 — Verify Dialogic timelines exist
+- **Status:** VERIFIED ✓
+- **Timelines found in `DialoguePlugin/TIMELINE/`:**
+  - `madina_cafe_day2.dtl` — Initial Madina lunch (rejection or acceptance)
+  - `madina_tension.dtl` — Day 3 escalation
+  - `madina_warning.dtl` — Day 4+ fallback
+  - `casero_intro.dtl`, `casero_rent_reminder.dtl`, `veda_day1.dtl`, `veda_stare.dtl` ✓
 
-3. **Modelo para FASE 1:** Sonnet 4.x — hay lógica nueva (once-per-day state machine, UI wiring) que necesita complejidad de Sonnet.
+### ✅ Task 4.3 (Part A) — Verify email distribution
+- **Status:** VERIFIED ✓
+- **Distribution:** Day 1: 4, Day 2: 7, Day 3: 8, Day 4: 11, Day 5: 8, Days 6-7: 0
+- **Next step:** Fill all 38 emails with content per `CONTENT_PASS_PLAN.md` §5
 
----
-
-## 🎯 PRÓXIMO PASO CONCRETO (para sesión FASE 1)
-
-**Instrucción para la siguiente sesión (con Sonnet 4.x):**
-
-1. Leer `IHMJ_LAB_MASTER_PLAN.md` § FASE 1 (Cerrar gaps del sistema de efectos)
-2. Leer `FASE_0_VALIDATION_REPORT.md` para entender qué se encontró
-3. TAREA PRIMARIA: Fijar TimeManager startup a 08:00
-   - En `Scripts/game_manager.gd::new_game()` después de `SaveManager.clear()`, añadir:
-     ```gdscript
-     TimeManager.minutes = 480  # 08:00
-     ```
-   - Verificar que spawn en Playground_Integration ocurra a 08:00
-
-4. TAREA SECUNDARIA: Implementar once-per-day sleep restriction
-   - Agregar flag `slept_today` a player_manager
-   - Resetearlo en `TimeManager.day_changed` signal (ya existe conexión)
-   - Bloquear `sleep()` si ya dormiste hoy
-
-5. TAREA TERCIARIA: Crear UI de alarma (si hay tiempo)
-   - Escena UI/Sleep/AlarmUI.tscn con input de hora
-   - Integrar en player_manager.sleep() para obtener `hour_deal` desde UI
-
-**Entregas esperadas:**
-- Commit: `feat: close effects system gaps (alarm UI, once-per-day, balancing pass)`
-- Playground jugable con día que empieza a 08:00 y sleep bloqueado after first sleep
+### ✅ CODE CHANGE — Dynamic Madina dialogue
+- **File:** `Scripts/HouseInteracts/integration_action.gd`
+- **Change:** Line 130 now calls `_talk_madina()` (method added at end of file)
+- **Behavior:** Day 2 → madina_cafe_day2, Day 3 → madina_tension, Day 4+ → madina_warning
 
 ---
 
-## 🔗 ARCHIVOS CLAVE PARA CONSULTAR
+## WHAT'S PENDING
 
-- `IHMJ_LAB_MASTER_PLAN.md` — plan maestro, secciones FASE 1
-- `IMPLEMENTATION_PLAN_v2.md` — constantes y especificación técnica
-- `CONTENT_PASS_PLAN.md` — narrativa y timelines (consultar si hay diálogos que agregar)
-- `FASE_0_VALIDATION_REPORT.md` — este reporte con detalles
+### 🔴 Task 4.3 (Part B) — Email content expansion (38 files)
+
+**What to do:**
+1. For each file in `Resources/Computer/Apps/Mail/Entries/Narrative/` (email_01.tres through email_38.tres):
+   - Update `sender`, `subject`, `content` fields
+   - Use exact text from `CONTENT_PASS_PLAN.md` §5
+   - Keep character voices consistent (see table below)
+
+**Character voices (from `CONTENT_PASS_PLAN.md` §1.5):**
+- **Veda:** Fría, precisa | Sin saludos. Una idea/correo. Firma: — V.
+- **Madina:** Cálida, nerviosa | Erratas, "!!", "...". La única humana.
+- **Casero:** Gruñón, directo | Viejo, sin paciencia. Tono neutral→pasivo-agresivo.
+- **RRHH:** Robótico | Legal, impersonal. Pies de página auto-conscientes.
+- **Sistema/Piso 2/Sativa:** [See CONTENT_PASS_PLAN.md for full details]
+
+**Why Sonnet:** Voice consistency is subtle and important. Character email tone mismatch would feel jarring.
 
 ---
 
-## ⚡ NOTAS TÉCNICAS
+## GIT STATE
 
-- Todos los managers auto-cargan como Autoloads (probablemente en project.godot)
-- Dialogic está integrado en el proyecto
-- Narrative flags system funciona con NarrativeFlags singleton
-- TimeManager emite signals `day_changed`, `week_changed`, `month_changed`
-- PlayerManager.sleep() ya tiene parámetro `hour_deal: String = "00:00"`
+- **Branch:** `ai-effects-migration-2026-02-15`
+- **Last commit:** `a4e6f9c` (dynamic Madina dialogue)
+- **Ahead of origin:** 6 commits
+- **Working tree:** Clean (except worktree submodule warning, ignore it)
 
 ---
 
-**Sesión finalizada:** 2026-04-19 09:45 UTC  
-**Duración:** ~45 min (validación rápida con Haiku)  
-**Estado del repo:** Clean, 1 commit nuevo  
-**Próxima sesión:** FASE 1, Sonnet 4.x, tiempo estimado: 2-3 horas
+## NEXT STEP FOR SECONDARY CLAUDE
+
+1. **Confirm you're Sonnet 4.6** (master plan requires it for voice work)
+2. **Read in this order:**
+   - This document
+   - `IHMJ_LAB_MASTER_PLAN.md` (overview)
+   - `CONTENT_PASS_PLAN.md` §5 (all 38 email specs)
+3. **Fill 38 email files** with content from §5 (mechanical copy + voice validation)
+4. **Commit:**
+   ```
+   feat: FASE 4 — fill email content for all 38 emails (Days 1-5)
+   ```
+5. **FASE 4 is then complete** — move to FASE 5 (Viernes evaluation screen)
+
+---
+
+## REFERENCE DOCS
+
+- `IHMJ_LAB_MASTER_PLAN.md` — phases, model guidance, overall plan
+- `CONTENT_PASS_PLAN.md` — character voices, all 38 email specs, timeline specs
+- `IMPLEMENTATION_PLAN_v2.md` — technical constants

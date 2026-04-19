@@ -3,6 +3,8 @@ extends World
 const WORKSPACE_SCENE := preload("res://Prefabs/Workspace/Workspace.tscn")
 const PORTAL_SCENE := preload("res://Prefabs/Workspace/Computer/Apps/Portal/portal.tscn")
 const EVALUATION_SCENE := preload("res://UI/Evaluation/evaluation_screen.tscn")
+const ARCADE_SCENE := preload("res://UI/Arcade/arcade.tscn")
+const MARKET_SCENE := preload("res://UI/Market/market.tscn")
 
 @onready var status_label: RichTextLabel = %StatusLabel
 @onready var day_spin: SpinBox = %DaySpin
@@ -119,6 +121,8 @@ func _bind_signals() -> void:
 	%TriggerWarning1Button.pressed.connect(func() -> void: NarrativeFlags.set_flag("absence_warning_1"))
 	%TriggerWarning2Button.pressed.connect(func() -> void: NarrativeFlags.set_flag("absence_warning_2"))
 	%TestSleepButton.pressed.connect(func() -> void: PlayerManager.request_sleep(PlayerManager.BED_TYPE.TYPE_C))
+	%TestArcadeButton.pressed.connect(func() -> void: _open_test_overlay(ARCADE_SCENE, "arcade_closed", "arcade_open"))
+	%TestMarketButton.pressed.connect(func() -> void: _open_test_overlay(MARKET_SCENE, "market_closed", "market_open"))
 
 	%ScenarioDay1Button.pressed.connect(_scenario_day1)
 	%ScenarioDay5Button.pressed.connect(_scenario_day5)
@@ -359,3 +363,14 @@ func _scenario_sunday() -> void:
 	NarrativeFlags.set_flag("met_veda_day1")
 	_set_action("ESCENARIO Domingo — sunday_prep se activa a las 17:00 (faltan 5 min)")
 	_refresh_status()
+
+func _open_test_overlay(scene: PackedScene, closed_signal: String, required_flag: String) -> void:
+	if not NarrativeFlags.has_flag(required_flag):
+		NarrativeFlags.set_flag(required_flag)
+		_set_action("Auto-set flag '%s' for testing" % required_flag)
+	var canvas := CanvasLayer.new()
+	canvas.layer = 20
+	get_tree().root.add_child(canvas)
+	var ui := scene.instantiate()
+	canvas.add_child(ui)
+	ui.connect(closed_signal, canvas.queue_free)

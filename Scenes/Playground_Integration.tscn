@@ -772,6 +772,16 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Test Sleep (Alarm)"
 
+[node name="TestArcadeButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Test Arcade"
+
+[node name="TestMarketButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Test Market"
+
 [node name="ScenarioLabel" type="Label" parent="HarnessUI/Panel/Margin/Root"]
 layout_mode = 2
 text = "--- ESCENARIOS RÁPIDOS ---"

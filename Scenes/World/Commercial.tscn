@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://Scripts/world.gd" id="1"]
 [ext_resource type="Script" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
+[ext_resource type="Script" path="res://Scripts/HouseInteracts/integration_action.gd" id="3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a1"]
+size = Vector2(80, 30)
 
 [node name="Commercial" type="Node2D"]
 script = ExtResource("1")
@@ -12,3 +16,39 @@ player_enabled = true
 position = Vector2(100, 100)
 script = ExtResource("2")
 entity = "Player"
+
+[node name="ArcadeStation" type="Label" parent="."]
+offset_left = 250.0
+offset_top = 100.0
+offset_right = 380.0
+offset_bottom = 123.0
+text = "ARCADE"
+
+[node name="InteractableAction" type="Area2D" parent="ArcadeStation"]
+position = Vector2(35, 12)
+script = ExtResource("3")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Jugar arcade"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "ARCADE"
+action_type = 48
+
+[node name="MarketStation" type="Label" parent="."]
+offset_left = 450.0
+offset_top = 100.0
+offset_right = 580.0
+offset_bottom = 123.0
+text = "MERCADO"
+
+[node name="InteractableAction" type="Area2D" parent="MarketStation"]
+position = Vector2(35, 12)
+script = ExtResource("3")
+shape = SubResource("RectangleShape2D_a1")
+display_text = "Ir al mercado"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "MARKET"
+action_type = 49

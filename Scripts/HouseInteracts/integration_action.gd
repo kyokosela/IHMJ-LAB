@@ -1,6 +1,9 @@
 @tool
 extends InteractableAction
 
+const ARCADE_SCENE := preload("res://UI/Arcade/arcade.tscn")
+const MARKET_SCENE := preload("res://UI/Market/market.tscn")
+
 # Preload effect resources (EFFECT_STRESS inherited from InteractableAction)
 const EFFECT_HUNGER := preload("res://Resources/Effects/Effects/hunger.tres")
 const EFFECT_SLEEPY := preload("res://Resources/Effects/Effects/sleepy.tres")
@@ -82,6 +85,9 @@ enum ActionType {
 	REMOVE_EFFECT_ATENTA,
 	# Food
 	EAT_FOOD,
+	# Weekend activities
+	OPEN_ARCADE,
+	OPEN_MARKET,
 }
 
 @export var action_type: ActionType = ActionType.OPEN_WORKSPACE
@@ -225,6 +231,16 @@ func custom_execute() -> void:
 			PlayerManager.increase_stat("ENERGY", 10.0)
 			TimeManager.add_to_current_time("00:10")
 			_show_feedback("Comiste algo (+10 energía, 10 min)")
+		ActionType.OPEN_ARCADE:
+			if NarrativeFlags.has_flag("arcade_open"):
+				_open_overlay(ARCADE_SCENE, "arcade_closed")
+			else:
+				_show_feedback("El arcade no está disponible hoy")
+		ActionType.OPEN_MARKET:
+			if NarrativeFlags.has_flag("market_open"):
+				_open_overlay(MARKET_SCENE, "market_closed")
+			else:
+				_show_feedback("El mercado no está disponible hoy")
 
 func _call_scene_method(method_name: String) -> void:
 	var scene := get_tree().current_scene
@@ -326,6 +342,14 @@ func _clear_all_effects() -> void:
 		PlayerManager.remove_effect(effect_name)
 
 	_show_feedback("Efectos eliminados: %d" % effect_names.size())
+
+func _open_overlay(scene: PackedScene, closed_signal: String) -> void:
+	var canvas := CanvasLayer.new()
+	canvas.layer = 20
+	get_tree().root.add_child(canvas)
+	var ui := scene.instantiate()
+	canvas.add_child(ui)
+	ui.connect(closed_signal, canvas.queue_free.bind())
 
 func _talk_madina() -> void:
 	match TimeManager.day:

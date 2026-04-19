@@ -1,0 +1,133 @@
+[gd_scene load_steps=2 format=3 uid="uid://market_ui"]
+
+[ext_resource type="Script" path="res://UI/Market/market.gd" id="1"]
+
+[node name="Market" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.1, 0.05, 0.95)
+
+[node name="Container" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -200.0
+offset_right = 220.0
+offset_bottom = 200.0
+
+[node name="Title" type="Label" parent="Container"]
+layout_mode = 2
+text = "MERCADO"
+horizontal_alignment = 1
+
+[node name="Separator1" type="HSeparator" parent="Container"]
+layout_mode = 2
+
+[node name="BalanceLabel" type="Label" parent="Container"]
+layout_mode = 2
+text = "Savia: S/0"
+horizontal_alignment = 1
+
+[node name="Items" type="VBoxContainer" parent="Container"]
+layout_mode = 2
+
+[node name="ComidaInstant" type="HBoxContainer" parent="Container/Items"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Container/Items/ComidaInstant"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Comida instantanea (+10 energia)"
+
+[node name="BuyBtn" type="Button" parent="Container/Items/ComidaInstant"]
+layout_mode = 2
+text = "S/25"
+
+[node name="ComidaPack" type="HBoxContainer" parent="Container/Items"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Container/Items/ComidaPack"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Pack x3 (+30 energia)"
+
+[node name="BuyBtn" type="Button" parent="Container/Items/ComidaPack"]
+layout_mode = 2
+text = "S/60"
+
+[node name="ComidaCasera" type="HBoxContainer" parent="Container/Items"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Container/Items/ComidaCasera"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Comida casera (+20 energia, -estres)"
+
+[node name="BuyBtn" type="Button" parent="Container/Items/ComidaCasera"]
+layout_mode = 2
+text = "S/30"
+
+[node name="JabonC" type="HBoxContainer" parent="Container/Items"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Container/Items/JabonC"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Jabon C (5 usos)"
+
+[node name="BuyBtn" type="Button" parent="Container/Items/JabonC"]
+layout_mode = 2
+text = "S/10"
+
+[node name="JabonB" type="HBoxContainer" parent="Container/Items"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Container/Items/JabonB"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Jabon B (8 usos)"
+
+[node name="BuyBtn" type="Button" parent="Container/Items/JabonB"]
+layout_mode = 2
+text = "S/20"
+
+[node name="JabonA" type="HBoxContainer" parent="Container/Items"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Container/Items/JabonA"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Jabon A (12 usos)"
+
+[node name="BuyBtn" type="Button" parent="Container/Items/JabonA"]
+layout_mode = 2
+text = "S/35"
+
+[node name="Separator2" type="HSeparator" parent="Container"]
+layout_mode = 2
+
+[node name="FeedbackLabel" type="Label" parent="Container"]
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Separator3" type="HSeparator" parent="Container"]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="Container"]
+layout_mode = 2
+text = "Salir"

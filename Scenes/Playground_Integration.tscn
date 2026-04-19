@@ -556,6 +556,67 @@ show_again_at_end = true
 interaction_name = "REMOVE_ATENTA"
 action_type = 46
 
+[node name="HeaderWeekend" type="Label" parent="."]
+offset_left = 100.0
+offset_top = 600.0
+offset_right = 400.0
+offset_bottom = 623.0
+text = "WEEKEND ACTIVITIES"
+
+[node name="ArcadeStation" type="Label" parent="."]
+offset_left = 100.0
+offset_top = 640.0
+offset_right = 240.0
+offset_bottom = 663.0
+text = "ARCADE"
+
+[node name="InteractableAction" type="Area2D" parent="ArcadeStation"]
+position = Vector2(45, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Jugar arcade"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "OPEN_ARCADE"
+action_type = 48
+
+[node name="MarketStation" type="Label" parent="."]
+offset_left = 280.0
+offset_top = 640.0
+offset_right = 420.0
+offset_bottom = 663.0
+text = "MARKET"
+
+[node name="InteractableAction" type="Area2D" parent="MarketStation"]
+position = Vector2(45, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Comprar en mercado"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "OPEN_MARKET"
+action_type = 49
+
+[node name="EatFoodStation" type="Label" parent="."]
+offset_left = 460.0
+offset_top = 640.0
+offset_right = 620.0
+offset_bottom = 663.0
+text = "EAT FOOD"
+
+[node name="InteractableAction" type="Area2D" parent="EatFoodStation"]
+position = Vector2(50, 12)
+script = ExtResource("5")
+shape = SubResource("RectangleShape2D_a2")
+display_text = "Comer (-hambre, +energía)"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "EAT_FOOD"
+action_type = 47
+
 [node name="PlayerUI" parent="." instance=ExtResource("4")]
 
 [node name="DebugPanel" parent="." instance=ExtResource("3")]
@@ -570,16 +631,17 @@ unique_name_in_owner = true
 layer = 10
 
 [node name="Panel" type="PanelContainer" parent="HarnessUI"]
-anchors_preset = 3
+anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.0
 anchor_right = 1.0
-anchor_bottom = 0.0
-offset_left = -420.0
+anchor_bottom = 1.0
+offset_left = -440.0
 offset_top = 10.0
 offset_right = -10.0
-offset_bottom = 590.0
+offset_bottom = -10.0
 grow_horizontal = 0
+grow_vertical = 2
 
 [node name="Margin" type="MarginContainer" parent="HarnessUI/Panel"]
 layout_mode = 2

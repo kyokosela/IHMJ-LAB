@@ -557,21 +557,21 @@ interaction_name = "REMOVE_ATENTA"
 action_type = 46
 
 [node name="HeaderWeekend" type="Label" parent="."]
-offset_left = 100.0
-offset_top = 600.0
-offset_right = 400.0
-offset_bottom = 623.0
+offset_left = 730.0
+offset_top = 580.0
+offset_right = 1060.0
+offset_bottom = 603.0
 text = "WEEKEND ACTIVITIES"
 
 [node name="ArcadeStation" type="Label" parent="."]
-offset_left = 100.0
-offset_top = 640.0
-offset_right = 240.0
-offset_bottom = 663.0
+offset_left = 730.0
+offset_top = 610.0
+offset_right = 855.0
+offset_bottom = 633.0
 text = "ARCADE"
 
 [node name="InteractableAction" type="Area2D" parent="ArcadeStation"]
-position = Vector2(45, 12)
+position = Vector2(35, 12)
 script = ExtResource("5")
 shape = SubResource("RectangleShape2D_a2")
 display_text = "Jugar arcade"
@@ -582,14 +582,14 @@ interaction_name = "OPEN_ARCADE"
 action_type = 48
 
 [node name="MarketStation" type="Label" parent="."]
-offset_left = 280.0
-offset_top = 640.0
-offset_right = 420.0
-offset_bottom = 663.0
+offset_left = 860.0
+offset_top = 610.0
+offset_right = 985.0
+offset_bottom = 633.0
 text = "MARKET"
 
 [node name="InteractableAction" type="Area2D" parent="MarketStation"]
-position = Vector2(45, 12)
+position = Vector2(35, 12)
 script = ExtResource("5")
 shape = SubResource("RectangleShape2D_a2")
 display_text = "Comprar en mercado"
@@ -600,14 +600,14 @@ interaction_name = "OPEN_MARKET"
 action_type = 49
 
 [node name="EatFoodStation" type="Label" parent="."]
-offset_left = 460.0
-offset_top = 640.0
-offset_right = 620.0
-offset_bottom = 663.0
+offset_left = 990.0
+offset_top = 610.0
+offset_right = 1115.0
+offset_bottom = 633.0
 text = "EAT FOOD"
 
 [node name="InteractableAction" type="Area2D" parent="EatFoodStation"]
-position = Vector2(50, 12)
+position = Vector2(35, 12)
 script = ExtResource("5")
 shape = SubResource("RectangleShape2D_a2")
 display_text = "Comer (-hambre, +energía)"
@@ -806,43 +806,63 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Load Slot"
 
+[node name="TriggerLabel" type="Label" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+text = "--- NARRATIVA / WARNINGS ---"
+horizontal_alignment = 1
+
 [node name="TriggerRow" type="HBoxContainer" parent="HarnessUI/Panel/Margin/Root"]
 layout_mode = 2
 
 [node name="TriggerEvalButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Trigger Eval Event"
+size_flags_horizontal = 3
+text = "Eval Event"
 
 [node name="TriggerM88Button" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Enable M88 Email"
+size_flags_horizontal = 3
+text = "M88 Email"
 
 [node name="TriggerWarning1Button" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Absence Warning 1"
+size_flags_horizontal = 3
+text = "Warn 1"
 
 [node name="TriggerWarning2Button" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Absence Warning 2"
+size_flags_horizontal = 3
+text = "Warn 2"
 
-[node name="TestSleepButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
+[node name="TestLabel" type="Label" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+text = "--- PRUEBAS RÁPIDAS ---"
+horizontal_alignment = 1
+
+[node name="TestRow" type="HBoxContainer" parent="HarnessUI/Panel/Margin/Root"]
+layout_mode = 2
+
+[node name="TestSleepButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TestRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Test Sleep (Alarm)"
+size_flags_horizontal = 3
+text = "💤 Dormir"
 
-[node name="TestArcadeButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
+[node name="TestArcadeButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TestRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Test Arcade"
+size_flags_horizontal = 3
+text = "🎮 Arcade"
 
-[node name="TestMarketButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TriggerRow"]
+[node name="TestMarketButton" type="Button" parent="HarnessUI/Panel/Margin/Root/TestRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Test Market"
+size_flags_horizontal = 3
+text = "🛒 Mercado"
 
 [node name="ScenarioLabel" type="Label" parent="HarnessUI/Panel/Margin/Root"]
 layout_mode = 2
@@ -855,22 +875,26 @@ layout_mode = 2
 [node name="ScenarioDay1Button" type="Button" parent="HarnessUI/Panel/Margin/Root/ScenarioRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "▶ Día 1"
+size_flags_horizontal = 3
+text = "D1"
 
 [node name="ScenarioDay5Button" type="Button" parent="HarnessUI/Panel/Margin/Root/ScenarioRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "▶ Día 5 (Eval)"
+size_flags_horizontal = 3
+text = "D5 Eval"
 
 [node name="ScenarioWeekendButton" type="Button" parent="HarnessUI/Panel/Margin/Root/ScenarioRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "▶ Fin de semana"
+size_flags_horizontal = 3
+text = "Finde"
 
 [node name="ScenarioSundayButton" type="Button" parent="HarnessUI/Panel/Margin/Root/ScenarioRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "▶ Domingo"
+size_flags_horizontal = 3
+text = "Dom"
 
 [node name="PortalOverlay" type="Control" parent="HarnessUI"]
 unique_name_in_owner = true

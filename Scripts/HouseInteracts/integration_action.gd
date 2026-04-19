@@ -127,7 +127,7 @@ func custom_execute() -> void:
 			else:
 				Dialogic.start("casero_intro")
 		ActionType.TALK_MADINA:
-			Dialogic.start("madina_cafe_day2")
+			_talk_madina()
 		ActionType.TALK_VEDA:
 			if TimeManager.day == 1 and not NarrativeFlags.has_flag("met_veda_day1"):
 				Dialogic.start("veda_day1")
@@ -326,3 +326,12 @@ func _clear_all_effects() -> void:
 		PlayerManager.remove_effect(effect_name)
 
 	_show_feedback("Efectos eliminados: %d" % effect_names.size())
+
+func _talk_madina() -> void:
+	match TimeManager.day:
+		2:
+			Dialogic.start("madina_cafe_day2")
+		3:
+			Dialogic.start("madina_tension")
+		_:
+			Dialogic.start("madina_warning")

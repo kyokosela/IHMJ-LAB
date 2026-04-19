@@ -1,96 +1,103 @@
-# CONTINUATION PROMPT — FASE 4 (Dias 2-4)
+# CONTINUATION PROMPT — POST FASE 7 (Runtime Testing)
 **Date:** 2026-04-19  
-**Session completed by:** Claude Haiku 4.5  
-**Handoff to:** Claude Sonnet 4.6 (for narrative content work)
+**Session completed by:** Claude Sonnet 4.6  
+**Handoff to:** Any model (Haiku for testing/iteration, Sonnet if bugs require logic fixes)
 
 ---
 
 ## CURRENT STATUS
 
-**Phase:** FASE 4 — Días 2-4 (narrativa creciente)  
-**Last commit:** `a4e6f9c` — "feat: FASE 4 — make Madina dialogue dynamic by day"  
+**Phase:** PRÓLOGO COMPLETO — Todas las FASEs (0-7) terminadas  
+**Last commit:** `1f1dc53` — "audio manager with placeholder hooks"  
 **Branch:** `ai-effects-migration-2026-02-15`  
-**Model for this work:** ⛔ **REQUIRES SONNET** (voice consistency)
+**Ahead of origin:** 9 commits
 
 ---
 
-## WHAT WAS COMPLETED THIS SESSION
+## LO QUE SE COMPLETÓ ESTA SESIÓN
 
-### ✅ Task 4.1 — Verify schedule events load
-- **Status:** VERIFIED ✓
-- **Evidence:** 
-  - `Scripts/game_manager.gd::_load_schedule_events()` loads all `.tres` files from `Resources/Events/Schedule/` at game startup
-  - 11 schedule events exist for Days 2-4, each with proper `day` and `time` config
-  - EventManager loads them into the event stack (no trigger until time/day arrives)
+### ✅ FASE 5 — Viernes (evaluación y pago)
+- `_trigger_friday_evaluation()` ahora: inicia timeline `friday_evaluation.dtl` → instancia `evaluation_screen.tscn` en CanvasLayer(20) → muestra resultados → limpia al cerrar
+- Guard: no repite si `evaluation_completed` flag ya activo
 
-### ✅ Task 4.2 — Verify Dialogic timelines exist
-- **Status:** VERIFIED ✓
-- **Timelines found in `DialoguePlugin/TIMELINE/`:**
-  - `madina_cafe_day2.dtl` — Initial Madina lunch (rejection or acceptance)
-  - `madina_tension.dtl` — Day 3 escalation
-  - `madina_warning.dtl` — Day 4+ fallback
-  - `casero_intro.dtl`, `casero_rent_reminder.dtl`, `veda_day1.dtl`, `veda_stare.dtl` ✓
+### ✅ FASE 6 — Fin de semana
+- **Arcade** (`UI/Arcade/arcade.gd` + `arcade.tscn`): apuesta 50/50, gana = +2x + CALM, pierde = -S + STRESS. Guard: flag `arcade_open`
+- **Market** (`UI/Market/market.gd` + `market.tscn`): 6 items (3 comida, 3 jabón) con precios del spec. Guard: flag `market_open`
+- `OPEN_ARCADE` (enum 48) y `OPEN_MARKET` (49) en `integration_action.gd`
+- `Commercial.tscn` tiene interactables para ambos
+- **Sunday prep** ya estaba completo (`sunday_prep.dtl` + handler wired)
 
-### ✅ Task 4.3 (Part A) — Verify email distribution
-- **Status:** VERIFIED ✓
-- **Distribution:** Day 1: 4, Day 2: 7, Day 3: 8, Day 4: 11, Day 5: 8, Days 6-7: 0
-- **Next step:** Fill all 38 emails with content per `CONTENT_PASS_PLAN.md` §5
-
-### ✅ CODE CHANGE — Dynamic Madina dialogue
-- **File:** `Scripts/HouseInteracts/integration_action.gd`
-- **Change:** Line 130 now calls `_talk_madina()` (method added at end of file)
-- **Behavior:** Day 2 → madina_cafe_day2, Day 3 → madina_tension, Day 4+ → madina_warning
+### ✅ FASE 7 — Balancing + Audio
+- `BALANCING_NOTES.md` — análisis estático completo, 3 perfiles simulados, 7 issues
+- **Fix aplicados:**
+  - `ABSENCE_SALARY_CUT`: S/50 → S/100
+  - Stress Lv2→Lv3 threshold: `days >= 2` → `days >= 3` (Lv3 mínimo en Día 4)
+- `AudioManager` autoload (`Scripts/audio_manager.gd`): safe play (silent si falta .ogg)
+  - Hooks: click (interaction), coin_gain/spend (economy), sleep (player), alarm (alarm UI)
+  - Directorio: `Audio/SFX/` — drop `.ogg` files para activar
 
 ---
 
-## WHAT'S PENDING
+## LO QUE QUEDA (CHECKLIST FINAL DEL PLAN)
 
-### 🔴 Task 4.3 (Part B) — Email content expansion (38 files)
+Ninguna tarea de código queda. El prólogo es **feature-complete**. Lo que falta es **runtime validation**:
 
-**What to do:**
-1. For each file in `Resources/Computer/Apps/Mail/Entries/Narrative/` (email_01.tres through email_38.tres):
-   - Update `sender`, `subject`, `content` fields
-   - Use exact text from `CONTENT_PASS_PLAN.md` §5
-   - Keep character voices consistent (see table below)
+### 🔴 Requiere abrir Godot
+- [ ] Correr `Playground_Integration.tscn` — verificar 0 errores en consola al arranque
+- [ ] Día 1 completo: alarm → casero → veda → work emails → sleep
+- [ ] Días 2-4: eventos narrativos Madina/Veda se disparan en orden correcto
+- [ ] Día 5: evaluación aparece a las 15:00, salario llega a las 16:00, renta vence a las 18:00
+- [ ] Día 6: arcade y market accesibles (set flag `arcade_open` + `market_open` manualmente o avanzar a Día 6)
+- [ ] Día 7: `sunday_prep` timeline se ejecuta a las 17:00
+- [ ] Save/Load entre días
+- [ ] Verificar que preloads `@tool` en `integration_action.gd` no causan errores en editor
 
-**Character voices (from `CONTENT_PASS_PLAN.md` §1.5):**
-- **Veda:** Fría, precisa | Sin saludos. Una idea/correo. Firma: — V.
-- **Madina:** Cálida, nerviosa | Erratas, "!!", "...". La única humana.
-- **Casero:** Gruñón, directo | Viejo, sin paciencia. Tono neutral→pasivo-agresivo.
-- **RRHH:** Robótico | Legal, impersonal. Pies de página auto-conscientes.
-- **Sistema/Piso 2/Sativa:** [See CONTENT_PASS_PLAN.md for full details]
+### 🟡 Si hay bugs en runtime
+- **Errores de preload en editor**: mover `const ARCADE_SCENE/MARKET_SCENE` fuera del top-level y usar `load()` dentro de `custom_execute()`
+- **Arcade/Market no abren**: verificar que `arcade_open`/`market_open` flags están seteados antes de interactuar
+- **Evaluation screen no aparece**: verificar que `DAY5_EVALUATION` schedule event dispara a las 15:00 del Día 5
 
-**Why Sonnet:** Voice consistency is subtle and important. Character email tone mismatch would feel jarring.
-
----
-
-## GIT STATE
-
-- **Branch:** `ai-effects-migration-2026-02-15`
-- **Last commit:** `a4e6f9c` (dynamic Madina dialogue)
-- **Ahead of origin:** 6 commits
-- **Working tree:** Clean (except worktree submodule warning, ignore it)
+### 🟡 Pendientes de under-testing (documentados en BALANCING_NOTES.md)
+- `LATE_SALARY_PENALTY`: S/20 — considerar subir a S/30 tras playtest
+- `LV3_STRESS_SECONDARY_SPAWN_CHANCE`: 50% — considerar bajar a 30%
+- Bus cost S/10 por viaje — posiblemente muy barato
+- Curva de energía sleep (salto brusco 6h→7h)
+- Arcade CALM/STRESS stacking
 
 ---
 
-## NEXT STEP FOR SECONDARY CLAUDE
+## ARCHIVOS CLAVE MODIFICADOS ESTA SESIÓN
 
-1. **Confirm you're Sonnet 4.6** (master plan requires it for voice work)
-2. **Read in this order:**
-   - This document
-   - `IHMJ_LAB_MASTER_PLAN.md` (overview)
-   - `CONTENT_PASS_PLAN.md` §5 (all 38 email specs)
-3. **Fill 38 email files** with content from §5 (mechanical copy + voice validation)
-4. **Commit:**
-   ```
-   feat: FASE 4 — fill email content for all 38 emails (Days 1-5)
-   ```
-5. **FASE 4 is then complete** — move to FASE 5 (Viernes evaluation screen)
+| Archivo | Cambio |
+|---------|--------|
+| `Scripts/narrative_event_handler.gd` | `_trigger_friday_evaluation()` completo |
+| `Scripts/HouseInteracts/integration_action.gd` | OPEN_ARCADE/OPEN_MARKET + `_open_overlay()` + click audio |
+| `Scripts/attendance_manager.gd` | ABSENCE_SALARY_CUT: 50→100 |
+| `Scripts/player_manager.gd` | Stress escalation threshold + sleep audio |
+| `Scripts/economy_manager.gd` | Coin audio hooks |
+| `Scripts/audio_manager.gd` | NUEVO autoload |
+| `UI/Arcade/arcade.gd` + `arcade.tscn` | NUEVO |
+| `UI/Market/market.gd` + `market.tscn` | NUEVO |
+| `Scenes/World/Commercial.tscn` | Interactables arcade + market |
+| `project.godot` | AudioManager autoload registrado |
+| `BALANCING_NOTES.md` | NUEVO — análisis completo |
 
 ---
 
-## REFERENCE DOCS
+## PRÓXIMO PASO
 
-- `IHMJ_LAB_MASTER_PLAN.md` — phases, model guidance, overall plan
-- `CONTENT_PASS_PLAN.md` — character voices, all 38 email specs, timeline specs
-- `IMPLEMENTATION_PLAN_v2.md` — technical constants
+**Abrir Godot 4.6, cargar el proyecto, correr `Playground_Integration.tscn`.**
+
+Si 0 errores en consola: hacer playthrough completo de 7 días.  
+Si hay errores: diagnosticar con los hints de "Si hay bugs en runtime" arriba.
+
+**Modelo recomendado:** Haiku 4.5 para testing iterativo. Sonnet si aparecen bugs de lógica.
+
+---
+
+## REFERENCIA RÁPIDA
+
+- `IHMJ_LAB_MASTER_PLAN.md` — plan maestro completo
+- `BALANCING_NOTES.md` — todos los números, issues, y cambios aplicados
+- `CONTENT_PASS_PLAN.md` — spec de contenido narrativo
+- `Audio/SFX/README.md` — qué archivos .ogg crear para activar sonido

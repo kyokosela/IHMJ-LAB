@@ -24,7 +24,7 @@ func _ready() -> void:
 func play(sfx_key: String) -> void:
 	if not SFX.has(sfx_key):
 		return
-	var path := SFX_PATH + SFX[sfx_key]
+	var path: String = SFX_PATH + String(SFX[sfx_key])
 	if not ResourceLoader.exists(path):
 		return
 	_player.stream = load(path)

@@ -1,5 +1,7 @@
 extends Node
 
+const EVALUATION_SCREEN := preload("res://UI/Evaluation/evaluation_screen.tscn")
+
 func _ready() -> void:
 	EventManager.event_activated.connect(_on_event_activated)
 	EventManager.event_deactivaded.connect(_on_event_deactivated)
@@ -111,7 +113,19 @@ func _trigger_rent_reminder() -> void:
 	Dialogic.start("casero_rent_reminder")
 
 func _trigger_friday_evaluation() -> void:
+	if NarrativeFlags.has_flag("evaluation_completed"):
+		return
 	NarrativeFlags.set_flag("evaluation_started")
+	Dialogic.start("friday_evaluation")
+	await Dialogic.timeline_ended
+	var canvas := CanvasLayer.new()
+	canvas.layer = 20
+	get_tree().root.add_child(canvas)
+	var screen := EVALUATION_SCREEN.instantiate()
+	canvas.add_child(screen)
+	screen.show_evaluation()
+	await screen.evaluation_closed
+	canvas.queue_free()
 
 func _check_m88_email() -> void:
 	if NarrativeFlags.has_flag("nota_madina"):

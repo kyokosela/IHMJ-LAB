@@ -120,6 +120,11 @@ func _bind_signals() -> void:
 	%TriggerWarning2Button.pressed.connect(func() -> void: NarrativeFlags.set_flag("absence_warning_2"))
 	%TestSleepButton.pressed.connect(func() -> void: PlayerManager.request_sleep(PlayerManager.BED_TYPE.TYPE_C))
 
+	%ScenarioDay1Button.pressed.connect(_scenario_day1)
+	%ScenarioDay5Button.pressed.connect(_scenario_day5)
+	%ScenarioWeekendButton.pressed.connect(_scenario_weekend)
+	%ScenarioSundayButton.pressed.connect(_scenario_sunday)
+
 	TimeManager.time_changed.connect(_on_runtime_changed)
 	EconomyManager.money_changed.connect(_on_runtime_changed.bind())
 	AttendanceManager.warning_issued.connect(_on_warning)
@@ -309,3 +314,48 @@ Count: %d
 		flags.size(),
 		", ".join(flags) if not flags.is_empty() else "none"
 	]
+
+
+# ─── Scenario Quick-Starts ───────────────────────────────────────────────────
+
+func _scenario_day1() -> void:
+	_bootstrap_runtime()
+	TimeManager.day = 1
+	TimeManager.set_current_time("07:30")
+	PlayerManager.slept_today = false
+	_set_action("ESCENARIO Día 1 — despierta, habla con casero, ve al trabajo")
+	_refresh_status()
+
+func _scenario_day5() -> void:
+	_bootstrap_runtime()
+	TimeManager.day = 5
+	TimeManager.set_current_time("14:55")
+	PlayerManager.slept_today = false
+	NarrativeFlags.set_flag("casero_intro_done")
+	NarrativeFlags.set_flag("met_veda_day1")
+	EconomyManager.add_money(50, "SCENARIO_SETUP")
+	_set_action("ESCENARIO Día 5 — evaluación se activa a las 15:00 (faltan 5 min)")
+	_refresh_status()
+
+func _scenario_weekend() -> void:
+	_bootstrap_runtime()
+	TimeManager.day = 6
+	TimeManager.set_current_time("10:00")
+	PlayerManager.slept_today = false
+	NarrativeFlags.set_flag("casero_intro_done")
+	NarrativeFlags.set_flag("met_veda_day1")
+	NarrativeFlags.set_flag("arcade_open")
+	NarrativeFlags.set_flag("market_open")
+	EconomyManager.add_money(150, "SCENARIO_SETUP")
+	_set_action("ESCENARIO Fin de semana — ve a COMMERCIAL, usa arcade y mercado")
+	_refresh_status()
+
+func _scenario_sunday() -> void:
+	_bootstrap_runtime()
+	TimeManager.day = 7
+	TimeManager.set_current_time("16:55")
+	PlayerManager.slept_today = false
+	NarrativeFlags.set_flag("casero_intro_done")
+	NarrativeFlags.set_flag("met_veda_day1")
+	_set_action("ESCENARIO Domingo — sunday_prep se activa a las 17:00 (faltan 5 min)")
+	_refresh_status()

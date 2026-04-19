@@ -1,14 +1,111 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://Scripts/world.gd" id="1"]
 [ext_resource type="Script" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
+[ext_resource type="Script" path="res://Scripts/scene_changer.gd" id="3"]
+[ext_resource type="Script" path="res://Scripts/HouseInteracts/integration_action.gd" id="4"]
+[ext_resource type="PackedScene" path="res://Prefabs/walls/floors.tscn" id="5"]
+
+[sub_resource type="RectangleShape2D" id="Shape_exit"]
+size = Vector2(32, 64)
+
+[sub_resource type="RectangleShape2D" id="Shape_clock"]
+size = Vector2(48, 48)
+
+[sub_resource type="RectangleShape2D" id="Shape_desk"]
+size = Vector2(64, 48)
+
+[sub_resource type="RectangleShape2D" id="Shape_madina"]
+size = Vector2(48, 48)
 
 [node name="Office" type="Node2D"]
 script = ExtResource("1")
 zone_id = 2
 player_enabled = true
 
+[node name="Floors" parent="." instance=ExtResource("5")]
+
 [node name="SpawnPoint" type="Marker2D" parent="." groups=["spawn_point"]]
-position = Vector2(100, 100)
+position = Vector2(100, 160)
 script = ExtResource("2")
 entity = "Player"
+
+[node name="ExitToLobby" type="Area2D" parent="."]
+position = Vector2(20, 160)
+script = ExtResource("3")
+shape = SubResource("Shape_exit")
+new_scene_id = 1
+
+[node name="Label" type="Label" parent="ExitToLobby"]
+position = Vector2(-40, -24)
+text = "← Salida / Lobby"
+
+[node name="ClockStation" type="Node2D" parent="."]
+position = Vector2(200, 60)
+
+[node name="ClockIn" type="Area2D" parent="ClockStation"]
+position = Vector2(-30, 0)
+script = ExtResource("4")
+shape = SubResource("Shape_clock")
+display_text = "Fichar entrada"
+children_visible = true
+reusable = false
+show_again_at_end = false
+interaction_name = "CLOCK_IN"
+action_type = 3
+
+[node name="Label" type="Label" parent="ClockStation/ClockIn"]
+position = Vector2(-30, -28)
+text = "Fichar Entrada"
+
+[node name="ClockOut" type="Area2D" parent="ClockStation"]
+position = Vector2(30, 0)
+script = ExtResource("4")
+shape = SubResource("Shape_clock")
+display_text = "Fichar salida"
+children_visible = true
+reusable = false
+show_again_at_end = false
+interaction_name = "CLOCK_OUT"
+action_type = 4
+
+[node name="Label" type="Label" parent="ClockStation/ClockOut"]
+position = Vector2(-30, -28)
+text = "Fichar Salida"
+
+[node name="MayuiDesk" type="Area2D" parent="."]
+position = Vector2(160, 120)
+script = ExtResource("4")
+shape = SubResource("Shape_desk")
+display_text = "PC de trabajo"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "WORKSPACE"
+action_type = 0
+
+[node name="Label" type="Label" parent="MayuiDesk"]
+position = Vector2(-30, -28)
+text = "PC Mayui"
+
+[node name="MadinaNPC" type="Area2D" parent="."]
+position = Vector2(240, 120)
+script = ExtResource("4")
+shape = SubResource("Shape_madina")
+display_text = "Hablar con Madina"
+children_visible = true
+reusable = true
+show_again_at_end = true
+interaction_name = "NPC_MADINA"
+action_type = 9
+
+[node name="Label" type="Label" parent="MadinaNPC"]
+position = Vector2(-30, -28)
+text = "Madina"
+
+[node name="VedaDoor" type="Node2D" parent="."]
+position = Vector2(280, 60)
+
+[node name="Label" type="Label" parent="VedaDoor"]
+position = Vector2(-40, 0)
+text = "[Zona de Veda\n  — Cerrado]"

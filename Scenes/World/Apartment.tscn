@@ -1,14 +1,31 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://Scripts/world.gd" id="1"]
 [ext_resource type="Script" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
+[ext_resource type="Script" path="res://Scripts/scene_changer.gd" id="3"]
+[ext_resource type="PackedScene" path="res://Prefabs/walls/floors.tscn" id="4"]
+
+[sub_resource type="RectangleShape2D" id="Shape_door"]
+size = Vector2(32, 64)
 
 [node name="Apartment" type="Node2D"]
 script = ExtResource("1")
 zone_id = 0
 player_enabled = true
 
+[node name="Floors" parent="." instance=ExtResource("4")]
+
 [node name="SpawnPoint" type="Marker2D" parent="." groups=["spawn_point"]]
 position = Vector2(100, 100)
 script = ExtResource("2")
 entity = "Player"
+
+[node name="DoorOut" type="Area2D" parent="."]
+position = Vector2(180, 100)
+script = ExtResource("3")
+shape = SubResource("Shape_door")
+new_scene_id = 1
+
+[node name="Label" type="Label" parent="DoorOut"]
+position = Vector2(-40, -24)
+text = "→ Salir / Lobby"

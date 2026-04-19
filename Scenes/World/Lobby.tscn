@@ -1,14 +1,44 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://Scripts/world.gd" id="1"]
 [ext_resource type="Script" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
+[ext_resource type="Script" path="res://Scripts/scene_changer.gd" id="3"]
+[ext_resource type="PackedScene" path="res://Prefabs/walls/floors.tscn" id="4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(32, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(32, 64)
 
 [node name="Lobby" type="Node2D"]
 script = ExtResource("1")
 zone_id = 1
 player_enabled = true
 
+[node name="Floors" parent="." instance=ExtResource("4")]
+
 [node name="SpawnPoint" type="Marker2D" parent="." groups=["spawn_point"]]
 position = Vector2(100, 100)
 script = ExtResource("2")
 entity = "Player"
+
+[node name="DoorToOffice" type="Area2D" parent="."]
+position = Vector2(220, 100)
+script = ExtResource("3")
+shape = SubResource("RectangleShape2D_1")
+new_scene_id = 2
+
+[node name="Label" type="Label" parent="DoorToOffice"]
+position = Vector2(-40, -20)
+text = "[Bus] → Oficina"
+
+[node name="DoorToApartment" type="Area2D" parent="."]
+position = Vector2(20, 100)
+script = ExtResource("3")
+shape = SubResource("RectangleShape2D_2")
+new_scene_id = 0
+
+[node name="Label" type="Label" parent="DoorToApartment"]
+position = Vector2(-50, -20)
+text = "← Apartamento"

@@ -9,92 +9,110 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 0
 script = ExtResource("1_alarm")
 
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 1
-anchor_left = 0.25
-anchor_top = 0.25
-anchor_right = 0.75
-anchor_bottom = 0.75
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBox" type="VBoxContainer" parent="Panel"]
+[node name="Backdrop" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 16
-offset_left = 20.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = -20.0
+mouse_filter = 0
+color = Color(0, 0, 0, 0.7)
 
-[node name="TitleLabel" type="Label" parent="Panel/VBox"]
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(480, 360)
+layout_mode = 2
+mouse_filter = 0
+
+[node name="VBox" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Margin" type="MarginContainer" parent="Center/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Inner" type="VBoxContainer" parent="Center/Panel/VBox/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="Center/Panel/VBox/Margin/Inner"]
 layout_mode = 2
 text = "¿A qué hora quieres despertar?"
 horizontal_alignment = 1
 
-[node name="AlarmSection" type="VBoxContainer" parent="Panel/VBox"]
+[node name="AlarmSection" type="VBoxContainer" parent="Center/Panel/VBox/Margin/Inner"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="AlarmLabel" type="Label" parent="Panel/VBox/AlarmSection"]
+[node name="AlarmLabel" type="Label" parent="Center/Panel/VBox/Margin/Inner/AlarmSection"]
 layout_mode = 2
 text = "Hora de alarma"
 horizontal_alignment = 1
 
-[node name="HourRow" type="HBoxContainer" parent="Panel/VBox/AlarmSection"]
+[node name="HourRow" type="HBoxContainer" parent="Center/Panel/VBox/Margin/Inner/AlarmSection"]
 layout_mode = 2
 alignment = 1
 theme_override_constants/separation = 12
 
-[node name="MinusButton" type="Button" parent="Panel/VBox/AlarmSection/HourRow"]
+[node name="MinusButton" type="Button" parent="Center/Panel/VBox/Margin/Inner/AlarmSection/HourRow"]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 text = "-"
-custom_minimum_size = Vector2(40, 40)
 
-[node name="HourLabel" type="Label" parent="Panel/VBox/AlarmSection/HourRow"]
+[node name="HourLabel" type="Label" parent="Center/Panel/VBox/Margin/Inner/AlarmSection/HourRow"]
+custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 text = "08:00"
-custom_minimum_size = Vector2(80, 0)
 horizontal_alignment = 1
 
-[node name="PlusButton" type="Button" parent="Panel/VBox/AlarmSection/HourRow"]
+[node name="PlusButton" type="Button" parent="Center/Panel/VBox/Margin/Inner/AlarmSection/HourRow"]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 text = "+"
-custom_minimum_size = Vector2(40, 40)
 
-[node name="InfoSection" type="VBoxContainer" parent="Panel/VBox"]
+[node name="InfoSection" type="VBoxContainer" parent="Center/Panel/VBox/Margin/Inner"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="WakeChanceLabel" type="Label" parent="Panel/VBox/InfoSection"]
+[node name="WakeChanceLabel" type="Label" parent="Center/Panel/VBox/Margin/Inner/InfoSection"]
 layout_mode = 2
 text = "Probabilidad de despertar: 95%"
 horizontal_alignment = 1
 visible = false
 
-[node name="InsomniaWarning" type="Label" parent="Panel/VBox/InfoSection"]
+[node name="InsomniaWarning" type="Label" parent="Center/Panel/VBox/Margin/Inner/InfoSection"]
 layout_mode = 2
 autowrap_mode = 3
 horizontal_alignment = 1
 visible = false
 
-[node name="Buttons" type="HBoxContainer" parent="Panel/VBox"]
+[node name="Buttons" type="HBoxContainer" parent="Center/Panel/VBox/Margin/Inner"]
 layout_mode = 2
 alignment = 1
 theme_override_constants/separation = 12
 
-[node name="ConfirmButton" type="Button" parent="Panel/VBox/Buttons"]
+[node name="ConfirmButton" type="Button" parent="Center/Panel/VBox/Margin/Inner/Buttons"]
+custom_minimum_size = Vector2(180, 44)
 layout_mode = 2
 text = "Dormir con alarma"
-custom_minimum_size = Vector2(160, 40)
 
-[node name="NoAlarmButton" type="Button" parent="Panel/VBox/Buttons"]
+[node name="NoAlarmButton" type="Button" parent="Center/Panel/VBox/Margin/Inner/Buttons"]
+custom_minimum_size = Vector2(120, 44)
 layout_mode = 2
 text = "Sin alarma"
-custom_minimum_size = Vector2(100, 40)

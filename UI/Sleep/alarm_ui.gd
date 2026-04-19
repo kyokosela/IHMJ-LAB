@@ -13,11 +13,13 @@ const WAKE_CHANCE_BY_ENERGY : Array[Dictionary] = [
 var _bed_type : int = PlayerManager.BED_TYPE.TYPE_C
 var _alarm_hours : int = 8
 
-@onready var hour_label : Label = $Panel/VBox/AlarmSection/HourRow/HourLabel
-@onready var wake_chance_label : Label = $Panel/VBox/InfoSection/WakeChanceLabel
-@onready var insomnia_warning : Label = $Panel/VBox/InfoSection/InsomniaWarning
-@onready var confirm_button : Button = $Panel/VBox/Buttons/ConfirmButton
-@onready var no_alarm_button : Button = $Panel/VBox/Buttons/NoAlarmButton
+const INNER := "Center/Panel/VBox/Margin/Inner"
+
+@onready var hour_label : Label = get_node(INNER + "/AlarmSection/HourRow/HourLabel")
+@onready var wake_chance_label : Label = get_node(INNER + "/InfoSection/WakeChanceLabel")
+@onready var insomnia_warning : Label = get_node(INNER + "/InfoSection/InsomniaWarning")
+@onready var confirm_button : Button = get_node(INNER + "/Buttons/ConfirmButton")
+@onready var no_alarm_button : Button = get_node(INNER + "/Buttons/NoAlarmButton")
 
 func _ready() -> void:
 	AudioManager.play_alarm()
@@ -25,8 +27,9 @@ func _ready() -> void:
 	_refresh_wake_chance()
 	confirm_button.pressed.connect(_on_confirm)
 	no_alarm_button.pressed.connect(_on_no_alarm)
-	$Panel/VBox/AlarmSection/HourRow/PlusButton.pressed.connect(_on_hour_up)
-	$Panel/VBox/AlarmSection/HourRow/MinusButton.pressed.connect(_on_hour_down)
+	get_node(INNER + "/AlarmSection/HourRow/PlusButton").pressed.connect(_on_hour_up)
+	get_node(INNER + "/AlarmSection/HourRow/MinusButton").pressed.connect(_on_hour_down)
+	confirm_button.grab_focus()
 
 func setup(bed_type: int) -> void:
 	_bed_type = bed_type

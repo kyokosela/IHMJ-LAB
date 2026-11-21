@@ -2,7 +2,28 @@ extends Node
 
 const EVALUATION_SCREEN := preload("res://UI/Evaluation/evaluation_screen.tscn")
 
+## DONDE debe ocurrir cada evento con dialogo. Si Mayui no esta en una de estas zonas cuando
+## llega la hora, el evento queda PENDIENTE y se entrega al entrar a la zona correcta.
+## Los eventos que no aparecen aqui (solo ponen banderas, etc.) corren donde sea.
+## Editar esta tabla para cambiar donde sucede un evento.
+var event_zones : Dictionary = {
+	"DAY1_CASERO_INTRO": [ZoneManager.ZONES.LOBBY],       # el casero la intercepta al salir del edificio
+	"DAY1_VEDA_APPEAR": [ZoneManager.ZONES.OFFICE],
+	"DAY2_MADINA_CAFE": [ZoneManager.ZONES.OFFICE],
+	"DAY3_MADINA_TENSION": [ZoneManager.ZONES.OFFICE],
+	"DAY4_MADINA_OBJECT": [ZoneManager.ZONES.OFFICE],
+	"DAY4_RENT_REMINDER": [ZoneManager.ZONES.LOBBY],
+	"DAY5_EVALUATION": [ZoneManager.ZONES.OFFICE],
+	"DAY7_CASERO_FINAL": [ZoneManager.ZONES.LOBBY],
+	"DAY7_WEEK_PREP": [ZoneManager.ZONES.APARTMENT],
+}
+var rent_overdue_zones : Array = [ZoneManager.ZONES.LOBBY] # advertencias del casero por renta vencida
+
+var _pending : Array[Dictionary] = [] ## eventos que ya llegaron a su hora pero esperan a que Mayui este en su zona
+
 func _ready() -> void:
+	ZoneManager.zone_ready.connect(_on_zone_ready)
+	TimeManager.day_changed.connect(_on_day_changed)
 	EventManager.event_activated.connect(_on_event_activated)
 	EventManager.event_deactivaded.connect(_on_event_deactivated)
 
@@ -16,7 +37,47 @@ func _ready() -> void:
 	if Dialogic.has_signal("signal_event") and not Dialogic.signal_event.is_connected(_on_dialogic_signal_event):
 		Dialogic.signal_event.connect(_on_dialogic_signal_event)
 
+#region Entrega por zona
+## Zona donde esta Mayui ahora: la del mundo realmente cargado (no la "destino" mientras viaja).
+func _current_zone() -> int:
+	if ZoneManager.zone_node != null:
+		return ZoneManager.zone_node.zone_id
+	return ZoneManager.current_zone
+
+## Ejecuta la accion ya si Mayui esta en una zona valida; si no, queda pendiente.
+func _deliver(key: String, zones: Array, action: Callable) -> void:
+	if zones.is_empty() or _current_zone() in zones:
+		action.call()
+		return
+	_pending.append({"key": key, "zones": zones, "action": action})
+	print("[Eventos] '%s' pendiente: espera a que Mayui llegue a %s" % [key, zones])
+
+func _on_zone_ready(zone_id: int) -> void:
+	var due : Array = _pending.filter(func(p : Dictionary) -> bool: return zone_id in p.zones)
+	if due.is_empty():
+		return
+	await get_tree().create_timer(0.8).timeout # dejar que termine el fundido de entrada
+	for p : Dictionary in due:
+		if not _pending.has(p):
+			continue
+		_pending.erase(p)
+		if Dialogic.current_timeline != null: # uno por uno, sin superponer dialogos
+			await Dialogic.timeline_ended
+		print("[Eventos] entregando '%s' en la zona %d" % [p.key, zone_id])
+		await p.action.call()
+
+## Un evento pendiente que no se pudo entregar el mismo dia se descarta (ya paso su momento).
+func _on_day_changed(_day: int) -> void:
+	if not _pending.is_empty():
+		print("[Eventos] descartados por cambio de dia: ", _pending.map(func(p : Dictionary) -> String: return p.key))
+	_pending.clear()
+#endregion
+
 func _on_event_activated(event_name: String) -> void:
+	var zones : Array = event_zones.get(event_name, [])
+	_deliver(event_name, zones, _run_event.bind(event_name))
+
+func _run_event(event_name: String) -> void:
 	match event_name:
 		"DAY1_ALARM":
 			_trigger_alarm_tutorial()
@@ -149,6 +210,9 @@ func _on_rent_due() -> void:
 	pass
 
 func _on_rent_overdue(warnings: int) -> void:
+	_deliver("RENT_OVERDUE_%d" % warnings, rent_overdue_zones, _rent_overdue_now.bind(warnings))
+
+func _rent_overdue_now(warnings: int) -> void:
 	match warnings:
 		1:
 			Dialogic.start("casero_rent_warning1")

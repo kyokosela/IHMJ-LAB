@@ -16,6 +16,13 @@ var create_log : bool = false ## activar si quieren generar logs
 var print_mode : bool = true
 var log_file_name : String
 var is_on_tutorial : bool
+var game_started : bool = false ## true una vez que new_game() ya corrió; evita reiniciar al recargar escenas
+var modal_count : int = 0 ## > 0 mientras haya una UI modal abierta (ej. alarma de dormir): bloquea las interacciones
+
+## true si el jugador NO debe poder interactuar con el mundo ahora mismo
+## (hay un dialogo en curso o una UI modal abierta).
+func is_input_blocked() -> bool:
+	return modal_count > 0 or Dialogic.current_timeline != null
 
 func _ready() -> void:
 	if create_log :
@@ -28,6 +35,7 @@ func _process(_delta: float) -> void:
 
 #region FILE SYSTEM
 func new_game() -> void:
+	game_started = true
 	is_on_tutorial = true
 
 	SaveManager.clear()
@@ -41,6 +49,23 @@ func new_game() -> void:
 	EventManager.create_lapse_event("16:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/sleepy.tres")), "AUTO_SLEEPY_LAPSE", "SLEEPY_TIMER", true)
 
 	_load_schedule_events()
+	_skip_past_events()
+
+## Los eventos del dia actual cuya hora ya paso al iniciar la partida (ej. 06:30 y 07:30
+## cuando se empieza a las 08:00) se marcan como ya ocurridos. Si no, se disparan todos
+## juntos en el primer cambio de reloj (ej. al ducharse).
+## Los eventos que dependen de una zona (NarrativeEventHandler.event_zones, ej. el casero en
+## el lobby) NO se saltan: se disparan al primer cambio de reloj y quedan pendientes hasta
+## que Mayui llegue a su zona.
+func _skip_past_events() -> void:
+	for event in EventManager.events:
+		if not (event is EventScheduled) or event.start == null:
+			continue
+		if NarrativeEventHandler.event_zones.has(event.event_unique_name):
+			continue
+		var config : ScheduleConfig = event.start
+		if config.day == TimeManager.day and TimeManager.get_minutes(config.time) <= TimeManager.minutes:
+			config.triggered = true
 
 func _load_schedule_events() -> void:
 	var schedule_path : String = "res://Resources/Events/Schedule/"

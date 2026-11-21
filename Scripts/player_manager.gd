@@ -397,9 +397,16 @@ var hour_debt : String = "00:00"
 const ALARM_UI_SCENE := preload("res://UI/Sleep/AlarmUI.tscn")
 
 ## Punto de entrada para camas/interactables. Muestra AlarmUI y luego llama sleep().
+var _sleep_in_progress : bool = false ## evita abrir varias alarmas / dormir varias veces a la vez
+
 func request_sleep(bed_type: int = BED_TYPE.TYPE_C) -> void:
-	if slept_today:
+	if _sleep_in_progress:
 		return
+	if slept_today:
+		Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], "Ya dormí lo suficiente por hoy.")
+		return
+	_sleep_in_progress = true
+	GameManager.modal_count += 1
 	var canvas := CanvasLayer.new()
 	canvas.layer = 20
 	get_tree().root.add_child(canvas)
@@ -408,7 +415,11 @@ func request_sleep(bed_type: int = BED_TYPE.TYPE_C) -> void:
 	ui.setup(bed_type)
 	var result : Array = await ui.sleep_confirmed
 	canvas.queue_free()
-	sleep(result[0], result[1])
+	await sleep(result[0], result[1])
+	GameManager.modal_count -= 1
+	_sleep_in_progress = false
+	if not slept_today:
+		Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], "No tengo sueño todavía.")
 
 func sleep(hour_deal : String = "00:00", bed_type: int = BED_TYPE.TYPE_C) -> void :
 	if slept_today:

@@ -125,7 +125,11 @@ func custom_expression_handler()-> void:
 	
 
 func _unhandled_input(event: InputEvent) -> void:
+	if Engine.is_editor_hint(): return
 	if event.is_action_pressed("Interact") and is_inside and can_interact and !collision_trigger:
+		# No interactuar mientras hay un dialogo o una UI modal abierta: si no, la misma Z
+		# que usas para avanzar/cerrar vuelve a disparar la accion.
+		if GameManager.is_input_blocked(): return
 		execute()
 		
 func _on_body_entered(_body : Node2D) -> void :

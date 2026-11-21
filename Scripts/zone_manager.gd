@@ -1,6 +1,7 @@
 extends Node
 
 signal street_risk_triggered(chance: float, roll: float)
+signal zone_ready(zone_id: int) ## la escena de una zona ya cargo y Mayui esta en ella
 
 enum ZONES {
 	APARTMENT,
@@ -32,6 +33,9 @@ var zone_node: World:
 	set(_value):
 		zone_node = _value
 		TransitionManager.fadeOut()
+		if _value != null:
+			# diferido: que la escena termine de armarse antes de entregar eventos pendientes
+			call_deferred("emit_signal", "zone_ready", _value.zone_id)
 
 var energy_cost_base: float = 2
 var energy_cost_incremental: float = 0
@@ -62,7 +66,9 @@ func change_zone(new_zone_id: ZONES) -> void:
 
 	TransitionManager.fadeIn()
 	await TransitionManager.transition_finished
-	zone_node.get_tree().call_deferred("change_scene_to_file", zone_paths[new_zone_id])
+	var tree := zone_node.get_tree()
+	zone_node.release_player() # antes de cerrar la escena, no durante (evita crash)
+	tree.call_deferred("change_scene_to_file", zone_paths[new_zone_id])
 
 func _requires_transport(zone_id: ZONES) -> bool:
 	if current_zone in [ZONES.APARTMENT, ZONES.LOBBY]:

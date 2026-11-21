@@ -7,7 +7,7 @@ var interactor : Area2D
 var player : Player:
 	get: return host as Player
 @export var shape : Shape2D:
-	set(value) : shape = value; if Engine.is_editor_hint() : collshape.shape = shape
+	set(value) : shape = value; if Engine.is_editor_hint() and collshape : collshape.shape = shape
 @export_custom(PROPERTY_HINT_LAYERS_2D_PHYSICS, "Collision Mask") var collision_layer : int = 1
 @export_custom(PROPERTY_HINT_LAYERS_2D_PHYSICS, "Collision Mask") var collision_mask : int = 1
 
@@ -21,7 +21,8 @@ func _initialize() -> void:
 	interactor.add_to_group("Interactor")
 	add_child(interactor)
 	interactor.add_child(collshape)
-	player.move_component().direction_changed.connect(update)
+	if not Engine.is_editor_hint():
+		player.move_component().direction_changed.connect(update)
 	assert(interactor != null, "Interactor should never be NULL")
 
 func _ready() -> void:

@@ -11,8 +11,11 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 (ni playground, ni minijuegos, ni ciudad, ni contenido narrativo nuevo).
 
 ## ESTADO (actualizar al cerrar cada sesión)
-- El proyecto importa y arranca sin errores graves (verificado en consola).
-- La pantalla del tutorial AÚN NO está asignada como escena principal.
+- El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Lobby, Oficina y
+  Comercial; cada una con cámara (zoom 5). Los eventos con diálogo esperan a que Mayui esté en su zona
+  (`narrative_event_handler.gd`, tabla `event_zones`). Z interactúa y avanza diálogos. Reloj arriba al centro.
+- Diseño unificado y pendiente de revisión de Ramiro: `Docs/Design/SISTEMA_GAMEPLAY.md`. Hoja de ruta F1–F5 en
+  `DECISIONES_Y_PENDIENTES.md`; NO empezar una fase sin que Ramiro apruebe las decisiones D# que la tocan.
 - Existe `Scenes/Playground_Integration.tscn` (herramienta de pruebas, desordenada). Congelada.
 - Pendiente menor: 3 `.tres` con UID duplicado (`home_meal`, `ingredients_bag`, `ingredients_unpack`).
 - Próximo paso: ver `NEXT.md` si existe.
@@ -22,7 +25,10 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 2. Nunca declarar algo "terminado" sin haber ejecutado el juego o la comprobación.
 3. Mantener la arquitectura actual: managers planos en `Scripts/`, autoloads en `project.godot`.
    No reestructurar a componentes (la migración al repo principal es futura y requiere consenso).
-4. Reglas de diseño resueltas: `Docs/AMBIGUITIES.md` manda sobre documentos viejos.
+4. **Fuente de verdad de los EFECTOS: `Docs/Design/SISTEMA_EFECTOS.md`** (validado con `Tools/simulacion_efectos.gd`;
+   si se cambia un número, correr la simulación). **Del resto del gameplay: `Docs/Design/SISTEMA_GAMEPLAY.md`** (decisiones D# y pendientes P# en
+   `Docs/Design/DECISIONES_Y_PENDIENTES.md`). El código se alinea a ese documento, no al revés. Si algo no está
+   definido, NO inventar: anotarlo como pendiente y preguntar. `Docs/AMBIGUITIES.md` es histórico (lo generó una IA).
 5. No modificar `.gd` cuando la tarea es solo contenido (`.tres`, `.dtl`, textos).
 6. Verificar que existen los `.dtl` (`DialoguePlugin/TIMELINE/`) antes de llamar `Dialogic.start()`.
 7. No usar git worktrees aislados; trabajar en la rama activa del repo.

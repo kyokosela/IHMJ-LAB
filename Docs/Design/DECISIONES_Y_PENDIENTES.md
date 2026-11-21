@@ -71,9 +71,9 @@
 **❌ Difiere o falta** (ordenado por impacto al jugar)
 | # | Qué | Dónde está hoy | Fase |
 |---|---|---|---|
-| 1 | Bañarse hace 30 min, sin energía, sin Estrés, sin cooldown, sin jabón | `integration_action.gd` (`_do_bathe`) | F2 |
-| 2 | Todo es repetible sin límite; no existe el tipo General (3 usos) | `Apartment.tscn` (`reusable = true`) | F2 |
-| 3 | La puerta del tutorial solo exige ducha y ropa (faltan comer y cepillarse) | `tutorial.gd` | F2 |
+| 1 | **Corregido:** lo medido (30 min, sin energía, sin cooldown) era la escena placeholder de la IA (`Apartment.tscn` + `integration_action.gd`). **Tu ducha real** (`bathe.gd` en `Playground.tscn`) ya es una ficha: 20 min, 10 de energía y cooldown de 5 h con mensaje. Falta ajustarla a la Ficha (25 min, −5) en el Inspector, el agua caliente/fría y el jabón con usos | `InteractableAction` en la escena | F2 |
+| 2 | En la escena de la IA todo es repetible; en la tuya ya hay cooldown (`is_cooldown_at_execute`). Falta el tipo General (3 usos) como propiedad opcional | `interactable_task.gd` | F2 |
+| 3 | Tu `TutorialDoor.tres` exige BATHE, COOK y CLOTHES; falta la tarea de cepillarse (TEETH). `tutorial.gd` (de la IA) duplica esto con banderas propias y debe sustituirse por `task_lists` | `Resources/Task/Tutorial/TutorialDoor.tres` | F2 |
 | 4 | Calma no usa Rutina saludable | `player_manager.gd` | F3 |
 | 5 | Escalada de niveles automática por días, sin tirada 50 % ni umbral de cordura | `player_manager.gd` (`_check_level_escalation`) | F3 |
 | 6 | Estrés III mitigado otorga Calma (debe ser Insomnio) | `player_manager.gd` (`_grant_opposite_primary_effect`) | F1 |
@@ -96,7 +96,7 @@
 | Fase | Qué se hace | Cómo lo verifico |
 |---|---|---|
 | **F1 · Números en un solo sitio** | Un archivo `game_rules.gd` con todas las constantes etiquetadas con el § de este documento; migrar las dispersas. Arreglar #6, #7, #8 (24 h), #9, #10 | Prueba que lee `game_rules` y comprueba cada valor contra este documento |
-| **F2 · Fichas de acción** | Recurso `ActionSheet` con **tu plantilla** (tipo, costes, elimina/aplica, límite diario, cooldown) y un solo ejecutor. Migrar Bañarse, Cepillarse, Cambiarse, Comer, Dormir e Inspeccionar. Tutorial completo con sus 4 pasos | Ducharse dos veces seguidas: la segunda entra en cooldown; no se sale sin los 4 pasos |
+| **F2 · Acciones y tutorial en TU sistema** | **No se crean clases nuevas.** Se ajustan los valores de `InteractableAction` en las escenas (Inspector: `time_cost`, `stat_req_list`, `cooldown_time`), se agrega la tarea TEETH a `TutorialDoor.tres` con sus mensajes, la puerta usa `task_lists`, y `tutorial.gd` (de la IA) se sustituye por `TaskManager`. Opcional: propiedad de usos máximos para las acciones Generales | Ducharse dos veces seguidas: la segunda entra en cooldown; no se sale sin las 4 tareas |
 | **F3 · Efectos completos** | Implementar [SISTEMA_EFECTOS.md](SISTEMA_EFECTOS.md): Rutina saludable, escalada con tirada y umbral, Suciedad en dos capas, niveles de Atenta/Hipersomnia/Inapetencia/Sueño, Desahogo, estabilizadores de cordura (rebote, tope, piso), deuda de sueño con tope y los ítems Pastillas/Medicina/Mentas/Antojo | Reproducir en el juego real los perfiles de `Tools/simulacion_efectos.gd` y comparar resultados |
 | **F4 · Calendario y economía** | Alquiler el miércoles y avisos, servicios, pago único el viernes 17:00, bus por horario, deudas invisibles, tolerancia 08:10 | Recorrer la semana con y sin pagar y comparar con §7 |
 | **F5 · Guardado y pantalla** | Guardado al dormir; HUD con efectos, hora, energía, día y dinero | Guardar, cargar y comparar estado |

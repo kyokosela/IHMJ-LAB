@@ -272,7 +272,7 @@ Costo de energía **−75 %**, tiempo **×1,5**. Se va al subir la energía. **R
 ## 8. Huecos cerrados (E#) y lo que sigue abierto
 | ID | Hueco en tu diseño | Cómo lo cerré |
 |---|---|---|
-| **E1** | Tablas de Atenta, Hipersomnia, Inapetencia y Sueño sin niveles | 3 niveles; **tu fila = nivel III** y los niveles I y II son el 40 % y el 70 % (redondeado). Sueño por deuda de horas |
+| **E1** | Tablas de Atenta, Hipersomnia, Inapetencia y Sueño sin niveles | 3 niveles; **tu fila = nivel III** y los niveles I y II son el 40 % y el 70 % (redondeado). Sueño por deuda de horas. **Sin arte nuevo:** conservan su icono único hecho a mano; el nivel es interno (se ve en el panel de depuración y en el tooltip) |
 | **E2** | ¿De qué nivel dependen las probabilidades "(I/II/III)"? | del efecto que las provoca (Atenta ← Insomnio; Inapetencia, Hipersomnia por días) |
 | **E3** | "30 % en L3" y "50 % en la 4.ª acción" (Debilitamiento) | L3 = fila 3 de tu tabla de energía (Agotada): 30 % diario y 50 % en la 4.ª acción seguida |
 | **E4** | Mitigación en blanco (Inapetencia, Hipersomnia) | se van con su causa; Antojo −1 (Inapetencia); Café −1 (Hipersomnia) |
@@ -280,7 +280,7 @@ Costo de energía **−75 %**, tiempo **×1,5**. Se va al subir la energía. **R
 | **E6** | Calma III "−8 %" | 12 % (5 → 8 → 12) |
 | **E7** | Umbral de Rutina saludable | las 4 obligatorias; jugar = comodín |
 | **E8** | Estabilizador de cordura (P1) | daño ×0,75 · tope −10/día · rebote ×2/×1,5 · piso 10 · Calma protege · rebalanceo del domingo (§2.2) |
-| **E9** | Medicina y pastillas no existían | ítems con precio (§5) |
+| **E9** | Medicina y pastillas no existían | ítems con precio (§5); necesitan icono (placeholder hasta que haya arte) |
 | **E10** | Bono de estrés de las camas (P12) | proporción de tu Ficha: base −1 nivel; **A +75 %** (6/8) y **B +25 %** (2/8) de un −1 extra |
 | **E11** | Duraciones | Hiperactividad no energética 2 h · Atenta por agua fría 1 h · Debilitamiento 72 h |
 | **E12** | Qué es el Desmayo | evento: sueño forzado, pierdes el día |

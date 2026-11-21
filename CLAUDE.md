@@ -25,6 +25,15 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 2. Nunca declarar algo "terminado" sin haber ejecutado el juego o la comprobación.
 3. Mantener la arquitectura actual: managers planos en `Scripts/`, autoloads en `project.godot`.
    No reestructurar a componentes (la migración al repo principal es futura y requiere consenso).
+   **RESPETAR EL SISTEMA ACTUAL (acordado con Ramiro): ajustar la lógica DENTRO de lo que existe, no construir en paralelo.**
+   - Efectos = Resources (`Effect`, `EffectLevel`, `EffectHourControl`, `TemporalEffect`) + lógica en `player_manager.gd`.
+     Los 12 efectos y sus imágenes están hechos a mano: NO crear efectos nuevos ni renombrar. Arte por nivel solo existe
+     para Estrés, Calma e Insomnio (3 iconos); el resto tiene un solo icono (sus niveles, si los hay, son internos).
+   - Acciones = `InteractableAction` (`time_cost`, `stat_req_list`, `cooldown_time`, `task_lists`, mensajes): la "ficha"
+     ya existe como propiedades; se configuran en el Inspector de cada escena. Hijas reales: `bathe.gd`, `bed.gd`, etc.
+   - Tutorial = `TaskManager` + `TaskList` (`Resources/Task/Tutorial/TutorialDoor.tres`) + evento `TUTORIAL`.
+     `Scripts/tutorial.gd` y `Scenes/World/Apartment.tscn` son un placeholder de IA con banderas propias: deben sustituirse.
+   - Para ver los efectos en juego: `UI/Debug/debug_panel.tscn` (ya muestra cordura, efectos, día y hora); ampliarlo, no duplicarlo.
 4. **Fuente de verdad de los EFECTOS: `Docs/Design/SISTEMA_EFECTOS.md`** (validado con `Tools/simulacion_efectos.gd`;
    si se cambia un número, correr la simulación). **Del resto del gameplay: `Docs/Design/SISTEMA_GAMEPLAY.md`** (decisiones D# y pendientes P# en
    `Docs/Design/DECISIONES_Y_PENDIENTES.md`). El código se alinea a ese documento, no al revés. Si algo no está

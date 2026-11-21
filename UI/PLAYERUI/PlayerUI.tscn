@@ -47,26 +47,35 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="TimeLabel" type="Label" parent="Control/MarginContainer"]
-unique_name_in_owner = true
+[node name="TopBar" type="HBoxContainer" parent="Control/MarginContainer"]
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 4
 size_flags_vertical = 0
-text = "tiempo"
+theme_override_constants/separation = 40
 
-[node name="MoneyLabel" type="Label" parent="Control/MarginContainer"]
+[node name="DayLabel" type="Label" parent="Control/MarginContainer/TopBar"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 28
+text = "DIA 1 - LUN"
+
+[node name="TimeLabel" type="Label" parent="Control/MarginContainer/TopBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 40
+text = "00:00"
+
+[node name="MoneyLabel" type="Label" parent="Control/MarginContainer/TopBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 28
 text = "S/0"
-
-[node name="DayLabel" type="Label" parent="Control/MarginContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 0
-text = "LUN"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer"]
 layout_mode = 2

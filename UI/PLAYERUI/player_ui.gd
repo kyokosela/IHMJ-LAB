@@ -16,6 +16,7 @@ func _ready() -> void:
 	PlayerManager.connect_to_stat("ENERGY", _on_energy_changed) 
 	#PlayerManager.connect_to_stat("HEALTH", _on_health_changed)
 	TimeManager.minutes_changed.connect(_on_minutes_changed)
+	_on_minutes_changed(TimeManager.minutes) # mostrar la hora actual desde el inicio, no "tiempo"
 	PlayerManager.effect_added.connect(create_effect_slot)
 	PlayerManager.effect_removed.connect(remove_effect_slot)
 
@@ -49,7 +50,7 @@ func _update_day_display() -> void:
 		var day_names : Array[String] = ["LUN", "MAR", "MIE", "JUE", "VIE", "SAB", "DOM"]
 		var week_day_index : int = TimeManager.week_day
 		if week_day_index >= 0 and week_day_index < day_names.size():
-			day_label.text = "%s" % day_names[week_day_index]
+			day_label.text = "DIA %d - %s" % [TimeManager.day, day_names[week_day_index]]
 
 func create_effect_slot(effect : Effect) -> void :
 	var node = effect_list.get_node_or_null(effect.effect_unique_name)

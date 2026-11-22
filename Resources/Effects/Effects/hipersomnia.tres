@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="Effect" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="Effect" format=3 uid="uid://d0gvl3x0eo0jt"]
 
-[ext_resource type="Texture2D" path="res://Assets/UI/effects/hypersomnia.png" id="1_0"]
-[ext_resource type="Script" path="res://Resources/Effects/effect.gd" id="1_1"]
-[ext_resource type="Script" path="res://Resources/Effects/time_changer.gd" id="2_0"]
+[ext_resource type="Texture2D" uid="uid://3g0clvsh8a7o" path="res://Assets/UI/effects/hypersomnia.png" id="1_0"]
+[ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_1"]
+[ext_resource type="Script" uid="uid://cy3erp2xhtbpv" path="res://Resources/Effects/time_changer.gd" id="2_0"]
+[ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="3_je0jh"]
 
 [sub_resource type="Resource" id="time_change_hipersomnia"]
 script = ExtResource("2_0")

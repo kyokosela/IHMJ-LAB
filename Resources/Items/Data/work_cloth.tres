@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=7 format=3 uid="uid://cmva81pyqiyry"]
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cmva81pyqiyry"]
 
 [ext_resource type="Resource" uid="uid://cgiarn82yn77y" path="res://Resources/SpriteStacks/Mayui/mayui_work.tres" id="1_ifkuu"]
 [ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="2_vnrrr"]

@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="EffectHourControl" load_steps=6 format=3 uid="uid://bgyg0kv1wdjc5"]
+[gd_resource type="Resource" script_class="EffectHourControl" format=3 uid="uid://bgyg0kv1wdjc5"]
 
-[ext_resource type="Texture2D" uid="uid://bii5vy6jrp6nf" path="res://Assets/UI/effects/drowsy.png" id="1_oqngu"]
+[ext_resource type="Texture2D" uid="uid://bw3wkwl1c67uf" path="res://Assets/UI/effects/drowsy.png" id="1_oqngu"]
 [ext_resource type="Script" uid="uid://csaddwui1c2y4" path="res://Resources/Effects/effect_hour_control.gd" id="2_frq4b"]
 [ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_oqngu"]
 [ext_resource type="Script" uid="uid://cy3erp2xhtbpv" path="res://Resources/Effects/time_changer.gd" id="4_frq4b"]

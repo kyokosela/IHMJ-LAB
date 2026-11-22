@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CustomCondition" load_steps=15 format=3 uid="uid://bh61tmksmvfe5"]
+[gd_resource type="Resource" script_class="CustomCondition" format=3 uid="uid://bh61tmksmvfe5"]
 
 [ext_resource type="Resource" uid="uid://c3gi4rg1obavi" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_fresh.tres" id="1_4thje"]
 [ext_resource type="Script" uid="uid://2ayeg7yj87f6" path="res://Resources/Items/Conditions/condition_threshold.gd" id="2_02tcq"]

@@ -1,19 +1,19 @@
-[gd_resource type="Resource" script_class="Effect" load_steps=7 format=3]
+[gd_resource type="Resource" script_class="Effect" format=3 uid="uid://bbmc8lp58rw2t"]
 
-[ext_resource type="Texture2D" path="res://Assets/UI/effects/energized2.png" id="1_0"]
-[ext_resource type="Script" path="res://Resources/Effects/effect.gd" id="1_1"]
-[ext_resource type="Script" path="res://Resources/Effects/time_changer.gd" id="2_0"]
-[ext_resource type="Script" path="res://Resources/Effects/stat_changer.gd" id="3_0"]
-
-[sub_resource type="Resource" id="time_change_atenta"]
-script = ExtResource("2_0")
-time_value = -0.25
-OPERATION = 2
+[ext_resource type="Texture2D" uid="uid://ci8b7wdm1l6m2" path="res://Assets/UI/effects/energized2.png" id="1_0"]
+[ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_1"]
+[ext_resource type="Script" uid="uid://cy3erp2xhtbpv" path="res://Resources/Effects/time_changer.gd" id="2_0"]
+[ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="3_0"]
 
 [sub_resource type="Resource" id="stat_change_energy_atenta"]
 script = ExtResource("3_0")
 stat_unique_name = "ENERGY"
 value = 0.25
+OPERATION = 2
+
+[sub_resource type="Resource" id="time_change_atenta"]
+script = ExtResource("2_0")
+time_value = -0.25
 OPERATION = 2
 
 [resource]

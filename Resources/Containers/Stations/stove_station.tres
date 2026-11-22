@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Station" load_steps=27 format=3 uid="uid://ixynr0bols3u"]
+[gd_resource type="Resource" script_class="Station" format=3 uid="uid://ixynr0bols3u"]
 
 [ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="1_8ipk4"]
 [ext_resource type="Script" uid="uid://rjxff1x2nc58" path="res://Resources/Containers/station.gd" id="1_station"]

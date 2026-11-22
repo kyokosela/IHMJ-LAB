@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=7 format=3 uid="uid://xyia21ce8x85"]
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://xyia21ce8x85"]
 
 [ext_resource type="Resource" uid="uid://c4vlc21elx4fq" path="res://Resources/SpriteStacks/Mayui/mayui_towel.tres" id="1_3cfi0"]
 [ext_resource type="Script" uid="uid://bhvlc64o0ato" path="res://Resources/Items/Behaviors/cloth_behavior.gd" id="2_cb0tm"]

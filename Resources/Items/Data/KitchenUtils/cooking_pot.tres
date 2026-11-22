@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=6 format=3 uid="uid://bmt41wvyxm0ut"]
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bmt41wvyxm0ut"]
 
 [ext_resource type="Script" uid="uid://br5b4xhai6xh0" path="res://Resources/Items/Behaviors/holder_behavior.gd" id="1_dpxn2"]
 [ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="2_ppxiq"]

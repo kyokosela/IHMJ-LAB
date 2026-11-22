@@ -9,3 +9,5 @@ func custom_execute() -> void :
 	PlayerManager.remove_effect("SMELLY")
 	EventManager.reset_lapse_event("AUTO_SMELLY_LAPSE")
 	PlayerManager.register_bath(cold_water)
+	# Al salir del bano Mayui queda con la toalla hasta que vaya al armario.
+	PlayerManager.wear_towel()

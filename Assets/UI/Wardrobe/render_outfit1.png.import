@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b46k2v7kov7tl"
-path="res://.godot/imported/blouse_dirty.png-1dcaa33a09bd4587c954d01cb09f2b99.ctex"
+uid="uid://dfet1ulwj8b2q"
+path="res://.godot/imported/render_outfit1.png-5ab64cc06db0bd28465164611b6cb6fb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI/Wardrobe/blouse_dirty.png"
-dest_files=["res://.godot/imported/blouse_dirty.png-1dcaa33a09bd4587c954d01cb09f2b99.ctex"]
+source_file="res://Assets/UI/Wardrobe/render_outfit1.png"
+dest_files=["res://.godot/imported/render_outfit1.png-5ab64cc06db0bd28465164611b6cb6fb.ctex"]
 
 [params]
 

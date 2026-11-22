@@ -185,6 +185,8 @@ func _ready() -> void:
 	}
 	stat_decrease.connect(energy_spend_handler)
 	TimeManager.day_changed.connect(_on_day_changed_primary_effects)
+	TimeManager.minutes_delta.connect(_on_clothes_time)
+	reset_outfits()
 	effect_removed.connect(_on_effect_removed)
 
 #recorre el recurso que contiene las stats y carga su valor
@@ -847,6 +849,7 @@ func reset_engine_state(full: bool = false) -> void:
 	var energy : Stat = get_stat_res("ENERGY")
 	if energy != null:
 		energy.value = 45.0
+	reset_outfits()
 
 func _stress_level() -> int:
 	var e : EffectLevel = get_effect_res("STRESS") as EffectLevel
@@ -1072,6 +1075,114 @@ func _acquire_weak() -> void:
 	tired_actions = 0
 #endregion
 
+#region Ropa puesta (armario)
+## La ropa vive aqui (PlayerManager persiste entre zonas): lo que lleva puesto Mayui y las prendas colgadas en el armario.
+## Cada prenda es un Item del dev (ItemData tipo CLOTH + ClothBehavior) con las condiciones `cleanliness` (<= 50 = sucia) y
+## `wetness` (> 30 = mojada). Los numeros marcados "propuesta" son mios: ajustalos.
+signal outfit_changed(item: Item)
+
+const HOME_CLOTHES_DATA : String = "res://Resources/Items/Data/home_cloth.tres"
+const WORK_CLOTHES_DATA : String = "res://Resources/Items/Data/work_cloth.tres"
+const TOWEL_DATA : String = "res://Resources/Items/Data/towel_cloth.tres"
+const CHANGE_CLOTHES_TIME : String = "00:02"            ## vestirse tarda 2 min (tu especificacion)
+const CLOTHES_DIRT_PER_HOUR : float = 2.0               ## propuesta: limpieza que pierde la ropa puesta por hora (sucia a las ~25 h)
+const CLOTHES_DRY_PER_HOUR : float = 10.0               ## propuesta: humedad que pierde por hora (mojada unas 7 h)
+const DIRTY_CLOTHES_BODY_DIRT_RATE : float = 2.0        ## propuesta: con ropa sucia puesta la Suciedad del cuerpo (24 h) corre al doble
+const WET_CLOTHES_DIRT_MINUTES : int = 360              ## ropa mojada mas de 6 h = Suciedad (SISTEMA_EFECTOS)
+const WET_CLOTHES_WEAK_CHANCE : float = 0.25            ## propuesta: al ponerse ropa mojada, Debilitamiento
+const WET_CLOTHES_STRESS_CHANCE : float = 0.50          ## propuesta: al ponerse ropa mojada, Estres
+
+var outfit : Item = null                 ## lo que lleva puesto Mayui (puede ser la toalla)
+var wardrobe : Array[Item] = []          ## prendas colgadas en el armario
+var _wet_minutes : int = 0               ## minutos seguidos con la ropa mojada puesta
+
+## Ropa inicial: ropa de casa puesta y el uniforme colgado (la toalla aparece al banarse).
+func reset_outfits() -> void:
+	wardrobe.clear()
+	_wet_minutes = 0
+	outfit = Item.new(load(HOME_CLOTHES_DATA))
+	wardrobe.append(Item.new(load(WORK_CLOTHES_DATA)))
+	_apply_outfit_sprite()
+	outfit_changed.emit(outfit)
+
+## Id de outfit ("home", "work", "outfit1", "towel") de una prenda; "" si no tiene arte asociado.
+func outfit_id_of(item: Item) -> String:
+	if item == null or item.data == null: return ""
+	var behavior = item.data.behavior as ClothBehavior
+	return behavior.clothing.outfit_id if behavior != null and behavior.clothing != null else ""
+
+func get_outfit_id() -> String:
+	return outfit_id_of(outfit)
+
+## Mayui se pone una prenda del armario: la que llevaba vuelve a colgarse (la toalla no), cambia su sprite y, si la ropa esta
+## mojada, hay probabilidad de Debilitamiento y de Estres. Quien llame debe sumar CHANGE_CLOTHES_TIME al reloj.
+func wear_clothes(item: Item) -> void:
+	if item == null: return
+	var previous : Item = outfit
+	wardrobe.erase(item)
+	if previous != null and previous != item and outfit_id_of(previous) != "towel":
+		wardrobe.append(previous)
+	outfit = item
+	_wet_minutes = 0
+	_apply_outfit_sprite()
+	if item.data.behavior != null:
+		item.data.behavior.use(item)
+	if item.has_state("wet"):
+		if rng.randf() < WET_CLOTHES_WEAK_CHANCE:
+			_acquire_weak()
+		if rng.randf() < WET_CLOTHES_STRESS_CHANCE:
+			add_stress_cause("WET_CLOTHES")
+	outfit_changed.emit(item)
+
+## Al salir de la ducha Mayui queda con la toalla hasta que vaya al armario.
+func wear_towel() -> void:
+	wear_clothes(Item.new(load(TOWEL_DATA)))
+
+## Ensucia la ropa puesta (lluvia, comida dificil de comer, lugares sucios...). amount = puntos de limpieza que pierde.
+func soil_clothes(amount: float) -> void:
+	_change_outfit_condition("cleanliness", -amount)
+
+## Moja la ropa puesta (lluvia...). amount = puntos de humedad que gana (100 = empapada).
+func wet_clothes(amount: float = 100.0) -> void:
+	_change_outfit_condition("wetness", amount)
+
+func _change_outfit_condition(condition_name: String, delta: float) -> void:
+	if outfit == null: return
+	var cc : CustomCondition = outfit.get_custom_condition(condition_name)
+	if cc == null: return
+	cc.value = clampf(cc.value + delta, 0.0, 100.0)
+	outfit.update_states()
+	outfit_changed.emit(outfit)
+
+func _apply_outfit_sprite() -> void:
+	if player == null or outfit == null: return
+	var behavior = outfit.data.behavior as ClothBehavior
+	if behavior != null and behavior.preset != null:
+		player.change_preset(behavior.preset)
+
+## Con el paso del tiempo la ropa puesta se ensucia y se seca. Ropa sucia = el cuerpo se ensucia mas rapido; ropa mojada
+## mas de 6 h seguidas = Suciedad.
+func _on_clothes_time(delta_minutes: int) -> void:
+	if outfit == null or delta_minutes <= 0: return
+	var hours : float = delta_minutes / 60.0
+	var clean : CustomCondition = outfit.get_custom_condition("cleanliness")
+	var wet : CustomCondition = outfit.get_custom_condition("wetness")
+	if clean != null:
+		clean.value = maxf(0.0, clean.value - CLOTHES_DIRT_PER_HOUR * hours)
+	if wet != null and wet.value > 0.0:
+		wet.value = maxf(0.0, wet.value - CLOTHES_DRY_PER_HOUR * hours)
+	outfit.update_states()
+	if outfit.has_state("wet"):
+		_wet_minutes += delta_minutes
+		if _wet_minutes >= WET_CLOTHES_DIRT_MINUTES and not has_effect("SMELLY"):
+			add_effect(load("res://Resources/Effects/Effects/smelly.tres"))
+	else:
+		_wet_minutes = 0
+	if outfit.has_state("dirty"):
+		var smelly_event := EventManager.get_event("AUTO_SMELLY_LAPSE") as LapseEvent
+		if smelly_event != null:
+			smelly_event.check_timer(int(round(delta_minutes * (DIRTY_CLOTHES_BODY_DIRT_RATE - 1.0))))
+#endregion
 #region Cierre del dia (§6.3)
 ## Cierra el dia que termino: evalua la Rutina saludable, aplica el balance de cordura y reinicia
 ## los contadores. Corre a medianoche, ANTES de los chequeos de la manana.

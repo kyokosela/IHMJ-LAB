@@ -1,247 +1,58 @@
-[gd_scene load_steps=28 format=3 uid="uid://dd0p5w6n0rqyj"]
+[gd_scene load_steps=11 format=3 uid="uid://dd0p5w6n0rqyj"]
 
-[ext_resource type="Script" uid="uid://dfn7rhufpg4au" path="res://UI/Containers/wardrobe_ui.gd" id="1_1r4s0"]
-[ext_resource type="Texture2D" uid="uid://pmc6kpm5dlqn" path="res://Assets/UI/Wardrobe/wardrobe.png" id="2_bbh5u"]
-[ext_resource type="Script" uid="uid://bwwsmokf0q8y2" path="res://Scripts/entity.gd" id="2_jqbpu"]
-[ext_resource type="Script" uid="uid://dxbbffiau4vqt" path="res://Prefabs/Components/sprite_stack_component.gd" id="3_d6yee"]
-[ext_resource type="Texture2D" uid="uid://dh0tkdxcjyod2" path="res://Assets/UI/Wardrobe/blouse_clean.png" id="3_sh32p"]
-[ext_resource type="Texture2D" uid="uid://b7o185qgevqge" path="res://Assets/UI/Wardrobe/basket_full.png" id="4_cwatp"]
-[ext_resource type="Script" uid="uid://bswuea3inx1i8" path="res://Resources/SpriteStacks/Mayui/sprite_preset.gd" id="4_h23nu"]
-[ext_resource type="Resource" uid="uid://cgiarn82yn77y" path="res://Resources/SpriteStacks/Mayui/mayui_work.tres" id="5_ncci6"]
-[ext_resource type="Texture2D" uid="uid://m536wj2mt2j" path="res://Assets/UI/Wardrobe/uniform_clean.png" id="5_vxjan"]
-[ext_resource type="Resource" uid="uid://c4vlc21elx4fq" path="res://Resources/SpriteStacks/Mayui/mayui_towel.tres" id="6_fifye"]
-[ext_resource type="Texture2D" uid="uid://o384ea47yxv5" path="res://Assets/Mayui/mayui_work_legs.png" id="7_kdcjt"]
-[ext_resource type="Texture2D" uid="uid://cxmgoxewya4il" path="res://Assets/Mayui/mayui_work_body.png" id="8_1ryp7"]
-[ext_resource type="Texture2D" uid="uid://7ywufu1mplt2" path="res://Assets/Mayui/mayui_face.png" id="9_08ng1"]
-[ext_resource type="Texture2D" uid="uid://ci8n5ia3dji02" path="res://Assets/Mayui/mayui_hair.png" id="10_6eac2"]
-[ext_resource type="Texture2D" uid="uid://bhkln5nq45lwf" path="res://Assets/Mayui/mayui_eyes.png" id="11_nu4ag"]
-[ext_resource type="Texture2D" uid="uid://c7xrwleix05oo" path="res://Assets/Mayui/mayui_accesories.png" id="12_es8mf"]
+[ext_resource type="Script" uid="uid://dfn7rhufpg4au" path="res://UI/Containers/wardrobe_ui.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://pmc6kpm5dlqn" path="res://Assets/UI/Wardrobe/wardrobe.png" id="3_cabinet"]
+[ext_resource type="Texture2D" uid="uid://bfyqy67ik2bcn" path="res://Assets/UI/Wardrobe/render_towel.png" id="4_render"]
+[ext_resource type="Texture2D" uid="uid://dw4abnu6emish" path="res://Assets/UI/Wardrobe/basket_empty.png" id="5_basket"]
+[ext_resource type="Texture2D" uid="uid://i4wdfi05h8we" path="res://Assets/UI/Wardrobe/basket_empty_selection.png" id="6_basket_hl"]
+[ext_resource type="Texture2D" uid="uid://4gd6yju4h40e" path="res://Assets/UI/Wardrobe/home_clean.png" id="7_home_layer"]
+[ext_resource type="Texture2D" uid="uid://dp27mhhgpbuh7" path="res://Assets/UI/Wardrobe/home_selection.png" id="8_home_hl"]
+[ext_resource type="Texture2D" uid="uid://c2ibfm3xrfyy0" path="res://Assets/UI/Wardrobe/work_clean.png" id="9_work_layer"]
+[ext_resource type="Texture2D" uid="uid://b7pj23c4rbpgg" path="res://Assets/UI/Wardrobe/work_selection.png" id="10_work_hl"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_d53a4"]
-size = Vector2(8, 9.599998)
-
-[sub_resource type="Animation" id="Animation_tl25y"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:sync_frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
-[sub_resource type="Animation" id="Animation_us0jv"]
-resource_name = "idle_down"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:sync_frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [4]
-}
-
-[sub_resource type="Animation" id="Animation_hxf3l"]
-resource_name = "idle_left"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:sync_frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [2]
-}
-
-[sub_resource type="Animation" id="Animation_03ewh"]
-resource_name = "idle_right"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:sync_frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [1]
-}
-
-[sub_resource type="Animation" id="Animation_21evy"]
-resource_name = "idle_up"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:sync_frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [3]
-}
-
-[sub_resource type="Animation" id="Animation_2lcig"]
-resource_name = "walk_down"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:sync_frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [5, 6, 7, 6]
-}
-
-[sub_resource type="Animation" id="Animation_h0qm3"]
-resource_name = "walk_left"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:sync_frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.49999997, 0.75),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [13, 14, 15, 14]
-}
-
-[sub_resource type="Animation" id="Animation_8ipit"]
-resource_name = "walk_right"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:sync_frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [9, 10, 11, 10]
-}
-
-[sub_resource type="Animation" id="Animation_3j425"]
-resource_name = "walk_up"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:sync_frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [17, 18, 19, 18]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_21ku0"]
-_data = {
-&"RESET": SubResource("Animation_tl25y"),
-&"idle_down": SubResource("Animation_us0jv"),
-&"idle_left": SubResource("Animation_hxf3l"),
-&"idle_right": SubResource("Animation_03ewh"),
-&"idle_up": SubResource("Animation_21evy"),
-&"walk_down": SubResource("Animation_2lcig"),
-&"walk_left": SubResource("Animation_h0qm3"),
-&"walk_right": SubResource("Animation_8ipit"),
-&"walk_up": SubResource("Animation_3j425")
-}
-
-[node name="WardrobeUI" type="Control"]
+[node name="WardrobeUI" type="Control" node_paths=PackedStringArray("render_rect", "basket_rect", "basket_highlight", "basket_hit", "garment_slots") groups=["wardrobe_ui"]]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_script")
+render_rect = NodePath("Canvas/Render")
+basket_rect = NodePath("Canvas/Basket")
+basket_highlight = NodePath("Canvas/BasketHighlight")
+basket_hit = NodePath("Canvas/BasketHit")
+garment_slots = {
+"home": NodePath("Canvas/Home"),
+"work": NodePath("Canvas/Work")
+}
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Canvas" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="Entity" type="CharacterBody2D" parent="."]
-position = Vector2(612, 831)
-scale = Vector2(20.384626, 20.384626)
-script = ExtResource("2_jqbpu")
-metadata/_custom_type_script = "uid://bwwsmokf0q8y2"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Entity"]
-position = Vector2(0, -8)
-scale = Vector2(0.99999994, 0.99999994)
-shape = SubResource("RectangleShape2D_d53a4")
-
-[node name="SpriteComponent" type="Node2D" parent="Entity" node_paths=PackedStringArray("animation_player")]
-script = ExtResource("3_d6yee")
-animation_player = NodePath("AnimationPlayer")
-custom_presets = Array[ExtResource("4_h23nu")]([ExtResource("5_ncci6"), ExtResource("6_fifye")])
-current_preset = ExtResource("5_ncci6")
-sync_hframes = 20
-sync_offset = Vector2(0, -10)
-metadata/_custom_type_script = "uid://dxbbffiau4vqt"
-
-[node name="legs" type="Sprite2D" parent="Entity/SpriteComponent"]
-texture = ExtResource("7_kdcjt")
-offset = Vector2(0, -10)
-hframes = 20
-
-[node name="body" type="Sprite2D" parent="Entity/SpriteComponent"]
-texture = ExtResource("8_1ryp7")
-offset = Vector2(0, -10)
-hframes = 20
-
-[node name="head" type="Sprite2D" parent="Entity/SpriteComponent"]
-texture = ExtResource("9_08ng1")
-offset = Vector2(0, -10)
-hframes = 20
-
-[node name="hair" type="Sprite2D" parent="Entity/SpriteComponent"]
-texture = ExtResource("10_6eac2")
-offset = Vector2(0, -10)
-hframes = 20
-
-[node name="eyes" type="Sprite2D" parent="Entity/SpriteComponent"]
-texture = ExtResource("11_nu4ag")
-offset = Vector2(0, -10)
-hframes = 20
-
-[node name="accesories" type="Sprite2D" parent="Entity/SpriteComponent"]
-texture = ExtResource("12_es8mf")
-offset = Vector2(0, -10)
-hframes = 20
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Entity/SpriteComponent"]
-libraries = {
-&"": SubResource("AnimationLibrary_21ku0")
-}
-speed_scale = 1.5
-
-[node name="WardrobeImage" type="TextureRect" parent="."]
+[node name="Cabinet" type="TextureRect" parent="Canvas"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -249,67 +60,32 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_bbh5u")
-expand_mode = 3
-stretch_mode = 5
+texture = ExtResource("3_cabinet")
+expand_mode = 1
 
-[node name="UniformSlot" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("1_1r4s0")
-
-[node name="UniformContour" type="Control" parent="UniformSlot"]
-anchors_preset = 0
-offset_left = 1408.0
-offset_top = 594.0
-offset_right = 1408.0
-offset_bottom = 594.0
+[node name="Render" type="TextureRect" parent="Canvas"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
+texture = ExtResource("4_render")
+expand_mode = 1
 
-[node name="Uniform" type="Sprite2D" parent="UniformSlot/UniformContour"]
-position = Vector2(31, -2)
-texture = ExtResource("5_vxjan")
-
-[node name="BlouseSlot" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("1_1r4s0")
-
-[node name="BlouseContour" type="Control" parent="BlouseSlot"]
-anchors_preset = 0
-offset_left = 1639.0
-offset_top = 616.0
-offset_right = 1639.0
-offset_bottom = 616.0
+[node name="Basket" type="TextureRect" parent="Canvas"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
+texture = ExtResource("5_basket")
+expand_mode = 1
 
-[node name="Blouse" type="Sprite2D" parent="BlouseSlot/BlouseContour"]
-position = Vector2(28, -39)
-texture = ExtResource("3_sh32p")
-
-[node name="BasketSlot" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("1_1r4s0")
-
-[node name="BasketContour" type="Control" parent="BasketSlot"]
-anchors_preset = 0
-offset_left = 1370.0
-offset_top = 988.0
-offset_right = 1370.0
-offset_bottom = 988.0
-mouse_filter = 2
-
-[node name="Basket" type="Sprite2D" parent="BasketSlot/BasketContour"]
-position = Vector2(1, 10)
-texture = ExtResource("4_cwatp")
-expand_mode = 3
-stretch_mode = 5
-
-[node name="TextureRect2" type="TextureRect" parent="."]
+[node name="BasketHighlight" type="TextureRect" parent="Canvas"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -317,16 +93,105 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("5_vxjan")
-expand_mode = 3
-stretch_mode = 5
+mouse_filter = 2
+texture = ExtResource("6_basket_hl")
+expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="TextureRect2"]
+[node name="BasketHit" type="Control" parent="Canvas"]
+layout_mode = 0
+offset_left = 1342.0
+offset_top = 868.0
+offset_right = 1568.0
+offset_bottom = 1046.0
+mouse_default_cursor_shape = 2
+
+[node name="Home" type="Control" parent="Canvas"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-expand_mode = 3
-stretch_mode = 5
+mouse_filter = 2
+
+[node name="Layer" type="TextureRect" parent="Canvas/Home"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_home_layer")
+expand_mode = 1
+
+[node name="Highlight" type="TextureRect" parent="Canvas/Home"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("8_home_hl")
+expand_mode = 1
+
+[node name="Hit" type="Control" parent="Canvas/Home"]
+layout_mode = 0
+offset_left = 1378.0
+offset_top = 378.0
+offset_right = 1498.0
+offset_bottom = 704.0
+mouse_default_cursor_shape = 2
+
+[node name="Work" type="Control" parent="Canvas"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Layer" type="TextureRect" parent="Canvas/Work"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_work_layer")
+expand_mode = 1
+
+[node name="Highlight" type="TextureRect" parent="Canvas/Work"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("10_work_hl")
+expand_mode = 1
+
+[node name="Hit" type="Control" parent="Canvas/Work"]
+layout_mode = 0
+offset_left = 1498.0
+offset_top = 386.0
+offset_right = 1700.0
+offset_bottom = 753.0
+mouse_default_cursor_shape = 2
+
+[node name="Hint" type="Label" parent="Canvas"]
+layout_mode = 0
+offset_left = 1100.0
+offset_top = 70.0
+offset_right = 1860.0
+offset_bottom = 116.0
+horizontal_alignment = 2
+theme_override_colors/font_color = Color(0.25, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 26
+text = "Clic en una prenda para ponértela  ·  Esc para salir"

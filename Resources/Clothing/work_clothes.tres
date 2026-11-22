@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ClothingData" load_steps=10 format=3]
+
+[ext_resource type="Script" uid="uid://dcv5vn3vb7u0w" path="res://Resources/Clothing/clothingdata.gd" id="1_data"]
+[ext_resource type="Texture2D" uid="uid://c2ibfm3xrfyy0" path="res://Assets/UI/Wardrobe/work_clean.png" id="2_clean"]
+[ext_resource type="Texture2D" uid="uid://c8ajjo2jpnb8n" path="res://Assets/UI/Wardrobe/work_dirty.png" id="3_dirty"]
+[ext_resource type="Texture2D" uid="uid://d08ghy7e1oi63" path="res://Assets/UI/Wardrobe/work_wet.png" id="4_wet"]
+[ext_resource type="Texture2D" uid="uid://0fcil6514erh" path="res://Assets/UI/Wardrobe/work_wet_dirty.png" id="5_wet_dirty"]
+[ext_resource type="Texture2D" uid="uid://b7pj23c4rbpgg" path="res://Assets/UI/Wardrobe/work_selection.png" id="6_selection"]
+[ext_resource type="Texture2D" uid="uid://b8s4e2epuer1q" path="res://Assets/UI/Wardrobe/render_work.png" id="7_render"]
+[ext_resource type="Texture2D" uid="uid://djfevsnxgo1yk" path="res://Assets/UI/Wardrobe/render_work_changing.png" id="8_render_changing"]
+
+[resource]
+script = ExtResource("1_data")
+item_name = "Uniforme"
+outfit_id = "work"
+clean = ExtResource("2_clean")
+dirty = ExtResource("3_dirty")
+wet = ExtResource("4_wet")
+wet_dirty = ExtResource("5_wet_dirty")
+selection = ExtResource("6_selection")
+render = ExtResource("7_render")
+render_changing = ExtResource("8_render_changing")
+metadata/_custom_type_script = "uid://dcv5vn3vb7u0w"

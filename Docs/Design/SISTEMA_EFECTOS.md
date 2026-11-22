@@ -188,7 +188,7 @@ Cada ficha usa tu plantilla: **Causas · Niveles · Impacto · Mitigación · Se
 **Secuela** ✅ 🟡: si el hambre duró ≥24 h, durante las 4 h siguientes comer falla el 20 %.
 
 #### SUCIEDAD (Maloliente) — dos capas 🔧 D12
-**Causas.** *Cuerpo:* >24 h sin bañarse · ropa mojada >6 h. *Boca:* >24 h sin cepillarse · **comida instantánea**.
+**Causas.** *Cuerpo:* >24 h sin bañarse (con ropa sucia puesta el contador corre al doble 🟡) · ropa mojada >6 h seguidas. *Boca:* >24 h sin cepillarse · **comida instantánea**.
 **Impacto:** los NPCs te evitan (🟡 50 % se niegan a conversar) · tu influencia o relación **−15 %** ✅ (el "−15 % de crédito social") · fichar sucia: 25 % de llamado de atención 🟡 · acceso prohibido a algunos sitios (🔴 P9).
 **Mitigación** ✅: **cuerpo → Bañarse · boca → Cepillarse** · las **Mentas** anulan la boca 3 h 🟡 · pasta de calidad (A 12 · B 8 · C 5 usos).
 **Secuela** ✅: durante 6 h tras limpiarte, los NPCs mantienen distancia.

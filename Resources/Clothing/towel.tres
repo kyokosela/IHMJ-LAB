@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ClothingData" load_steps=4 format=3]
+
+[ext_resource type="Script" uid="uid://dcv5vn3vb7u0w" path="res://Resources/Clothing/clothingdata.gd" id="1_data"]
+[ext_resource type="Texture2D" uid="uid://bfyqy67ik2bcn" path="res://Assets/UI/Wardrobe/render_towel.png" id="2_render"]
+
+[resource]
+script = ExtResource("1_data")
+item_name = "Toalla"
+outfit_id = "towel"
+render = ExtResource("2_render")
+metadata/_custom_type_script = "uid://dcv5vn3vb7u0w"

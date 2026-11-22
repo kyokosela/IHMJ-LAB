@@ -1,21 +1,25 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://xyia21ce8x85"]
+[gd_resource type="Resource" script_class="ItemData" load_steps=8 format=3 uid="uid://xyia21ce8x85"]
 
-[ext_resource type="Resource" uid="uid://c4vlc21elx4fq" path="res://Resources/SpriteStacks/Mayui/mayui_towel.tres" id="1_3cfi0"]
-[ext_resource type="Script" uid="uid://bhvlc64o0ato" path="res://Resources/Items/Behaviors/cloth_behavior.gd" id="2_cb0tm"]
-[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="3_3cfi0"]
-[ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="4_h3gi5"]
-[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="5_8kkfk"]
+[ext_resource type="Resource" uid="uid://c4vlc21elx4fq" path="res://Resources/SpriteStacks/Mayui/mayui_towel.tres" id="1_preset"]
+[ext_resource type="Resource" path="res://Resources/Clothing/towel.tres" id="2_clothing"]
+[ext_resource type="Script" uid="uid://bhvlc64o0ato" path="res://Resources/Items/Behaviors/cloth_behavior.gd" id="3_behavior"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="4_data"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="5_cc"]
+[ext_resource type="Resource" path="res://Resources/Items/Conditions/cleanliness_template.tres" id="6_clean"]
+[ext_resource type="Resource" path="res://Resources/Items/Conditions/wetness_template.tres" id="7_wet"]
 
-[sub_resource type="Resource" id="Resource_0tjmv"]
-script = ExtResource("2_cb0tm")
-preset = ExtResource("1_3cfi0")
+[sub_resource type="Resource" id="Resource_behavior"]
+script = ExtResource("3_behavior")
+preset = ExtResource("1_preset")
+clothing = ExtResource("2_clothing")
 can_decay = false
 metadata/_custom_type_script = "uid://bhvlc64o0ato"
 
 [resource]
-script = ExtResource("5_8kkfk")
-item_name = "_WORK_CLOTHES_"
-item_unique_name = "work_clothes"
+script = ExtResource("4_data")
+item_name = "_TOWEL_"
+item_unique_name = "towel_clothes"
 item_type = 2
-behavior = SubResource("Resource_0tjmv")
+behavior = SubResource("Resource_behavior")
+custom_conditions = Array[ExtResource("5_cc")]([ExtResource("6_clean"), ExtResource("7_wet")])
 metadata/_custom_type_script = "uid://b03xnf82gb26a"

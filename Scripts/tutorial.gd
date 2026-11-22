@@ -22,6 +22,8 @@ func _ready() -> void:
 		return
 
 	_connect_routine_interactables()
+	PlayerManager.outfit_changed.connect(_on_outfit_changed)
+	_on_outfit_changed(null)   # por si ya lleva el uniforme puesto
 
 	if not NarrativeFlags.has_flag(FLAG_INTRO_SHOWN):
 		NarrativeFlags.set_flag(FLAG_INTRO_SHOWN)
@@ -38,10 +40,13 @@ func _connect_routine_interactables() -> void:
 		match node.interaction_name:
 			"APT_SHOWER":
 				node.executed.connect(func(): NarrativeFlags.set_flag(FLAG_SHOWERED))
-			"APT_WARDROBE":
-				node.executed.connect(func(): NarrativeFlags.set_flag(FLAG_DRESSED))
 			"APT_FRIDGE":
 				node.executed.connect(func(): NarrativeFlags.set_flag(FLAG_ATE))
+
+## Cambiarse = ponerse el uniforme (no basta con abrir el armario).
+func _on_outfit_changed(_item) -> void:
+	if PlayerManager.get_outfit_id() == "work":
+		NarrativeFlags.set_flag(FLAG_DRESSED)
 
 func _on_door_entered(body) -> void:
 	if not body is Player:

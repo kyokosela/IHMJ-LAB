@@ -47,6 +47,7 @@ func new_game() -> void:
 
 	SaveManager.clear()
 	PlayerManager.reset_engine_state()
+	PlayerManager.reset_outfits()   # ropa inicial: ropa de casa puesta y el uniforme colgado
 	TimeManager.minutes = 480  # 08:00
 	
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))

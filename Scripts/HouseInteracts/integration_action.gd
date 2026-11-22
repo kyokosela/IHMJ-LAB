@@ -165,8 +165,10 @@ func custom_execute() -> void:
 		ActionType.BATHE:
 			_do_bathe()
 		ActionType.CHANGE_CLOTHES:
-			TimeManager.add_to_current_time("00:05")
-			_show_feedback("Cambiaste de ropa")
+			# Completado: abre la UI del armario (mouse); ella suma los 2 min y cambia la ropa de Mayui.
+			var armario = get_tree().get_first_node_in_group("wardrobe_ui")
+			if armario != null:
+				armario.open()
 		# Effects - Apply
 		ActionType.APPLY_HUNGER:
 			_apply_effect(EFFECT_HUNGER, "Hambre aplicada")

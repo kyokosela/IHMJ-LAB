@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="CustomCondition" load_steps=9 format=3]
+
+[ext_resource type="Resource" uid="uid://c3fn8pext66na" path="res://Resources/Items/States/ClothStates/wetness_dry.tres" id="1_dry"]
+[ext_resource type="Script" uid="uid://2ayeg7yj87f6" path="res://Resources/Items/Conditions/condition_threshold.gd" id="2_threshold"]
+[ext_resource type="Script" uid="uid://df2q5ei6ve3yq" path="res://Resources/Items/Conditions/threshold_entry.gd" id="3_entry"]
+[ext_resource type="Resource" uid="uid://78e47ai1wrdv" path="res://Resources/Items/States/ClothStates/wetness_wet.tres" id="4_wet"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="5_cc"]
+
+[sub_resource type="Resource" id="Resource_dry_threshold"]
+script = ExtResource("3_entry")
+max_value = 30.0
+state = ExtResource("1_dry")
+
+[sub_resource type="Resource" id="Resource_wet_threshold"]
+script = ExtResource("3_entry")
+max_value = 100.0
+state = ExtResource("4_wet")
+
+[sub_resource type="Resource" id="Resource_threshold"]
+script = ExtResource("2_threshold")
+thresholds = Array[ExtResource("3_entry")]([SubResource("Resource_dry_threshold"), SubResource("Resource_wet_threshold")])
+default_state = ExtResource("1_dry")
+
+[resource]
+script = ExtResource("5_cc")
+condition = "wetness"
+value = 0.0
+base_decay_time = 0
+condition_threshold = SubResource("Resource_threshold")
+can_decay = false

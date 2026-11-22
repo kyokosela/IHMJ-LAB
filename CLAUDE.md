@@ -26,6 +26,7 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   en 0 FALLA (nada se duplica ni se pierde, ni al salir de la zona con la estufa cocinando). Falta del Paso 2: armario real (`ApartamentD.tscn`), marcar
   CLOTHES/TEETH en `TaskManager`, puerta con `task_lists` y retirar `tutorial.gd`. Pendientes del dev: P25–P31 en `DECISIONES_Y_PENDIENTES.md`.
   Diseñados y pendientes de OK: Desmayo por lugar y Sueño acumulado.
+- Ropa (2026-11-22): `PlayerManager` guarda lo que lleva Mayui (`outfit`) y lo colgado (`wardrobe`); cada prenda es un `Item` tipo CLOTH con `cleanliness` y `wetness`; la ropa se ensucia/seca con el reloj y afecta Suciedad, Debilitamiento y Estrés (números propuestos, P45). La UI del armario es `UI/Containers/wardrobe_ui.tscn` (mouse, 1.5 s de cambio, 2 min) con el arte de `Assets/UI/Wardrobe/`. Bañarse deja la toalla. PENDIENTE: espejo del lavamanos (P49), cesta (P47), sprites de casa/Outfit1 (P48), eventos que ensucian (P46). `Tools/probar_ropa.gd` debe terminar en 0 FALLA.
 - Flujo del juego (2026-11-22): `Tools/probar_flujo.gd` (debe terminar en 0 FALLA) cubre aparición por zona
   (`SpawnPoint.from_zone`), Mayui quieta con UI abierta (`GameManager.modal_count += 1` al abrir y `-= 1` al cerrar),
   diálogos, asistencia, cambio de zona (2 s en total, `ZoneManager.ZONE_FADE_TIME`, con Mayui quieta hasta que aclara) y acciones
@@ -76,6 +77,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_flujo.gd`
 - Pruebas de crafteos de la cocina (nada se duplica ni se pierde, regla de lo cocinado, olla, estufa, persistencia; tarda ~25 s):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_crafteos.gd`
+- Pruebas de la ropa y el armario (modelo, efectos, UI; tarda ~15 s):
+  `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_ropa.gd`
 - Si algo no se refleja en Godot: cerrar Godot, borrar la carpeta oculta `.godot/` y reabrir.
 
 ## MODELOS (plan Pro, ahorrar tokens)

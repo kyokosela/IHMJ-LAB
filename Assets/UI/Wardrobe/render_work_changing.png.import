@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xnrqqei5t7u8"
-path="res://.godot/imported/uniform_wet.png-41b7c4ade2639d6711c99ae6f54633d8.ctex"
+uid="uid://djfevsnxgo1yk"
+path="res://.godot/imported/render_work_changing.png-cb9abb51724a26ba7fbe6a29201292a4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI/Wardrobe/uniform_wet.png"
-dest_files=["res://.godot/imported/uniform_wet.png-41b7c4ade2639d6711c99ae6f54633d8.ctex"]
+source_file="res://Assets/UI/Wardrobe/render_work_changing.png"
+dest_files=["res://.godot/imported/render_work_changing.png-cb9abb51724a26ba7fbe6a29201292a4.ctex"]
 
 [params]
 

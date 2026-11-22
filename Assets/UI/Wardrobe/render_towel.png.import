@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://m536wj2mt2j"
-path="res://.godot/imported/uniform_clean.png-72f285c28697f9064597504f8151669b.ctex"
+uid="uid://bfyqy67ik2bcn"
+path="res://.godot/imported/render_towel.png-739c107c98aecb5a1951a13f87365fba.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI/Wardrobe/uniform_clean.png"
-dest_files=["res://.godot/imported/uniform_clean.png-72f285c28697f9064597504f8151669b.ctex"]
+source_file="res://Assets/UI/Wardrobe/render_towel.png"
+dest_files=["res://.godot/imported/render_towel.png-739c107c98aecb5a1951a13f87365fba.ctex"]
 
 [params]
 

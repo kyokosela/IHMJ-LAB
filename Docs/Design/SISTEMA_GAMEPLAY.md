@@ -135,7 +135,7 @@ Se gasta con cada acción (según su ficha) y al caminar entre zonas (§5.5). Se
 | **Dormir** | Activa | ≥ mínimo (§5.4) | + según horas | −1 nivel de Estrés · Insomnio si duerme menos del mínimo | 1 vez al día · cama (🟡 tipo C por defecto) · guarda la partida |
 | **Bañarse** | Activa | 25 min | −5 | Elimina Suciedad (cuerpo) · agua caliente: −1 Estrés · agua fría: Estrés (prob.) y Atenta breve (D4) | requiere jabón (usos limitados) · cooldown 5 h |
 | **Cepillarse** | Activa | 🟡 5 min | 🟡 0 | Elimina Suciedad (boca) · 🟡 +2 Salud (prob., una vez al día) | pasta con usos (A 12 · B 8 · C 5) · 🟡 cooldown hasta el día siguiente |
-| **Cambiarse** (armario) | Activa | 🟡 5 min | 🟡 0 | Cambia la ropa (limpia / sucia / mojada / seca) | uniforme obligatorio para trabajar |
+| **Cambiarse** (armario) | Activa | ✅ 2 min | 🟡 0 | Cambia la ropa (limpia / sucia / mojada / seca) | uniforme obligatorio para trabajar |
 | **Cocinar** | Pasiva/Activa | 2 min por crafteo + receta | −1 por crafteo | Genera comida y bebida (§5.4) | requiere utensilios de la estación |
 | **Comer** | Activa | 🟡 10 min | — | según el ítem (§5.4) | con Inapetencia: éxito −50 % |
 | **Beber café** | Activa | 🟡 5 min | — | Hiperactividad 2 h (caliente = más efectivo) | si ya hay Hiperactividad → Insomnio (D2) |

@@ -17,7 +17,14 @@ var print_mode : bool = true
 var log_file_name : String
 var is_on_tutorial : bool
 var game_started : bool = false ## true una vez que new_game() ya corrió; evita reiniciar al recargar escenas
-var modal_count : int = 0 ## > 0 mientras haya una UI modal abierta (ej. alarma de dormir): bloquea las interacciones
+signal input_block_changed(blocked: bool) ## se emite al abrir o cerrar una UI modal (PC, alarma, arcade...)
+
+## > 0 mientras haya una UI modal abierta (alarma de dormir, PC, arcade, mercado...). Quien abre una UI
+## hace modal_count += 1 y al cerrarla modal_count -= 1: Mayui se queda quieta y no interactua con el mundo.
+var modal_count : int = 0 :
+	set(value):
+		modal_count = maxi(value, 0)
+		input_block_changed.emit(is_input_blocked())
 
 ## true si el jugador NO debe poder interactuar con el mundo ahora mismo
 ## (hay un dialogo en curso o una UI modal abierta).

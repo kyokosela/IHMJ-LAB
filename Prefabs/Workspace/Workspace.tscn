@@ -10,7 +10,7 @@ shader_parameter/blur_amount = 2.0
 shader_parameter/tint_color = Color(1, 1, 1, 0.2)
 
 [node name="Workspace" type="CanvasLayer"]
-follow_viewport_enabled = true
+follow_viewport_enabled = false
 
 [node name="Blur" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_ixvs8")
@@ -29,10 +29,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -480.0
-offset_top = -300.0
-offset_right = 480.0
-offset_bottom = 240.0
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
 grow_horizontal = 2
 grow_vertical = 2
 

@@ -55,7 +55,14 @@ func _process_action_stress_risk() -> void:
 func _ready() -> void:
 	super()
 	# Fix: Añadido Engine.is_editor_hint() para evitar acceder a EventManager en @tool mode antes de que los autoloads estén listos
-	if EventManager and not Engine.is_editor_hint() and EventManager.is_event_exist(interaction_name.to_upper() + "_COOLDOWN") : is_cooldown = true
+	if EventManager and not Engine.is_editor_hint():
+		var cooldown_event : Event = EventManager.get_event(interaction_name.to_upper() + "_COOLDOWN")
+		if cooldown_event != null:
+			# Volvimos a esta escena con el cooldown en curso (la escena se recrea al cambiar de zona):
+			# sigue en cooldown y se reinicia al terminar. Antes quedaba usable al instante, o muerta para siempre.
+			is_cooldown = true
+			cooldown_executed = is_cooldown_at_execute
+			cooldown_event.event_executed.connect(disable_cooldown, CONNECT_ONE_SHOT)
 	
 	# Fix: Añadidos checks para evitar acceder a la señal end_chain en instancias Resource placeholder en @tool mode
 	if effect_messages and not Engine.is_editor_hint(): effect_messages.end_chain.connect(_on_end_chain)

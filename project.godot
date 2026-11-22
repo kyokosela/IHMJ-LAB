@@ -117,7 +117,7 @@ audio/channel_defaults={
 "volume": 0.0
 }
 }
-translation/enabled=true
+translation/enabled=false
 translation/file_mode=1
 translation/translation_folder="res://Textfiles/DialogicTranslations"
 translation/save_mode=0

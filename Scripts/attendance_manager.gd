@@ -27,6 +27,7 @@ var warnings: Array[Dictionary] = []
 
 var is_at_work: bool = false
 var arrived_today: bool = false
+var absence_recorded_today: bool = false ## una falta cuenta una sola vez por dia (la anota el evento de las 17:00 o la medianoche)
 var left_early_today: bool = false
 var current_day_on_time: bool = true
 
@@ -89,9 +90,10 @@ func is_lunch_break() -> bool:
 	return current >= lunch_start and current < lunch_end
 
 func record_absence() -> void:
-	if arrived_today:
+	if arrived_today or absence_recorded_today:
 		return
 
+	absence_recorded_today = true
 	absence_count += 1
 	absence_recorded.emit(absence_count)
 	_add_warning("ABSENCE", "Ausencia dia %d" % TimeManager.day)
@@ -147,9 +149,8 @@ func _check_absence_consequences() -> void:
 			total_deductions_this_week += deduction
 			salary_deduction_applied.emit(deduction, "ABSENCES")
 			warning_issued.emit("ABSENCE_SALARY_CUT", 3)
-		_:
-			if absence_count >= ABSENCE_FIRED:
-				fired.emit("EXCESSIVE_ABSENCES")
+		ABSENCE_FIRED:
+			fired.emit("EXCESSIVE_ABSENCES")   # una sola vez: antes se repetia con cada falta nueva
 
 func _apply_late_penalty() -> void:
 	total_deductions_this_week += LATE_SALARY_PENALTY
@@ -168,10 +169,13 @@ func _add_warning(type: String, description: String) -> void:
 	})
 
 func _on_day_changed(_day: int) -> void:
-	var previous_week_day := (int(TimeManager.week_day) + 6) % 7
-	if previous_week_day >= 0 and previous_week_day <= 4 and not arrived_today:
+	# Dentro de esta senal week_day todavia es el dia que TERMINA (antes se restaba uno de mas:
+	# contaba el sabado como laboral y se saltaba el lunes).
+	var ended_week_day := int(TimeManager.week_day)
+	if ended_week_day >= 0 and ended_week_day <= 4 and not arrived_today:
 		record_absence()
 
+	absence_recorded_today = false
 	arrived_today = false
 	is_at_work = false
 	left_early_today = false

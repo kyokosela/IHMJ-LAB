@@ -1,21 +1,21 @@
 {
 "@path": "res://addons/dialogic/Resources/character.gd",
 "@subpath": NodePath(""),
-"&_translation_id": "veda_char",
-"&color": Color(0.5, 0.2, 0.6, 1),
-"&custom_info": {
+&"_translation_id": "veda_char",
+&"color": Color(0.5, 0.2, 0.6, 1),
+&"custom_info": {
 "prefix": "",
 "sound_mood_default": "",
 "sound_moods": {},
 "style": "test_style",
 "suffix": ""
 },
-"&default_portrait": "",
-"&description": "Supervisora de toda la empresa. Uva. Fria y precisa.",
-"&display_name": "Veda",
-"&mirror": false,
-"&nicknames": ["V.", "Supervisora"],
-"&offset": Vector2(0, 0),
-"&portraits": {},
-"&scale": 1.0
+&"default_portrait": "",
+&"description": "Supervisora de toda la empresa. Uva. Fria y precisa.",
+&"display_name": "Veda",
+&"mirror": false,
+&"nicknames": ["V.", "Supervisora"],
+&"offset": Vector2(0, 0),
+&"portraits": {},
+&"scale": 1.0
 }

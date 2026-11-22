@@ -24,10 +24,10 @@ func _ready() -> void:
 			optional_camera_node = auto_camera
 		PlayerManager.player.reparent(self, false)
 		
-		for mark : SpawnPoint in get_tree().get_nodes_in_group("spawn_point") :
-			if mark.entity == "Player":
-				PlayerManager.player.movement.tile_destination = mark.global_position
-				PlayerManager.player.global_position = mark.global_position
+		var spawn : SpawnPoint = _find_player_spawn()
+		if spawn != null:
+			PlayerManager.player.movement.tile_destination = spawn.global_position
+			PlayerManager.player.global_position = spawn.global_position
 		if optional_camera_node: optional_camera_node.reparent(PlayerManager.player, false)
 	
 	if PlayerManager.player: 
@@ -38,6 +38,21 @@ func _ready() -> void:
 		entities[entity.name] = entity
 		entity.world = self
 		entity_created.emit(entity)
+
+## Donde aparece Mayui: el punto marcado con la zona de la que viene (cerca de la puerta por la que salio);
+## si no hay uno para esa zona, el general (from_zone = -1); y si tampoco, cualquiera de Mayui.
+func _find_player_spawn() -> SpawnPoint:
+	var general : SpawnPoint = null
+	var any_player_spawn : SpawnPoint = null
+	for mark : SpawnPoint in get_tree().get_nodes_in_group("spawn_point"):
+		if mark.entity != "Player":
+			continue
+		any_player_spawn = mark
+		if mark.from_zone >= 0 and mark.from_zone == ZoneManager.previous_zone:
+			return mark
+		if mark.from_zone < 0:
+			general = mark
+	return general if general != null else any_player_spawn
 
 func kill_entity(entity: Entity) -> void:
 	if !entities.has(entity): return

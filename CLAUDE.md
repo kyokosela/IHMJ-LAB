@@ -20,6 +20,10 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   correr `Tools/probar_efectos.gd` (debe terminar en 0 FALLA). En el juego, **F3** abre/cierra el panel de depuración
   (efectos, cordura, reloj). Pendiente de ese sistema: Desmayo, Desahogo, Suciedad en dos capas, ítems de medicina.
   Siguiente: Paso 2 = tutorial sobre `TaskManager` (agregar TEETH a `TutorialDoor.tres`, retirar `tutorial.gd`).
+- Flujo del juego (2026-11-22): `Tools/probar_flujo.gd` (debe terminar en 0 FALLA) cubre aparición por zona
+  (`SpawnPoint.from_zone`), Mayui quieta con UI abierta (`GameManager.modal_count += 1` al abrir y `-= 1` al cerrar),
+  diálogos, asistencia y acciones del apartamento. La historia de relleno está APAGADA: `NarrativeEventHandler.story_enabled = false`.
+  La traducción de Dialogic está desactivada (los ids de los `.dtl` se repiten entre archivos; no activarla sin ids únicos).
 - Existe `Scenes/Playground_Integration.tscn` (herramienta de pruebas, desordenada). Congelada.
 - Pendiente menor: 3 `.tres` con UID duplicado (`home_meal`, `ingredients_bag`, `ingredients_unpack`).
 - Próximo paso: ver `NEXT.md` si existe.
@@ -59,6 +63,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   Buscar líneas `SCRIPT ERROR` / `ERROR`. Ruido conocido e ignorable: aviso del dock "EditorView" de Dialogic.
 - Pruebas automáticas de efectos (reloj y cambio de día reales; imprime `FALLA` por cada error y al final el total):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_efectos.gd`
+- Pruebas del flujo del juego (zonas, UI, diálogos, asistencia, apartamento; tarda ~40 s):
+  `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_flujo.gd`
 - Si algo no se refleja en Godot: cerrar Godot, borrar la carpeta oculta `.godot/` y reabrir.
 
 ## MODELOS (plan Pro, ahorrar tokens)

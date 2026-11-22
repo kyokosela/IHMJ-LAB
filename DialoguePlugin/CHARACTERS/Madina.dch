@@ -1,21 +1,21 @@
 {
 "@path": "res://addons/dialogic/Resources/character.gd",
 "@subpath": NodePath(""),
-"&_translation_id": "madina_char",
-"&color": Color(0.9, 0.6, 0.3, 1),
-"&custom_info": {
+&"_translation_id": "madina_char",
+&"color": Color(0.9, 0.6, 0.3, 1),
+&"custom_info": {
 "prefix": "",
 "sound_mood_default": "",
 "sound_moods": {},
 "style": "test_style",
 "suffix": ""
 },
-"&default_portrait": "",
-"&description": "Compañera de trabajo. Misma posicion que Mayui. Calida y nerviosa.",
-"&display_name": "Madina",
-"&mirror": false,
-"&nicknames": ["Madi"],
-"&offset": Vector2(0, 0),
-"&portraits": {},
-"&scale": 1.0
+&"default_portrait": "",
+&"description": "Compañera de trabajo. Misma posicion que Mayui. Calida y nerviosa.",
+&"display_name": "Madina",
+&"mirror": false,
+&"nicknames": ["Madi"],
+&"offset": Vector2(0, 0),
+&"portraits": {},
+&"scale": 1.0
 }

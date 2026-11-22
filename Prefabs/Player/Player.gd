@@ -20,12 +20,18 @@ func _initialize() -> void:
 	
 	Dialogic.timeline_started.connect(_on_dialogic_timeline_started)
 	Dialogic.timeline_ended.connect(_on_dialogic_timeline_ended)
-	
+	GameManager.input_block_changed.connect(_on_input_block_changed)
+
 func _on_dialogic_timeline_started():
 	movement.can_move = false
-	
+
 func _on_dialogic_timeline_ended():
-	movement.can_move = true
+	# una UI modal abierta (PC, alarma...) mantiene a Mayui quieta aunque termine un dialogo
+	movement.can_move = GameManager.modal_count <= 0
+
+## Al abrir o cerrar una UI modal (GameManager.modal_count): Mayui se queda quieta mientras haya una abierta.
+func _on_input_block_changed(blocked: bool) -> void:
+	movement.can_move = not blocked
 
 #TODO: borrar this shit :sob:
 func _unhandled_input(event: InputEvent) -> void:

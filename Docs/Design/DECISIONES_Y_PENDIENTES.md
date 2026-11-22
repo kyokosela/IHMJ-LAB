@@ -56,6 +56,16 @@
 | **P12** | **Camas A/B**: el bono de estrés (−6 % / −2 %) no tiene traducción a niveles | ✅ **Cerrado** (E10): A +75 %, B +25 % de un −1 extra |
 | **P13** | Cómo se consiguen **la cama, el despertador y el teléfono** (Dormir pide "objeto en inventario") | todo jugador tiene cama tipo C y despertador |
 | **P14** | Números de **tareas extra / token de ascensión** y su costo de Estrés (dijiste "balancéalo") | 3 tareas extra |
+| **P15** | **Desmayo por energía 0** (tu prueba del 2026-11-22): al llegar a 0 fuera de casa solo recupera hasta el punto de Debilitamiento (energía 15) y adquiere Debilitamiento. Falta: cuánto tiempo pasa inconsciente, dónde despierta, qué pasa con lo pendiente del día y si cuenta como falta | propuesta en el chat; sin implementar |
+| **P16** | **Regla para volver a dormir.** Hoy la cama se bloquea 12 h tras despertar (o hasta medianoche): es tu "una vez al día". Falta decidir si se cambia por "puedes dormir si estás cansada y llevas X horas despierta" y los **mensajes** que expliquen por qué no se puede dormir | se deja como está + mensajes claros (sin implementar) |
+| **P17** | **Avisos de peligro** al estar fuera muy tarde o con energía baja (textos de Mayui) | los escribes tú |
+| **P18** | La **nevera de relleno** (`Apartment.tscn`) da +10 de energía cada 10 min **sin límite**: por eso nunca llegabas a 0. Hasta tener tu cocina real: ¿cooldown o exigir Hambre? | sin tocar hasta que decidas |
+| **P19** | **Sistema de NPCs importantes**: saber si ya los conoces y cuánto has hablado con ellos (los diálogos de Madina suponen que ya se conocen). Existe `RelationshipManager` (puntos y niveles) pero los diálogos no lo consultan | se escribe junto con el guion |
+| **P20** | **Horarios de presencia** de personajes (X personaje está en X sitio durante una franja de tiempo); el casero ya funciona por zona (`event_zones`) | ampliar `event_zones` con franjas |
+| **P21** | **Fichaje con la recepcionista**: fichar la entrada activa lo que toca ese día (y sin fichar no abre el PC); fichar la salida antes de hora avisa "Aún te quedan X horas… no te pagarán lo trabajado sin permiso" mostrando S/ con permiso | F4 |
+| **P22** | **Renta y casero**: el casero dice "domingo al mediodía" pero el diseño dice miércoles 17:00; no cobra ni bloquea el apartamento | F4 |
+| **P23** | **Dinero sin trabajar**: el salario sube el viernes y al cambiar de semana aunque no hayas trabajado | F4 (#14) |
+| **P24** | **Guía de cordura** de una página (qué la sube y qué la baja) | la preparo cuando la pidas |
 
 ---
 

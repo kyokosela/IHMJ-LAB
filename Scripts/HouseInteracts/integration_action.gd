@@ -231,6 +231,7 @@ func custom_execute() -> void:
 		ActionType.EAT_FOOD:
 			PlayerManager.remove_effect("HUNGER")
 			PlayerManager.increase_stat("ENERGY", 10.0)
+			PlayerManager.register_meal("HOME")   # cuenta como comida casera para la Rutina saludable
 			TimeManager.add_to_current_time("00:10")
 			_show_feedback("Comiste algo (+10 energía, 10 min)")
 		ActionType.OPEN_ARCADE:
@@ -351,7 +352,10 @@ func _open_overlay(scene: PackedScene, closed_signal: String) -> void:
 	get_tree().root.add_child(canvas)
 	var ui := scene.instantiate()
 	canvas.add_child(ui)
-	ui.connect(closed_signal, canvas.queue_free.bind())
+	GameManager.modal_count += 1   # Mayui se queda quieta mientras la pantalla esta abierta
+	ui.connect(closed_signal, func() -> void:
+		GameManager.modal_count -= 1
+		canvas.queue_free())
 
 func _talk_madina() -> void:
 	match TimeManager.day:

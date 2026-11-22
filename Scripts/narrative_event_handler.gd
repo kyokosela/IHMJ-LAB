@@ -19,6 +19,15 @@ var event_zones : Dictionary = {
 }
 var rent_overdue_zones : Array = [ZoneManager.ZONES.LOBBY] # advertencias del casero por renta vencida
 
+## Historia de relleno APAGADA hasta que Ramiro escriba el guion (pidio evitar cosas inventadas).
+## Los eventos de `story_events` no se ejecutan y tampoco el despido; para encenderla: story_enabled = true.
+## El casero (renta), el arcade y el mercado NO son relleno: siguen funcionando.
+var story_enabled : bool = false
+var story_events : Array[String] = [
+	"DAY1_VEDA_APPEAR", "DAY2_MADINA_CAFE", "DAY3_MADINA_TENSION", "DAY4_MADINA_OBJECT",
+	"DAY5_EVALUATION", "DAY7_MADINA_LAUNDRY", "DAY7_WEEK_PREP",
+]
+
 var _pending : Array[Dictionary] = [] ## eventos que ya llegaron a su hora pero esperan a que Mayui este en su zona
 
 func _ready() -> void:
@@ -74,6 +83,9 @@ func _on_day_changed(_day: int) -> void:
 #endregion
 
 func _on_event_activated(event_name: String) -> void:
+	if not story_enabled and event_name in story_events:
+		print("[Eventos] '%s' es historia de relleno: apagada (story_enabled = false)" % event_name)
+		return
 	var zones : Array = event_zones.get(event_name, [])
 	_deliver(event_name, zones, _run_event.bind(event_name))
 
@@ -221,6 +233,8 @@ func _rent_overdue_now(warnings: int) -> void:
 			Dialogic.start("casero_rent_final")
 
 func _on_fired(reason: String) -> void:
+	if not story_enabled:
+		return   # el despido (dialogo y correo) todavia no se necesita
 	NarrativeFlags.set_flag("fired")
 	var timeline := "fired_absence"
 	match reason:

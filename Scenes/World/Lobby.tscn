@@ -23,6 +23,12 @@ position = Vector2(100, 100)
 script = ExtResource("2")
 entity = "Player"
 
+[node name="SpawnFromOffice" type="Marker2D" parent="." groups=["spawn_point"]]
+position = Vector2(180, 100)
+script = ExtResource("2")
+entity = "Player"
+from_zone = 2
+
 [node name="DoorToOffice" type="Area2D" parent="."]
 position = Vector2(220, 100)
 script = ExtResource("3")

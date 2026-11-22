@@ -4,12 +4,42 @@
 [ext_resource type="Script" uid="uid://c5tmcnj0wdxvt" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
 [ext_resource type="Script" uid="uid://ptp5mp2uvryo" path="res://Scripts/HouseInteracts/integration_action.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://ctagwp38abn4u" path="res://Prefabs/walls/floors.tscn" id="4"]
+[ext_resource type="Script" uid="uid://big4o7sjh0g0y" path="res://Scripts/HouseInteracts/bathe.gd" id="5"]
+[ext_resource type="Script" uid="uid://c2qbhsn6tgmrc" path="res://Resources/StringChain/string_chain.gd" id="6"]
+[ext_resource type="Script" uid="uid://cdqqyuliu6jyp" path="res://Resources/StringChain/string_chain_array.gd" id="7"]
 
 [sub_resource type="RectangleShape2D" id="Shape_interact"]
 size = Vector2(48, 48)
 
 [sub_resource type="RectangleShape2D" id="Shape_door"]
 size = Vector2(32, 64)
+
+[sub_resource type="Resource" id="Lines_shower_cooldown"]
+script = ExtResource("7")
+string_list = Array[String](["Ya me bañé hace poco.", "Otra ducha ahora no hace falta.", "Mejor espero un rato."])
+
+[sub_resource type="Resource" id="Chain_shower_cooldown"]
+script = ExtResource("6")
+string_list = Array[ExtResource("7")]([SubResource("Lines_shower_cooldown")])
+cooldown_message = "Basta de ducha por ahora."
+
+[sub_resource type="Resource" id="Lines_no_energy"]
+script = ExtResource("7")
+string_list = Array[String](["No tengo suficiente energía."])
+behaviour = 3
+
+[sub_resource type="Resource" id="Chain_no_energy"]
+script = ExtResource("6")
+string_list = Array[ExtResource("7")]([SubResource("Lines_no_energy")])
+
+[sub_resource type="Resource" id="Lines_sink_clean"]
+script = ExtResource("7")
+string_list = Array[String](["No lo necesito ahora."])
+behaviour = 3
+
+[sub_resource type="Resource" id="Chain_sink_clean"]
+script = ExtResource("6")
+string_list = Array[ExtResource("7")]([SubResource("Lines_sink_clean")])
 
 [node name="Apartment" type="Node2D" unique_id=380701902 node_paths=PackedStringArray("optional_camera_node")]
 script = ExtResource("1")
@@ -24,6 +54,12 @@ zoom = Vector2(5, 5)
 position = Vector2(100, 100)
 script = ExtResource("2")
 entity = "Player"
+
+[node name="SpawnFromLobby" type="Marker2D" parent="." groups=["spawn_point"]]
+position = Vector2(160, 100)
+script = ExtResource("2")
+entity = "Player"
+from_zone = 1
 
 [node name="Bed" type="Area2D" parent="." unique_id=1390192927 groups=["Interactable"]]
 position = Vector2(60, 60)
@@ -44,9 +80,15 @@ text = "Cama"
 
 [node name="Shower" type="Area2D" parent="." unique_id=511588362 groups=["Interactable"]]
 position = Vector2(120, 60)
-script = ExtResource("3")
-action_type = 19
+script = ExtResource("5")
 interaction_name = "APT_SHOWER"
+is_cooldown_at_execute = true
+cooldown_timer_message = SubResource("Chain_shower_cooldown")
+stat_req_list = Dictionary[String, int]({
+"ENERGY": 10
+})
+stat_messages = SubResource("Chain_no_energy")
+time_cost = "00:20"
 shape = SubResource("Shape_interact")
 display_text = "Bañarse"
 reusable = true
@@ -98,6 +140,8 @@ position = Vector2(120, 140)
 script = ExtResource("3")
 action_type = 31
 interaction_name = "APT_SINK"
+effect_list = Array[String](["SMELLY"])
+effect_messages = SubResource("Chain_sink_clean")
 shape = SubResource("Shape_interact")
 display_text = "Lavarse"
 reusable = true

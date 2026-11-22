@@ -33,6 +33,8 @@ func _set_action(text: String) -> void:
 
 func _connect_routine_interactables() -> void:
 	for node in get_tree().get_nodes_in_group("Interactable"):
+		if not "interaction_name" in node:
+			continue   # los contenedores reales (cocina) no son acciones y no tienen interaction_name
 		match node.interaction_name:
 			"APT_SHOWER":
 				node.executed.connect(func(): NarrativeFlags.set_flag(FLAG_SHOWERED))

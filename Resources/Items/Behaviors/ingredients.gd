@@ -31,3 +31,6 @@ func use(_item: Item) -> void:
 	EventManager.reset_lapse_event("AUTO_HUNGER_LAPSE")
 	# Cuenta como comida casera para la Rutina saludable; servida caliente baja 1 nivel de Estres.
 	PlayerManager.register_meal("HOME", _item.has_state("hot"))
+	# Tutorial: comer es la tarea COOK de la puerta (igual que bathe.gd marca BATHE)
+	if TaskManager.is_task_list_active("TUTORIAL_DOOR"):
+		TaskManager.done_task("TUTORIAL_DOOR", "COOK")

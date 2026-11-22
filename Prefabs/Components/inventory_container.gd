@@ -107,9 +107,9 @@ func use_item_at(slot_index: int):
 	if item == null: return
 	var behavior = item.data.behavior
 	print(behavior.can_use(item))
-	if not behavior.can_use(item) or item.data.uses <= 0: return
+	if not behavior.can_use(item) or item.uses_left <= 0: return
 	behavior.use(item)
-	if item.data.uses <= 0:
+	if item.uses_left <= 0:
 		if item.data.consume_after_use:
 			inventory.remove_item_at(slot_index)
 

@@ -83,6 +83,18 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 		"origin_node": self
 	}
 
+## Completado: la UI no tenia forma de USAR un objeto (solo la tecla de depuracion `test`). Clic derecho o doble
+## clic sobre un objeto de TUS manos lo usa (comer, beber...) con el use_item_at que ya existia.
+func _gui_input(event: InputEvent) -> void:
+	if item == null or parent_inventory == null: return
+	if not (event is InputEventMouseButton and event.pressed): return
+	var quiere_usar : bool = event.button_index == MOUSE_BUTTON_RIGHT \
+			or (event.button_index == MOUSE_BUTTON_LEFT and event.double_click)
+	if not quiere_usar: return
+	var player_inventory = PlayerManager.player.inventory if PlayerManager.player else null
+	if player_inventory != null and parent_inventory == player_inventory.inventory:
+		player_inventory.use_item_at(slot_index)
+
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 	return typeof(data) == TYPE_DICTIONARY and data.has("inventory") and data.has("index")
 

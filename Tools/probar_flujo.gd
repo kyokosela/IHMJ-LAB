@@ -40,7 +40,9 @@ func _initialize() -> void:
 	await _t_dialogos()
 	_t_historia()
 	_t_asistencia()
+	await _t_transicion()
 	await _t_apartamento()
+	await _t_cocina()
 	print("=== %d comprobaciones OK, %d con FALLA ===" % [passed, failed])
 	quit(1 if failed > 0 else 0)
 
@@ -184,6 +186,50 @@ func _t_asistencia() -> void:
 	att.fired.disconnect(cb)
 	att.absence_count = 0
 
+# ------------------------------------------------------------------ G. cambio de zona
+func _t_transicion() -> void:
+	print("G. Cambio de zona: Mayui quieta y 2 s en total")
+	var tr = root.get_node("TransitionManager")
+	# un solo fundido a la vez
+	var emitidos := [0]
+	var cb := func() -> void: emitidos[0] += 1
+	tr.transition_finished.connect(cb)
+	tr.fadeIn(0.4)
+	await create_timer(0.1).timeout
+	tr.fadeOut(0.4)
+	await create_timer(0.7).timeout
+	tr.transition_finished.disconnect(cb)
+	_check("Dos fundidos seguidos: solo el ultimo avisa y la pantalla queda clara", emitidos[0] == 1 and tr.color_rect.color.a < 0.01, "avisos %d, alfa %.2f" % [emitidos[0], tr.color_rect.color.a])
+	# cambio de zona de verdad: Apartamento -> Lobby
+	gm.modal_count = 0
+	zm.current_zone = 0
+	zm.previous_zone = -1
+	var escena : Node = (load("res://Scenes/World/Apartment.tscn") as PackedScene).instantiate()
+	root.add_child(escena)
+	current_scene = escena
+	await create_timer(1.3).timeout          # que termine el fundido de entrada de la escena
+	var mov = pm.player.movement
+	var t0 := Time.get_ticks_msec()
+	zm.change_zone(1)
+	_check("Al tocar la puerta Mayui queda quieta", not mov.can_move and gm.modal_count == 1)
+	zm.change_zone(2)                         # una puerta pisada otra vez durante el viaje no cuenta
+	_check("Una segunda puerta durante el viaje se ignora", gm.modal_count == 1 and zm.current_zone == 1, "zona %d" % zm.current_zone)
+	await create_timer(1.3).timeout           # ya oscuro y con la escena cambiada: sigue quieta
+	_check("A mitad del viaje sigue quieta", not mov.can_move and gm.modal_count == 1)
+	while gm.modal_count > 0 and Time.get_ticks_msec() - t0 < 5000:
+		await create_timer(0.05).timeout
+	var total : float = (Time.get_ticks_msec() - t0) / 1000.0
+	_check("El viaje dura 2 s en total (1 s oscurece, 1 s aclara)", total > 1.9 and total < 2.6, "%.2f s" % total)
+	_check("Al terminar Mayui vuelve a moverse", mov.can_move and gm.modal_count == 0)
+	_check("Llego al lobby viniendo del apartamento", current_scene != null and current_scene.zone_id == 1 and pm.player.global_position.is_equal_approx(Vector2(100, 100)), str(pm.player.global_position))
+	if current_scene != null:
+		current_scene.release_player()
+		current_scene.queue_free()
+	zm.zone_node = null
+	zm.current_zone = 0
+	zm.previous_zone = -1
+	await process_frame
+
 # ------------------------------------------------------------------ F. apartamento
 ## Espera a que no haya ningun dialogo en curso (cierra los que Dialogic vaya arrancando con retraso).
 func _esperar_calma() -> void:
@@ -214,7 +260,7 @@ func _ejecutar_y_oir(accion) -> Array:
 	return dicho
 
 func _t_apartamento() -> void:
-	print("F. Apartamento: ducha con cooldown, lavamanos con requisito y nevera")
+	print("F. Apartamento: ducha con cooldown y lavamanos con requisito")
 	gm.new_game()
 	pm.reset_engine_state(true)
 	var escena = await _cargar("res://Scenes/World/Apartment.tscn", -1)
@@ -250,10 +296,107 @@ func _t_apartamento() -> void:
 	pm.add_effect(load("res://Resources/Effects/Effects/smelly.tres").duplicate())
 	await _ejecutar_y_oir(lavamanos)
 	_check("Lavamanos con suciedad: se usa y la quita", usos_lav[0] == 1 and not pm.has_effect("SMELLY"))
-	# nevera: la comida cuenta para la Rutina saludable
-	var nevera = escena.get_node("Fridge")
-	var comidas0 : int = pm.daily.home_meals
-	await _ejecutar_y_oir(nevera)
-	_check("Nevera: cuenta como comida casera", pm.daily.home_meals == comidas0 + 1, str(pm.daily.home_meals))
+	await _esperar_calma()
+	await _soltar(escena)
+
+# ------------------------------------------------------------------ H. cocina real (tu sistema de contenedores)
+## Mueve un objeto de un slot a otro del mismo inventario, igual que arrastrar en la UI (interact_inventory).
+func _arrastrar(inv, destino: int, origen: int) -> void:
+	inv.interact_inventory(destino, inv, origen)
+
+## Una comida completa con tu cocina: bolsa del almacenamiento -> tabla de picar -> combinar. Devuelve la comida.
+func _cocinar_una(kc):
+	var inv = kc.inventory
+	var bolsa_idx : int = -1
+	for i in kc.get_storage_indices():
+		if not inv.slots[i].is_empty() and inv.slots[i].item.data.item_unique_name == "ingredients_bag":
+			bolsa_idx = i
+			break
+	if bolsa_idx == -1:
+		return null
+	_arrastrar(inv, kc.get_station_slot_index("cutting"), bolsa_idx)
+	if not kc.start_manual_station_craft("cutting"):
+		return null
+	var resultado_idx : int = kc.get_simple_craft_result_index()
+	_arrastrar(inv, kc.get_simple_craft_input_indices()[0], resultado_idx)
+	if kc.check_simple_craft() == null:
+		return null
+	return kc.execute_simple_craft()
+
+func _t_cocina() -> void:
+	print("H. Cocina real: nevera, tabla de picar, combinar y comer")
+	root.get_node("ContainerManager").container_states.clear()
+	gm.new_game()
+	pm.reset_engine_state(true)
+	var tarea = root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR").get_task_res("COOK")
+	tarea.task_done = false
+	var escena = await _cargar("res://Scenes/World/Apartment.tscn", -1)
+	await _esperar_calma()
+	var cocina = escena.get_node("Kitchen")
+	var kc = cocina.container
+	var inv = kc.inventory
+	var ui = escena.get_node("UILayer/KitchenMultiUI")
+	var mov = pm.player.movement
+	# 1) la nevera: 2 bolsas de ingredientes en el ALMACENAMIENTO (no en las estaciones)
+	var guardados : Array = kc.get_storage_indices().filter(func(i): return not inv.slots[i].is_empty())
+	_check("La nevera trae 2 bolsas de ingredientes en el almacenamiento", guardados.size() == 2 and inv.slots[guardados[0]].item.data.item_unique_name == "ingredients_bag", str(guardados))
+	_check("Las estaciones empiezan vacias", kc.get_station_item("cutting") == null and kc.get_station_item("stove") == null and kc.get_station_item("sink") == null)
+	# 2) abrir la cocina: la UI se ve y Mayui queda quieta
+	cocina.can_interact = true
+	cocina.execute()
+	_check("Abrir la cocina: se ve la UI y Mayui queda quieta", ui.visible and not mov.can_move and gm.modal_count == 1)
+	# 3) bolsa -> tabla de picar -> ingredientes
+	var bolsa_idx : int = guardados[0]
+	_arrastrar(inv, kc.get_station_slot_index("cutting"), bolsa_idx)
+	_check("Con la bolsa en la tabla hay receta (picar)", kc.has_valid_station_craft("cutting"))
+	_check("Se puede picar", kc.start_manual_station_craft("cutting"))
+	var resultado = inv.slots[kc.get_simple_craft_result_index()].item
+	_check("Picar da ingredientes", resultado != null and resultado.data.item_unique_name == "ingredients", str(resultado))
+	# 4) ingredientes -> combinar -> comida casera
+	_arrastrar(inv, kc.get_simple_craft_input_indices()[0], kc.get_simple_craft_result_index())
+	_check("Ingredientes en 'Combinar' ofrecen la comida", kc.check_simple_craft() != null)
+	var comida = kc.execute_simple_craft()
+	_check("Combinar da la comida casera", comida != null and comida.data.item_unique_name == "home_meal")
+	# 5) a las manos y comer (clic derecho en la UI = use_item_at)
+	var manos = pm.player.inventory
+	manos.add_item(comida)
+	pm.add_effect(load("res://Resources/Effects/Effects/hunger.tres").duplicate())
+	var energia0 : float = pm.get_stat_value("ENERGY")
+	var mano_idx : int = -1
+	for i in manos.get_hands_indices():
+		if manos.get_slot(i).item == comida:
+			mano_idx = i
+	manos.use_item_at(mano_idx)
+	_check("Comer: sube la energia, quita el Hambre y cuenta como comida casera", pm.get_stat_value("ENERGY") > energia0 and not pm.has_effect("HUNGER") and pm.daily.home_meals == 1, "energia %.1f -> %.1f" % [energia0, pm.get_stat_value("ENERGY")])
+	_check("Comer marca la tarea COOK del tutorial", tarea.task_done)
+	_check("La comida se consume y el ItemData compartido no se gasta", manos.get_hands_items().is_empty() and comida.data.uses == 1, "uses del dato: %d" % comida.data.uses)
+	# 6) Esc cierra la UI y Mayui vuelve a moverse
+	var esc := InputEventAction.new()
+	esc.action = "ui_cancel"
+	esc.pressed = true
+	ui._unhandled_input(esc)
+	_check("Esc cierra la cocina y Mayui vuelve a moverse", not ui.visible and mov.can_move and gm.modal_count == 0)
+	# 7) la cocina se puede abrir otra vez
+	cocina.execute()
+	_check("La cocina se puede abrir mas de una vez", ui.visible and gm.modal_count == 1)
+	ui._unhandled_input(esc)
+	# 8) salir y volver: lo guardado se conserva y no se vuelve a llenar la nevera
+	await _soltar(escena)
+	escena = await _cargar("res://Scenes/World/Apartment.tscn", 1)
+	await _esperar_calma()
+	kc = escena.get_node("Kitchen").container
+	inv = kc.inventory
+	var quedan : int = kc.get_storage_indices().filter(func(i): return not inv.slots[i].is_empty()).size()
+	_check("Al volver queda 1 bolsa (no se rellena la nevera ni se borra)", quedan == 1, "bolsas: %d" % quedan)
+	# 9) la segunda comida: los usos son de cada objeto, no del dato compartido
+	var comida2 = _cocinar_una(kc)
+	_check("Se puede cocinar una segunda comida", comida2 != null and comida2.data.item_unique_name == "home_meal")
+	manos = pm.player.inventory
+	manos.add_item(comida2)
+	var energia1 : float = pm.get_stat_value("ENERGY")
+	for i in manos.get_hands_indices():
+		if manos.get_slot(i).item == comida2:
+			manos.use_item_at(i)
+	_check("La segunda comida tambien se puede comer", pm.get_stat_value("ENERGY") > energia1 and pm.daily.home_meals == 2, "energia %.1f -> %.1f, comidas %d" % [energia1, pm.get_stat_value("ENERGY"), pm.daily.home_meals])
 	await _esperar_calma()
 	await _soltar(escena)

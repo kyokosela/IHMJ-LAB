@@ -7,6 +7,21 @@
 [ext_resource type="Script" uid="uid://big4o7sjh0g0y" path="res://Scripts/HouseInteracts/bathe.gd" id="5"]
 [ext_resource type="Script" uid="uid://c2qbhsn6tgmrc" path="res://Resources/StringChain/string_chain.gd" id="6"]
 [ext_resource type="Script" uid="uid://cdqqyuliu6jyp" path="res://Resources/StringChain/string_chain_array.gd" id="7"]
+[ext_resource type="Script" uid="uid://btpm0l5mnnxxf" path="res://Prefabs/Interactable/interactable_container.gd" id="8"]
+[ext_resource type="Script" uid="uid://cbskl252oro" path="res://Prefabs/Components/KitchenContainer.gd" id="9"]
+[ext_resource type="Script" uid="uid://ctwvwqkrwenys" path="res://Prefabs/Components/inventory_component.gd" id="10"]
+[ext_resource type="Script" uid="uid://rjxff1x2nc58" path="res://Resources/Containers/station.gd" id="11"]
+[ext_resource type="Resource" uid="uid://ixynr0bols3u" path="res://Resources/Containers/Stations/stove_station.tres" id="12"]
+[ext_resource type="Resource" uid="uid://bx86vtfaagc6" path="res://Resources/Containers/Stations/sink_station.tres" id="13"]
+[ext_resource type="Resource" uid="uid://bc21aexaviphi" path="res://Resources/Containers/Stations/cutting_station.tres" id="14"]
+[ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="15"]
+[ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="16"]
+[ext_resource type="Script" uid="uid://ckwswawlru4js" path="res://Resources/Containers/container_rules.gd" id="17"]
+[ext_resource type="Script" uid="uid://bo45lmkm6yiet" path="res://Resources/Containers/container_environment.gd" id="18"]
+[ext_resource type="Resource" path="res://Resources/Items/Data/home_meal.tres" id="19"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="20"]
+[ext_resource type="Resource" path="res://Resources/Items/Data/ingredients_bag.tres" id="21"]
+[ext_resource type="PackedScene" uid="uid://cktm7n04xp2qy" path="res://UI/Containers/KitchenMultiUI.tscn" id="22"]
 
 [sub_resource type="RectangleShape2D" id="Shape_interact"]
 size = Vector2(48, 48)
@@ -40,6 +55,22 @@ behaviour = 3
 [sub_resource type="Resource" id="Chain_sink_clean"]
 script = ExtResource("6")
 string_list = Array[ExtResource("7")]([SubResource("Lines_sink_clean")])
+
+[sub_resource type="Resource" id="Kitchen_rules"]
+script = ExtResource("17")
+allowed_types = Array[int]([1, 3, 4])
+
+[sub_resource type="Resource" id="Kitchen_environment"]
+script = ExtResource("18")
+
+[sub_resource type="Resource" id="Kitchen_slot_ingredients"]
+script = ExtResource("16")
+item_id = "ingredients"
+
+[sub_resource type="Resource" id="Kitchen_recipe_home_meal"]
+script = ExtResource("15")
+needed_items = Array[ExtResource("16")]([SubResource("Kitchen_slot_ingredients")])
+result_item = ExtResource("19")
 
 [node name="Apartment" type="Node2D" unique_id=380701902 node_paths=PackedStringArray("optional_camera_node")]
 script = ExtResource("1")
@@ -118,22 +149,34 @@ offset_right = -20.0
 offset_bottom = -28.0
 text = "Armario"
 
-[node name="Fridge" type="Area2D" parent="." unique_id=685046310 groups=["Interactable"]]
+[node name="Kitchen" type="Area2D" parent="." unique_id=685046310 node_paths=PackedStringArray("container_ui") groups=["Interactable"]]
 position = Vector2(60, 140)
-script = ExtResource("3")
-action_type = 47
-interaction_name = "APT_FRIDGE"
+script = ExtResource("8")
+initial_items = Array[ExtResource("20")]([ExtResource("21"), ExtResource("21")])
+container_ui = NodePath("../UILayer/KitchenMultiUI")
 shape = SubResource("Shape_interact")
-display_text = "Comer algo"
+display_text = "Cocina"
 reusable = true
 show_again_at_end = true
 
-[node name="Label" type="Label" parent="Fridge" unique_id=2094016945]
+[node name="KitchenContainer" type="Node2D" parent="Kitchen"]
+script = ExtResource("9")
+stations = Array[ExtResource("11")]([ExtResource("12"), ExtResource("13"), ExtResource("14")])
+simple_craft_recipes = Array[ExtResource("15")]([SubResource("Kitchen_recipe_home_meal")])
+container_id = "kitchen_multi"
+rules = SubResource("Kitchen_rules")
+environment = SubResource("Kitchen_environment")
+
+[node name="InventoryComponent" type="Node2D" parent="Kitchen/KitchenContainer"]
+script = ExtResource("10")
+size = 12
+
+[node name="Label" type="Label" parent="Kitchen" unique_id=2094016945]
 offset_left = -20.0
 offset_top = -28.0
 offset_right = -20.0
 offset_bottom = -28.0
-text = "Nevera"
+text = "Nevera y cocina"
 
 [node name="Sink" type="Area2D" parent="." unique_id=1994543045 groups=["Interactable"]]
 position = Vector2(120, 140)
@@ -167,3 +210,29 @@ offset_top = -28.0
 offset_right = -30.0
 offset_bottom = -28.0
 text = "→ Salir"
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="KitchenMultiUI" parent="UILayer" node_paths=PackedStringArray("station_containers", "station_labels", "station_progress_bars", "station_craft_buttons") instance=ExtResource("22")]
+visible = false
+station_containers = {
+"cutting": NodePath("Panel/MainContainer/StationsSection/CuttingStation/VBox/CuttingGrid"),
+"sink": NodePath("Panel/MainContainer/StationsSection/SinkStation/VBox/SinkGrid"),
+"stove": NodePath("Panel/MainContainer/StationsSection/StoveStation/VBox/StoveGrid")
+}
+station_labels = {
+"cutting": NodePath("Panel/MainContainer/StationsSection/CuttingStation/VBox/Label"),
+"sink": NodePath("Panel/MainContainer/StationsSection/SinkStation/VBox/Label"),
+"stove": NodePath("Panel/MainContainer/StationsSection/StoveStation/VBox/Label")
+}
+station_progress_bars = {
+"cutting": NodePath("Panel/MainContainer/StationsSection/CuttingStation/VBox/CuttingProgress"),
+"sink": NodePath("Panel/MainContainer/StationsSection/SinkStation/VBox/SinkProgress"),
+"stove": NodePath("Panel/MainContainer/StationsSection/StoveStation/VBox/StoveProgress")
+}
+station_craft_buttons = {
+"cutting": NodePath("Panel/MainContainer/StationsSection/CuttingStation/VBox/CuttingCraftButton"),
+"sink": NodePath("Panel/MainContainer/StationsSection/SinkStation/VBox/SinkCraftButton"),
+"stove": NodePath("Panel/MainContainer/StationsSection/StoveStation/VBox/StoveCraftButton")
+}

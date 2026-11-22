@@ -42,8 +42,12 @@ func _ready():
 
 func _setup_slot_structure(): ## Calcula el tamaño total necesario
 	var total_slots = stations.size() + 3 + storage_size  # stations + simple craft (2+1) + storage
-	
+
 	if inventory:
+		# Completado: si el inventario ya viene armado (p. ej. restaurado por el ContainerManager al volver
+		# a la escena) NO se vuelve a crear: antes esto borraba todo lo guardado en la cocina.
+		if inventory.slots.size() == total_slots:
+			return
 		inventory.size = total_slots
 		inventory._initialize_slots()
 
@@ -292,6 +296,19 @@ func return_simple_craft_items(target: InventoryContainer) -> Array[Item]:
 #endregion
 
 #region Storage API
+## Completado: lo que se agrega "sin mas" a la cocina (ej. los items iniciales de la nevera) va al
+## ALMACENAMIENTO. El add_item de InventoryContainer usa el primer slot libre, que aqui es una estacion.
+func add_item_by_data(data: ItemData) -> bool:
+	if rules and not rules.can_store(data): return false
+	return add_item(Item.new(data))
+
+func add_item(item: Item) -> bool:
+	if rules and not rules.can_store(item.data): return false
+	if not _add_to_storage(item): return false
+	inventory.item_added.emit(item)
+	inventory.inventory_changed.emit()
+	return true
+
 ## Obtiene los índices de los slots de storage
 func get_storage_indices() -> Array[int]:
 	var indices: Array[int] = []

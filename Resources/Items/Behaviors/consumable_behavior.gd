@@ -20,4 +20,7 @@ func update_states(_item: Item) -> void:
 func use(_item: Item) -> void:
 	if !can_use(_item): return
 	super(_item)
-	_item.data.uses -= 1
+	# Completado: se descontaba del ItemData COMPARTIDO (data.uses): tras la primera comida ningun otro
+	# objeto igual se podia usar. Los usos son de cada objeto (uses_left), como ya hacen HolderBehavior
+	# y CraftingContainer.
+	_item.uses_left -= 1

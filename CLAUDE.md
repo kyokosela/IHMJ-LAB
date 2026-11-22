@@ -19,10 +19,14 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 - Efectos implementados (Paso 1) dentro de `player_manager.gd` según `SISTEMA_EFECTOS.md`. Tras tocar números o efectos hay que
   correr `Tools/probar_efectos.gd` (debe terminar en 0 FALLA). En el juego, **F3** abre/cierra el panel de depuración
   (efectos, cordura, reloj). Pendiente de ese sistema: Desmayo, Desahogo, Suciedad en dos capas, ítems de medicina.
-  Siguiente: Paso 2 = tutorial sobre `TaskManager` (agregar TEETH a `TutorialDoor.tres`, retirar `tutorial.gd`).
+  Paso 2a HECHO: la cocina real (nodo `Kitchen` de `Apartment.tscn`: nevera = almacenamiento de la cocina, tabla de picar, combinar,
+  comer con clic derecho/doble clic desde las manos, COOK marcada). Falta del Paso 2: armario real (`ApartamentD.tscn`), marcar
+  CLOTHES/TEETH en `TaskManager`, puerta con `task_lists` y retirar `tutorial.gd`. Pendientes del dev: P25–P31 en `DECISIONES_Y_PENDIENTES.md`.
+  Diseñados y pendientes de OK: Desmayo por lugar y Sueño acumulado.
 - Flujo del juego (2026-11-22): `Tools/probar_flujo.gd` (debe terminar en 0 FALLA) cubre aparición por zona
   (`SpawnPoint.from_zone`), Mayui quieta con UI abierta (`GameManager.modal_count += 1` al abrir y `-= 1` al cerrar),
-  diálogos, asistencia y acciones del apartamento. La historia de relleno está APAGADA: `NarrativeEventHandler.story_enabled = false`.
+  diálogos, asistencia, cambio de zona (2 s en total, `ZoneManager.ZONE_FADE_TIME`, con Mayui quieta hasta que aclara) y acciones
+  del apartamento. La historia de relleno está APAGADA: `NarrativeEventHandler.story_enabled = false`.
   La traducción de Dialogic está desactivada (los ids de los `.dtl` se repiten entre archivos; no activarla sin ids únicos).
 - Existe `Scenes/Playground_Integration.tscn` (herramienta de pruebas, desordenada). Congelada.
 - Pendiente menor: 3 `.tres` con UID duplicado (`home_meal`, `ingredients_bag`, `ingredients_unpack`).
@@ -42,6 +46,9 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
    - Tutorial = `TaskManager` + `TaskList` (`Resources/Task/Tutorial/TutorialDoor.tres`) + evento `TUTORIAL`.
      `Scripts/tutorial.gd` y `Scenes/World/Apartment.tscn` son un placeholder de IA con banderas propias: deben sustituirse.
    - Para ver los efectos en juego: `UI/Debug/debug_panel.tscn` (ya muestra cordura, efectos, día y hora); ampliarlo, no duplicarlo.
+   - **Cocina, almacenamiento e ítems = sistema de un dev (Ghoko), ya hecho: seguirlo ESTRICTAMENTE, con sus reglas.** No crear código
+     nuevo: solo completar o complementar lo que falta con cambios mínimos DENTRO de sus clases (`InteractableContainer`,
+     `KitchenContainer`, `ContainerUI`, `InventorySlotUI`, behaviors, `Station`, `Crafts`). Las herramientas son los `.tres` y las escenas (lo que se configura en el Inspector).
 4. **Fuente de verdad de los EFECTOS: `Docs/Design/SISTEMA_EFECTOS.md`** (validado con `Tools/simulacion_efectos.gd`;
    si se cambia un número, correr la simulación). **Del resto del gameplay: `Docs/Design/SISTEMA_GAMEPLAY.md`** (decisiones D# y pendientes P# en
    `Docs/Design/DECISIONES_Y_PENDIENTES.md`). El código se alinea a ese documento, no al revés. Si algo no está

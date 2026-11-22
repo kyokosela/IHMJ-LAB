@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="Station" load_steps=3 format=3 uid="uid://bc21aexaviphi"]
+[gd_resource type="Resource" script_class="Station" load_steps=4 format=3 uid="uid://bc21aexaviphi"]
 
 [ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="1_ab475"]
 [ext_resource type="Script" uid="uid://rjxff1x2nc58" path="res://Resources/Containers/station.gd" id="1_station"]
+[ext_resource type="Resource" uid="uid://c7hduywevgqlw" path="res://Resources/Crafts/Kitchen/HomeMeal/ingredients_craft.tres" id="2_craft"]
 
 [resource]
 script = ExtResource("1_station")
 station_id = "cutting"
 station_name = "Tabla de Picar"
 inherent_util = "cutting"
+available_crafts = Array[ExtResource("1_ab475")]([ExtResource("2_craft")])
 required_provided_utils = Array[String](["cuttable"])

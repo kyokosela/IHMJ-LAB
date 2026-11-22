@@ -14,7 +14,11 @@ func _ready() -> void:
 	_find_container()
 	if not Engine.is_editor_hint():
 		assert(container != null, "ERROR: No hay InventoryContainer en " + name)
-		if container:
+		# Completado: los items iniciales solo la PRIMERA vez. Si el ContainerManager ya guardo este contenedor
+		# (la escena se recrea al cambiar de zona) se restaura lo que quedo; antes se agregaban otra vez.
+		var already_saved : bool = container != null and container.container_id != "" \
+				and ContainerManager.container_states.has(container.container_id)
+		if container and not already_saved:
 			for item in initial_items:
 				container.add_item_by_data(item)
 
@@ -34,3 +38,7 @@ func custom_execute():
 	#de usar la api para cosas etc
 	
 	open_ui()
+	# Completado: Interactable solo reactivaba las acciones "reusables" que tienen dialogo; sin esto el
+	# contenedor se podia abrir una sola vez (execute() deja can_interact en false).
+	if reusable:
+		can_interact = true

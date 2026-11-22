@@ -56,10 +56,17 @@
 | **P12** | **Camas A/B**: el bono de estrés (−6 % / −2 %) no tiene traducción a niveles | ✅ **Cerrado** (E10): A +75 %, B +25 % de un −1 extra |
 | **P13** | Cómo se consiguen **la cama, el despertador y el teléfono** (Dormir pide "objeto en inventario") | todo jugador tiene cama tipo C y despertador |
 | **P14** | Números de **tareas extra / token de ascensión** y su costo de Estrés (dijiste "balancéalo") | 3 tareas extra |
-| **P15** | **Desmayo por energía 0** (tu prueba del 2026-11-22): al llegar a 0 fuera de casa solo recupera hasta el punto de Debilitamiento (energía 15) y adquiere Debilitamiento. Falta: cuánto tiempo pasa inconsciente, dónde despierta, qué pasa con lo pendiente del día y si cuenta como falta | propuesta en el chat; sin implementar |
-| **P16** | **Regla para volver a dormir.** Hoy la cama se bloquea 12 h tras despertar (o hasta medianoche): es tu "una vez al día". Falta decidir si se cambia por "puedes dormir si estás cansada y llevas X horas despierta" y los **mensajes** que expliquen por qué no se puede dormir | se deja como está + mensajes claros (sin implementar) |
-| **P17** | **Avisos de peligro** al estar fuera muy tarde o con energía baja (textos de Mayui) | los escribes tú |
-| **P18** | La **nevera de relleno** (`Apartment.tscn`) da +10 de energía cada 10 min **sin límite**: por eso nunca llegabas a 0. Hasta tener tu cocina real: ¿cooldown o exigir Hambre? | sin tocar hasta que decidas |
+| **P15** | **Desmayo por energía 0.** Tu respuesta (2026-11-22): despierta según el lugar (casa y calle = donde cayó, con robo por probabilidad; oficina = enfermería; cerca del hospital = hospital, te cura sin Debilitamiento y cobra al despertar); la falta ya la decide `arrived_today`. | 🟡 propuesta completa en [SISTEMA_EFECTOS](SISTEMA_EFECTOS.md) (E14); **falta tu OK de los números**: horas perdidas, monto del hospital, probabilidades de robo. Sin implementar |
+| **P16** | **Volver a dormir.** Se reemplaza el candado de 12 h por el **sueño acumulado** (horas despierta, 5 etapas, atajo por energía ≤30) y mensajes **sin hora** ("ya dormí" y variaciones) | 🟡 propuesta en [SISTEMA_EFECTOS](SISTEMA_EFECTOS.md) (E15); falta tu OK. Sin implementar |
+| **P17** | **Avisos de cansancio y de peligro** (estar fuera muy tarde, energía baja): los textos de Mayui por etapa | los escribes tú; las etapas están en E15 |
+| **P18** | La **nevera de relleno** daba +10 de energía cada 10 min **sin límite**. ✅ **Hecho (Paso 2a):** `Apartment.tscn` usa tu cocina real (nodo `Kitchen`): la nevera es el **almacenamiento** de la cocina (2 bolsas de ingredientes), se pica en la tabla, se combina en "Combinar" y se come con clic derecho o doble clic desde las manos. Esc cierra la UI y Mayui queda quieta mientras está abierta. Completé 8 detalles que le faltaban a las clases del dev (§5) sin crear clases nuevas | Falta del Paso 2: armario real, marcar CLOTHES/TEETH en `TaskManager`, puerta con `task_lists` y retirar `tutorial.gd` |
+| **P25** | **Comida instantánea**: tu guion del tutorial dice que la nevera solo trae comida instantánea ("Solo queda esta porquería"), pero ese ítem **no existe** en `Resources/Items/Data`. Mientras tanto la nevera trae 2 bolsas de ingredientes (placeholder mío). El guion también dice "no hay ingredientes en el refrigerador": ¿cuál vale? | tú / tu dev |
+| **P26** | **Nevera, estufa, escritorio y lavamanos como objetos separados** (tu guion). Hoy el almacenamiento de la cocina hace de nevera en un solo objeto "Nevera y cocina". En tu Notion "UI Cocina" y "UI inventario" están "Sin iniciar" | tu dev |
+| **P27** | **Comer en el escritorio** con su secuencia ("Escritorio mientras come", "No sabe a nada"). Hoy se come desde la UI de la cocina (clic derecho/doble clic en las manos) | tu dev |
+| **P28** | **Estufa y tabla de picar a medias**: la estufa solo calienta agua en la olla; la receta `home_meal_craft.tres` (tarda "10:00") no está conectada; la tabla no tenía receta (le asigné `ingredients_craft`); `needed_util` dice "chopping_board" y la estación "cutting"; la barra de progreso es un placeholder | tu dev |
+| **P29** | **Ítems duplicados con el mismo UID** (`home_meal`, `ingredients_bag`, `ingredients_unpack` en `Items/Data/` y en `Items/Data/Meals/`): la receta de picar apunta a la copia vieja de `Meals/` | borrar la copia vieja |
+| **P30** | La UI **no valida reglas al arrastrar**: `interact_inventory` intercambia sin revisar `ContainerRules` ni `Station.can_accept` | tu dev |
+| **P31** | Si sales de la zona con la estufa cocinando, el evento conserva el nodo viejo y la estación puede quedar bloqueada para siempre | tu dev |
 | **P19** | **Sistema de NPCs importantes**: saber si ya los conoces y cuánto has hablado con ellos (los diálogos de Madina suponen que ya se conocen). Existe `RelationshipManager` (puntos y niveles) pero los diálogos no lo consultan | se escribe junto con el guion |
 | **P20** | **Horarios de presencia** de personajes (X personaje está en X sitio durante una franja de tiempo); el casero ya funciona por zona (`event_zones`) | ampliar `event_zones` con franjas |
 | **P21** | **Fichaje con la recepcionista**: fichar la entrada activa lo que toca ese día (y sin fichar no abre el PC); fichar la salida antes de hora avisa "Aún te quedan X horas… no te pagarán lo trabajado sin permiso" mostrando S/ con permiso | F4 |
@@ -113,4 +120,20 @@
 
 **Costo en tokens (plan Pro):** cada fase cabe en sesiones cortas. Sonnet para F1–F4; Haiku para ajustar números; Opus solo si F3 se atasca. Antes de cada fase leo **solo** `CLAUDE.md` y la parte de este documento que toca.
 
-**Estado de lo ya hecho:** arranque en el apartamento · zoom y cámara por zona · tecla Z para todo · reloj arriba · eventos por zona · correcciones de crash y repeticiones · **Paso 1: motor de efectos dentro de `PlayerManager`, probado con `Tools/probar_efectos.gd` y visible en el panel de depuración (F3)**.
+**Estado de lo ya hecho:** arranque en el apartamento · zoom y cámara por zona · tecla Z para todo · reloj arriba · eventos por zona · correcciones de crash y repeticiones · **Paso 1: motor de efectos dentro de `PlayerManager`, probado con `Tools/probar_efectos.gd` y visible en el panel de depuración (F3)** · **Paso 2a: tu cocina real en el Apartamento, probada con `Tools/probar_flujo.gd` (sección H)**.
+
+---
+
+## 5. Paso 2a: lo que completé en las clases de tu dev (sin crear clases nuevas)
+Todo son cambios mínimos dentro de lo que ya existía; los comentarios en el código empiezan con "Completado:".
+| Clase | Qué le faltaba | Qué le puse |
+|---|---|---|
+| `ContainerUI` | Mayui seguía caminando con la UI abierta | usa `GameManager.modal_count` (como el PC y la alarma) |
+| `ContainerUI` | La UI no se podía cerrar | Esc la cierra |
+| `InteractableContainer` | Cada vez que se recreaba la escena volvía a agregar los ítems iniciales | solo la primera vez (el `ContainerManager` ya guarda y restaura) |
+| `InteractableContainer` | Se podía abrir una sola vez (`can_interact` quedaba en falso) | si es `reusable`, se reactiva |
+| `KitchenContainer` | Al volver a la escena se borraba lo guardado | no rehace los slots si ya vienen armados |
+| `KitchenContainer` | `add_item` caía en una estación (primer slot libre) | va al almacenamiento |
+| `InventorySlotUI` | No había forma de usar un objeto desde la UI (solo la tecla `test`) | clic derecho o doble clic sobre un objeto de tus manos |
+| `ConsumableBehavior` y `use_item_at` | Descontaban el uso del dato compartido: solo se podía comer una vez por sesión | usan `uses_left` de cada objeto (como ya hacían `HolderBehavior` y `CraftingContainer`) |
+Y en datos: la estación "Tabla de Picar" no tenía receta (le asigné tu `ingredients_craft`); `Ingredients.use` marca la tarea COOK del tutorial; `tutorial.gd` ya no se cae con objetos que no son acciones.

@@ -14,6 +14,7 @@
 [ext_resource type="Resource" uid="uid://b18f3g76hqy6t" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_cold.tres" id="13_700i4"]
 [ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="14_fd2ii"]
 [ext_resource type="Script" uid="uid://dvjyhvtl4cau5" path="res://Resources/Crafts/craft_result.gd" id="15_xpaxt"]
+[ext_resource type="Resource" path="res://Resources/Crafts/Kitchen/HomeMeal/pot_cook_home_meal.tres" id="16_cook"]
 
 [sub_resource type="Resource" id="Resource_xx8kx"]
 script = ExtResource("2_j75hq")
@@ -103,6 +104,6 @@ script = ExtResource("1_station")
 station_id = "stove"
 station_name = "Estufa"
 inherent_util = "heat"
-available_crafts = Array[ExtResource("1_8ipk4")]([SubResource("Resource_k6tcm")])
+available_crafts = Array[ExtResource("1_8ipk4")]([SubResource("Resource_k6tcm"), ExtResource("16_cook")])
 required_provided_utils = Array[String](["cookware"])
 required_held_item = true

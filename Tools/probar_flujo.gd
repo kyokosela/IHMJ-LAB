@@ -304,7 +304,23 @@ func _t_apartamento() -> void:
 func _arrastrar(inv, destino: int, origen: int) -> void:
 	inv.interact_inventory(destino, inv, origen)
 
-## Una comida completa con tu cocina: bolsa del almacenamiento -> tabla de picar -> combinar. Devuelve la comida.
+## Saca la olla de la cocina (donde este) o de las manos de Mayui.
+func _tomar_olla(kc):
+	var inv = kc.inventory
+	for s in inv.slots:
+		if not s.is_empty() and s.item.data.item_unique_name == "cooking_pot":
+			var o = s.item
+			s.clear()
+			return o
+	var manos = pm.player.inventory
+	for o in manos.get_hands_items():
+		if o.data.item_unique_name == "cooking_pot":
+			manos.remove_from_hands(o)
+			return o
+	return null
+
+## Una comida completa con tu cocina: bolsa -> tabla de picar -> olla + ingredientes en "Combinar" -> estufa 45 min.
+## Devuelve la olla con la comida dentro (ya fuera de la cocina) o null si algo falla.
 func _cocinar_una(kc):
 	var inv = kc.inventory
 	var bolsa_idx : int = -1
@@ -317,14 +333,25 @@ func _cocinar_una(kc):
 	_arrastrar(inv, kc.get_station_slot_index("cutting"), bolsa_idx)
 	if not kc.start_manual_station_craft("cutting"):
 		return null
-	var resultado_idx : int = kc.get_simple_craft_result_index()
-	_arrastrar(inv, kc.get_simple_craft_input_indices()[0], resultado_idx)
+	var olla = _tomar_olla(kc)
+	if olla == null:
+		return null
+	var entradas : Array = kc.get_simple_craft_input_indices()
+	inv.slots[entradas[0]].item = olla
+	_arrastrar(inv, entradas[1], kc.get_simple_craft_result_index())
 	if kc.check_simple_craft() == null:
 		return null
-	return kc.execute_simple_craft()
-
+	var llena = kc.execute_simple_craft()
+	if llena == null:
+		return null
+	inv.slots[kc.get_station_slot_index("stove")].item = llena
+	inv.inventory_changed.emit()
+	if not kc.start_manual_station_craft("stove"):
+		return null
+	tm.minutes_delta.emit(45)
+	return _tomar_olla(kc)
 func _t_cocina() -> void:
-	print("H. Cocina real: nevera, tabla de picar, combinar y comer")
+	print("H. Cocina real: nevera, tabla de picar, olla, estufa y comer")
 	root.get_node("ContainerManager").container_states.clear()
 	gm.new_game()
 	pm.reset_engine_state(true)
@@ -339,12 +366,43 @@ func _t_cocina() -> void:
 	var mov = pm.player.movement
 	# 1) la nevera: 2 bolsas de ingredientes en el ALMACENAMIENTO (no en las estaciones)
 	var guardados : Array = kc.get_storage_indices().filter(func(i): return not inv.slots[i].is_empty())
-	_check("La nevera trae 2 bolsas de ingredientes en el almacenamiento", guardados.size() == 2 and inv.slots[guardados[0]].item.data.item_unique_name == "ingredients_bag", str(guardados))
+	_check("La nevera trae 2 bolsas de ingredientes y la olla en el almacenamiento", guardados.size() == 3 and inv.slots[guardados[0]].item.data.item_unique_name == "ingredients_bag" and inv.slots[guardados[1]].item.data.item_unique_name == "ingredients_bag" and inv.slots[guardados[2]].item.data.item_unique_name == "cooking_pot", str(guardados))
 	_check("Las estaciones empiezan vacias", kc.get_station_item("cutting") == null and kc.get_station_item("stove") == null and kc.get_station_item("sink") == null)
 	# 2) abrir la cocina: la UI se ve y Mayui queda quieta
 	cocina.can_interact = true
 	cocina.execute()
 	_check("Abrir la cocina: se ve la UI y Mayui queda quieta", ui.visible and not mov.can_move and gm.modal_count == 1)
+	# 2b) la cocina ilustrada (arte de IHMJ ART): alacena que abre y cierra; olla, fuego y humo segun la estacion
+	var alacena = ui.get_node("Panel/MainContainer/StorageSection")
+	var boton_alacena = ui.get_node("Panel/MainContainer/ShelfButton")
+	_check("La alacena empieza cerrada (sus casillas no se ven)", not alacena.visible)
+	boton_alacena.button_pressed = true
+	_check("Clic en la alacena: se abre y se ven sus casillas", alacena.visible)
+	boton_alacena.button_pressed = false
+	_check("Otro clic: se cierra", not alacena.visible)
+	var alacena2 = ui.get_node("Panel/MainContainer/StorageSectionLeft")
+	var boton_alacena2 = ui.get_node("Panel/MainContainer/ShelfLeftButton")
+	_check("La segunda alacena tambien empieza cerrada", not alacena2.visible)
+	boton_alacena2.button_pressed = true
+	_check("Clic en la segunda alacena: se abre", alacena2.visible)
+	boton_alacena2.button_pressed = false
+	_check("Otro clic: se cierra la segunda", not alacena2.visible)
+	var vivos = func(g): return g.get_children().filter(func(c): return not c.is_queued_for_deletion()).size()
+	_check("Cada alacena muestra 6 casillas (el almacenamiento tiene 12)", vivos.call(ui.storage_grid) == 6 and vivos.call(ui.storage_grid_2) == 6, "%d y %d" % [vivos.call(ui.storage_grid), vivos.call(ui.storage_grid_2)])
+	var olla_estufa = ui.station_item_props["stove"]
+	var fuego_estufa = ui.station_active_props["stove"]
+	_check("Sin objeto en la estufa no hay olla, fuego ni humo", not olla_estufa.visible and not fuego_estufa.visible)
+	var idx_estufa : int = kc.get_station_slot_index("stove")
+	inv.slots[idx_estufa].item = load("res://Resources/Items/item.gd").new(load("res://Resources/Items/Data/KitchenUtils/cooking_pot.tres"))
+	inv.inventory_changed.emit()
+	_check("Con una olla en la estufa se ve la olla (sin fuego)", olla_estufa.visible and not fuego_estufa.visible)
+	kc.get_station("stove").is_locked = true
+	ui._update_stations_ui()
+	_check("Mientras la estufa cocina se ven el fuego y el humo", fuego_estufa.visible)
+	kc.get_station("stove").is_locked = false
+	inv.slots[idx_estufa].item = null
+	inv.inventory_changed.emit()
+	_check("Estufa vacia y libre: vuelve a no haber olla ni fuego", not olla_estufa.visible and not fuego_estufa.visible)
 	# 3) bolsa -> tabla de picar -> ingredientes
 	var bolsa_idx : int = guardados[0]
 	_arrastrar(inv, kc.get_station_slot_index("cutting"), bolsa_idx)
@@ -352,25 +410,38 @@ func _t_cocina() -> void:
 	_check("Se puede picar", kc.start_manual_station_craft("cutting"))
 	var resultado = inv.slots[kc.get_simple_craft_result_index()].item
 	_check("Picar da ingredientes", resultado != null and resultado.data.item_unique_name == "ingredients", str(resultado))
-	# 4) ingredientes -> combinar -> comida casera
-	_arrastrar(inv, kc.get_simple_craft_input_indices()[0], kc.get_simple_craft_result_index())
-	_check("Ingredientes en 'Combinar' ofrecen la comida", kc.check_simple_craft() != null)
-	var comida = kc.execute_simple_craft()
-	_check("Combinar da la comida casera", comida != null and comida.data.item_unique_name == "home_meal")
-	# 5) a las manos y comer (clic derecho en la UI = use_item_at)
+	# 4) olla + ingredientes en "Combinar" -> olla con ingredientes -> estufa 45 min -> olla con la comida caliente
+	var olla = _tomar_olla(kc)
+	_check("La olla esta en la alacena y se puede sacar", olla != null)
+	var entradas : Array = kc.get_simple_craft_input_indices()
+	inv.slots[entradas[0]].item = olla
+	_arrastrar(inv, entradas[1], kc.get_simple_craft_result_index())
+	_check("Olla vacia + ingredientes en 'Combinar' ofrecen meter los ingredientes", kc.check_simple_craft() != null)
+	var olla_llena = kc.execute_simple_craft()
+	_check("Combinar da la olla con los ingredientes dentro", olla_llena != null and olla_llena.data.item_unique_name == "cooking_pot" and olla_llena.held_item != null and olla_llena.held_item.data.item_unique_name == "ingredients")
+	inv.slots[idx_estufa].item = olla_llena
+	inv.inventory_changed.emit()
+	_check("La olla con ingredientes en la estufa tiene receta (cocinar)", kc.has_valid_station_craft("stove"))
+	_check("Se puede cocinar", kc.start_manual_station_craft("stove"))
+	_check("La estufa trabaja: se ven el fuego y el humo", kc.get_station("stove").is_locked and fuego_estufa.visible)
+	tm.minutes_delta.emit(45)   # pasan los 45 minutos
+	var comida_olla = _tomar_olla(kc)
+	var comida = comida_olla.held_item if comida_olla != null else null
+	_check("A los 45 min la estufa se libera y la olla trae la comida casera", not kc.get_station("stove").is_locked and comida != null and comida.data.item_unique_name == "home_meal")
+	_check("La comida esta cocinada y caliente", comida != null and comida.has_state("cooked") and comida.has_state("hot"))
+	# 5) a las manos y comer desde la olla (clic derecho en la UI = use_item_at)
 	var manos = pm.player.inventory
-	manos.add_item(comida)
+	manos.add_item(comida_olla)
 	pm.add_effect(load("res://Resources/Effects/Effects/hunger.tres").duplicate())
 	var energia0 : float = pm.get_stat_value("ENERGY")
 	var mano_idx : int = -1
 	for i in manos.get_hands_indices():
-		if manos.get_slot(i).item == comida:
+		if manos.get_slot(i).item == comida_olla:
 			mano_idx = i
 	manos.use_item_at(mano_idx)
 	_check("Comer: sube la energia, quita el Hambre y cuenta como comida casera", pm.get_stat_value("ENERGY") > energia0 and not pm.has_effect("HUNGER") and pm.daily.home_meals == 1, "energia %.1f -> %.1f" % [energia0, pm.get_stat_value("ENERGY")])
 	_check("Comer marca la tarea COOK del tutorial", tarea.task_done)
-	_check("La comida se consume y el ItemData compartido no se gasta", manos.get_hands_items().is_empty() and comida.data.uses == 1, "uses del dato: %d" % comida.data.uses)
-	# 6) Esc cierra la UI y Mayui vuelve a moverse
+	_check("La comida se gasta, la olla queda vacia en las manos y el ItemData compartido no se gasta", comida_olla.held_item == null and manos.get_hands_items().size() == 1 and comida.data.uses == 1, "uses del dato: %d" % comida.data.uses)	# 6) Esc cierra la UI y Mayui vuelve a moverse
 	var esc := InputEventAction.new()
 	esc.action = "ui_cancel"
 	esc.pressed = true
@@ -387,15 +458,15 @@ func _t_cocina() -> void:
 	kc = escena.get_node("Kitchen").container
 	inv = kc.inventory
 	var quedan : int = kc.get_storage_indices().filter(func(i): return not inv.slots[i].is_empty()).size()
-	_check("Al volver queda 1 bolsa (no se rellena la nevera ni se borra)", quedan == 1, "bolsas: %d" % quedan)
+	_check("Al volver queda 1 bolsa (no se rellena la nevera ni se borra) y la olla sigue en las manos", quedan == 1 and pm.player.inventory.get_hands_items().size() == 1, "objetos guardados: %d" % quedan)
 	# 9) la segunda comida: los usos son de cada objeto, no del dato compartido
-	var comida2 = _cocinar_una(kc)
-	_check("Se puede cocinar una segunda comida", comida2 != null and comida2.data.item_unique_name == "home_meal")
+	var olla2 = _cocinar_una(kc)
+	_check("Se puede cocinar una segunda comida con la misma olla", olla2 != null and olla2.held_item != null and olla2.held_item.data.item_unique_name == "home_meal")
 	manos = pm.player.inventory
-	manos.add_item(comida2)
+	manos.add_item(olla2)
 	var energia1 : float = pm.get_stat_value("ENERGY")
 	for i in manos.get_hands_indices():
-		if manos.get_slot(i).item == comida2:
+		if manos.get_slot(i).item == olla2:
 			manos.use_item_at(i)
 	_check("La segunda comida tambien se puede comer", pm.get_stat_value("ENERGY") > energia1 and pm.daily.home_meals == 2, "energia %.1f -> %.1f, comidas %d" % [energia1, pm.get_stat_value("ENERGY"), pm.daily.home_meals])
 	await _esperar_calma()

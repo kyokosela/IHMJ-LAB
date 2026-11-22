@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="Crafts" load_steps=6 format=3]
+
+[ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="1_craft"]
+[ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="2_slot"]
+[ext_resource type="Resource" uid="uid://bmt41wvyxm0ut" path="res://Resources/Items/Data/KitchenUtils/cooking_pot.tres" id="3_pot"]
+[ext_resource type="Resource" uid="uid://c87phvhm6ujj0" path="res://Resources/Items/Data/home_meal.tres" id="4_home_meal"]
+
+[sub_resource type="Resource" id="Slot_pot_with_ingredients"]
+script = ExtResource("2_slot")
+item_id = "cooking_pot"
+requires_held_item = true
+required_held_item_id = "ingredients"
+required_held_item_states = Array[String](["prepared"])
+metadata/_custom_type_script = "uid://bh8urv85cwvl5"
+
+[resource]
+script = ExtResource("1_craft")
+needed_time = "00:45"
+needed_items = Array[ExtResource("2_slot")]([SubResource("Slot_pot_with_ingredients")])
+result_item = ExtResource("3_pot")
+result_held_item = ExtResource("4_home_meal")
+result_held_item_conditions = Dictionary[String, float]({
+"coldness": 10.0
+})
+metadata/_custom_type_script = "uid://de0p0f0ihls31"

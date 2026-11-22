@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="Crafts" load_steps=6 format=3]
+
+[ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="1_craft"]
+[ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="2_slot"]
+[ext_resource type="Resource" uid="uid://bmt41wvyxm0ut" path="res://Resources/Items/Data/KitchenUtils/cooking_pot.tres" id="3_pot"]
+[ext_resource type="Resource" uid="uid://cy37p1h5j1xr1" path="res://Resources/Items/Data/ingredients_unpack.tres" id="4_ingredients"]
+
+[sub_resource type="Resource" id="Slot_pot_empty"]
+script = ExtResource("2_slot")
+item_id = "cooking_pot"
+exclude_if_has_held_item = true
+metadata/_custom_type_script = "uid://bh8urv85cwvl5"
+
+[sub_resource type="Resource" id="Slot_ingredients_prepared"]
+script = ExtResource("2_slot")
+item_id = "ingredients"
+required_states = Array[String](["prepared"])
+metadata/_custom_type_script = "uid://bh8urv85cwvl5"
+
+[resource]
+script = ExtResource("1_craft")
+needed_items = Array[ExtResource("2_slot")]([SubResource("Slot_pot_empty"), SubResource("Slot_ingredients_prepared")])
+result_item = ExtResource("3_pot")
+result_held_item = ExtResource("4_ingredients")
+metadata/_custom_type_script = "uid://de0p0f0ihls31"

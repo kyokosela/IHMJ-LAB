@@ -212,15 +212,44 @@ func to_dict() -> Dictionary:
 	}
 	for slot in slots:
 		if not slot.is_empty():
-			var item = slot.item
-			data.slots.append({
-				"item_unique_name": item.data.item_unique_name,
-				"condition": item.condition,
-				"uses_left": item.uses_left
-			})
+			data.slots.append(_item_to_dict(slot.item))
 		else:
 			data.slots.append(null)
 	return data
+
+## Completado: antes solo se guardaban el id, la condicion y los usos: una olla con ingredientes volvia VACIA y un objeto
+## perdia sus condiciones (preparation, coldness...). Ahora tambien se guarda el valor de cada condicion y el contenido
+## (held_item). Las claves anteriores no cambian, asi que lo ya guardado sigue cargando.
+func _item_to_dict(item: Item) -> Dictionary:
+	var entry = {
+		"item_unique_name": item.data.item_unique_name,
+		"condition": item.condition,
+		"uses_left": item.uses_left
+	}
+	var conditions := {}
+	for cc in item.custom_conditions:
+		conditions[cc.condition] = cc.value
+	if not conditions.is_empty():
+		entry["conditions"] = conditions
+	if item.held_item != null:
+		entry["held"] = _item_to_dict(item.held_item)
+	return entry
+
+func _item_from_dict(entry: Dictionary, item_database: Dictionary) -> Item:
+	var unique_name = entry.get("item_unique_name", "")
+	if not item_database.has(unique_name): return null
+	var new_item = Item.new(item_database[unique_name])
+	new_item.condition = entry.get("condition", 100.0)
+	new_item.uses_left = entry.get("uses_left", new_item.data.uses)
+	var conditions : Dictionary = entry.get("conditions", {})
+	for condition_name in conditions.keys():
+		var cc = new_item.get_custom_condition(condition_name)
+		if cc != null:
+			cc.value = conditions[condition_name]
+	new_item.update_states()
+	if entry.has("held"):
+		new_item.held_item = _item_from_dict(entry["held"], item_database)
+	return new_item
 
 func from_dict(dict_data: Dictionary, item_database: Dictionary):
 	size = dict_data.get("size", size)
@@ -231,12 +260,8 @@ func from_dict(dict_data: Dictionary, item_database: Dictionary):
 	for i in range(min(slot_data.size(), slots.size())):
 		var entry = slot_data[i]
 		if entry != null:
-			var unique_name = entry.get("item_unique_name", "")
-			if item_database.has(unique_name):
-				var new_item = Item.new(item_database[unique_name])
-				new_item.condition = entry.get("condition", 100.0)
-				new_item.uses_left = entry.get("uses_left", new_item.data.uses)
-				slots[i].item = new_item
+			var restored = _item_from_dict(entry, item_database)
+			if restored != null:
+				slots[i].item = restored
 	end_batch()
-
 #endregion

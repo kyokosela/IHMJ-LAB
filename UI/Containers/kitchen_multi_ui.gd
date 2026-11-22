@@ -11,6 +11,9 @@ signal overflow_resolution_needed(items: Array[Item])
 @export var station_labels: Dictionary[String,Label] = {}
 @export var station_progress_bars: Dictionary[String,ProgressBar] = {}
 @export var station_craft_buttons: Dictionary[String,Button] = {}
+## Completado (arte ilustrado de la cocina, Assets/UI/Kitchen): props que cambian segun el estado de la estacion.
+@export var station_item_props: Dictionary[String,CanvasItem] = {}    ## visibles mientras la estacion tiene un objeto (la olla)
+@export var station_active_props: Dictionary[String,CanvasItem] = {}  ## visibles mientras la estacion trabaja (fuego y humo, agua)
 
 @export_group("Simple Craft")
 @export var simple_craft_input_grid: Container
@@ -20,6 +23,10 @@ signal overflow_resolution_needed(items: Array[Item])
 
 @export_group("Storage")
 @export var storage_grid: Container
+## Completado: la cocina tiene dos alacenas. Las primeras storage_first_count casillas del almacenamiento van a storage_grid y el
+## resto a storage_grid_2 (si no hay segunda, todas van a la primera).
+@export var storage_grid_2: Container
+@export var storage_first_count: int = 6
 
 @export_group("Player Inventory")
 @export var player_hands_grid: Container
@@ -141,7 +148,16 @@ func _update_stations_ui():
 		var item = kitchen.get_station_item(station.station_id)
 		var slot_ui = _create_slot_ui(item, kitchen.get_station_slot_index(station.station_id))
 		container.add_child(slot_ui)
-		
+
+		# Completado (arte ilustrado, Assets/UI/Kitchen): la olla aparece cuando la estacion tiene un objeto
+		# y el fuego, el humo o el agua se ven mientras la estacion trabaja.
+		var item_prop = station_item_props.get(station.station_id)
+		if item_prop and is_instance_valid(item_prop):
+			item_prop.visible = item != null
+		var active_prop = station_active_props.get(station.station_id)
+		if active_prop and is_instance_valid(active_prop):
+			active_prop.visible = station.is_locked
+
 	
 		var label = station_labels.get(station.station_id)
 		if label and is_instance_valid(label):
@@ -204,11 +220,16 @@ func _update_storage_ui():
 	if not storage_grid: return
 	
 	_clear_grid(storage_grid)
+	_clear_grid(storage_grid_2)
 	
+	var n := 0
 	for idx in kitchen.get_storage_indices():
 		var slot = kitchen.inventory.slots[idx]
 		var slot_ui = _create_slot_ui(slot.item if not slot.is_empty() else null, idx)
-		storage_grid.add_child(slot_ui)
+		# Completado: segunda alacena (ver storage_first_count)
+		var grid = storage_grid_2 if (storage_grid_2 and n >= storage_first_count) else storage_grid
+		grid.add_child(slot_ui)
+		n += 1
 
 func _update_player_ui():
 	if not player_inventory: return

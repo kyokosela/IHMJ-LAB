@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="1_vq45f"]
 [ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="1_xqb5t"]
-[ext_resource type="Resource" uid="uid://cy37p1h5j1xr1" path="res://Resources/Items/Data/Meals/ingredients_unpack.tres" id="2_u81w5"]
+[ext_resource type="Resource" uid="uid://cy37p1h5j1xr1" path="res://Resources/Items/Data/ingredients_unpack.tres" id="2_u81w5"]
 [ext_resource type="Script" uid="uid://dvjyhvtl4cau5" path="res://Resources/Crafts/craft_result.gd" id="4_y3k0l"]
 
 [sub_resource type="Resource" id="Resource_u81w5"]

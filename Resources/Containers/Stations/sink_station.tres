@@ -27,7 +27,7 @@ metadata/_custom_type_script = "uid://de0p0f0ihls31"
 [resource]
 script = ExtResource("1_station")
 station_id = "sink"
-station_name = "Sink"
+station_name = "Fregadero"
 inherent_util = "water"
 available_crafts = Array[ExtResource("1_craft")]([SubResource("Resource_craft_fill_pot")])
 blocked_states = Array[String]([])

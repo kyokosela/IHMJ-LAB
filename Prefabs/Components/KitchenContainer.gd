@@ -39,6 +39,8 @@ func _ready():
 	
 	if inventory:
 		inventory.inventory_changed.connect(_on_inventory_changed)
+	
+	_restore_stations()
 
 func _setup_slot_structure(): ## Calcula el tamaño total necesario
 	var total_slots = stations.size() + 3 + storage_size  # stations + simple craft (2+1) + storage
@@ -51,6 +53,28 @@ func _setup_slot_structure(): ## Calcula el tamaño total necesario
 		inventory.size = total_slots
 		inventory._initialize_slots()
 
+## Completado (P31): las estaciones son recursos COMPARTIDOS: al salir de la zona con la estufa cocinando seguia "ocupada" y su
+## evento apuntaba al nodo viejo (ya liberado), asi que la comida nunca terminaba. Al volver se retoma: si el evento sigue en
+## marcha se rehace con este nodo y el tiempo que le queda; si ya se cumplio mientras no estabas, el crafteo termina ahora.
+func _restore_stations() -> void:
+	for station in stations:
+		if not station.is_locked: continue
+		var event = EventManager.get_event(station.active_craft_event) as LapseEvent
+		var left := ""
+		if event != null:
+			left = event.timer_count if not event.timer_count.is_empty() else event.time_lapse_value
+			EventManager.remove_event(station.active_craft_event)
+		var item = get_station_item(station.station_id)
+		var recipe = station.find_valid_recipe([item]) if item != null else null
+		if recipe == null:
+			station.unlock()
+			continue
+		var items : Array[Item] = [item]
+		if left == "":
+			station.unlock()
+			_execute_station_craft(station, recipe, items)
+		else:
+			EventManager.create_lapse_event(left, _on_station_craft_timer_complete.bind(station.station_id, recipe, items), station.active_craft_event, "COOKING_" + station.station_id, false, true, true)
 #region Station API
 ## Obtiene una estación por ID
 func get_station(station_id: String) -> Station:
@@ -230,11 +254,23 @@ func _simple_craft_matches(recipe: Crafts, items: Array[Item]) -> bool:
 	return true
 
 ## Ejecuta el craft simple pendiente (cuando el player toma el resultado)
+## Completado: antes cada ingrediente se buscaba por su POSICION en la lista de items ocupados y no por la casilla donde
+## estaba: con el ingrediente en la 2.a casilla se vaciaba la 1.a (vacia) y el ingrediente nunca se gastaba (comidas
+## infinitas). Ahora cada ingrediente se consume en SU casilla, como hace CraftingContainer con los indices usados.
 func execute_simple_craft() -> Item:
 	if _pending_simple_craft == null: return null
 	
 	var recipe = _pending_simple_craft
-	var items = _pending_simple_craft_items.duplicate()
+	var slot_indices : Array[int] = _simple_craft_slot_indices(recipe)
+	if slot_indices.size() < recipe.needed_items.size():
+		# lo que hay en las casillas ya no coincide con la receta pendiente
+		_pending_simple_craft = null
+		_pending_simple_craft_items.clear()
+		return null
+	
+	var items: Array[Item] = []
+	for idx in slot_indices:
+		items.append(inventory.slots[idx].item)
 	
 	if _check_breakage(items):
 		_pending_simple_craft = null
@@ -244,20 +280,14 @@ func execute_simple_craft() -> Item:
 	var result = recipe.create_result(items)
 	result.update_states()
 	
-	var input_indices = get_simple_craft_input_indices()
-	for i in range(mini(recipe.needed_items.size(), items.size())):
+	for i in range(slot_indices.size()):
 		var craft_slot: CraftSlot = recipe.needed_items[i]
-		var slot_idx = input_indices[i] if i < input_indices.size() else -1
-		if slot_idx == -1: continue
-		
-		var original_item = items[i] if i < items.size() else null
-		var return_item = craft_slot.create_return_item(original_item)
-		
+		var return_item = craft_slot.create_return_item(items[i])
 		if return_item != null:
 			return_item.update_states()
-			inventory.slots[slot_idx].item = return_item
+			inventory.slots[slot_indices[i]].item = return_item
 		else:
-			inventory.slots[slot_idx].clear()
+			inventory.slots[slot_indices[i]].clear()
 	
 	_pending_simple_craft = null
 	_pending_simple_craft_items.clear()
@@ -266,6 +296,22 @@ func execute_simple_craft() -> Item:
 	inventory.inventory_changed.emit()
 	
 	return result
+
+## Completado: casilla de entrada que usa cada ingrediente de la receta (en el orden de la receta); vacio si no coincide.
+func _simple_craft_slot_indices(recipe: Crafts) -> Array[int]:
+	var used: Array[int] = []
+	for needed in recipe.needed_items:
+		var found := -1
+		for idx in get_simple_craft_input_indices():
+			if idx in used: continue
+			var slot = inventory.slots[idx]
+			if not slot.is_empty() and needed.matches(slot.item):
+				found = idx
+				break
+		if found == -1:
+			return []
+		used.append(found)
+	return used
 
 ## Devuelve los items de craft simple a un inventario (al cerrar UI)
 func return_simple_craft_items(target: InventoryContainer) -> Array[Item]:

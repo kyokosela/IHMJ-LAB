@@ -22,6 +22,7 @@ class_name DebugPanel
 @onready var sanity_value : Label = %sanityValue
 @onready var sanity_spin_box : SpinBox = %sanitySpinBox
 @onready var sanity_name : Label = %sanityName
+@onready var engine_info : RichTextLabel = %EngineInfo ## resumen del motor de efectos (PlayerManager.get_debug_report)
 
 var entity_widgets : Dictionary = {}
 var stat_widgets : Array[StatContainerDebug]
@@ -66,6 +67,16 @@ func _ready() -> void:
 	PlayerManager.effect_added.connect(_on_effect_active)
 	PlayerManager.effect_removed.connect(_on_effect_remove)
 	PlayerManager.sanity_changed.connect(_sanity_changed)
+	# El panel puede abrirse a mitad de partida (F3): mostrar lo que ya esta activo.
+	for effect : Effect in PlayerManager.effects:
+		_on_effect_active(effect)
+	_sanity_changed(PlayerManager.sanity_value, PlayerManager.sanity_value)
+
+## F3 tambien cierra el panel cuando es la ventana con el foco (GameManager solo recibe F3 desde el juego).
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3:
+		hide()
+		set_input_as_handled()
 
 func _disconnect_current_entity():
 	if _connected_inventory and is_instance_valid(_connected_inventory):
@@ -290,6 +301,7 @@ func entity_info_update(_delta : float)-> void:
 
 func game_info_update(_delta : float)->void:
 	frame_time_ms = _delta * 1000.0
+	engine_info.text = PlayerManager.get_debug_report()
 	
 	game_info.text = """
 	[font_size=12]

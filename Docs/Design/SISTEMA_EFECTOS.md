@@ -3,6 +3,8 @@
 
 > Es la **fuente de verdad de los efectos** (sustituye al §4 de [SISTEMA_GAMEPLAY.md](SISTEMA_GAMEPLAY.md)). Parte de tu tabla de efectos, cierra todos sus huecos con lo que ya existía en tus documentos, y fue **probada con una simulación** ([Tools/simulacion_efectos.gd](../../Tools/simulacion_efectos.gd)) para comprobar que no hay trampas sin salida.
 
+> **Estado (Paso 1, 2026-11-21):** implementado **dentro de `PlayerManager`** (sin clases nuevas) y comprobado con [Tools/probar_efectos.gd](../../Tools/probar_efectos.gd) (más de 150 comprobaciones contra este documento, con el reloj y el cambio de día reales; correrlo tras cualquier cambio de números: debe terminar en 0 FALLA). **Pendiente:** Desmayo (Estrés III), Desahogo (faltan los diálogos), Suciedad en dos capas e ítems Pastillas / Medicina / Mentas / Antojo (faltan iconos y datos).
+
 **Leyenda:** ✅ viene de tus documentos · 🔧 unifiqué (ver D# de [DECISIONES_Y_PENDIENTES.md](DECISIONES_Y_PENDIENTES.md)) · 🟡 **lo completé yo** derivándolo de tus números (ver E# en §8) · 🔴 abierto
 
 ---
@@ -212,7 +214,7 @@ Costo de energía **−75 %**, tiempo **×1,5**. Se va al subir la energía. **R
 
 #### DEBILITAMIENTO
 **Causas** ✅ 🟡: Energía **0** (100 %) · los dos riesgos de Agotada (arriba). **Duración 72 h.**
-**Impacto** ✅: tiempo **×2** · cada interacción gasta +1 de energía. **Secuela** ✅: las acciones pesadas cuestan **+20 % de energía** durante esos 3 días. Al adquirirlo: **−5 Cordura** (FJ2).
+**Impacto** ✅: tiempo **×2** · cada interacción gasta **+1 %** de energía (tu `weak.tres`: ×1,01). **Secuela** ✅: las acciones pesadas cuestan **+20 % de energía** durante esos 3 días. Al adquirirlo: **−5 Cordura** (FJ2).
 **Mitigación** ✅: **Medicina** (anula).
 
 #### DESMAYO (evento, no efecto) 🟡 E12
@@ -236,7 +238,7 @@ Costo de energía **−75 %**, tiempo **×1,5**. Se va al subir la energía. **R
 | Estrés III mitigado por completo | → **Insomnio** |
 | Calma III anulada por completo | → **Estrés** |
 | Energía ≤15 | 30 %/día y 50 % en la 4.ª acción → **Debilitamiento** |
-| Hambre + Debilitamiento | los costos suman (+15 % y +1) |
+| Hambre + Debilitamiento | los costos suman (+15 % y +1 %) |
 
 ## 5. Ítems que tocan efectos 🟡 (E9) — a escala del mercado actual (comida S/25–60, jabón S/10–35)
 | Ítem | Precio | Efecto |

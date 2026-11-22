@@ -1,9 +1,6 @@
 extends ConsumableBehavior
 class_name Ingredients
 
-const INAPETENCIA_EAT_SUCCESS_CHANCE : float = 0.50
-const INAPETENCIA_EFFECTIVENESS_MULTIPLIER : float = 0.75
-
 func update_states(_item: Item) -> void:
 	super(_item)
 
@@ -19,21 +16,18 @@ func use(_item: Item) -> void:
 		ItemData.QUALITY.C:
 			base_energy_gain = 30
 
-	var has_inapetencia : bool = PlayerManager.has_effect("INAPETENCIA")
-	if has_inapetencia and randf() > INAPETENCIA_EAT_SUCCESS_CHANCE:
+	# Inapetencia (SISTEMA_EFECTOS §3.2): probabilidad de fallar y energia recuperada segun su nivel.
+	var eating : Dictionary = PlayerManager.get_inapetencia_eating()
+	if eating.fail_chance > 0.0 and PlayerManager.rng.randf() < eating.fail_chance:
 		super(_item)
 		return
 
 	super(_item)
 
-	if has_inapetencia:
-		base_energy_gain *= INAPETENCIA_EFFECTIVENESS_MULTIPLIER
+	base_energy_gain *= eating.energy_mult
 
 	PlayerManager.increase_stat("ENERGY", base_energy_gain)
 	PlayerManager.remove_effect("HUNGER")
 	EventManager.reset_lapse_event("AUTO_HUNGER_LAPSE")
-	
-	if _item.has_state("hot"):
-		print("reducir estres 1 nivel")
-	
-	
+	# Cuenta como comida casera para la Rutina saludable; servida caliente baja 1 nivel de Estres.
+	PlayerManager.register_meal("HOME", _item.has_state("hot"))

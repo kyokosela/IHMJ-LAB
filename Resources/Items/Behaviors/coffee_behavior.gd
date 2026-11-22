@@ -11,13 +11,13 @@ func use(_item: Item) -> void:
 	# Check for INSOMNIA trigger before applying hyperactive (design: coffee at energy >= 90%)
 	PlayerManager.check_coffee_insomnia_trigger()
 	
-	PlayerManager.add_effect(preload("uid://bjjg72x4dps63"))
-	EventManager.create_lapse_event("02:00",func(): PlayerManager.remove_effect("HYPERACTIVE"),"COFFEE_HYPERACTIVE","Coffee HyperActive", false, true, true)
+	PlayerManager.apply_timed_hyperactive("COFFEE")   # reactivada estando activa -> Insomnio (D2)
+	PlayerManager.coffee_relieves_hipersomnia()
 	
 	if _item.has_state("hot"):
-		var random = randi_range(0,5)
+		var random = PlayerManager.rng.randi_range(0,5)
 		if random == 3:
-			PlayerManager.decrease_level_effect("STRESS", 1)
+			PlayerManager.mitigate_stress(1, "HOT_COFFEE")
 	elif _item.has_state("cold"):
 		PlayerManager.increase_stat("ENERGY", 10)
 	

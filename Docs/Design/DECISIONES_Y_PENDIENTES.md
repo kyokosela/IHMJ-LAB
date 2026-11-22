@@ -74,15 +74,15 @@
 | 1 | **Corregido:** lo medido (30 min, sin energía, sin cooldown) era la escena placeholder de la IA (`Apartment.tscn` + `integration_action.gd`). **Tu ducha real** (`bathe.gd` en `Playground.tscn`) ya es una ficha: 20 min, 10 de energía y cooldown de 5 h con mensaje. Falta ajustarla a la Ficha (25 min, −5) en el Inspector, el agua caliente/fría y el jabón con usos | `InteractableAction` en la escena | F2 |
 | 2 | En la escena de la IA todo es repetible; en la tuya ya hay cooldown (`is_cooldown_at_execute`). Falta el tipo General (3 usos) como propiedad opcional | `interactable_task.gd` | F2 |
 | 3 | Tu `TutorialDoor.tres` exige BATHE, COOK y CLOTHES; falta la tarea de cepillarse (TEETH). `tutorial.gd` (de la IA) duplica esto con banderas propias y debe sustituirse por `task_lists` | `Resources/Task/Tutorial/TutorialDoor.tres` | F2 |
-| 4 | Calma no usa Rutina saludable | `player_manager.gd` | F3 |
-| 5 | Escalada de niveles automática por días, sin tirada 50 % ni umbral de cordura | `player_manager.gd` (`_check_level_escalation`) | F3 |
-| 6 | Estrés III mitigado otorga Calma (debe ser Insomnio) | `player_manager.gd` (`_grant_opposite_primary_effect`) | F1 |
-| 7 | Atenta suma 5 % de riesgo de Estrés (debe reducirlo) | `interactable_task.gd` | F1 |
-| 8 | Suciedad a las 16 h y un solo efecto (sin capas cuerpo/boca) | `game_manager.gd` (`new_game`) | F1 / F3 |
-| 9 | Energía base 50 (debe ser 45) | `Resources/Stats/stats/stat_energy.tres` | F1 |
-| 10 | Almuerzo hasta 14:00 (debe ser 13:45) | `attendance_manager.gd` | F1 |
-| 11 | Hiperactividad solo por energía ≥90 y café; faltan Atenta y Estrés | `player_manager.gd` | F3 |
-| 12 | Inapetencia es un efecto sin números (no reduce éxito ni energía al comer) | `Resources/Effects/Effects/inapetencia.tres` | F3 |
+| 4 | Calma no usa Rutina saludable | `player_manager.gd` | ✅ Paso 1 |
+| 5 | Escalada de niveles automática por días, sin tirada 50 % ni umbral de cordura | `player_manager.gd` (`_check_level_escalation`) | ✅ Paso 1 |
+| 6 | Estrés III mitigado otorga Calma (debe ser Insomnio) | `player_manager.gd` (`_grant_opposite_primary_effect`) | ✅ Paso 1 |
+| 7 | Atenta suma 5 % de riesgo de Estrés (debe reducirlo) | `interactable_task.gd` | ✅ Paso 1 |
+| 8 | Suciedad a las 16 h y un solo efecto (sin capas cuerpo/boca) | `game_manager.gd` (`new_game`) | ✅ 24 h (Paso 1) · capas pendientes |
+| 9 | Energía base 50 (debe ser 45) | `Resources/Stats/stats/stat_energy.tres` | ✅ Paso 1 |
+| 10 | Almuerzo hasta 14:00 (debe ser 13:45) | `attendance_manager.gd` | ✅ Paso 1 |
+| 11 | Hiperactividad solo por energía ≥90 y café; faltan Atenta y Estrés | `player_manager.gd` | ✅ Paso 1 |
+| 12 | Inapetencia es un efecto sin números (no reduce éxito ni energía al comer) | `Resources/Effects/Effects/inapetencia.tres` | ✅ Paso 1 |
 | 13 | El evento `RENT` (miércoles 17:00) no dispara nada; el cobro lo hacen eventos del jueves y viernes | `Resources/Events/` + `narrative_event_handler.gd` | F4 |
 | 14 | El salario se paga el viernes 16:00 **y** al cambiar de semana | `narrative_event_handler.gd` + `attendance_manager.gd` | F4 |
 | 15 | Advertencias de renta suben por pagos fallidos, no por días; sin deudas invisibles (dinero nunca <0) | `economy_manager.gd` | F4 |
@@ -95,12 +95,12 @@
 ## 4. Hoja de ruta (una fase a la vez, cada una con prueba automática)
 | Fase | Qué se hace | Cómo lo verifico |
 |---|---|---|
-| **F1 · Números en un solo sitio** | Un archivo `game_rules.gd` con todas las constantes etiquetadas con el § de este documento; migrar las dispersas. Arreglar #6, #7, #8 (24 h), #9, #10 | Prueba que lee `game_rules` y comprueba cada valor contra este documento |
+| **F1 · Números en su sitio** ✅ | Hecho en el Paso 1 **sin archivos nuevos** (se respeta tu sistema): los números quedaron como constantes de `player_manager.gd`, etiquetadas con su §, y en tus `.tres`. Arreglados #6, #7, #8 (24 h), #9, #10 y 3 errores de signo en tus recursos (Hambre ×1,15, Cansancio ×1,5, Debilitamiento ×2 y +1 %) | `Tools/probar_efectos.gd`: más de 150 comprobaciones contra este documento, con el reloj y el cambio de día reales |
 | **F2 · Acciones y tutorial en TU sistema** | **No se crean clases nuevas.** Se ajustan los valores de `InteractableAction` en las escenas (Inspector: `time_cost`, `stat_req_list`, `cooldown_time`), se agrega la tarea TEETH a `TutorialDoor.tres` con sus mensajes, la puerta usa `task_lists`, y `tutorial.gd` (de la IA) se sustituye por `TaskManager`. Opcional: propiedad de usos máximos para las acciones Generales | Ducharse dos veces seguidas: la segunda entra en cooldown; no se sale sin las 4 tareas |
-| **F3 · Efectos completos** | Implementar [SISTEMA_EFECTOS.md](SISTEMA_EFECTOS.md): Rutina saludable, escalada con tirada y umbral, Suciedad en dos capas, niveles de Atenta/Hipersomnia/Inapetencia/Sueño, Desahogo, estabilizadores de cordura (rebote, tope, piso), deuda de sueño con tope y los ítems Pastillas/Medicina/Mentas/Antojo | Reproducir en el juego real los perfiles de `Tools/simulacion_efectos.gd` y comparar resultados |
+| **F3 · Efectos completos** (casi todo ✅ en el Paso 1) | Implementar [SISTEMA_EFECTOS.md](SISTEMA_EFECTOS.md). **Hecho:** Rutina saludable, escalada con tirada y umbral, niveles de Atenta/Hipersomnia/Inapetencia/Sueño, estabilizadores de cordura (rebote, tope, piso) y deuda de sueño con tope. **Pendiente:** Suciedad en dos capas, Desmayo (Estrés III), Desahogo (faltan los diálogos) e ítems Pastillas/Medicina/Mentas/Antojo (faltan iconos y datos) | Una semana modelo y una caótica con el reloj real (`Tools/probar_efectos.gd`, sección L): la modelo sube la cordura y la caótica la hunde |
 | **F4 · Calendario y economía** | Alquiler el miércoles y avisos, servicios, pago único el viernes 17:00, bus por horario, deudas invisibles, tolerancia 08:10 | Recorrer la semana con y sin pagar y comparar con §7 |
 | **F5 · Guardado y pantalla** | Guardado al dormir; HUD con efectos, hora, energía, día y dinero | Guardar, cargar y comparar estado |
 
 **Costo en tokens (plan Pro):** cada fase cabe en sesiones cortas. Sonnet para F1–F4; Haiku para ajustar números; Opus solo si F3 se atasca. Antes de cada fase leo **solo** `CLAUDE.md` y la parte de este documento que toca.
 
-**Estado de lo ya hecho hoy:** arranque en el apartamento · zoom y cámara por zona · tecla Z para todo · reloj arriba · eventos por zona · correcciones de crash y repeticiones (todo sin commitear).
+**Estado de lo ya hecho:** arranque en el apartamento · zoom y cámara por zona · tecla Z para todo · reloj arriba · eventos por zona · correcciones de crash y repeticiones · **Paso 1: motor de efectos dentro de `PlayerManager`, probado con `Tools/probar_efectos.gd` y visible en el panel de depuración (F3)**.

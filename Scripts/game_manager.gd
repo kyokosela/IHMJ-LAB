@@ -39,14 +39,15 @@ func new_game() -> void:
 	is_on_tutorial = true
 
 	SaveManager.clear()
+	PlayerManager.reset_engine_state()
 	TimeManager.minutes = 480  # 08:00
 	
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
 	
-	EventManager.create_lapse_event("16:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/smelly.tres")), "AUTO_SMELLY_LAPSE", "SMELLY_TIMER", true)
+	EventManager.create_lapse_event("24:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/smelly.tres")), "AUTO_SMELLY_LAPSE", "SMELLY_TIMER", true)
 	EventManager.create_lapse_event("06:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/hunger.tres")), "AUTO_HUNGER_LAPSE", "HUNGER_TIMER", true)
-	EventManager.create_lapse_event("16:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/sleepy.tres")), "AUTO_SLEEPY_LAPSE", "SLEEPY_TIMER", true)
+	EventManager.create_lapse_event("16:00", PlayerManager.apply_vigil_sleepy, "AUTO_SLEEPY_LAPSE", "SLEEPY_TIMER", true)
 
 	_load_schedule_events()
 	_skip_past_events()
@@ -99,6 +100,16 @@ func load_file(slot_id : int) -> void :
 
 #region DEBUG SYSTEM
 var current_sesion : FileAccess
+var _debug_panel : Window
+
+## Abre o cierra el panel de depuracion (UI/Debug/debug_panel.tscn). Se crea la primera vez que se pide,
+## asi muestra lo que ya esta activo y sirve en cualquier escena (el Apartamento no lo trae).
+func toggle_debug_panel() -> void:
+	if _debug_panel == null or not is_instance_valid(_debug_panel):
+		_debug_panel = (load("res://UI/Debug/debug_panel.tscn") as PackedScene).instantiate()
+		get_tree().root.add_child(_debug_panel)
+		return
+	_debug_panel.visible = not _debug_panel.visible
 
 func setup_log() -> void :
 	if !create_log : return
@@ -138,7 +149,12 @@ func _notification(what: int) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not OS.is_debug_build(): return
-	
+
+	# F3: abre/cierra el panel de depuracion (efectos, cordura, reloj) en cualquier escena.
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3:
+		toggle_debug_panel()
+		get_viewport().set_input_as_handled()
+
 	if event.is_action_pressed("debug_save"):
 		print("saving...")
 		save_file(0)

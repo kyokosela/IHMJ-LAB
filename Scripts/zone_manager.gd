@@ -23,9 +23,8 @@ const ZONES_REQUIRING_TRANSPORT: Array[ZONES] = [
 ]
 
 const STREET_RISK_BASE_CHANCE : float = 0.10
-const STREET_RISK_SANITY_LOSS : float = 5.0
 const STREET_RISK_TIME_PENALTY : String = "00:10"
-const EFFECT_STRESS := preload("res://Resources/Effects/Effects/stress.tres")
+## La cordura y el Estres de un imprevisto en la calle los resuelve PlayerManager.register_street_event().
 
 var current_zone: int = ZONES.APARTMENT
 var previous_zone: int = -1
@@ -90,12 +89,11 @@ func get_zone_name(zone_id: ZONES) -> String:
 
 func _process_street_risk() -> void:
 	var chance : float = PlayerManager.get_street_risk_chance(STREET_RISK_BASE_CHANCE)
-	var roll : float = randf()
+	var roll : float = PlayerManager.rng.randf()
 
 	if roll > chance:
 		return
 
-	PlayerManager.sanity_value -= STREET_RISK_SANITY_LOSS
 	TimeManager.add_to_current_time(STREET_RISK_TIME_PENALTY)
-	PlayerManager.add_effect(EFFECT_STRESS.duplicate())
+	PlayerManager.register_street_event()
 	street_risk_triggered.emit(chance, roll)

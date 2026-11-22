@@ -1,13 +1,13 @@
-[gd_resource type="Resource" script_class="Effect" load_steps=5 format=3 uid="uid://ctefxi51nsxx3"]
+[gd_resource type="Resource" script_class="Effect" format=3 uid="uid://ctefxi51nsxx3"]
 
-[ext_resource type="Texture2D" path="res://Assets/UI/effects/hungerrr.png" id="1_75jho"]
+[ext_resource type="Texture2D" uid="uid://bsv1xdnr8vwtf" path="res://Assets/UI/effects/hungerrr.png" id="1_75jho"]
 [ext_resource type="Script" uid="uid://b7krqqvmfg6wr" path="res://Resources/Effects/effect.gd" id="1_nvdfj"]
 [ext_resource type="Script" uid="uid://8yhqerdijsj6" path="res://Resources/Effects/stat_changer.gd" id="2_xfa77"]
 
 [sub_resource type="Resource" id="Resource_jpd7d"]
 script = ExtResource("2_xfa77")
 stat_unique_name = "ENERGY"
-value = 0.15
+value = -0.15
 OPERATION = 2
 metadata/_custom_type_script = "uid://8yhqerdijsj6"
 

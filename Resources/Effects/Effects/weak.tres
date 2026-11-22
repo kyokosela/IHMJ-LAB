@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="TemporalEffect" load_steps=7 format=3 uid="uid://b1regvog0e5nl"]
+[gd_resource type="Resource" script_class="TemporalEffect" format=3 uid="uid://b1regvog0e5nl"]
 
 [ext_resource type="Script" uid="uid://cxwrfm5erroju" path="res://Resources/Effects/temporalEffect.gd" id="1_7wyev"]
 [ext_resource type="Texture2D" uid="uid://mma80df2cs8c" path="res://Assets/UI/effects/weak.png" id="1_26wfe"]
@@ -8,13 +8,13 @@
 [sub_resource type="Resource" id="Resource_26wfe"]
 script = ExtResource("2_26wfe")
 stat_unique_name = "ENERGY"
-value = 0.01
+value = -0.01
 OPERATION = 2
 metadata/_custom_type_script = "uid://8yhqerdijsj6"
 
 [sub_resource type="Resource" id="Resource_hurv1"]
 script = ExtResource("3_agjk3")
-time_value = 2.0
+time_value = 1.0
 OPERATION = 2
 metadata/_custom_type_script = "uid://cy3erp2xhtbpv"
 

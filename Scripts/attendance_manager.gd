@@ -11,7 +11,7 @@ signal fired(reason: String)
 const WORK_START: String = "08:00"
 const WORK_END: String = "17:00"
 const LUNCH_START: String = "13:00"
-const LUNCH_END: String = "14:00"
+const LUNCH_END: String = "13:45"
 
 const ABSENCE_WARNING_1: int = 1
 const ABSENCE_WARNING_2: int = 2

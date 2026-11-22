@@ -260,6 +260,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Decrease"
 
+[node name="engine" type="FoldableContainer" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer"]
+layout_mode = 2
+title = "Engine (efectos y cordura)"
+
+[node name="EngineInfo" type="RichTextLabel" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer/engine"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "..."
+fit_content = true
+
 [node name="effects" type="FoldableContainer" parent="MarginContainer/TabContainer/PlayerManager/MarginContainer/VBoxContainer"]
 layout_mode = 2
 title = "Effects"

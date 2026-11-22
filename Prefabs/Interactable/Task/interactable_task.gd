@@ -3,8 +3,6 @@ extends Interactable
 class_name InteractableAction
 
 const EFFECT_STRESS := preload("res://Resources/Effects/Effects/stress.tres")
-const ACTION_STRESS_RISK_WITH_HYPERSOMNIA : float = 0.10
-const ACTION_STRESS_RISK_WITH_ATENTA : float = 0.05
 
 @export var interaction_name : String
 @export var is_cooldown_at_execute : bool
@@ -46,17 +44,13 @@ func custom_execute():
 	
 	if !is_cooldown and is_cooldown_at_execute : cooldown_executed = true
 
+## Hipersomnia puede causar Estres en cualquier accion (4 / 7 / 10 % segun su nivel).
+## Atenta ya NO suma riesgo (antes sumaba 5 %): tu diseno dice que lo reduce; su efecto es subir
+## el umbral de "exceso de trabajo". SISTEMA_EFECTOS §3.2.
 func _process_action_stress_risk() -> void:
-	var has_hypersomnia : bool = PlayerManager.has_effect("HIPERSOMNIA")
-	var has_atenta : bool = PlayerManager.has_effect("ATENTA")
-
-	if not has_hypersomnia and not has_atenta:
-		return
-
-	var base_chance : float = ACTION_STRESS_RISK_WITH_HYPERSOMNIA if has_hypersomnia else ACTION_STRESS_RISK_WITH_ATENTA
-	var chance : float = PlayerManager.get_street_risk_chance(base_chance)
-	if randf() <= chance:
-		PlayerManager.add_effect(EFFECT_STRESS.duplicate())
+	var chance : float = PlayerManager.get_action_stress_chance()
+	if chance > 0.0 and PlayerManager.rng.randf() < chance:
+		PlayerManager.add_stress_cause("ACTION_HIPERSOMNIA")
 
 func _ready() -> void:
 	super()

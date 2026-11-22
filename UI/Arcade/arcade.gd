@@ -2,9 +2,6 @@ extends Control
 
 signal arcade_closed
 
-const STRESS_EFFECT := preload("res://Resources/Effects/Effects/stress.tres")
-const CALM_EFFECT := preload("res://Resources/Effects/Effects/calm.tres")
-
 @onready var balance_label: Label = $Container/BalanceLabel
 @onready var result_label: Label = $Container/ResultLabel
 @onready var bet_10: Button = $Container/Bets/Bet10
@@ -44,12 +41,12 @@ func _on_bet(amount: int) -> void:
 		EconomyManager.add_money(amount, "ARCADE_WIN")
 		result_label.text = "¡GANASTE! +S/%d" % amount
 		result_label.modulate = Color.GREEN
-		PlayerManager.add_effect(CALM_EFFECT.duplicate())
+		PlayerManager.register_gamble(true)
 	else:
 		EconomyManager.spend_money(amount, "ARCADE_LOSS")
 		result_label.text = "Perdiste... -S/%d" % amount
 		result_label.modulate = Color.RED
-		PlayerManager.add_effect(STRESS_EFFECT.duplicate())
+		PlayerManager.register_gamble(false)
 
 	_update_balance()
 	_update_buttons()

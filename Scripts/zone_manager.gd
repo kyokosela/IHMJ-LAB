@@ -26,15 +26,22 @@ const STREET_RISK_BASE_CHANCE : float = 0.10
 const STREET_RISK_TIME_PENALTY : String = "00:10"
 ## La cordura y el Estres de un imprevisto en la calle los resuelve PlayerManager.register_street_event().
 
+## Segundos para oscurecer y otros tantos para aclarar: un cambio de zona dura 2 s en total.
+const ZONE_FADE_TIME : float = 1.0
+
 var current_zone: int = ZONES.APARTMENT
 var previous_zone: int = -1
+var _changing_zone : bool = false ## true desde que se toca la puerta hasta que la nueva zona termina de aclarar
+var _change_id : int = 0
 var zone_node: World:
 	set(_value):
 		zone_node = _value
-		TransitionManager.fadeOut()
+		TransitionManager.fadeOut(ZONE_FADE_TIME)
 		if _value != null:
 			# diferido: que la escena termine de armarse antes de entregar eventos pendientes
 			call_deferred("emit_signal", "zone_ready", _value.zone_id)
+		if _changing_zone:
+			_unlock_after_fade()
 
 var energy_cost_base: float = 2
 var energy_cost_incremental: float = 0
@@ -43,11 +50,18 @@ var time_cost_base: String = "00:05"
 var time_cost_incremental: String = "00:05"
 
 func change_zone(new_zone_id: ZONES) -> void:
+	if _changing_zone:
+		return # ya se esta viajando: una puerta pisada otra vez no debe repetir el cambio
 	if _requires_transport(new_zone_id):
 		if not EconomyManager.can_afford_bus():
 			push_warning("Cannot afford bus fare")
 			return
 		EconomyManager.pay_bus()
+
+	# Mayui queda quieta (y sin interactuar) hasta que la nueva zona termine de aclarar
+	_changing_zone = true
+	_change_id += 1
+	GameManager.modal_count += 1
 
 	if new_zone_id == previous_zone:
 		energy_cost_incremental = energy_cost_base
@@ -63,11 +77,30 @@ func change_zone(new_zone_id: ZONES) -> void:
 	TimeManager.add_to_current_time(PlayerManager.get_time_cost_with_effects(time_cost_incremental))
 	_process_street_risk()
 
-	TransitionManager.fadeIn()
+	TransitionManager.fadeIn(ZONE_FADE_TIME)
 	await TransitionManager.transition_finished
 	var tree := zone_node.get_tree()
 	zone_node.release_player() # antes de cerrar la escena, no durante (evita crash)
 	tree.call_deferred("change_scene_to_file", zone_paths[new_zone_id])
+	_guard_stuck_lock(_change_id)
+
+## La nueva zona ya cargo y empezo a aclarar: cuando termine, Mayui vuelve a moverse.
+func _unlock_after_fade() -> void:
+	var id := _change_id
+	await TransitionManager.transition_finished
+	_release_lock(id)
+
+func _release_lock(id: int) -> void:
+	if _changing_zone and id == _change_id:
+		_changing_zone = false
+		GameManager.modal_count -= 1
+
+## Seguro: si la nueva zona nunca llega a cargar, no dejar a Mayui bloqueada para siempre.
+func _guard_stuck_lock(id: int) -> void:
+	await get_tree().create_timer(6.0).timeout
+	if _changing_zone and id == _change_id:
+		push_warning("ZoneManager: el cambio de zona no termino; se libera a Mayui")
+		_release_lock(id)
 
 func _requires_transport(zone_id: ZONES) -> bool:
 	if current_zone in [ZONES.APARTMENT, ZONES.LOBBY]:

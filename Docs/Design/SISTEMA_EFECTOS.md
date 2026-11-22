@@ -3,7 +3,7 @@
 
 > Es la **fuente de verdad de los efectos** (sustituye al §4 de [SISTEMA_GAMEPLAY.md](SISTEMA_GAMEPLAY.md)). Parte de tu tabla de efectos, cierra todos sus huecos con lo que ya existía en tus documentos, y fue **probada con una simulación** ([Tools/simulacion_efectos.gd](../../Tools/simulacion_efectos.gd)) para comprobar que no hay trampas sin salida.
 
-> **Estado (Paso 1, 2026-11-21):** implementado **dentro de `PlayerManager`** (sin clases nuevas) y comprobado con [Tools/probar_efectos.gd](../../Tools/probar_efectos.gd) (más de 150 comprobaciones contra este documento, con el reloj y el cambio de día reales; correrlo tras cualquier cambio de números: debe terminar en 0 FALLA). **Pendiente:** Desmayo (Estrés III), Desahogo (faltan los diálogos), Suciedad en dos capas e ítems Pastillas / Medicina / Mentas / Antojo (faltan iconos y datos).
+> **Estado (Paso 1, 2026-11-21):** implementado **dentro de `PlayerManager`** (sin clases nuevas) y comprobado con [Tools/probar_efectos.gd](../../Tools/probar_efectos.gd) (más de 150 comprobaciones contra este documento, con el reloj y el cambio de día reales; correrlo tras cualquier cambio de números: debe terminar en 0 FALLA). **Diseñado, falta tu OK para implementar:** Desmayo según el lugar (E14) y Sueño acumulado (E15). **Pendiente:** Desahogo (faltan los diálogos), Suciedad en dos capas e ítems Pastillas / Medicina / Mentas / Antojo (faltan iconos y datos).
 
 **Leyenda:** ✅ viene de tus documentos · 🔧 unifiqué (ver D# de [DECISIONES_Y_PENDIENTES.md](DECISIONES_Y_PENDIENTES.md)) · 🟡 **lo completé yo** derivándolo de tus números (ver E# en §8) · 🔴 abierto
 
@@ -201,6 +201,24 @@ Cada ficha usa tu plantilla: **Causas · Niveles · Impacto · Mitigación · Se
 **Secuela** ✅ 🟡: 4 h después de pagarla, la sorpresa en la calle sube 10 % ("−10 % de percepción").
 **Provoca:** Insomnio si es nivel III y hay un día sin dormir apropiadamente ✅.
 
+#### SUEÑO ACUMULADO 🟡 E15 — propuesta del 2026-11-22, falta tu OK
+**Qué es:** las **horas despierta** desde la última vez que durmió. No es un efecto ni tiene icono: es un dato interno que usa el mismo reloj que el Sueño por vigilia (16 h), así que no puede contradecirlo. Se ve en el panel de depuración y en lo que dice Mayui.
+
+| Etapa | Horas despierta (🟡 ajustables) | Mayui dice (lo escribes tú) | La cama |
+|---|---|---|---|
+| 0 Descansada | 0–5 | — | "ya dormí" (variaciones) |
+| 1 Algo cansada | 6–9 | "empiezo a cansarme" | "aún no tengo sueño" |
+| 2 Cansada | 10–13 | "estoy cansada" | **se puede dormir** |
+| 3 Muy cansada | 14–15 | "no doy más" | se puede |
+| 4 Sueño | ≥16 | nace el Sueño (12 h de deuda, ya existe) | se puede |
+
+- **Atajos para acostarse** (pasadas 2 h desde que despertó): **Energía ≤30** (el cansancio del cuerpo: lo que viste al gastar energía rápido) o **Sueño activo**. Dormir sigue igual: horas mínimas por energía, energía por horas, camas A/B/C, alarma e Insomnio.
+- **Al dormir:** si duerme el mínimo o más, vuelve a 0; si duerme menos, baja en proporción (4 de 8 h = a la mitad). El déficit oculto de siempre sigue su curso. **Desmayo:** lo deja en etapa 2 (puede acostarse).
+- **Reemplaza** el candado de "ya dormí" por 12 h: tu "una vez al día" sale solo (despierta a las 08:00 → cama desde las 18:00, o antes si está agotada). Mensajes **sin hora**: "ya dormí" y variaciones.
+- **Avisos por energía:** al bajar de 30 y de 15 (una vez por día cada uno) Mayui también lo dice: el cansancio del cuerpo y el del sueño suenan como uno solo.
+- **Con lo que ya existe (sin clases nuevas):** eventos de tiempo al despertar a las 6, 10 y 14 h (como el de 16 h del Sueño y el de 12 h de la cama); un evento `PUEDE_DORMIR` para que `bed.gd` use sus `event_list` y `event_messages` (tus StringChain con las variaciones); las líneas de Mayui las entrega `narrative_event_handler.gd` como el resto de eventos.
+- **Choques revisados:** Sueño (misma cuenta, no se duplica) · Energía (no se mezcla: solo abre el atajo y avisa) · Insomnio, Hipersomnia, alarma y camas (sin cambios) · Café e Hiperactividad (no cuentan como dormir) · Rutina saludable ("dormir apropiado sin despertador": sin cambios) · Desmayo (lo deja cansada y no gasta el dormir).
+
 ### 3.4 ENERGÍA
 
 #### HIPERACTIVIDAD
@@ -217,8 +235,23 @@ Costo de energía **−75 %**, tiempo **×1,5**. Se va al subir la energía. **R
 **Impacto** ✅: tiempo **×2** · cada interacción gasta **+1 %** de energía (tu `weak.tres`: ×1,01). **Secuela** ✅: las acciones pesadas cuestan **+20 % de energía** durante esos 3 días. Al adquirirlo: **−5 Cordura** (FJ2).
 **Mitigación** ✅: **Medicina** (anula).
 
-#### DESMAYO (evento, no efecto) 🟡 E12
-**Causas:** Energía 0 · Estrés III (50 % por día) ✅. **Resultado:** Mayui se desmaya donde esté y duerme con la fórmula de sueño (FJ3); pierde el resto del día (falta si es laboral; los eventos del día se descartan); no cuenta como "dormir apropiadamente".
+#### DESMAYO (evento, no efecto) 🟡 E12 · E14 — v2 con tus reglas del 2026-11-22 (falta tu OK de los números 🟡)
+**Causas** ✅: Energía **0** (en cualquier sitio) · Estrés III (50 % por día, en el chequeo de la mañana). *(Salud 0 es otro caso, el "Colapso" de tu Notion: queda para cuando exista Salud.)*
+**Qué pasa** 🟡: Mayui cae donde esté, la pantalla se oscurece, pasan horas y despierta según el **lugar**. Nunca cuenta como "dormir apropiadamente" y **no gasta el dormir del día**: despierta cansada y puede acostarse (ver SUEÑO ACUMULADO).
+
+| Dónde cae | Dónde despierta | Pierde | Energía al despertar | Debilitamiento | Dinero |
+|---|---|---|---|---|---|
+| **Casa** | donde cayó ✅ | 10 h (la fórmula de sueño con energía ≤15) 🟡 | 15 ✅ | sí, 72 h ✅ | sin robo |
+| **Lobby** 🟡 | donde cayó | 10 h | 15 | sí | robo bajo (10 %) |
+| **Trabajo (Oficina)** ✅ | **enfermería** de la oficina ✅ | hasta las 17:00 (mínimo 2 h) 🟡 | 15 | sí 🟡 (solo descansó) | sin cobro 🟡 |
+| **Cerca del hospital** ✅ | **hospital** ✅ | 8 h en cama A 🟡 | la de dormir 8 h en cama A | **no** ✅ | **cobro automático al despertar** ✅ (monto 🔴); si no alcanza, paga lo que tiene y el resto es deuda invisible (P10) 🟡 |
+| **Calle / Zona comercial** ✅ | donde cayó ✅ | 10 h | 15 | sí | **te roban TODO el dinero, por probabilidad según el punto** ✅ (🟡 bajo 10 % · medio 30 % · alto 60 %); −Salud por la caída 🟡 |
+
+**Reglas comunes** 🟡:
+- **Robo:** probabilidad = la del punto × lo que ya sube o baja la "sorpresa en la calle" (Atenta la reduce: ×0,8 / ×0,65 / ×0,5). Al robarla se aplica la sorpresa que ya existe (−5 de cordura ×0,75, anula Calma, causa Estrés). Opcional 🔴: la policía recupera lo robado con probabilidad (tu nota del Notion).
+- **Trabajo y falta** ✅ (tu respuesta): si ya fichó, no hay falta; si no fichó a su hora, sí. Lo resuelve `arrived_today`, sin código nuevo. Las tareas sin terminar tienen sus consecuencias normales.
+- **Mientras estuvo inconsciente:** igual que dormir (los eventos con hora se entregan o caducan como siempre).
+- **Al despertar:** una línea de Mayui según el desenlace (las escribes tú: `desmayo_casa`, `_enfermeria`, `_hospital`, `_calle`, `_robada`).
 
 ---
 
@@ -287,5 +320,7 @@ Costo de energía **−75 %**, tiempo **×1,5**. Se va al subir la energía. **R
 | **E11** | Duraciones | Hiperactividad no energética 2 h · Atenta por agua fría 1 h · Debilitamiento 72 h |
 | **E12** | Qué es el Desmayo | evento: sueño forzado, pierdes el día |
 | **E13** | Deuda de sueño sin tope | tope 36 h (hallazgo de la simulación) |
+| **E14** | Dónde despierta tras un Desmayo (tu propuesta del 2026-11-22) | tabla del Desmayo (§3.4): casa y calle = donde cayó · oficina = enfermería · cerca del hospital = hospital (cura y cobra) · robo por probabilidad según el punto |
+| **E15** | "No puedo dormir de nuevo" y el acumulador de sueño que pediste | horas despierta con 5 etapas y atajo por energía ≤30 (§3.3); reemplaza el candado de 12 h |
 
 **Siguen abiertos (🔴), ya sin bloquear nada:** P2 lista maestra de tareas · P7 azotea · P8 monto de servicios · P9 efectos de Maloliente sobre relaciones y accesos · P10 deudas invisibles · P11 Documento Maestro v2 · P13 cómo se consiguen cama y despertador · P14 números de tareas extra · y una nueva: ¿hay **agua caliente** después del tutorial? (supuse que sí desde el día 2).

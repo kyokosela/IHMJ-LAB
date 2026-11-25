@@ -221,7 +221,13 @@ func _t_manana() -> void:
 	await _calma()
 	_junto(Vector2(40, 8), Vector2.LEFT)   # junto a la ducha
 	await create_timer(0.5).timeout
+	var escena : Control = casa.get_node("UILayer/ShowerScene")
+	var vista : Array = []   # por cada linea de la ducha: [linea, ¿se esta viendo la escena sin irse?]
+	var anotar := func(info) -> void: vista.append([str(info.get("text", "")).strip_edges(), escena.visible and not escena._closing])
+	dlg.Text.text_started.connect(anotar)
 	var oido : Array = await _hablar_con_z()
+	dlg.Text.text_started.disconnect(anotar)
+	_check("La escena de la ducha (silueta tras la cortina) se ve con 'Que frio.' y se va despues", vista.size() >= 2 and vista[0] == ["Qué frío.", true] and vista[1] == ["¡Achuu!", false] and not escena.visible and gm.modal_count == 0, "%s visible=%s modal=%d" % [str(vista), escena.visible, gm.modal_count])
 	_check("La ducha queda hecha y Mayui sale en toalla", _tarea("BATHE") and pm.get_outfit_id() == "towel")
 	_check("La ducha quita Maloliente; la lista tacha asearse y marca el uniforme", not pm.has_effect("SMELLY") and _filas(ayudas)[0] == "[x] Asearse" and _filas(ayudas)[1] == "[  ] Ponerse el uniforme*", str(_filas(ayudas)))
 	_check("Primera ducha con Z: tus lineas en orden, una vez", oido == ["Qué frío.", "¡Achuu!", "...", "Debería ir a cambiarme si no quiero morir congelada.", "Espero que mi uniforme esté limpio, no recuerdo si lo lavé."], str(oido))

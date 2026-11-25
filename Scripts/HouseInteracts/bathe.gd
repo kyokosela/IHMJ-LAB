@@ -14,6 +14,11 @@ func custom_execute() -> void :
 	PlayerManager.register_bath(cold_water)
 	# Al salir del bano Mayui queda con la toalla hasta que vaya al armario.
 	PlayerManager.wear_towel()
+	# La escena de la silueta tras la cortina, si la zona la tiene (UI/Shower en Bathroom.tscn). La primera vez se queda
+	# mientras Mayui dice "Que frio."; despues, un par de segundos.
+	var ducha = get_tree().get_first_node_in_group("shower_scene")
+	if ducha != null:
+		ducha.play(first_tutorial_bath and dialog != null)
 	if first_tutorial_bath and dialog != null:
 		Dialogic.start(dialog)
 

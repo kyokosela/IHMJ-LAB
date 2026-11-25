@@ -303,7 +303,7 @@ func _t_apartamento() -> void:
 	var hora1 : int = tm.minutes
 	var dicho : Array = await _ejecutar_y_oir(ducha)
 	_check("Segunda ducha seguida: no se repite ni pasa el tiempo", usos_ducha[0] == 1 and tm.minutes == hora1, "usos %d, +%d min" % [usos_ducha[0], tm.minutes - hora1])
-	_check("...y Mayui avisa que ya se bano", dicho.size() > 0 and dicho[0].contains("bañé"), str(dicho))
+	_check("...y Mayui avisa que ya se bano", dicho.size() > 0 and dicho[0].strip_edges() == "Ya estoy limpia.", str(dicho))
 	# salir y volver al apartamento: la ducha sigue en cooldown
 	await _soltar(escena)
 	escena = await _cargar("res://Scenes/World/Apartment.tscn", 1)
@@ -313,6 +313,10 @@ func _t_apartamento() -> void:
 	_check("Al volver de otra zona la ducha SIGUE en cooldown", ducha2.cooldown_executed and tm.minutes == hora2 and dicho.size() > 0, "+%d min, dijo %s" % [tm.minutes - hora2, str(dicho)])
 	tm.add_to_current_time("05:01")
 	_check("Pasadas 5 h el cooldown termina y se puede volver a duchar", not ducha2.cooldown_executed and not ducha2.is_cooldown and ducha2.can_interact)
+	pm.increase_stat("ENERGY", 100)
+	await _ejecutar_y_oir(ducha2)             # otro bano: enfriamiento nuevo
+	dicho = await _ejecutar_y_oir(ducha2)     # insistir
+	_check("Con otro bano las frases al insistir vuelven a la primera", dicho.size() > 0 and dicho[0].strip_edges() == "Ya estoy limpia.", str(dicho))
 	# lavamanos (pantalla del espejo): antes de comer Mayui avisa; despues de comer se abre
 	var lavamanos = escena.get_node("Sink")
 	var espejo = escena.get_node("UILayer/MirrorUI")

@@ -25,6 +25,7 @@
 [ext_resource type="PackedScene" uid="uid://dd0p5w6n0rqyj" path="res://UI/Containers/wardrobe_ui.tscn" id="26"]
 [ext_resource type="PackedScene" path="res://UI/Mirror/mirror_ui.tscn" id="27"]
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/exit_door.gd" id="28"]
+[ext_resource type="Resource" path="res://DialoguePlugin/TIMELINE/ducha_tutorial.dtl" id="29"]
 
 [sub_resource type="RectangleShape2D" id="Shape_interact"]
 size = Vector2(48, 48)
@@ -34,12 +35,13 @@ size = Vector2(32, 64)
 
 [sub_resource type="Resource" id="Lines_shower_cooldown"]
 script = ExtResource("7")
-string_list = Array[String](["Ya me bañé hace poco.", "Otra ducha ahora no hace falta.", "Mejor espero un rato."])
+string_list = Array[String](["_TAKE_BATH_#1_", "_TAKE_BATH_#2_", "_TAKE_BATH_#3_"])
 
 [sub_resource type="Resource" id="Chain_shower_cooldown"]
 script = ExtResource("6")
 string_list = Array[ExtResource("7")]([SubResource("Lines_shower_cooldown")])
-cooldown_message = "Basta de ducha por ahora."
+cooldown_message = "_TAKE_BATH_COOLDOWN_"
+max_cycles = 1
 
 [sub_resource type="Resource" id="Lines_no_energy"]
 script = ExtResource("7")
@@ -116,6 +118,7 @@ stat_req_list = Dictionary[String, int]({
 })
 stat_messages = SubResource("Chain_no_energy")
 time_cost = "00:20"
+dialog = ExtResource("29")
 shape = SubResource("Shape_interact")
 display_text = "Bañarse"
 reusable = true

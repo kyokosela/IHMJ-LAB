@@ -103,10 +103,11 @@
 | **P63** | **Sistema de NPC** (diseño importante, juntos y después). Madina responde "..." mientras la historia de relleno siga apagada | tú |
 | **P64** | **PC**: el ratón ya funciona (lo bloqueaba un panel de depuración pegado a Mayui). Quité la app de prueba "Crocaina", que metía a Mayui en la ventana y la borraba de la oficina; siguen las apps de prueba "coso" y "coso2" (`mayui_pc.tres`). Los minijuegos del trabajo irán aquí, sobre la estructura del dev | tú: ¿quito "coso" y "coso2"? |
 | **P65** | **"Atenta se acumula"**: no se reproduce (con agua fría da una sola Atenta I por 1 h; ducharse otra vez no suma ni alarga). Falta saber dónde se vio (iconos o panel F3) | tú: captura |
-| **P66** | **Guion de la mañana a medias en el juego**: ya están el arranque a las 06:00 y las frases de la puerta; faltan las de la ducha, el armario y la cama, y lo que necesita arte (nevera, comida instantánea, escritorio, balcón, calendario): ver [TUTORIAL_ESTADO.md](TUTORIAL_ESTADO.md) | siguiente fase |
+| **P66** | **Guion de la mañana a medias en el juego**: ya están el arranque a las 06:00 y las frases de la puerta y la ducha; faltan las del armario y la cama, y lo que necesita arte (nevera, comida instantánea, escritorio, balcón, calendario): ver [TUTORIAL_ESTADO.md](TUTORIAL_ESTADO.md) | siguiente fase |
 | **P67** | **Casero**: su diálogo dice que la renta se paga los **viernes**; tu diseño (D6) dice **miércoles** | tú: ¿cuál vale? |
 | **P68** | **Guion del trabajo** (Bloque 1-2) sin escribir: solo tiene objetivos; la tarjeta *Flujo (gameplay)* describe la llegada sin diálogos | tú / equipo de guion |
 | **P69** | **Puerta, si insistes**: la lista de tareas del dev dice cada frase, repite el último aviso unas veces y después **no dice nada** hasta que cumples lo que falta. No te traba, pero puede parecer que la puerta no responde | tú: ¿que siga repitiendo el último aviso? |
+| **P70** | **Ducha**: ✅ frases puestas. En la primera ducha junté en orden las de `Flow de juego.txt` ("Qué frío.", "¡Achuu!", "...", "Debería ir a cambiarme si no quiero morir congelada.") y la de DIALOGOS ("Espero que mi uniforme esté limpio, no recuerdo si lo lavé."), con tildes y signos corregidos. Al insistir: tus 3 frases y el aviso; el aviso cuesta 7 min y 6 de energía (así funciona el sistema del dev). Fuera del tutorial usa esas mismas frases (no hay otras escritas). **Falta:** transición, silueta tras la cortina y sonido (arte), y la ropa sucia en las manos (P49) | tú: ¿quitas o cambias alguna frase? |
 
 ---
 

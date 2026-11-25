@@ -9,12 +9,12 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 | Momento | Qué pide el guion | En el juego |
 |---|---|---|
 | Despertar | "Tengo que ducharme." | ✅ |
-| Hora | de 6:00 a 8:00 | ✅ empieza a las 06:00 (la prueba automática sale de casa a las 07:31) |
+| Hora | de 6:00 a 8:00 | ✅ empieza a las 06:00 (la prueba automática sale de casa antes de las 08:00) |
 | Al empezar | lista de tareas en una esquina, efectos Suciedad y Hambre visibles, cuarto a oscuras, sonidos, ayudas de teclas | ❌ |
 | Cama | no deja volver a dormir (3 frases) | ❌ abre la pantalla de dormir |
 | Puerta | frases según lo que falte: ducha, uniforme, comida, dientes | ✅ con la lista de tareas; el uniforme tiene que estar puesto al salir. Si insistes mucho, se queda callada (P69) |
 | Puerta al terminar | "Aquí vamos." | ✅ la primera vez; después deja salir directo |
-| Ducha | primera vez, repetir, "Qué frío", silueta tras la cortina, estornudo al salir | ❌ solo frases provisionales al repetir |
+| Ducha | primera vez, repetir, "Qué frío", silueta tras la cortina, estornudo al salir | ✅ las frases (primera vez, estornudo y al insistir). ❌ transición, silueta y sonido: falta arte (P70) |
 | Armario | primero ducharse; frases para uniforme, pijama, casual y ropa sucia; ruge el estómago | ❌ sin frases y deja ponerse cualquier cosa |
 | Nevera | frases (antes de ducharse, sin compras, comida instantánea) | ❌ no hay nevera aparte |
 | Comida | comida instantánea y café | ❌ hoy se cocina comida casera (P25) |
@@ -30,7 +30,7 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 ## Orden que recomiendo
 1. ✅ Empezar a las 6:00.
 2. ✅ Puerta con tu guion, usando la lista de tareas que ya existe (retirada la puerta provisional de `tutorial.gd`).
-3. Frases de la ducha, el armario y la cama.
+3. Frases: ✅ la ducha; faltan el armario y la cama.
 4. Nevera y pudrición de la comida ([COCINA_Y_OBJETOS.md](COCINA_Y_OBJETOS.md)).
 5. Comida instantánea, café, escritorio, balcón y calendario (necesitan arte).
 6. Escribir el guion del trabajo (Bloque 1-2).

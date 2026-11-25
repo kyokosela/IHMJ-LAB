@@ -40,6 +40,7 @@ func custom_execute():
 	
 	if is_cooldown_at_execute :
 		if !TimeUtils.is_valid_format(cooldown_time) : printerr(" error con el formato del tiempo en cooldown");return
+		if cooldown_timer_message != null : cooldown_timer_message.reset()
 		EventManager.create_lapse_event(cooldown_time, disable_cooldown, interaction_name.to_upper() + "_COOLDOWN", interaction_name.to_upper() + "_COOLDOWN", false, true, true)
 	
 	if !is_cooldown and is_cooldown_at_execute : cooldown_executed = true

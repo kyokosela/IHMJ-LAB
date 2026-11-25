@@ -40,14 +40,20 @@ func _initialize() -> void:
 	quit(1 if failed > 0 else 0)
 
 # ------------------------------------------------------------------ utilidades
-## Espera a que no haya ningun dialogo en curso.
+## Espera a que no haya ningun dialogo en curso: lo pasa con Z como el jugador. Solo si no avanza (el del casero tiene
+## opciones) lo cierra a la fuerza; cerrar a la fuerza a media frase deja a Dialogic sin pasar el dialogo siguiente.
 func _calma() -> void:
 	var tranquilo := 0
+	var pulsaciones := 0
 	for i in 40:
 		await create_timer(0.15).timeout
 		if dlg.current_timeline != null:
-			dlg.end_timeline()
 			tranquilo = 0
+			if pulsaciones < 10:
+				pulsaciones += 1
+				await _pulsar_z()
+			else:
+				dlg.end_timeline()
 		else:
 			tranquilo += 1
 			if tranquilo >= 3:
@@ -63,6 +69,29 @@ func _decir(accion: Callable) -> String:
 		if not dichos.is_empty():
 			break
 	return " ".join(dichos)
+
+## Pulsa la tecla Z como el jugador (la misma que interactua y que pasa los dialogos).
+func _pulsar_z() -> void:
+	for presionada in [true, false]:
+		var tecla := InputEventKey.new()
+		tecla.keycode = KEY_Z
+		tecla.physical_keycode = KEY_Z
+		tecla.pressed = presionada
+		Input.parse_input_event(tecla)
+		await process_frame
+
+## Como el jugador: pulsa Z y sigue pulsando hasta que se cierre el dialogo. Devuelve las lineas oidas.
+func _hablar_con_z() -> Array:
+	dichos.clear()
+	await _pulsar_z()
+	await create_timer(0.8).timeout
+	for i in 14:
+		if dlg.current_timeline == null:
+			break
+		await _pulsar_z()
+		await create_timer(0.8).timeout
+	await create_timer(0.5).timeout
+	return dichos.map(func(linea: String) -> String: return linea.strip_edges())
 
 func _poner(pos: Vector2) -> void:
 	pm.player.movement.tile_destination = pos
@@ -125,11 +154,20 @@ func _t_manana() -> void:
 	await _calma()
 	await _vestir(casa, "work")
 	_check("(prueba) se pone el uniforme antes de ducharse", pm.get_outfit_id() == "work")
-	var ducha = casa.get_node("Shower")
-	ducha.can_interact = true
-	ducha.execute()
 	await _calma()
+	_poner(casa.get_node("Shower").global_position)
+	await create_timer(0.5).timeout
+	var oido : Array = await _hablar_con_z()
 	_check("La ducha queda hecha y Mayui sale en toalla", _tarea("BATHE") and pm.get_outfit_id() == "towel")
+	_check("Primera ducha con Z: tus lineas en orden, una vez", oido == ["Qué frío.", "¡Achuu!", "...", "Debería ir a cambiarme si no quiero morir congelada.", "Espero que mi uniforme esté limpio, no recuerdo si lo lavé."], str(oido))
+	var insistencia : Array = []
+	for i in 4:
+		insistencia.append_array(await _hablar_con_z())
+	_check("Insistiendo en la ducha: tus 3 frases y el aviso", insistencia == ["Ya estoy limpia.", "El agua no es gratis.", "No necesito otra.", "Realmente debería salir de acá para poder cambiarme."], str(insistencia))
+	oido = await _hablar_con_z()
+	_check("Despues del aviso la ducha ya no contesta", oido.is_empty(), str(oido))
+	_poner(Vector2(100, 100))
+	await create_timer(0.3).timeout
 	dicho = await _decir(abrir)
 	_check("En toalla la puerta dice 'Ni loca.' (haberse vestido antes no cuenta)", dicho.strip_edges() == "Ni loca.", dicho)
 	await _calma()

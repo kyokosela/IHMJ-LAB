@@ -46,25 +46,35 @@ func get_message() -> String :
 			
 	if selection.string_list.is_empty() : printerr(" No se encontro ningun texto en ", self);return ""
 	
+	# tr(): las listas admiten claves de Textfiles/ (como las tareas); un texto normal sale igual.
 	match selection.behaviour:
 		StringChainArray.BEHAVIOUR.COOLDOWN:
-			return get_cooldown_message(selection)
+			return tr(get_cooldown_message(selection))
 			
 		StringChainArray.BEHAVIOUR.RANDOM:
-			return list_to_check.pick_random()
+			return tr(list_to_check.pick_random())
 		
 		StringChainArray.BEHAVIOUR.ORDER:
 			message_order_index = clamp(message_order_index + 1, 0, list_to_check.size() - 1)
-			return list_to_check[message_order_index]
+			return tr(list_to_check[message_order_index])
 			
 		StringChainArray.BEHAVIOUR.CYCLE:
 			message_cycle_index += 1
 			var idx = (message_cycle_index - 1) % list_to_check.size()
-			return list_to_check[idx]
+			return tr(list_to_check[idx])
 	
 	printerr(" unknow error with stringChain, check export sets")
 	return ""
 	
+## Vuelve a la primera frase. Cada enfriamiento nuevo cuenta sus propias insistencias.
+func reset() -> void :
+	tries = 0
+	message_index = -1
+	message_order_index = 0
+	message_cycle_index = 0
+	time_cycle_started = false
+	energy_cycle_started = false
+
 func get_cooldown_message(selection : StringChainArray) -> String :
 	var message : String
 	

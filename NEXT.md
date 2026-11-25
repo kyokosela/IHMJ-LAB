@@ -23,7 +23,8 @@ bien: eso lo dices tú.
 De la mañana: cuarto en L, baño, balcón, frases de tu guion y arranque a oscuras (P74–P78).
 
 ## Para probar
-Sigue la lista, paso a paso: [Docs/PRUEBA_TUTORIAL.md](Docs/PRUEBA_TUTORIAL.md). El juego no cambia hasta que reportes.
+Sigue el recorrido, paso a paso (qué hacer, qué debe pasar y qué necesito que me digas):
+[Docs/PRUEBA_TUTORIAL.md](Docs/PRUEBA_TUTORIAL.md). El juego no cambia hasta que reportes.
 El pedido de arte y sonido para el equipo está en `Docs/Para el equipo/pedido_de_arte_y_sonido.md` (no va en git).
 
 ## Preguntas (una a la vez, en este orden)

@@ -30,6 +30,12 @@ var story_events : Array[String] = [
 
 var _pending : Array[Dictionary] = [] ## eventos que ya llegaron a su hora pero esperan a que Mayui este en su zona
 
+## "Presion temporal" de tu guion (DIALOGOS): si la manana del tutorial se alarga, Mayui dice la siguiente frase de la
+## lista cuando se cumple cada hora (eventos DAY1_VOY_TARDE_1..3: 07:30, 07:40 y 07:50).
+const LATE_LINES : Array[String] = ["_LATE_#1_", "_LATE_#2_", "_LATE_#3_"]
+var _late_said : int = 0
+var _late_waiting : bool = false
+
 func _ready() -> void:
 	ZoneManager.zone_ready.connect(_on_zone_ready)
 	TimeManager.day_changed.connect(_on_day_changed)
@@ -95,6 +101,8 @@ func _run_event(event_name: String) -> void:
 			_trigger_alarm_tutorial()
 		"DAY1_CASERO_INTRO":
 			_trigger_casero_intro()
+		"DAY1_VOY_TARDE_1", "DAY1_VOY_TARDE_2", "DAY1_VOY_TARDE_3":
+			_trigger_late_warning()
 		"DAY1_VEDA_APPEAR":
 			_trigger_veda_day1()
 		"DAY2_MADINA_CAFE":
@@ -146,6 +154,25 @@ func _on_event_deactivated(event_name: String) -> void:
 
 func _trigger_alarm_tutorial() -> void:
 	NarrativeFlags.set_flag("tutorial_started")
+
+## Espera a que no haya otro dialogo ni una pantalla abierta, para no pisar lo que este pasando. Si el reloj salta varias
+## horas de golpe, dice una sola frase.
+func _trigger_late_warning() -> void:
+	if _late_waiting: return
+	_late_waiting = true
+	await get_tree().process_frame # que termine la accion que movio el reloj (y abra su dialogo, si tiene)
+	while GameManager.is_input_blocked():
+		await get_tree().create_timer(0.2).timeout
+	_late_waiting = false
+	if not _is_tutorial_morning_at_home(): return
+	Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], tr(LATE_LINES[mini(_late_said, LATE_LINES.size() - 1)]))
+	_late_said += 1
+
+## La manana del tutorial dura hasta que Mayui sale con la rutina completa (exit_door.gd).
+func _is_tutorial_morning_at_home() -> bool:
+	if not TaskManager.is_task_list_active("TUTORIAL_DOOR") or NarrativeFlags.has_flag("tutorial_door_done"):
+		return false
+	return ZoneManager.zone_node != null and ZoneManager.zone_node.zone_id == ZoneManager.ZONES.APARTMENT
 
 func _trigger_casero_intro() -> void:
 	if NarrativeFlags.has_flag("casero_intro_done"):

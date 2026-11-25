@@ -272,6 +272,8 @@ func _t_manana() -> void:
 	dicho = await _decir(abrir)
 	_check("Con la rutina completa: 'Aquí vamos.'", dicho.strip_edges() == "Aquí vamos.", dicho)
 	var hora_salida : String = tm.get_current_time()
+	var despues : Array = []
+	dlg.Text.text_started.connect(func(info) -> void: despues.append(str(info.get("text", "")).strip_edges()))
 	dichos.clear()
 	dlg.end_timeline()
 	_check("...y sale al lobby", await _llegar(1))
@@ -311,3 +313,4 @@ func _t_manana() -> void:
 	_poner(casa.get_node("MainDoor").global_position)
 	_check("Despues del tutorial caminar a la puerta deja salir directo, sin frases", await _llegar(1) and not " ".join(dichos).contains("Aquí vamos."), str(dichos))
 	await _calma()
+	_check("Una vez fuera, Mayui ya no dice que va tarde", not (despues.has("Voy tarde.") or despues.has("Debería apresurarme.") or despues.has("No tengo todo el día.")), str(despues))

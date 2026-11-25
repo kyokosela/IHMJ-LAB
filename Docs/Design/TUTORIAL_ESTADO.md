@@ -20,7 +20,8 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 | Comida | comida instantánea y café | ❌ hoy se cocina comida casera (P25) |
 | Estufa y escritorio | frases; Mayui come sentada | ❌ no hay escritorio |
 | Lavamanos y espejo | todas | ✅ |
-| Balcón, calendario, "voy tarde" a las 7:30 | frases | ❌ no existen |
+| "Voy tarde" (hacia las 7:30) | si se alarga en el cuarto: 3 frases | ✅ a las 07:30, 07:40 y 07:50, una por vez, sin interrumpir diálogos ni pantallas (P73) |
+| Balcón y calendario | frases | ❌ no existen esos objetos |
 | Casero en el lobby | explica el cobro | ✅ pero dice **viernes** y tu diseño dice **miércoles** (D6) |
 
 ## Detalles a decidir en los textos
@@ -30,7 +31,7 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 ## Orden que recomiendo
 1. ✅ Empezar a las 6:00.
 2. ✅ Puerta con tu guion, usando la lista de tareas que ya existe (retirada la puerta provisional de `tutorial.gd`).
-3. ✅ Frases de la ducha, el armario y la cama.
+3. ✅ Frases de la ducha, el armario, la cama y el "Voy tarde".
 4. Nevera y pudrición de la comida ([COCINA_Y_OBJETOS.md](COCINA_Y_OBJETOS.md)).
 5. Comida instantánea, café, escritorio, balcón y calendario (necesitan arte).
 6. Escribir el guion del trabajo (Bloque 1-2).

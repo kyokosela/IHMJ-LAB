@@ -39,8 +39,10 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   (`Interacts.csv`); el uniforme tiene que estar **puesto** al salir; la primera vez dice "Aquí vamos."; después deja salir directo.
   El arreglo provisional de la puerta en `tutorial.gd` está retirado (queda solo el arranque y "Tengo que ducharme."). El casero pasó a
   las 06:00 (sigue esperando a que Mayui llegue al lobby). `Tools/probar_tutorial.gd` juega la mañana completa (la meta) y debe
-  terminar en 0 FALLA. La cama tampoco deja volver a dormir en esa mañana (mismo `check_events`, frases `_BED_*`). Próximo paso
-  del guion sin arte: el "Voy tarde" de las 7:30.
+  terminar en 0 FALLA. La cama tampoco deja volver a dormir en esa mañana (mismo `check_events`, frases `_BED_*`). "Voy tarde" a
+  las 07:30/07:40/07:50 con eventos con hora (`DAY1_VOY_TARDE_*`, `narrative_event_handler.gd`; P73); `Tools/probar_voy_tarde.gd`.
+  Lo que queda del guion de la mañana necesita arte u objetos nuevos (balcón, calendario, nevera, comida instantánea, escritorio):
+  antes, prueba de juego de Ramiro.
 - Armario del tutorial (2026-11-24): antes de ducharse no se abre (`check_events` en `integration_action.gd`, `event_messages` del
   nodo `Wardrobe`); en la mañana del tutorial (hasta la bandera `tutorial_door_done`) la pijama no se pone; al ponerse el uniforme
   ya duchada suena `armario_uniforme.dtl`; la cesta habla si hay ropa sucia. Frases en `wardrobe_ui.tscn` (StringChain en modo
@@ -108,6 +110,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_espejo.gd`
 - Prueba de la mañana completa del tutorial, de despertar a encontrar al casero:
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_tutorial.gd`
+- Prueba del "Voy tarde" (reloj pasadas las 7:30):
+  `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_voy_tarde.gd`
 - Si algo no se refleja en Godot: cerrar Godot, borrar la carpeta oculta `.godot/` y reabrir.
 
 ## MODELOS (plan Pro, ahorrar tokens)

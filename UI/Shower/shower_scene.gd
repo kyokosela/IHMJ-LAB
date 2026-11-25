@@ -34,6 +34,7 @@ func _ready() -> void:
 		_drops.append(Vector3(randf_range(STALL.position.x + 30.0, STALL.end.x - 30.0), randf_range(STALL.position.y, STALL.end.y), randf_range(900.0, 1400.0)))
 
 func _exit_tree() -> void:
+	AudioManager.stop_loop("shower")
 	_unlock()
 
 ## wait_for_dialog: la escena se queda hasta la senal del dialogo (o hasta que el dialogo termine).
@@ -42,6 +43,7 @@ func play(wait_for_dialog: bool) -> void:
 	_closing = false
 	visible = true
 	set_process(true)
+	AudioManager.play_loop("shower")   # silencio mientras no haya archivo en Audio/SFX
 	modulate.a = 0.0
 	if not _locked:
 		_locked = true
@@ -57,6 +59,7 @@ func play(wait_for_dialog: bool) -> void:
 func close() -> void:
 	if not visible or _closing: return
 	_closing = true
+	AudioManager.stop_loop("shower")
 	_fade(0.0)
 	await _tween.finished
 	visible = false

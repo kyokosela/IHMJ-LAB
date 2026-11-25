@@ -302,6 +302,8 @@ func _on_dialogic_signal_event(argument: Variant) -> void:
 			signal_name = str(argument["signal_name"])
 
 	match signal_name:
+		"estomago":   # armario_uniforme.dtl: ruge el estomago (suena cuando exista Audio/SFX/stomach.ogg)
+			AudioManager.play("stomach")
 		"received_m88_note":
 			NarrativeFlags.set_flag("nota_madina")
 			NarrativeFlags.set_flag("email_37_available")

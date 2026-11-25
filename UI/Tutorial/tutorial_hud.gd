@@ -20,6 +20,10 @@ var _shown_tasks : String = "" ## para no redibujar la lista si no cambio
 
 func _process(_delta: float) -> void:
 	var morning : bool = _morning_at_home()
+	if morning:   # ambiente de la manana en casa (silencio mientras no haya archivo en Audio/SFX)
+		AudioManager.play_loop("morning")
+	else:
+		AudioManager.stop_loop("morning")
 	var mouse_ui : CanvasItem = _mouse_ui_open()
 	mouse_panel.visible = morning and Dialogic.current_timeline == null and mouse_ui != null
 	if mouse_panel.visible:   # cada pantalla puede traer su ayuda (metadato "tutorial_hint"; la cocina explica como comer)

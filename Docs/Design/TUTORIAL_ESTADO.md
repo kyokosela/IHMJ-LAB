@@ -14,7 +14,7 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 | Hora | de 6:00 a 8:00 | ✅ empieza a las 06:00 (la prueba automática sale de casa antes de las 08:00) |
 | Al empezar | lista de tareas en una esquina, efectos Suciedad y Hambre visibles, cuarto a oscuras, sonidos, ayudas de teclas | ✅ todo menos sonidos (P78) |
 | Cama | no deja volver a dormir (3 frases) | ✅ tus 3 frases y el aviso; después de la mañana del tutorial deja dormir |
-| Puerta | frases según lo que falte: ducha, uniforme, comida, dientes | ✅ con la lista de tareas; el uniforme tiene que estar puesto al salir. Si insistes mucho, se queda callada (P69) |
+| Puerta | frases según lo que falte: ducha, uniforme, comida, dientes | ✅ con la lista de tareas; el uniforme tiene que estar puesto al salir. Si insistes, repite el aviso (P69) |
 | Puerta al terminar | "Aquí vamos." | ✅ la primera vez; después deja salir directo |
 | Ducha | primera vez, repetir, "Qué frío", silueta tras la cortina, estornudo al salir | ✅ las frases (primera vez, estornudo y al insistir). ❌ transición, silueta y sonido: falta arte (P70) |
 | Armario | primero ducharse; frases para uniforme, pijama, casual y ropa sucia; ruge el estómago | ✅ antes de la ducha no se abre; la pijama no se pone; uniforme y estómago (como texto). La cesta habla si hay ropa sucia (en el tutorial aún no la hay, P71). ❌ casual (aún no se puede poner, P72) y sonido del estómago |

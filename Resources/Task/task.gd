@@ -36,7 +36,10 @@ func check_events() -> bool :
 	return true
 
 func get_message() -> String :
-	if task_message.is_empty() or is_cooldown: return ""
+	if task_message.is_empty(): return ""
+	# Completado: agotadas las frases se repite la ultima (la COOLDOWN de tu guion) sin gastar mas tiempo; antes la puerta se
+	# quedaba muda para siempre y parecia que no respondia.
+	if is_cooldown: return task_message.back()
 	var message = task_message[message_index]
 	message_index += 1
 	return message

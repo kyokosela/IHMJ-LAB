@@ -28,8 +28,8 @@ func _check(nombre: String, ok: bool, detalle: String = "") -> void:
 		print("  FALLA: ", nombre, " ", detalle)
 
 func _initialize() -> void:
-	var guardia := create_timer(150.0)
-	guardia.timeout.connect(func(): print("  FALLA: la prueba se colgo (150 s)"); quit(2))
+	var guardia := create_timer(240.0)
+	guardia.timeout.connect(func(): print("  FALLA: la prueba se colgo (240 s)"); quit(2))
 	pm = root.get_node("PlayerManager")
 	gm = root.get_node("GameManager")
 	tm = root.get_node("TimeManager")
@@ -199,8 +199,12 @@ func _t_manana() -> void:
 	for i in esperadas.size():
 		oidas.append((await _decir(abrir)).strip_edges())
 	_check("Insistiendo dice tus frases de la ducha en orden y luego el aviso", oidas == esperadas, str(oidas))
-	dicho = await _decir(abrir)
-	_check("Agotadas las frases no abre un cuadro vacio, y la puerta sigue respondiendo despues", dicho == "" and dlg.current_timeline == null and puerta.can_interact, "'%s'" % dicho)
+	var antes : String = tm.get_current_time()
+	var siempre := []
+	for i in 3:
+		siempre.append((await _decir(abrir)).strip_edges())
+	await _calma()
+	_check("Si sigue insistiendo la puerta repite el aviso (no se queda muda), sin gastar mas tiempo", siempre == ["Debo ir a bañarme.", "Debo ir a bañarme.", "Debo ir a bañarme."] and tm.get_current_time() == antes and puerta.can_interact, "%s, %s -> %s" % [str(siempre), antes, tm.get_current_time()])
 
 	print("B. Armario antes de ducharse, ducha y uniforme")
 	await _calma()

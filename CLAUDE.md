@@ -135,6 +135,9 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 - Jugar la mañana entera como una persona (teclas, clics y arrastres de ratón; ~1 min; agregar `-- <carpeta>` sin
   `--headless` para guardar fotos):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/jugar_manana.gd`
+- El "jugador torpe" (insiste en todo, desordena la cocina al azar y comprueba que nada se pierde y que aún se puede
+  terminar; ~4 min; `-- <acciones> <semillas...>` para más combinaciones):
+  `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_torpe.gd`
 - Si algo no se refleja en Godot: cerrar Godot, borrar la carpeta oculta `.godot/` y reabrir.
 
 ## MODELOS (plan Pro, ahorrar tokens)

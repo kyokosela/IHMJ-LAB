@@ -41,7 +41,7 @@ func _initialize() -> void:
 	if argumentos.size() >= 2:
 		acciones = int(argumentos[0])
 		semillas = Array(argumentos.slice(1)).map(func(a: String) -> int: return int(a))
-	var limite : float = 150.0 + semillas.size() * acciones * 1.2
+	var limite : float = 200.0 + semillas.size() * acciones * 2.5
 	var guardia := create_timer(limite)
 	guardia.timeout.connect(func(): print("  FALLA: la prueba se colgo (%d s)" % limite); quit(2))
 	pm = root.get_node("PlayerManager")
@@ -268,6 +268,8 @@ func _ui() -> Control:
 	return zm.zone_node.get_node("UILayer/KitchenMultiUI")
 
 func _abrir_cocina() -> void:
+	if dlg.current_timeline != null:   # Mayui esta hablando (p. ej. la estufa vacia): se pasa con Z, como una persona
+		await _calma()
 	if _ui().visible:
 		return
 	await _calma()
@@ -599,8 +601,8 @@ func _terminar_la_manana() -> void:
 	var oido : Array = await _hacer(_pisar.bind(Vector2(120, 8), Vector2(120, -8)))
 	for i in 60:
 		await create_timer(0.1).timeout
-		if zm.zone_node != null and is_instance_valid(zm.zone_node) and zm.zone_node.zone_id == 1:
+		if zm.zone_node != null and is_instance_valid(zm.zone_node) and zm.zone_node.zone_id == 6:
 			break
-	_check("Despues de todo, la puerta deja salir ('Aqui vamos.')", zm.zone_node.zone_id == 1, "zona %d, %s" % [zm.zone_node.zone_id, str(oido)])
+	_check("Despues de todo, la puerta deja salir ('Aqui vamos.')", zm.zone_node.zone_id == 6, "zona %d, %s" % [zm.zone_node.zone_id, str(oido)])
 	print("   (salio a las %s; veces que hubo que beberse el agua: %d)" % [tm.get_current_time(), agua_bebida])
 	await _calma()

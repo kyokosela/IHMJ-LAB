@@ -4,7 +4,7 @@ extends InteractableAction
 ## un paso, InteractableAction hace que Mayui diga las frases de tu guion para ese paso (ducha, uniforme, comida, dientes;
 ## Textfiles/Interact/Interacts.csv). Con la rutina completa, la primera vez dice "Aqui vamos." y sale; despues sale directo.
 
-@export var destination : ZoneManager.ZONES = ZoneManager.ZONES.LOBBY
+@export var destination : ZoneManager.ZONES = ZoneManager.ZONES.HALLWAY ## el pasillo del piso 2; las escaleras bajan a la recepcion
 
 const TUTORIAL_LIST : String = "TUTORIAL_DOOR"
 const ROUTINE_DONE_FLAG : String = "tutorial_door_done"

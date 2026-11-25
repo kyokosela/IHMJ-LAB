@@ -1,0 +1,234 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/world.gd" id="1"]
+[ext_resource type="Script" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
+[ext_resource type="Script" path="res://Scripts/scene_changer.gd" id="3"]
+[ext_resource type="Texture2D" path="res://Assets/Building/pasillo_provisional.png" id="4"]
+
+[sub_resource type="RectangleShape2D" id="Muro5"]
+size = Vector2(80, 16)
+
+[sub_resource type="RectangleShape2D" id="Muro6"]
+size = Vector2(96, 16)
+
+[sub_resource type="RectangleShape2D" id="Muro14"]
+size = Vector2(224, 16)
+
+[sub_resource type="RectangleShape2D" id="Puerta_Stairs"]
+size = Vector2(14, 30)
+
+[sub_resource type="RectangleShape2D" id="Puerta_DoorToApartment"]
+size = Vector2(14, 14)
+
+[node name="Hallway" type="Node2D" node_paths=PackedStringArray("optional_camera_node")]
+script = ExtResource("1")
+zone_id = 6
+optional_camera_node = NodePath("Camera2D")
+
+[node name="Fondo" type="Sprite2D" parent="."]
+position = Vector2(-16, -16)
+texture = ExtResource("4")
+centered = false
+
+[node name="Paredes" type="StaticBody2D" parent="."]
+
+[node name="M1" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(80, -24)
+shape = SubResource("Muro14")
+
+[node name="M2" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(80, -8)
+shape = SubResource("Muro14")
+
+[node name="M3" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(16, 8)
+shape = SubResource("Muro6")
+
+[node name="M4" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(144, 8)
+shape = SubResource("Muro6")
+
+[node name="M5" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(16, 24)
+shape = SubResource("Muro6")
+
+[node name="M6" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(152, 24)
+shape = SubResource("Muro5")
+
+[node name="M7" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(16, 40)
+shape = SubResource("Muro6")
+
+[node name="M8" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(144, 40)
+shape = SubResource("Muro6")
+
+[node name="M9" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(8, 56)
+shape = SubResource("Muro5")
+
+[node name="M10" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(144, 56)
+shape = SubResource("Muro6")
+
+[node name="M11" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(8, 72)
+shape = SubResource("Muro5")
+
+[node name="M12" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(144, 72)
+shape = SubResource("Muro6")
+
+[node name="M13" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(16, 88)
+shape = SubResource("Muro6")
+
+[node name="M14" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(144, 88)
+shape = SubResource("Muro6")
+
+[node name="M15" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(16, 104)
+shape = SubResource("Muro6")
+
+[node name="M16" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(144, 104)
+shape = SubResource("Muro6")
+
+[node name="M17" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(16, 120)
+shape = SubResource("Muro6")
+
+[node name="M18" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(144, 120)
+shape = SubResource("Muro6")
+
+[node name="M19" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(16, 136)
+shape = SubResource("Muro6")
+
+[node name="M20" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(144, 136)
+shape = SubResource("Muro6")
+
+[node name="M21" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(16, 152)
+shape = SubResource("Muro6")
+
+[node name="M22" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(144, 152)
+shape = SubResource("Muro6")
+
+[node name="M23" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(16, 168)
+shape = SubResource("Muro6")
+
+[node name="M24" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(144, 168)
+shape = SubResource("Muro6")
+
+[node name="M25" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(16, 184)
+shape = SubResource("Muro6")
+
+[node name="M26" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(144, 184)
+shape = SubResource("Muro6")
+
+[node name="M27" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(80, 200)
+shape = SubResource("Muro14")
+
+[node name="M28" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(80, 216)
+shape = SubResource("Muro14")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(5, 5)
+limit_left = -112
+limit_top = -16
+limit_right = 272
+limit_bottom = 200
+
+[node name="Stairs" type="Area2D" parent="."]
+position = Vector2(56, 64)
+script = ExtResource("3")
+shape = SubResource("Puerta_Stairs")
+new_scene_id = 1
+
+[node name="DoorToApartment" type="Area2D" parent="."]
+position = Vector2(104, 24)
+script = ExtResource("3")
+shape = SubResource("Puerta_DoorToApartment")
+new_scene_id = 0
+
+[node name="SpawnPoint" type="Marker2D" parent="." groups=["spawn_point"]]
+position = Vector2(72, 56)
+script = ExtResource("2")
+entity = "Player"
+from_zone = -1
+
+[node name="SpawnFromApartment" type="Marker2D" parent="." groups=["spawn_point"]]
+position = Vector2(88, 24)
+script = ExtResource("2")
+entity = "Player"
+from_zone = 0
+
+[node name="SpawnFromLobby" type="Marker2D" parent="." groups=["spawn_point"]]
+position = Vector2(72, 56)
+script = ExtResource("2")
+entity = "Player"
+from_zone = 1
+
+[node name="LabelM21" type="Label" parent="."]
+offset_left = 112.0
+offset_top = 18.0
+offset_right = 272.0
+offset_bottom = 63.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "M-21"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelM22" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 10.0
+offset_right = 184.0
+offset_bottom = 55.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "M-22"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelM23" type="Label" parent="."]
+offset_left = 112.0
+offset_top = 166.0
+offset_right = 272.0
+offset_bottom = 211.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "M-23"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelEscaleras" type="Label" parent="."]
+offset_left = 8.0
+offset_top = 64.0
+offset_right = 248.0
+offset_bottom = 109.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "Escaleras"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -25,6 +25,7 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 | "Voy tarde" (hacia las 7:30) | si se alarga en el cuarto: 3 frases | ✅ a las 07:30, 07:40 y 07:50, una por vez, sin interrumpir diálogos ni pantallas (P73) |
 | Balcón | frases | ✅ tus 3 frases; después de la mañana se sale (P76) |
 | Calendario | frases | ✅ (P77) |
+| Pasillo y escaleras | "recorre los pasillos, baja por las escaleras y llega al lobby" (`Flow de juego.txt`) | ✅ pasillo del piso 2 y recepción, según tus planos, con dibujos provisionales (P80) |
 | Casero en el lobby | explica el cobro | ✅ pero dice **viernes** y tu diseño dice **miércoles** (D6) |
 
 ## Detalles a decidir en los textos

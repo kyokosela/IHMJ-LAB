@@ -68,9 +68,11 @@ func _soltar(escena: Node) -> void:
 func _t_zonas() -> void:
 	print("A. Puntos de aparicion por zona")
 	var casos := [
-		["res://Scenes/World/Lobby.tscn", 2, Vector2(180, 100), "Lobby viniendo de la oficina: junto a la puerta de la oficina"],
-		["res://Scenes/World/Lobby.tscn", 0, Vector2(100, 100), "Lobby viniendo del apartamento: punto general"],
-		["res://Scenes/World/Apartment.tscn", 1, Vector2(120, 8), "Apartamento viniendo del lobby: junto a la puerta"],
+		["res://Scenes/World/Lobby.tscn", 2, Vector2(40, 168), "Recepcion viniendo de la oficina: junto a la puerta de la calle"],
+		["res://Scenes/World/Lobby.tscn", 6, Vector2(72, 56), "Recepcion viniendo del pasillo: al pie de las escaleras"],
+		["res://Scenes/World/Hallway.tscn", 0, Vector2(88, 24), "Pasillo viniendo de casa: junto a M-21"],
+		["res://Scenes/World/Hallway.tscn", 1, Vector2(72, 56), "Pasillo viniendo de la recepcion: junto a las escaleras"],
+		["res://Scenes/World/Apartment.tscn", 6, Vector2(120, 8), "Apartamento viniendo del pasillo: junto a la puerta"],
 		["res://Scenes/World/Apartment.tscn", -1, Vector2(88, 120), "Apartamento al empezar: junto a la cama"],
 		["res://Scenes/World/Apartment.tscn", 4, Vector2(88, 24), "Apartamento viniendo del bano: junto a la puerta del bano"],
 		["res://Scenes/World/Bathroom.tscn", 0, Vector2(72, 40), "Bano: junto a su puerta"],
@@ -238,11 +240,15 @@ func _t_transicion() -> void:
 	zm.change_zone(0)
 	await _esperar_zona(0)
 	_check("Vuelve al cuarto junto a la puerta del bano, tambien sin costo", current_scene.zone_id == 0 and pm.player.global_position.is_equal_approx(Vector2(88, 24)) and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, str(pm.player.global_position))
+	# de la puerta de casa al pasillo tampoco es viajar (el viaje empieza al bajar las escaleras)
+	zm.change_zone(6)
+	await _esperar_zona(6)
+	_check("Al pasillo se sale sin gastar energia ni tiempo, junto a la puerta M-21", current_scene.zone_id == 6 and pm.player.global_position.is_equal_approx(Vector2(88, 24)) and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, str(pm.player.global_position))
 	var energia_pie : float = pm.get_stat_value("ENERGY")
 	var t0 := Time.get_ticks_msec()
 	zm.change_zone(1)
-	_check("Al tocar la puerta Mayui queda quieta", not mov.can_move and gm.modal_count == 1)
-	_check("A pie (Apartamento -> Lobby) se gasta energia", pm.get_stat_value("ENERGY") < energia_pie, "%.1f -> %.1f" % [energia_pie, pm.get_stat_value("ENERGY")])
+	_check("Al tocar las escaleras Mayui queda quieta", not mov.can_move and gm.modal_count == 1)
+	_check("A pie (Pasillo -> Recepcion) se gasta energia", pm.get_stat_value("ENERGY") < energia_pie, "%.1f -> %.1f" % [energia_pie, pm.get_stat_value("ENERGY")])
 	zm.change_zone(2)                         # una puerta pisada otra vez durante el viaje no cuenta
 	_check("Una segunda puerta durante el viaje se ignora", gm.modal_count == 1 and zm.current_zone == 1, "zona %d" % zm.current_zone)
 	await create_timer(1.3).timeout           # ya oscuro y con la escena cambiada: sigue quieta
@@ -252,7 +258,7 @@ func _t_transicion() -> void:
 	var total : float = (Time.get_ticks_msec() - t0) / 1000.0
 	_check("El viaje dura 2 s en total (1 s oscurece, 1 s aclara)", total > 1.9 and total < 2.6, "%.2f s" % total)
 	_check("Al terminar Mayui vuelve a moverse", mov.can_move and gm.modal_count == 0)
-	_check("Llego al lobby viniendo del apartamento", current_scene != null and current_scene.zone_id == 1 and pm.player.global_position.is_equal_approx(Vector2(100, 100)), str(pm.player.global_position))
+	_check("Llega a la recepcion al pie de las escaleras", current_scene != null and current_scene.zone_id == 1 and pm.player.global_position.is_equal_approx(Vector2(72, 56)), str(pm.player.global_position))
 	# en bus: se paga con dinero, no con energia
 	var economia = root.get_node("EconomyManager")
 	var energia_bus : float = pm.get_stat_value("ENERGY")

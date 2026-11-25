@@ -410,11 +410,11 @@ position = Vector2(88, 120)
 script = ExtResource("2")
 entity = "Player"
 
-[node name="SpawnFromLobby" type="Marker2D" parent="." groups=["spawn_point"]]
+[node name="SpawnFromHallway" type="Marker2D" parent="." groups=["spawn_point"]]
 position = Vector2(120, 8)
 script = ExtResource("2")
 entity = "Player"
-from_zone = 1
+from_zone = 6
 
 [node name="SpawnFromBathroom" type="Marker2D" parent="." groups=["spawn_point"]]
 position = Vector2(88, 24)

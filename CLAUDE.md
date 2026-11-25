@@ -11,10 +11,17 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 (ni playground, ni minijuegos, ni ciudad, ni contenido narrativo nuevo).
 
 ## ESTADO (actualizar al cerrar cada sesión)
-- El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Baño, Lobby, Oficina y
-  Comercial; cada una con cámara (zoom 5). Apartamento, Baño y Balcón son la casa (`ZoneManager.is_home`): pasar entre
-  ellos no cuesta tiempo ni energía (`ZoneManager.HOME_ROOMS`). Los eventos con diálogo esperan a que Mayui esté en su zona
-  (`narrative_event_handler.gd`, tabla `event_zones`). Z interactúa y avanza diálogos. Reloj arriba al centro.
+- El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Baño, Balcón, Pasillo,
+  Recepción (`Lobby`), Oficina y Comercial; cada una con cámara (zoom 5). Apartamento, Baño y Balcón son la casa
+  (`ZoneManager.is_home`): pasar entre ellos y salir al pasillo no cuesta tiempo ni energía (`_is_free_step`). Los eventos con
+  diálogo esperan a que Mayui esté en su zona (`narrative_event_handler.gd`, tabla `event_zones`). Z interactúa y avanza
+  diálogos. Reloj arriba al centro.
+- Pasillo y recepción (2026-11-25, según los planos de Ramiro, por revisar): `Hallway.tscn` (zona 6; escaleras y puerta M-21)
+  y `Lobby.tscn` (piso 1; recepción, casero, puerta a la calle en bus). La puerta de casa lleva al pasillo. Fondos
+  provisionales en `Assets/Building/` (P80). Los carteles al acercarte son pequeños (`interactable.gd`, P74); la puerta del
+  tutorial repite el aviso en vez de quedarse muda (`task.gd`, P69); la estufa vacía tiene frases (`stove_empty_lines` en
+  `KitchenMultiUI.tscn`); la ducha muestra la silueta tras la cortina (`UI/Shower/`, señal `ducha_fuera` en
+  `ducha_tutorial.dtl`, P70).
 - Diseño unificado y pendiente de revisión de Ramiro: `Docs/Design/SISTEMA_GAMEPLAY.md`. Hoja de ruta F1–F5 en
   `DECISIONES_Y_PENDIENTES.md`; NO empezar una fase sin que Ramiro apruebe las decisiones D# que la tocan.
 - Efectos implementados (Paso 1) dentro de `player_manager.gd` según `SISTEMA_EFECTOS.md`. Tras tocar números o efectos hay que
@@ -130,7 +137,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_tutorial.gd`
 - Prueba del "Voy tarde" (reloj pasadas las 7:30):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_voy_tarde.gd`
-- Prueba de la casa (cuarto, baño y balcón: paredes, muebles, puertas, frases y caminar con las teclas hasta cada cosa; ~2 min):
+- Prueba de la casa y el edificio (cuarto, baño, balcón, pasillo y recepción: paredes, muebles, puertas, frases y caminar
+  con las teclas hasta cada cosa; ~2,5 min):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_cuarto.gd`
 - Jugar la mañana entera como una persona (teclas, clics y arrastres de ratón; ~1 min; agregar `-- <carpeta>` sin
   `--headless` para guardar fotos):

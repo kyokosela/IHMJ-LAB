@@ -9,7 +9,8 @@ enum ZONES {
 	OFFICE,
 	COMMERCIAL,
 	BATHROOM,
-	BALCONY
+	BALCONY,
+	HALLWAY
 }
 
 const zone_paths: Array[String] = [
@@ -18,7 +19,8 @@ const zone_paths: Array[String] = [
 	"res://Scenes/World/Office.tscn",
 	"res://Scenes/World/Commercial.tscn",
 	"res://Scenes/World/Bathroom.tscn",
-	"res://Scenes/World/Balcony.tscn"
+	"res://Scenes/World/Balcony.tscn",
+	"res://Scenes/World/Hallway.tscn"
 ]
 
 const ZONES_REQUIRING_TRANSPORT: Array[ZONES] = [
@@ -64,10 +66,17 @@ var time_cost_incremental: String = "00:05"
 func is_home(zone_id: int) -> bool:
 	return zone_id == ZONES.APARTMENT or zone_id in HOME_ROOMS
 
+## Pasos que no son viajar: entre cuartos de la casa y de la puerta de casa al pasillo del edificio (y de vuelta).
+## Salir del pasillo a la recepcion cuesta lo que antes costaba salir de casa.
+func _is_free_step(from_zone: int, to_zone: int) -> bool:
+	if is_home(from_zone) and is_home(to_zone):
+		return true
+	return (from_zone == ZONES.APARTMENT and to_zone == ZONES.HALLWAY) or (from_zone == ZONES.HALLWAY and to_zone == ZONES.APARTMENT)
+
 func change_zone(new_zone_id: ZONES) -> void:
 	if _changing_zone:
 		return # ya se esta viajando: una puerta pisada otra vez no debe repetir el cambio
-	var indoors : bool = is_home(current_zone) and is_home(new_zone_id)
+	var indoors : bool = _is_free_step(current_zone, new_zone_id)
 	var by_bus : bool = not indoors and _requires_transport(new_zone_id)
 	if by_bus:
 		if not EconomyManager.can_afford_bus():
@@ -153,6 +162,8 @@ func get_zone_name(zone_id: ZONES) -> String:
 			return "Baño"
 		ZONES.BALCONY:
 			return "Balcón"
+		ZONES.HALLWAY:
+			return "Pasillo"
 	return "Desconocido"
 
 func _process_street_risk() -> void:

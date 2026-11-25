@@ -338,10 +338,11 @@ func _t_manana() -> void:
 	dlg.Text.text_started.connect(func(info) -> void: despues.append(str(info.get("text", "")).strip_edges()))
 	dichos.clear()
 	dlg.end_timeline()
-	_check("...y sale al lobby", await _llegar(1))
+	_check("...y sale al pasillo", await _llegar(6))
 	await create_timer(0.1).timeout
 	_check("Fuera de casa se apagan las ayudas del tutorial", not ayudas.tasks_panel.visible and not ayudas.walk_panel.visible and not ayudas.mouse_panel.visible)
 	_check("Sale antes de la hora de entrada al trabajo (08:00)", tm.minutes < 8 * 60, "salio a las " + hora_salida)
+	_check("Las escaleras bajan a la recepcion", await _cruzar(zm.zone_node.get_node("Stairs"), 1))
 	var casero := false
 	for i in 40:
 		await create_timer(0.1).timeout
@@ -376,6 +377,6 @@ func _t_manana() -> void:
 	await _calma()
 	dichos.clear()
 	_poner(casa.get_node("MainDoor").global_position)
-	_check("Despues del tutorial caminar a la puerta deja salir directo, sin frases", await _llegar(1) and not " ".join(dichos).contains("Aquí vamos."), str(dichos))
+	_check("Despues del tutorial caminar a la puerta deja salir directo, sin frases", await _llegar(6) and not " ".join(dichos).contains("Aquí vamos."), str(dichos))
 	await _calma()
 	_check("Una vez fuera, Mayui ya no dice que va tarde", not (despues.has("Voy tarde.") or despues.has("Debería apresurarme.") or despues.has("No tengo todo el día.")), str(despues))

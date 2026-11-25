@@ -45,6 +45,22 @@ const PLANOS := {
 		"puertas": [Vector2i(5, 2)],
 		"rango": Rect2i(-1, -3, 7, 8),
 	},
+	6: {   # pasillo del piso 2: la puerta M-21 (6,1) y las escaleras (3,3 y 3,4)
+		"mapa": [
+			"####..####", "####..####", "####..####", "####..####", "####..####", "####..####",
+			"####..####", "####..####", "####..####", "####..####", "####..####", "####..####",
+		],
+		"puertas": [Vector2i(6, 1), Vector2i(3, 3), Vector2i(3, 4)],
+		"rango": Rect2i(-1, -1, 12, 14),
+	},
+	1: {   # recepcion (piso 1): las escaleras (3,3 y 3,4) y la puerta a la calle (2,11)
+		"mapa": [
+			"####..####", "####..####", "####..####", "####..####", "####..####", "####..####",
+			"####..####", "####..####", "#.....####", "#.....####", "#.....####", "##########",
+		],
+		"puertas": [Vector2i(3, 3), Vector2i(3, 4), Vector2i(2, 11)],
+		"rango": Rect2i(-1, -1, 12, 14),
+	},
 }
 const TECLAS := {Vector2i.LEFT: "move_left", Vector2i.RIGHT: "move_right", Vector2i.UP: "move_up", Vector2i.DOWN: "move_down"}
 const MUEBLES := ["Bed", "Wardrobe", "Kitchen", "Shower", "Sink", "Calendario", "Escritorio"]
@@ -91,6 +107,7 @@ func _initialize() -> void:
 	await _t_bano()
 	await _t_despues_del_bano()
 	await _t_balcon()
+	await _t_edificio()
 	print("=== %d comprobaciones OK, %d con FALLA ===" % [passed, failed])
 	quit(1 if failed > 0 else 0)
 
@@ -348,3 +365,42 @@ func _t_balcon() -> void:
 	_check("Balcon: entero y centrado en pantalla", _camara_en(Vector2(48, 8)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
 	_check("Balcon: se vuelve al cuarto", await _cruzar(Vector2i.UP, 0))
 	_check("Mayui aparece junto a la puerta del balcon", pm.player.global_position.is_equal_approx(Vector2(56, 136)), str(pm.player.global_position))
+
+# ------------------------------------------------------------------ pasillo y recepcion
+func _t_edificio() -> void:
+	print("G. Del cuarto a la calle: pasillo y recepcion")
+	for id in ["BATHE", "CLOTHES", "COOK", "TEETH"]:   # la rutina completa, con el uniforme puesto
+		tk.done_task("TUTORIAL_DOOR", id)
+	pm.wear_clothes(pm.wardrobe.filter(func(i) -> bool: return pm.outfit_id_of(i) == "work")[0])
+	_check("Del cuarto se camina hasta la puerta principal", await _caminar_a(Vector2i(7, 0)), str(pm.player.global_position))
+	var energia : float = pm.get_stat_value("ENERGY")
+	var hora : int = tm.minutes
+	_check("La puerta principal lleva al pasillo", await _cruzar(Vector2i.UP, 6))
+	_check("Pasillo: aparece junto a M-21 sin gastar energia ni tiempo", pm.player.global_position.is_equal_approx(Vector2(88, 24)) and pm.get_stat_value("ENERGY") == energia and tm.minutes == hora, str(pm.player.global_position))
+	await _t_plano("H. Pasillo: paredes y piso")
+	_check("Pasillo: entero en pantalla", _camara_en(Vector2(80, 92)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
+	_check("Pasillo: se camina hasta las escaleras", await _caminar_a(Vector2i(4, 4)), str(pm.player.global_position))
+	_check("Las escaleras bajan a la recepcion", await _cruzar(Vector2i.LEFT, 1))
+	_check("Recepcion: aparece al pie de las escaleras; bajar gasta energia y tiempo", pm.player.global_position.is_equal_approx(Vector2(72, 56)) and pm.get_stat_value("ENERGY") < energia and tm.minutes > hora, "%s %.1f +%d" % [str(pm.player.global_position), pm.get_stat_value("ENERGY"), tm.minutes - hora])
+	await create_timer(1.0).timeout
+	if dlg.current_timeline != null:   # el casero la intercepta (su dialogo tiene opciones: aqui se corta)
+		dlg.end_timeline()
+	await create_timer(1.5).timeout
+	await _t_plano("I. Recepcion: paredes y piso")
+	_check("Recepcion: entera en pantalla", _camara_en(Vector2(80, 92)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
+	var dinero : int = root.get_node("EconomyManager").money
+	_check("Recepcion: se camina hasta la puerta de la calle", await _caminar_a(Vector2i(2, 10)), str(pm.player.global_position))
+	_check("La puerta de la calle lleva en bus a la oficina (S/10)", await _cruzar(Vector2i.DOWN, 2) and root.get_node("EconomyManager").money == dinero - 10, "dinero %d -> %d" % [dinero, root.get_node("EconomyManager").money])
+	zm.change_zone(1)
+	await create_timer(3.0).timeout
+	casa = zm.zone_node
+	_check("De la oficina se vuelve a la puerta de la calle", casa.zone_id == 1 and pm.player.global_position.is_equal_approx(Vector2(40, 168)), str(pm.player.global_position))
+	if dlg.current_timeline != null:
+		dlg.end_timeline()
+		await create_timer(1.5).timeout
+	_check("Se vuelve caminando a las escaleras", await _caminar_a(Vector2i(4, 4)), str(pm.player.global_position))
+	_check("Las escaleras suben al pasillo", await _cruzar(Vector2i.LEFT, 6))
+	_check("Pasillo: aparece junto a las escaleras", pm.player.global_position.is_equal_approx(Vector2(72, 56)), str(pm.player.global_position))
+	_check("Pasillo: se camina a M-21", await _caminar_a(Vector2i(5, 1)), str(pm.player.global_position))
+	_check("M-21 vuelve a casa", await _cruzar(Vector2i.RIGHT, 0))
+	_check("En casa aparece junto a la puerta principal", pm.player.global_position.is_equal_approx(Vector2(120, 8)), str(pm.player.global_position))

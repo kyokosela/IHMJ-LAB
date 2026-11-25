@@ -9,10 +9,11 @@ extends SceneTree
 ## Termina con codigo 0 si todo pasa y 1 si algo falla.
 
 const T := 16
-## Planos del cuarto (0) y el bano (4), como en probar_cuarto.gd: "." se puede pisar.
+## Planos del cuarto (0), el bano (4) y el pasillo (6), como en probar_cuarto.gd: "." se puede pisar.
 const PLANOS := {
 	0: ["#####.....", "#####.....", "#####...##", "#####...##", "##......##", "........##", "........##", "##....####", "##....####"],
 	4: ["##.#.", "##...", ".....", "....."],
+	6: ["####..####", "####...###", "####..####", "###...####", "###...####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####"],
 }
 const TECLAS := {Vector2i.LEFT: "move_left", Vector2i.RIGHT: "move_right", Vector2i.UP: "move_up", Vector2i.DOWN: "move_down"}
 
@@ -342,9 +343,12 @@ func _jugar() -> void:
 	var hora : String = tm.get_current_time()
 	for i in 80:
 		await create_timer(0.1).timeout
-		if _zona() == 1 and not zm._changing_zone:
+		if _zona() == 6 and not zm._changing_zone:
 			break
-	_check("Sale al lobby", _zona() == 1, "zona %d" % _zona())
+	await create_timer(0.4).timeout
+	_check("Sale al pasillo", _zona() == 6, "zona %d" % _zona())
+	await _foto("10_pasillo")
+	await _cruzar(Vector2i(4, 3), Vector2i.LEFT, 1)   # baja las escaleras a la recepcion
 	var casero := false
 	for i in 50:
 		await create_timer(0.1).timeout
@@ -352,7 +356,7 @@ func _jugar() -> void:
 			casero = true
 			break
 	await create_timer(1.0).timeout
-	await _foto("10_casero")
+	await _foto("11_casero")
 	_check("El casero la intercepta", casero)
 	_check("Sale a tiempo (antes de las 08:00)", tm.minutes < 8 * 60, hora)
 	print("   (salio a las %s)" % hora)

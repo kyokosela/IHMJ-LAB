@@ -16,11 +16,9 @@ entera con teclas y ratón, y el "jugador torpe"). Prueban que funciona, no que 
 
 De la mañana: cuarto en L, baño, balcón, frases de tu guion y arranque a oscuras (P74–P78).
 
-## Al probar (F5), mira esto
-1. La mañana entera: ducha → uniforme → cocinar y comer → dientes → puerta → escaleras → casero.
-2. ¿El pasillo y la recepción se parecen a tus planos?
-3. La escena de la ducha y el tamaño de los carteles.
-4. No toques las teclas **H** ni **J**: son de prueba del programador.
+## Para probar
+Sigue la lista, paso a paso: [Docs/PRUEBA_TUTORIAL.md](Docs/PRUEBA_TUTORIAL.md). El juego no cambia hasta que reportes.
+El pedido de arte y sonido para el equipo está en `Docs/Para el equipo/pedido_de_arte_y_sonido.md` (no va en git).
 
 ## Preguntas (una a la vez, en este orden)
 1. ¿Subo los commits a GitHub?

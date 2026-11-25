@@ -12,8 +12,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 
 ## ESTADO (actualizar al cerrar cada sesión)
 - El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Baño, Lobby, Oficina y
-  Comercial; cada una con cámara (zoom 5). Apartamento y Baño son la casa (`ZoneManager.is_home`): pasar entre ellos no
-  cuesta tiempo ni energía (`ZoneManager.HOME_ROOMS`). Los eventos con diálogo esperan a que Mayui esté en su zona
+  Comercial; cada una con cámara (zoom 5). Apartamento, Baño y Balcón son la casa (`ZoneManager.is_home`): pasar entre
+  ellos no cuesta tiempo ni energía (`ZoneManager.HOME_ROOMS`). Los eventos con diálogo esperan a que Mayui esté en su zona
   (`narrative_event_handler.gd`, tabla `event_zones`). Z interactúa y avanza diálogos. Reloj arriba al centro.
 - Diseño unificado y pendiente de revisión de Ramiro: `Docs/Design/SISTEMA_GAMEPLAY.md`. Hoja de ruta F1–F5 en
   `DECISIONES_Y_PENDIENTES.md`; NO empezar una fase sin que Ramiro apruebe las decisiones D# que la tocan.
@@ -67,6 +67,9 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 - Baño (2026-11-25): escena aparte `Scenes/World/Bathroom.tscn` (puerta `sceneChanger` a la izquierda de la entrada) con la
   ducha (`Shower`, antes en el cuarto), el lavamanos (`Sink`) y `UILayer/MirrorUI`. Fondo `Assets/Apartment/bano_provisional.png`
   y cortina `cortina_ducha.png`, recortada del tileset del equipo (P75).
+- Balcón (2026-11-25): escena `Scenes/World/Balcony.tscn` con tendedero (sin mecánica); la puerta de abajo
+  (`balcony_door.gd`) en la mañana del tutorial solo dice tus frases y después lleva al balcón. "¿Sigue la mañana del
+  tutorial?" = `exit_door.gd` → `in_tutorial_morning()` (P76).
 - Existe `Scenes/Playground_Integration.tscn` (herramienta de pruebas, desordenada). Congelada.
 - Próximo paso: ver `NEXT.md` si existe.
 

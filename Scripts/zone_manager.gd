@@ -8,7 +8,8 @@ enum ZONES {
 	LOBBY,
 	OFFICE,
 	COMMERCIAL,
-	BATHROOM
+	BATHROOM,
+	BALCONY
 }
 
 const zone_paths: Array[String] = [
@@ -16,7 +17,8 @@ const zone_paths: Array[String] = [
 	"res://Scenes/World/Lobby.tscn",
 	"res://Scenes/World/Office.tscn",
 	"res://Scenes/World/Commercial.tscn",
-	"res://Scenes/World/Bathroom.tscn"
+	"res://Scenes/World/Bathroom.tscn",
+	"res://Scenes/World/Balcony.tscn"
 ]
 
 const ZONES_REQUIRING_TRANSPORT: Array[ZONES] = [
@@ -26,7 +28,8 @@ const ZONES_REQUIRING_TRANSPORT: Array[ZONES] = [
 
 ## Cuartos del apartamento: pasar entre ellos no es viajar (no gasta energia ni tiempo, no hay calle ni bus).
 const HOME_ROOMS : Array[ZONES] = [
-	ZONES.BATHROOM
+	ZONES.BATHROOM,
+	ZONES.BALCONY
 ]
 
 const STREET_RISK_BASE_CHANCE : float = 0.10
@@ -148,6 +151,8 @@ func get_zone_name(zone_id: ZONES) -> String:
 			return "Zona Comercial"
 		ZONES.BATHROOM:
 			return "Baño"
+		ZONES.BALCONY:
+			return "Balcón"
 	return "Desconocido"
 
 func _process_street_risk() -> void:

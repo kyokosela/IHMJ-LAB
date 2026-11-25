@@ -23,7 +23,8 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 | Estufa y escritorio | frases; Mayui come sentada | ❌ no hay escritorio |
 | Lavamanos y espejo | todas | ✅ |
 | "Voy tarde" (hacia las 7:30) | si se alarga en el cuarto: 3 frases | ✅ a las 07:30, 07:40 y 07:50, una por vez, sin interrumpir diálogos ni pantallas (P73) |
-| Balcón y calendario | frases | ❌ no existen esos objetos |
+| Balcón | frases | ✅ tus 3 frases; después de la mañana se sale (P76) |
+| Calendario | frases | ❌ falta ponerlo |
 | Casero en el lobby | explica el cobro | ✅ pero dice **viernes** y tu diseño dice **miércoles** (D6) |
 
 ## Detalles a decidir en los textos

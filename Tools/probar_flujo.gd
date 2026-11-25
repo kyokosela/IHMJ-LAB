@@ -74,6 +74,8 @@ func _t_zonas() -> void:
 		["res://Scenes/World/Apartment.tscn", -1, Vector2(88, 120), "Apartamento al empezar: junto a la cama"],
 		["res://Scenes/World/Apartment.tscn", 4, Vector2(88, 24), "Apartamento viniendo del bano: junto a la puerta del bano"],
 		["res://Scenes/World/Bathroom.tscn", 0, Vector2(72, 40), "Bano: junto a su puerta"],
+		["res://Scenes/World/Apartment.tscn", 5, Vector2(56, 136), "Apartamento viniendo del balcon: junto a la puerta del balcon"],
+		["res://Scenes/World/Balcony.tscn", 0, Vector2(40, 8), "Balcon: junto a su puerta"],
 		["res://Scenes/World/Office.tscn", 1, Vector2(100, 160), "Oficina: su unico punto"],
 	]
 	for c in casos:

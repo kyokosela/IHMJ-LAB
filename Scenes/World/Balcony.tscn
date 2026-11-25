@@ -1,0 +1,145 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://c5tmcnj0wdxvt" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Assets/Apartment/balcon_provisional.png" id="4"]
+[ext_resource type="Script" path="res://Scripts/scene_changer.gd" id="9"]
+[ext_resource type="Script" path="res://Scripts/world.gd" id="10"]
+
+[sub_resource type="RectangleShape2D" id="Shape_door"]
+size = Vector2(30, 14)
+
+[sub_resource type="RectangleShape2D" id="Wall_facade_side"]
+size = Vector2(48, 32)
+
+[sub_resource type="RectangleShape2D" id="Wall_above_door"]
+size = Vector2(32, 16)
+
+[sub_resource type="RectangleShape2D" id="Wall_side"]
+size = Vector2(16, 48)
+
+[sub_resource type="RectangleShape2D" id="Wall_railing"]
+size = Vector2(128, 16)
+
+[node name="Balcony" type="Node2D" node_paths=PackedStringArray("optional_camera_node")]
+script = ExtResource("10")
+zone_id = 5
+optional_camera_node = NodePath("Camera2D")
+
+[node name="Cielo" type="Polygon2D" parent="."]
+color = Color(0.14, 0.18, 0.28, 1)
+polygon = PackedVector2Array(-7, 44, 103, 44, 103, 70, -7, 70)
+
+[node name="Fondo" type="Sprite2D" parent="."]
+position = Vector2(-7, -40)
+texture = ExtResource("4")
+centered = false
+
+[node name="Paredes" type="StaticBody2D" parent="."]
+
+[node name="FachadaIzquierda" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(8, -16)
+shape = SubResource("Wall_facade_side")
+
+[node name="FachadaDerecha" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(88, -16)
+shape = SubResource("Wall_facade_side")
+
+[node name="SobreLaPuerta" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(48, -24)
+shape = SubResource("Wall_above_door")
+
+[node name="Izquierda" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(-8, 24)
+shape = SubResource("Wall_side")
+
+[node name="Derecha" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(104, 24)
+shape = SubResource("Wall_side")
+
+[node name="Baranda" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(48, 56)
+shape = SubResource("Wall_railing")
+
+[node name="Puerta" type="Node2D" parent="."]
+position = Vector2(48, -16)
+
+[node name="Marco" type="Polygon2D" parent="Puerta"]
+color = Color(0.15, 0.12, 0.1, 1)
+polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[node name="Vidrio" type="Polygon2D" parent="Puerta"]
+color = Color(0.45, 0.65, 0.75, 1)
+polygon = PackedVector2Array(-14, -14, 14, -14, 14, 16, -14, 16)
+
+[node name="Division" type="Polygon2D" parent="Puerta"]
+color = Color(0.15, 0.12, 0.1, 1)
+polygon = PackedVector2Array(-1, -14, 1, -14, 1, 16, -1, 16)
+
+[node name="Label" type="Label" parent="Puerta"]
+offset_left = -16.0
+offset_top = -26.0
+offset_right = 144.0
+offset_bottom = 24.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "Entrar"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tendedero" type="Node2D" parent="."]
+
+[node name="PosteIzquierdo" type="Polygon2D" parent="Tendedero"]
+color = Color(0.25, 0.25, 0.3, 1)
+polygon = PackedVector2Array(1, 22, 3, 22, 3, 36, 1, 36)
+
+[node name="PosteDerecho" type="Polygon2D" parent="Tendedero"]
+color = Color(0.25, 0.25, 0.3, 1)
+polygon = PackedVector2Array(93, 22, 95, 22, 95, 36, 93, 36)
+
+[node name="Cuerda" type="Line2D" parent="Tendedero"]
+points = PackedVector2Array(2, 24, 48, 27, 94, 24)
+width = 1.0
+default_color = Color(0.85, 0.83, 0.75, 1)
+
+[node name="Pinza1" type="Polygon2D" parent="Tendedero"]
+color = Color(0.72, 0.5, 0.3, 1)
+polygon = PackedVector2Array(20, 23, 22, 23, 22, 28, 20, 28)
+
+[node name="Pinza2" type="Polygon2D" parent="Tendedero"]
+color = Color(0.72, 0.5, 0.3, 1)
+polygon = PackedVector2Array(62, 25, 64, 25, 64, 30, 62, 30)
+
+[node name="Pinza3" type="Polygon2D" parent="Tendedero"]
+color = Color(0.72, 0.5, 0.3, 1)
+polygon = PackedVector2Array(70, 24, 72, 24, 72, 29, 70, 29)
+
+[node name="Label" type="Label" parent="Tendedero"]
+offset_left = 18.0
+offset_top = 29.0
+offset_right = 98.0
+offset_bottom = 59.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Tendedero"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(5, 5)
+limit_left = -144
+limit_top = -100
+limit_right = 240
+limit_bottom = 116
+
+[node name="SpawnPoint" type="Marker2D" parent="." groups=["spawn_point"]]
+position = Vector2(40, 8)
+script = ExtResource("2")
+entity = "Player"
+
+[node name="DoorToApartment" type="Area2D" parent="."]
+position = Vector2(48, -8)
+script = ExtResource("9")
+shape = SubResource("Shape_door")
+new_scene_id = 0

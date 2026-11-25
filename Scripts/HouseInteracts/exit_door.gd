@@ -10,6 +10,10 @@ const TUTORIAL_LIST : String = "TUTORIAL_DOOR"
 const ROUTINE_DONE_FLAG : String = "tutorial_door_done"
 const LEAVING_LINE : String = "_DOOR_LEAVE_"
 
+## La manana del tutorial dura hasta que Mayui sale con la rutina completa.
+static func in_tutorial_morning() -> bool:
+	return TaskManager.is_task_list_active(TUTORIAL_LIST) and not NarrativeFlags.has_flag(ROUTINE_DONE_FLAG)
+
 func execute() -> void:
 	_sync_uniform_task()
 	super()

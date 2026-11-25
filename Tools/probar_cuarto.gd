@@ -23,8 +23,17 @@ const PLANOS := {
 			"##....####",
 			"##....####",
 		],
-		"puertas": [Vector2i(7, -1), Vector2i(4, 1)],
+		"puertas": [Vector2i(7, -1), Vector2i(4, 1), Vector2i(3, 9), Vector2i(4, 9)],
 		"rango": Rect2i(-1, -3, 12, 13),
+	},
+	5: {
+		"mapa": [
+			"......",
+			"......",
+			"......",
+		],
+		"puertas": [Vector2i(2, -1), Vector2i(3, -1)],
+		"rango": Rect2i(-1, -2, 8, 6),
 	},
 	4: {
 		"mapa": [
@@ -81,6 +90,7 @@ func _initialize() -> void:
 	await _t_cuarto()
 	await _t_bano()
 	await _t_despues_del_bano()
+	await _t_balcon()
 	print("=== %d comprobaciones OK, %d con FALLA ===" % [passed, failed])
 	quit(1 if failed > 0 else 0)
 
@@ -288,3 +298,22 @@ func _t_despues_del_bano() -> void:
 		await _empujar(esquina[2])
 		_check("Esquina %s: las paredes y muebles la frenan" % str(esquina[0]), llego and pm.player.global_position.is_equal_approx(_centro(esquina[0])), str(pm.player.global_position))
 		_check("Esquina %s: el cuarto entero sigue en pantalla (camara fija)" % str(esquina[0]), _camara_en(Vector2(80, 56)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
+
+# ------------------------------------------------------------------ balcon
+func _t_balcon() -> void:
+	print("E. Balcon")
+	_check("Balcon: se llega caminando a su puerta", await _caminar_a(Vector2i(3, 8)), str(pm.player.global_position))
+	var oidas : Array = []
+	for i in 3:
+		oidas.append_array(await _hablar(func() -> void: await _paso(Vector2i.DOWN)))
+		await _paso(Vector2i.UP)
+	_check("Balcon en la manana del tutorial: tus 2 frases y el aviso, sin salir", oidas == ["No tengo tiempo.", "Luego.", "Debo apresurarme."] and casa.zone_id == 0, str(oidas))
+	root.get_node("NarrativeFlags").set_flag("tutorial_door_done")
+	var energia : float = pm.get_stat_value("ENERGY")
+	var hora : int = tm.minutes
+	_check("Balcon: pasada la manana del tutorial se sale", await _cruzar(Vector2i.DOWN, 5))
+	_check("Balcon: aparece junto a la puerta, sin gastar energia ni tiempo", pm.player.global_position.is_equal_approx(Vector2(40, 8)) and pm.get_stat_value("ENERGY") == energia and tm.minutes == hora, str(pm.player.global_position))
+	await _t_plano("F. Balcon: paredes y piso")
+	_check("Balcon: entero y centrado en pantalla", _camara_en(Vector2(48, 8)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
+	_check("Balcon: se vuelve al cuarto", await _cruzar(Vector2i.UP, 0))
+	_check("Mayui aparece junto a la puerta del balcon", pm.player.global_position.is_equal_approx(Vector2(56, 136)), str(pm.player.global_position))

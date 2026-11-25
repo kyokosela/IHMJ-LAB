@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://cktm7n04xp2qy" path="res://UI/Containers/KitchenMultiUI.tscn" id="22"]
 [ext_resource type="PackedScene" uid="uid://dd0p5w6n0rqyj" path="res://UI/Containers/wardrobe_ui.tscn" id="26"]
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/exit_door.gd" id="28"]
+[ext_resource type="Script" path="res://Scripts/HouseInteracts/balcony_door.gd" id="30"]
 
 [sub_resource type="RectangleShape2D" id="Shape_bed"]
 size = Vector2(64, 32)
@@ -58,8 +59,17 @@ size = Vector2(48, 48)
 [sub_resource type="RectangleShape2D" id="Wall_right"]
 size = Vector2(16, 144)
 
-[sub_resource type="RectangleShape2D" id="Wall_bottom"]
-size = Vector2(192, 16)
+[sub_resource type="RectangleShape2D" id="Wall_bottom_left"]
+size = Vector2(64, 16)
+
+[sub_resource type="RectangleShape2D" id="Wall_bottom_right"]
+size = Vector2(96, 16)
+
+[sub_resource type="RectangleShape2D" id="Wall_behind_balcony"]
+size = Vector2(32, 16)
+
+[sub_resource type="RectangleShape2D" id="Shape_balcony_door"]
+size = Vector2(30, 14)
 
 [sub_resource type="RectangleShape2D" id="Wall_left"]
 size = Vector2(16, 80)
@@ -78,6 +88,17 @@ behaviour = 2
 [sub_resource type="Resource" id="Chain_bed_tutorial"]
 script = ExtResource("6")
 string_list = Array[ExtResource("7")]([SubResource("Lines_bed_tutorial")])
+apply_times = false
+apply_energy = false
+
+[sub_resource type="Resource" id="Lines_balcony"]
+script = ExtResource("7")
+string_list = Array[String](["_BALCONY_#1_", "_BALCONY_#2_", "_BALCONY_COOLDOWN_"])
+behaviour = 2
+
+[sub_resource type="Resource" id="Chain_balcony"]
+script = ExtResource("6")
+string_list = Array[ExtResource("7")]([SubResource("Lines_balcony")])
 apply_times = false
 apply_energy = false
 
@@ -138,9 +159,17 @@ shape = SubResource("Wall_top_door_right")
 position = Vector2(168, 72)
 shape = SubResource("Wall_right")
 
-[node name="Abajo" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(80, 152)
-shape = SubResource("Wall_bottom")
+[node name="AbajoIzquierda" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(16, 152)
+shape = SubResource("Wall_bottom_left")
+
+[node name="AbajoDerecha" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(128, 152)
+shape = SubResource("Wall_bottom_right")
+
+[node name="DetrasDelBalcon" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(64, 168)
+shape = SubResource("Wall_behind_balcony")
 
 [node name="Izquierda" type="CollisionShape2D" parent="Paredes"]
 position = Vector2(-8, 104)
@@ -318,6 +347,23 @@ position = Vector2(72, 24)
 script = ExtResource("5")
 shape = SubResource("Shape_door")
 new_scene_id = 4
+
+[node name="SpawnFromBalcony" type="Marker2D" parent="." groups=["spawn_point"]]
+position = Vector2(56, 136)
+script = ExtResource("2")
+entity = "Player"
+from_zone = 5
+
+[node name="BalconyDoor" type="Area2D" parent="."]
+position = Vector2(64, 152)
+script = ExtResource("30")
+interaction_name = "APT_BALCONY"
+event_messages = SubResource("Chain_balcony")
+shape = SubResource("Shape_balcony_door")
+reusable = true
+show_again_at_end = true
+signal_type = 1
+collision_trigger = true
 
 [node name="Bed" type="Area2D" parent="." unique_id=1390192927 groups=["Interactable"]]
 position = Vector2(128, 128)

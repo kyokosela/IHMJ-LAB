@@ -8,6 +8,7 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 ## La mañana: qué está y qué falta
 | Momento | Qué pide el guion | En el juego |
 |---|---|---|
+| El cuarto | forma del plano, cajas de mudanza, balcón enfrente de la puerta | ✅ en L con muebles provisionales sólidos (P74). ❌ tileset y props reales |
 | Despertar | "Tengo que ducharme." | ✅ |
 | Hora | de 6:00 a 8:00 | ✅ empieza a las 06:00 (la prueba automática sale de casa antes de las 08:00) |
 | Al empezar | lista de tareas en una esquina, efectos Suciedad y Hambre visibles, cuarto a oscuras, sonidos, ayudas de teclas | ❌ |

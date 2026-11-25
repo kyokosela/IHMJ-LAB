@@ -111,6 +111,7 @@
 | **P71** | **Ropa sucia en el tutorial**: tu guion dice que al salir de la ducha Mayui lleva la ropa sucia y la deja en un rincón del armario. Hoy la ropa de la noche vuelve **limpia**, así que las frases de la cesta ("Luego lavaré esto."…) están puestas pero no pueden salir en el tutorial. Si queda sucia hoy **no hay forma de lavarla** (el lavamanos solo lava lo que llevas en las manos, P49) y dormir con ella ensuciaría a Mayui. Mi recomendación: esperar a que exista el lavado | tú |
 | **P72** | **Frases de la ropa casual** (4 líneas la primera vez, luego 2 y el aviso): sin poner, porque la ropa casual aún no está en el armario (sin prenda colgada ni ítem, P48) | tu artista / siguiente fase |
 | **P73** | **"Voy tarde"** ✅: tu guion dice que sale si te quedas en el cuarto, "hacia las 7:30", pero no dice cuándo van la 2.ª y la 3.ª frase. Puse **07:30, 07:40 y 07:50** (eventos `DAY1_VOY_TARDE_1..3` en `Resources/Events/Schedule`, cambiables en el Inspector). Se guía solo por la hora (no distingue "acciones irrelevantes"); espera a que cierres el diálogo o la pantalla abierta | tú: ¿te sirven esas horas? |
+| **P74** | **Cuarto en L** ✅ (forma aprobada): piso y paredes recortados de tu captura del tileset; muebles **provisionales** de colores, sólidos. La puerta principal es un hueco en la pared: solo se activa al caminar hacia ella (antes bastaba pasar cerca). Los carteles al acercarte ("Dormir", "Cocina"…) salen enormes y tapan el cuarto: ya eran así, pero ahora se nota | tú: ¿achico los carteles? artista: tileset en PNG/Aseprite |
 
 ---
 

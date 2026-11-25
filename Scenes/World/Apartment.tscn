@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://5fyyfswqh38m" path="res://Scripts/tutorial.gd" id="1"]
 [ext_resource type="Script" uid="uid://c5tmcnj0wdxvt" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
 [ext_resource type="Script" uid="uid://ptp5mp2uvryo" path="res://Scripts/HouseInteracts/integration_action.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://ctagwp38abn4u" path="res://Prefabs/walls/floors.tscn" id="4"]
+[ext_resource type="Texture2D" path="res://Assets/Apartment/cuarto_provisional.png" id="4"]
 [ext_resource type="Script" uid="uid://big4o7sjh0g0y" path="res://Scripts/HouseInteracts/bathe.gd" id="5"]
 [ext_resource type="Script" uid="uid://c2qbhsn6tgmrc" path="res://Resources/StringChain/string_chain.gd" id="6"]
 [ext_resource type="Script" uid="uid://cdqqyuliu6jyp" path="res://Resources/StringChain/string_chain_array.gd" id="7"]
@@ -27,11 +27,50 @@
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/exit_door.gd" id="28"]
 [ext_resource type="Resource" path="res://DialoguePlugin/TIMELINE/ducha_tutorial.dtl" id="29"]
 
-[sub_resource type="RectangleShape2D" id="Shape_interact"]
-size = Vector2(48, 48)
+[sub_resource type="RectangleShape2D" id="Shape_bed"]
+size = Vector2(64, 32)
+
+[sub_resource type="RectangleShape2D" id="Shape_wardrobe"]
+size = Vector2(32, 16)
+
+[sub_resource type="RectangleShape2D" id="Shape_kitchen"]
+size = Vector2(32, 64)
+
+[sub_resource type="RectangleShape2D" id="Shape_shower"]
+size = Vector2(16, 32)
+
+[sub_resource type="RectangleShape2D" id="Shape_sink"]
+size = Vector2(16, 16)
 
 [sub_resource type="RectangleShape2D" id="Shape_door"]
-size = Vector2(32, 64)
+size = Vector2(14, 14)
+
+[sub_resource type="RectangleShape2D" id="Wall_top_left"]
+size = Vector2(96, 112)
+
+[sub_resource type="RectangleShape2D" id="Wall_top_door_left"]
+size = Vector2(32, 48)
+
+[sub_resource type="RectangleShape2D" id="Wall_above_door"]
+size = Vector2(16, 32)
+
+[sub_resource type="RectangleShape2D" id="Wall_top_door_right"]
+size = Vector2(48, 48)
+
+[sub_resource type="RectangleShape2D" id="Wall_right"]
+size = Vector2(16, 144)
+
+[sub_resource type="RectangleShape2D" id="Wall_bottom"]
+size = Vector2(192, 16)
+
+[sub_resource type="RectangleShape2D" id="Wall_left"]
+size = Vector2(16, 80)
+
+[sub_resource type="RectangleShape2D" id="Shape_desk"]
+size = Vector2(32, 16)
+
+[sub_resource type="RectangleShape2D" id="Shape_boxes"]
+size = Vector2(32, 32)
 
 [sub_resource type="Resource" id="Lines_shower_cooldown"]
 script = ExtResource("7")
@@ -96,91 +135,259 @@ script = ExtResource("18")
 script = ExtResource("1")
 optional_camera_node = NodePath("Camera2D")
 
-[node name="Floors" parent="." unique_id=131230042 instance=ExtResource("4")]
+[node name="Cuarto" type="Sprite2D" parent="."]
+position = Vector2(-27, -77)
+texture = ExtResource("4")
+centered = false
+
+[node name="Paredes" type="StaticBody2D" parent="."]
+
+[node name="ArribaIzquierda" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(32, 8)
+shape = SubResource("Wall_top_left")
+
+[node name="ArribaIzquierdaDePuerta" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(96, -24)
+shape = SubResource("Wall_top_door_left")
+
+[node name="SobreLaPuerta" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(120, -32)
+shape = SubResource("Wall_above_door")
+
+[node name="ArribaDerechaDePuerta" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(152, -24)
+shape = SubResource("Wall_top_door_right")
+
+[node name="Derecha" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(168, 72)
+shape = SubResource("Wall_right")
+
+[node name="Abajo" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(80, 152)
+shape = SubResource("Wall_bottom")
+
+[node name="Izquierda" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(-8, 104)
+shape = SubResource("Wall_left")
+
+[node name="Calendario" type="Node2D" parent="."]
+position = Vector2(48, 47)
+
+[node name="Borde" type="Polygon2D" parent="Calendario"]
+color = Color(0.35, 0.1, 0.1, 1)
+polygon = PackedVector2Array(-12, -9, 12, -9, 12, 9, -12, 9)
+
+[node name="Hoja" type="Polygon2D" parent="Calendario"]
+color = Color(0.95, 0.95, 0.9, 1)
+polygon = PackedVector2Array(-11, -8, 11, -8, 11, 8, -11, 8)
+
+[node name="Encabezado" type="Polygon2D" parent="Calendario"]
+color = Color(0.75, 0.2, 0.2, 1)
+polygon = PackedVector2Array(-11, -8, 11, -8, 11, -4, -11, -4)
+
+[node name="Label" type="Label" parent="Calendario"]
+offset_left = -12.0
+offset_top = -4.0
+offset_right = 108.0
+offset_bottom = 61.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+theme_override_font_sizes/font_size = 20
+text = "Calendario"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Balcon" type="Node2D" parent="."]
+position = Vector2(64, 147)
+
+[node name="Borde" type="Polygon2D" parent="Balcon"]
+color = Color(0.15, 0.12, 0.1, 1)
+polygon = PackedVector2Array(-16, -4, 16, -4, 16, 4, -16, 4)
+
+[node name="Vidrio" type="Polygon2D" parent="Balcon"]
+color = Color(0.45, 0.65, 0.75, 1)
+polygon = PackedVector2Array(-15, -3, 15, -3, 15, 3, -15, 3)
+
+[node name="Marco" type="Polygon2D" parent="Balcon"]
+color = Color(0.15, 0.12, 0.1, 1)
+polygon = PackedVector2Array(-0.5, -3, 0.5, -3, 0.5, 3, -0.5, 3)
+
+[node name="Label" type="Label" parent="Balcon"]
+offset_left = -16.0
+offset_top = 5.0
+offset_right = 144.0
+offset_bottom = 55.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_font_sizes/font_size = 24
+text = "Balcón"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Escritorio" type="Node2D" parent="."]
+position = Vector2(16, 72)
+
+[node name="Borde" type="Polygon2D" parent="Escritorio"]
+color = Color(0.22, 0.13, 0.07, 1)
+polygon = PackedVector2Array(-16, -8, 16, -8, 16, 8, -16, 8)
+
+[node name="Mueble" type="Polygon2D" parent="Escritorio"]
+color = Color(0.62, 0.44, 0.26, 1)
+polygon = PackedVector2Array(-15, -7, 15, -7, 15, 7, -15, 7)
+
+[node name="Solido" type="StaticBody2D" parent="Escritorio"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Escritorio/Solido"]
+shape = SubResource("Shape_desk")
+
+[node name="Label" type="Label" parent="Escritorio"]
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 144.0
+offset_bottom = 72.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "Escritorio"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Cajas" type="Node2D" parent="."]
+position = Vector2(16, 128)
+
+[node name="BordeGrande" type="Polygon2D" parent="Cajas"]
+color = Color(0.3, 0.2, 0.1, 1)
+polygon = PackedVector2Array(-16, -4, 8, -4, 8, 16, -16, 16)
+
+[node name="CajaGrande" type="Polygon2D" parent="Cajas"]
+color = Color(0.74, 0.56, 0.35, 1)
+polygon = PackedVector2Array(-15, -3, 7, -3, 7, 15, -15, 15)
+
+[node name="BordeChica" type="Polygon2D" parent="Cajas"]
+color = Color(0.3, 0.2, 0.1, 1)
+polygon = PackedVector2Array(-4, -16, 16, -16, 16, 2, -4, 2)
+
+[node name="CajaChica" type="Polygon2D" parent="Cajas"]
+color = Color(0.66, 0.49, 0.3, 1)
+polygon = PackedVector2Array(-3, -15, 15, -15, 15, 1, -3, 1)
+
+[node name="Solido" type="StaticBody2D" parent="Cajas"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cajas/Solido"]
+shape = SubResource("Shape_boxes")
+
+[node name="Label" type="Label" parent="Cajas"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 144.0
+offset_bottom = 144.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "Cajas"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1401545714]
 zoom = Vector2(5, 5)
+limit_left = -112
+limit_top = -52
+limit_right = 272
+limit_bottom = 164
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1799097780 groups=["spawn_point"]]
-position = Vector2(100, 100)
+position = Vector2(88, 120)
 script = ExtResource("2")
 entity = "Player"
 
 [node name="SpawnFromLobby" type="Marker2D" parent="." groups=["spawn_point"]]
-position = Vector2(160, 100)
+position = Vector2(120, 8)
 script = ExtResource("2")
 entity = "Player"
 from_zone = 1
 
 [node name="Bed" type="Area2D" parent="." unique_id=1390192927 groups=["Interactable"]]
-position = Vector2(60, 60)
+position = Vector2(128, 128)
 script = ExtResource("3")
 action_type = 18
 interaction_name = "APT_BED"
 event_messages = SubResource("Chain_bed_tutorial")
-shape = SubResource("Shape_interact")
+shape = SubResource("Shape_bed")
 display_text = "Dormir"
 reusable = true
 show_again_at_end = true
+is_solid = true
+
+[node name="Borde" type="Polygon2D" parent="Bed"]
+color = Color(0.18, 0.2, 0.32, 1)
+polygon = PackedVector2Array(-32, -16, 32, -16, 32, 16, -32, 16)
+
+[node name="Mueble" type="Polygon2D" parent="Bed"]
+color = Color(0.36, 0.47, 0.72, 1)
+polygon = PackedVector2Array(-31, -15, 31, -15, 31, 15, -31, 15)
+
+[node name="Almohada" type="Polygon2D" parent="Bed"]
+color = Color(0.9, 0.9, 0.95, 1)
+polygon = PackedVector2Array(18, -12, 29, -12, 29, 12, 18, 12)
 
 [node name="Label" type="Label" parent="Bed" unique_id=943501445]
-offset_left = -20.0
-offset_top = -28.0
-offset_right = -20.0
-offset_bottom = -28.0
+offset_left = -32.0
+offset_top = -16.0
+offset_right = 288.0
+offset_bottom = 144.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
 text = "Cama"
-
-[node name="Shower" type="Area2D" parent="." unique_id=511588362 groups=["Interactable"]]
-position = Vector2(120, 60)
-script = ExtResource("5")
-interaction_name = "APT_SHOWER"
-is_cooldown_at_execute = true
-cooldown_timer_message = SubResource("Chain_shower_cooldown")
-stat_req_list = Dictionary[String, int]({
-"ENERGY": 10
-})
-stat_messages = SubResource("Chain_no_energy")
-time_cost = "00:20"
-dialog = ExtResource("29")
-shape = SubResource("Shape_interact")
-display_text = "Bañarse"
-reusable = true
-show_again_at_end = true
-
-[node name="Label" type="Label" parent="Shower" unique_id=635745923]
-offset_left = -20.0
-offset_top = -28.0
-offset_right = -20.0
-offset_bottom = -28.0
-text = "Ducha"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Wardrobe" type="Area2D" parent="." unique_id=625630880 groups=["Interactable"]]
-position = Vector2(180, 60)
+position = Vector2(144, 104)
 script = ExtResource("3")
 action_type = 20
 interaction_name = "APT_WARDROBE"
 event_messages = SubResource("Chain_wardrobe_bath_first")
-shape = SubResource("Shape_interact")
+shape = SubResource("Shape_wardrobe")
 display_text = "Cambiarse"
 reusable = true
 show_again_at_end = true
+is_solid = true
+
+[node name="Borde" type="Polygon2D" parent="Wardrobe"]
+color = Color(0.18, 0.1, 0.06, 1)
+polygon = PackedVector2Array(-16, -8, 16, -8, 16, 8, -16, 8)
+
+[node name="Mueble" type="Polygon2D" parent="Wardrobe"]
+color = Color(0.45, 0.28, 0.16, 1)
+polygon = PackedVector2Array(-15, -7, 15, -7, 15, 7, -15, 7)
 
 [node name="Label" type="Label" parent="Wardrobe" unique_id=867018130]
-offset_left = -20.0
-offset_top = -28.0
-offset_right = -20.0
-offset_bottom = -28.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 144.0
+offset_bottom = 72.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
 text = "Armario"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Kitchen" type="Area2D" parent="." unique_id=685046310 node_paths=PackedStringArray("container_ui") groups=["Interactable"]]
-position = Vector2(60, 140)
+position = Vector2(144, 64)
 script = ExtResource("8")
 initial_items = Array[ExtResource("20")]([ExtResource("21"), ExtResource("21"), ExtResource("19")])
 container_ui = NodePath("../UILayer/KitchenMultiUI")
-shape = SubResource("Shape_interact")
+shape = SubResource("Shape_kitchen")
 display_text = "Cocina"
 reusable = true
 show_again_at_end = true
+is_solid = true
 
 [node name="KitchenContainer" type="Node2D" parent="Kitchen"]
 script = ExtResource("9")
@@ -195,34 +402,125 @@ environment = SubResource("Kitchen_environment")
 script = ExtResource("10")
 size = 18
 
+[node name="BordeNevera" type="Polygon2D" parent="Kitchen"]
+color = Color(0.35, 0.38, 0.42, 1)
+polygon = PackedVector2Array(-16, -32, 16, -32, 16, 0, -16, 0)
+
+[node name="Nevera" type="Polygon2D" parent="Kitchen"]
+color = Color(0.74, 0.78, 0.83, 1)
+polygon = PackedVector2Array(-15, -31, 15, -31, 15, -1, -15, -1)
+
+[node name="BordeMeson" type="Polygon2D" parent="Kitchen"]
+color = Color(0.2, 0.2, 0.22, 1)
+polygon = PackedVector2Array(-16, 0, 16, 0, 16, 32, -16, 32)
+
+[node name="Meson" type="Polygon2D" parent="Kitchen"]
+color = Color(0.5, 0.52, 0.56, 1)
+polygon = PackedVector2Array(-15, 1, 15, 1, 15, 31, -15, 31)
+
 [node name="Label" type="Label" parent="Kitchen" unique_id=2094016945]
-offset_left = -20.0
-offset_top = -28.0
-offset_right = -20.0
-offset_bottom = -28.0
-text = "Nevera y cocina"
+offset_left = -16.0
+offset_top = -32.0
+offset_right = 144.0
+offset_bottom = 128.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "Nevera"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelMeson" type="Label" parent="Kitchen"]
+offset_left = -16.0
+offset_right = 144.0
+offset_bottom = 160.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "Cocina y
+alacenas"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Shower" type="Area2D" parent="." unique_id=511588362 groups=["Interactable"]]
+position = Vector2(88, 16)
+script = ExtResource("5")
+interaction_name = "APT_SHOWER"
+is_cooldown_at_execute = true
+cooldown_timer_message = SubResource("Chain_shower_cooldown")
+stat_req_list = Dictionary[String, int]({
+"ENERGY": 10
+})
+stat_messages = SubResource("Chain_no_energy")
+time_cost = "00:20"
+dialog = ExtResource("29")
+shape = SubResource("Shape_shower")
+display_text = "Bañarse"
+reusable = true
+show_again_at_end = true
+is_solid = true
+
+[node name="Borde" type="Polygon2D" parent="Shower"]
+color = Color(0.15, 0.35, 0.45, 1)
+polygon = PackedVector2Array(-8, -16, 8, -16, 8, 16, -8, 16)
+
+[node name="Mueble" type="Polygon2D" parent="Shower"]
+color = Color(0.5, 0.74, 0.82, 1)
+polygon = PackedVector2Array(-7, -15, 7, -15, 7, 15, -7, 15)
+
+[node name="Label" type="Label" parent="Shower" unique_id=635745923]
+offset_left = -8.0
+offset_top = -16.0
+offset_right = 72.0
+offset_bottom = 144.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Ducha"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Sink" type="Area2D" parent="." unique_id=1994543045 groups=["Interactable"]]
-position = Vector2(120, 140)
+position = Vector2(88, 56)
 script = ExtResource("3")
 action_type = 50
 interaction_name = "APT_SINK"
 event_messages = SubResource("Chain_sink_eat_first")
-shape = SubResource("Shape_interact")
+shape = SubResource("Shape_sink")
 display_text = "Lavamanos"
 reusable = true
 show_again_at_end = true
+is_solid = true
+
+[node name="Borde" type="Polygon2D" parent="Sink"]
+color = Color(0.35, 0.38, 0.42, 1)
+polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[node name="Mueble" type="Polygon2D" parent="Sink"]
+color = Color(0.82, 0.86, 0.9, 1)
+polygon = PackedVector2Array(-7, -7, 7, -7, 7, 7, -7, 7)
 
 [node name="Label" type="Label" parent="Sink" unique_id=99547917]
-offset_left = -20.0
-offset_top = -28.0
-offset_right = -20.0
-offset_bottom = -28.0
-text = "Lavamanos"
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 72.0
+offset_bottom = 72.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/line_spacing = -4
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18
+text = "Lava-
+manos"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="MainDoor" type="Area2D" parent="." unique_id=1350934528]
 unique_name_in_owner = true
-position = Vector2(200, 100)
+position = Vector2(120, -8)
 script = ExtResource("28")
 interaction_name = "APT_DOOR"
 task_lists = Array[String](["TUTORIAL_DOOR"])
@@ -231,13 +529,6 @@ reusable = true
 show_again_at_end = true
 signal_type = 1
 collision_trigger = true
-
-[node name="Label" type="Label" parent="MainDoor" unique_id=1181374000]
-offset_left = -30.0
-offset_top = -28.0
-offset_right = -30.0
-offset_bottom = -28.0
-text = "→ Salir"
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 layer = 3

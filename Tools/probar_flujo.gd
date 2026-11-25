@@ -70,8 +70,8 @@ func _t_zonas() -> void:
 	var casos := [
 		["res://Scenes/World/Lobby.tscn", 2, Vector2(180, 100), "Lobby viniendo de la oficina: junto a la puerta de la oficina"],
 		["res://Scenes/World/Lobby.tscn", 0, Vector2(100, 100), "Lobby viniendo del apartamento: punto general"],
-		["res://Scenes/World/Apartment.tscn", 1, Vector2(160, 100), "Apartamento viniendo del lobby: junto a la puerta"],
-		["res://Scenes/World/Apartment.tscn", -1, Vector2(100, 100), "Apartamento al empezar: junto a la cama"],
+		["res://Scenes/World/Apartment.tscn", 1, Vector2(120, 8), "Apartamento viniendo del lobby: junto a la puerta"],
+		["res://Scenes/World/Apartment.tscn", -1, Vector2(88, 120), "Apartamento al empezar: junto a la cama"],
 		["res://Scenes/World/Office.tscn", 1, Vector2(100, 160), "Oficina: su unico punto"],
 	]
 	for c in casos:

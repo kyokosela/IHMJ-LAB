@@ -7,6 +7,9 @@ extends SceneTree
 ##   Godot_v4.6-stable_win64_console.exe --headless --path . -s res://Tools/probar_tutorial.gd
 ## Termina con codigo 0 si todo pasa y 1 si algo falla.
 
+## Una baldosa del cuarto sin nada alrededor (ver Tools/probar_cuarto.gd).
+const NEUTRO := Vector2(104, 72)
+
 var pm
 var gm
 var tm
@@ -101,6 +104,11 @@ func _poner(pos: Vector2) -> void:
 	pm.player.movement.tile_destination = pos
 	pm.player.global_position = pos
 
+## Pone a Mayui en una baldosa mirando hacia un lado: como queda al llegar junto a un mueble.
+func _junto(pos: Vector2, mirando: Vector2) -> void:
+	_poner(pos)
+	pm.player.set_facing_direction(mirando)
+
 func _clic() -> InputEventMouseButton:
 	var c := InputEventMouseButton.new()
 	c.button_index = MOUSE_BUTTON_LEFT
@@ -147,15 +155,14 @@ func _t_manana() -> void:
 	_check("La partida empieza a las 06:00 con Mayui en ropa de casa", tm.get_current_time() == "06:00" and pm.get_outfit_id() == "home", tm.get_current_time())
 	_check("Al levantarse Mayui dice 'Tengo que ducharme.'", " ".join(dichos).contains("Tengo que ducharme."), str(dichos))
 	await _calma()
-	var cama = casa.get_node("Bed")
-	_poner(cama.global_position)
+	_junto(Vector2(104, 104), Vector2.DOWN)   # encima de la cama, mirandola
 	await create_timer(0.5).timeout
 	var volver : Array = []
 	for i in 5:
 		volver.append_array(await _hablar_con_z())
 	_check("No se puede volver a la cama: tus 3 frases y el aviso (se repite)", volver == ["Si vuelvo ahí, no salgo.", "Cinco minutos más nunca son cinco minutos.", "Después del trabajo… tal vez.", "Debo dejar de perder el tiempo. Voy a llegar tarde.", "Debo dejar de perder el tiempo. Voy a llegar tarde."], str(volver))
 	_check("...sin abrir la alarma ni pasar el tiempo", _buscar_alarma() == null and gm.modal_count == 0 and tm.get_current_time() == "06:00" and not pm.slept_today, tm.get_current_time())
-	_poner(Vector2(100, 100))
+	_poner(NEUTRO)
 	await create_timer(0.3).timeout
 	var puerta = casa.get_node("MainDoor")
 	var abrir := func() -> void: puerta.execute()
@@ -163,7 +170,7 @@ func _t_manana() -> void:
 	var dicho : String = await _decir(func() -> void: _poner(puerta.global_position))
 	_check("Caminar a la puerta: dice '...' y no sale", dicho.strip_edges() == "..." and zm.zone_node == casa, dicho)
 	await _calma()
-	_poner(Vector2(100, 100))
+	_poner(NEUTRO)
 	await create_timer(0.3).timeout
 	var esperadas := ["No puedo salir así.", "Voy a llegar tarde. Debería apresurarme.", "Debo ir a bañarme.", "Debo ir a bañarme.", "Debo ir a bañarme."]
 	var oidas := []
@@ -183,7 +190,7 @@ func _t_manana() -> void:
 		antes_de_ducha.append_array(await _hablar(func() -> void: mueble.execute()))
 	_check("Antes de ducharse el armario no se abre y dice tus frases (la ultima se repite)", not armario.visible and antes_de_ducha == ["Primero debería ducharme.", "No voy a ponerme ropa estando así.", "No perder el tiempo aquí.", "No perder el tiempo aquí."], str(antes_de_ducha))
 	await _calma()
-	_poner(casa.get_node("Shower").global_position)
+	_junto(Vector2(104, 24), Vector2.LEFT)   # junto a la ducha
 	await create_timer(0.5).timeout
 	var oido : Array = await _hablar_con_z()
 	_check("La ducha queda hecha y Mayui sale en toalla", _tarea("BATHE") and pm.get_outfit_id() == "towel")
@@ -194,7 +201,7 @@ func _t_manana() -> void:
 	_check("Insistiendo en la ducha: tus 3 frases y el aviso", insistencia == ["Ya estoy limpia.", "El agua no es gratis.", "No necesito otra.", "Realmente debería salir de acá para poder cambiarme."], str(insistencia))
 	oido = await _hablar_con_z()
 	_check("Despues del aviso la ducha ya no contesta", oido.is_empty(), str(oido))
-	_poner(Vector2(100, 100))
+	_poner(NEUTRO)
 	await create_timer(0.3).timeout
 	dicho = await _decir(abrir)
 	_check("En toalla la puerta dice 'Ni loca.'", dicho.strip_edges() == "Ni loca.", dicho)

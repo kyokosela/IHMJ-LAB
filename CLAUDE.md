@@ -58,6 +58,11 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   diálogos, asistencia, cambio de zona (2 s en total, `ZoneManager.ZONE_FADE_TIME`, con Mayui quieta hasta que aclara) y acciones
   del apartamento. La historia de relleno está APAGADA: `NarrativeEventHandler.story_enabled = false`.
   La traducción de Dialogic está desactivada (los ids de los `.dtl` se repiten entre archivos; no activarla sin ids únicos).
+- Cuarto de Mayui (2026-11-25, forma aprobada por Ramiro: **L invertida**): fondo provisional
+  `Assets/Apartment/cuarto_provisional.png` (recortado de la captura del tileset), paredes en el nodo `Paredes`, muebles
+  provisionales de colores **sólidos**, puerta principal en un hueco de la pared (solo al caminar hacia ella) y cámara fija con
+  el cuarto entero en pantalla. Mayui despierta junto a la cama. Si se mueve un mueble, actualizar `MAPA` en
+  `Tools/probar_cuarto.gd` y correrla (P74).
 - Existe `Scenes/Playground_Integration.tscn` (herramienta de pruebas, desordenada). Congelada.
 - Próximo paso: ver `NEXT.md` si existe.
 
@@ -112,6 +117,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_tutorial.gd`
 - Prueba del "Voy tarde" (reloj pasadas las 7:30):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_voy_tarde.gd`
+- Prueba del cuarto (paredes, muebles sólidos y caminar con las teclas hasta cada cosa; tarda ~45 s):
+  `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_cuarto.gd`
 - Si algo no se refleja en Godot: cerrar Godot, borrar la carpeta oculta `.godot/` y reabrir.
 
 ## MODELOS (plan Pro, ahorrar tokens)

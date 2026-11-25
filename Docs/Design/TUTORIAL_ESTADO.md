@@ -12,7 +12,7 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 | El baño | aparte, a la izquierda de la puerta: ducha y lavamanos | ✅ escena propia (P75) |
 | Despertar | "Tengo que ducharme." | ✅ |
 | Hora | de 6:00 a 8:00 | ✅ empieza a las 06:00 (la prueba automática sale de casa antes de las 08:00) |
-| Al empezar | lista de tareas en una esquina, efectos Suciedad y Hambre visibles, cuarto a oscuras, sonidos, ayudas de teclas | ❌ |
+| Al empezar | lista de tareas en una esquina, efectos Suciedad y Hambre visibles, cuarto a oscuras, sonidos, ayudas de teclas | ✅ todo menos sonidos (P78) |
 | Cama | no deja volver a dormir (3 frases) | ✅ tus 3 frases y el aviso; después de la mañana del tutorial deja dormir |
 | Puerta | frases según lo que falte: ducha, uniforme, comida, dientes | ✅ con la lista de tareas; el uniforme tiene que estar puesto al salir. Si insistes mucho, se queda callada (P69) |
 | Puerta al terminar | "Aquí vamos." | ✅ la primera vez; después deja salir directo |

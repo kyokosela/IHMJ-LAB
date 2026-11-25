@@ -144,6 +144,15 @@ func _buscar_alarma() -> Node:
 			return ui
 	return null
 
+## Las filas de la lista de tareas en pantalla; la resaltada como siguiente lleva un * al final.
+func _filas(ayudas: Node) -> Array:
+	var filas : Array = []
+	for fila : Label in ayudas.task_rows.get_children():
+		if fila.visible:
+			var siguiente : bool = fila.get_theme_color("font_color") == ayudas.NEXT_COLOR
+			filas.append(fila.text + ("*" if siguiente else ""))
+	return filas
+
 func _tarea(id: String) -> bool:
 	return tk.get_task_list_res("TUTORIAL_DOOR").get_task_res(id).task_done
 
@@ -159,9 +168,16 @@ func _t_manana() -> void:
 	await create_timer(1.5).timeout
 	_check("La partida empieza a las 06:00 con Mayui en ropa de casa", tm.get_current_time() == "06:00" and pm.get_outfit_id() == "home", tm.get_current_time())
 	_check("Al levantarse Mayui dice 'Tengo que ducharme.'", " ".join(dichos).contains("Tengo que ducharme."), str(dichos))
+	_check("Despierta Maloliente y con Hambre", pm.has_effect("SMELLY") and pm.has_effect("HUNGER"))
 	await _calma()
+	var ayudas = root.get_node("PlayerUI/TutorialHud")
+	_check("La manana empieza a oscuras", casa.get_node("Madrugada").visible)
+	await process_frame
+	_check("Arriba a la derecha: la lista de tareas, con la ducha como siguiente", ayudas.tasks_panel.visible and _filas(ayudas) == ["[  ] Asearse*", "[  ] Ponerse el uniforme", "[  ] Preparar algo de comer", "[  ] Lavarse los dientes", "[  ] Salir a trabajar"], str(_filas(ayudas)))
+	_check("Abajo: como moverse y a donde ir", ayudas.walk_panel.visible and ayudas.walk_label.text.begins_with("Muévete"), ayudas.walk_label.text)
 	_junto(Vector2(104, 104), Vector2.DOWN)   # encima de la cama, mirandola
 	await create_timer(0.5).timeout
+	_check("Al acercarse a algo dice como usarlo", ayudas.walk_label.text.contains("Z (o Enter): usar"), ayudas.walk_label.text)
 	var volver : Array = []
 	for i in 5:
 		volver.append_array(await _hablar_con_z())
@@ -203,6 +219,7 @@ func _t_manana() -> void:
 	await create_timer(0.5).timeout
 	var oido : Array = await _hablar_con_z()
 	_check("La ducha queda hecha y Mayui sale en toalla", _tarea("BATHE") and pm.get_outfit_id() == "towel")
+	_check("La ducha quita Maloliente; la lista tacha asearse y marca el uniforme", not pm.has_effect("SMELLY") and _filas(ayudas)[0] == "[x] Asearse" and _filas(ayudas)[1] == "[  ] Ponerse el uniforme*", str(_filas(ayudas)))
 	_check("Primera ducha con Z: tus lineas en orden, una vez", oido == ["Qué frío.", "¡Achuu!", "...", "Debería ir a cambiarme si no quiero morir congelada.", "Espero que mi uniforme esté limpio, no recuerdo si lo lavé."], str(oido))
 	var insistencia : Array = []
 	for i in 4:
@@ -231,6 +248,8 @@ func _t_manana() -> void:
 	_check("En el tutorial la pijama no se pone: tus 3 frases y el aviso", pm.get_outfit_id() == "towel" and pijama == ["Me encantaría volver a dormir, pero las facturas no se pagan solas.", "Resiste, Mayui, debes ser fuerte.", "Que no.", "Voy a llegar tarde.", "Voy a llegar tarde."], str(pijama))
 	var uniforme : Array = await _hablar(func() -> void: armario._on_garment_input(_clic(), "work"))
 	_check("Al ponerse el uniforme: tus frases y el estomago", pm.get_outfit_id() == "work" and uniforme == ["Huele bien, parece que no se me olvidó lavarlo.", "(Le ruge el estómago.)", "Es verdad, ayer no cené por estar organizando mis cosas...", "Nadie me advirtió que mudarse era tan complicado."], str(uniforme))
+	await create_timer(0.1).timeout
+	_check("En el armario no sale la lista ni otra ayuda (ya trae la suya)", not ayudas.tasks_panel.visible and not ayudas.mouse_panel.visible)
 	armario.close()
 	_check("El armario se cierra y Mayui queda libre", not armario.visible and gm.modal_count == 0)
 	dicho = await _decir(abrir)
@@ -242,6 +261,8 @@ func _t_manana() -> void:
 	var ui = casa.get_node("UILayer/KitchenMultiUI")
 	cocina.can_interact = true
 	cocina.execute()
+	await create_timer(0.1).timeout
+	_check("En la cocina: como usar el raton", ayudas.mouse_panel.visible and not ayudas.tasks_panel.visible)
 	var kc = cocina.container
 	var inv = kc.inventory
 	var bolsa := -1
@@ -274,6 +295,7 @@ func _t_manana() -> void:
 	manos.use_item_at(mano)
 	await _calma()
 	_check("Cocinar con 'Esperar' y comer completa la tarea de comer", _tarea("COOK") and pm.daily.home_meals == 1)
+	_check("Comer quita el Hambre", not pm.has_effect("HUNGER"))
 	dicho = await _decir(abrir)
 	_check("Comida y sin cepillarse: 'Me lavaré la boca antes de salir.'", dicho.strip_edges() == "Me lavaré la boca antes de salir.", dicho)
 
@@ -307,6 +329,8 @@ func _t_manana() -> void:
 	dichos.clear()
 	dlg.end_timeline()
 	_check("...y sale al lobby", await _llegar(1))
+	await create_timer(0.1).timeout
+	_check("Fuera de casa se apagan las ayudas del tutorial", not ayudas.tasks_panel.visible and not ayudas.walk_panel.visible and not ayudas.mouse_panel.visible)
 	_check("Sale antes de la hora de entrada al trabajo (08:00)", tm.minutes < 8 * 60, "salio a las " + hora_salida)
 	var casero := false
 	for i in 40:
@@ -325,6 +349,7 @@ func _t_manana() -> void:
 	await _calma()
 	await create_timer(2.5).timeout
 	_check("Al volver se queda en casa (la puerta no la saca sola)", zm.zone_node == casa and not zm._changing_zone)
+	_check("Despues del tutorial el cuarto ya no esta a oscuras ni salen las ayudas", not casa.get_node("Madrugada").visible and not ayudas.tasks_panel.visible)
 	casa.get_node("Wardrobe").can_interact = true
 	casa.get_node("Wardrobe").execute()
 	await _vestir(casa, "home")

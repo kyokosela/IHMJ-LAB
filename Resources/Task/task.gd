@@ -5,6 +5,7 @@ signal task_finished
 signal task_cooldown
 
 @export var task_unique_name : String ## NOMBRE UNICO DE LA TAREA
+@export var display_name : String ## Nombre corto en la lista de pantalla (clave de Textfiles/ o texto)
 @export var task_message : Array[String] ## Mensajes de "error" o advertencias de las tareas pendientes
 @export var task_done : bool ## Bool para saber si la tarea esta realizada, usar set_done si se quiere habilitar, por las señales
 @export var cooldown : int = 3 : ## numero de ciclos en antes del cooldown

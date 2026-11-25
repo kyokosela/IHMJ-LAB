@@ -3,6 +3,11 @@ extends World
 ## es Scripts/HouseInteracts/exit_door.gd, que usa la lista de tareas del dev.
 
 const FLAG_INTRO_SHOWN := "tutorial_intro_shown"
+## Mayui despierta con Maloliente y Hambre (tu Bloque 1-1; SISTEMA_GAMEPLAY §8): se quitan al ducharse y al comer.
+const START_EFFECTS : Array[Effect] = [
+	preload("res://Resources/Effects/Effects/smelly.tres"),
+	preload("res://Resources/Effects/Effects/hunger.tres"),
+]
 
 func _ready() -> void:
 	super()
@@ -12,6 +17,9 @@ func _ready() -> void:
 
 	if EventManager.is_event_active("TUTORIAL") and not NarrativeFlags.has_flag(FLAG_INTRO_SHOWN):
 		NarrativeFlags.set_flag(FLAG_INTRO_SHOWN)
+		for effect : Effect in START_EFFECTS:
+			if not PlayerManager.has_effect(effect.effect_unique_name):
+				PlayerManager.add_effect(effect.duplicate())
 		Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], "Tengo que ducharme.")
 
 ## integration_action.gd avisa al jugador llamando a este metodo en la escena actual.

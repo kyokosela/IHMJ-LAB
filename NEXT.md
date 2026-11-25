@@ -8,8 +8,7 @@ decisiones pequeñas y reversibles anotadas en `Docs/Design/DECISIONES_Y_PENDIEN
 1. [x] Cuarto en L (P74). Pruebas: efectos, flujo, crafteos, ropa, espejo, tutorial, voy_tarde, cuarto en 0 FALLA.
 2. [x] Baño como escena aparte (P75). Las 8 pruebas en 0 FALLA.
 3. [x] Balcón (P76).
-4. [ ] Resto del guion sin arte nuevo: calendario, escritorio y nevera ✅ (P77); falta lo del arranque (lista de tareas,
-   efectos al empezar, luz de la mañana, ayudas de teclas).
+4. [x] Resto del guion sin arte nuevo: calendario, escritorio y nevera (P77); arranque (P78). Las 8 pruebas en 0 FALLA.
 5. [ ] Revisión final, docs, informe con capturas y borrar la reanudación automática (CronList / CronDelete).
 
 Pruebas todas juntas: ver `ENTORNO` en CLAUDE.md.

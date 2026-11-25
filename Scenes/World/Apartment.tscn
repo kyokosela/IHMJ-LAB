@@ -31,6 +31,18 @@
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/calendar.gd" id="34"]
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/desk.gd" id="35"]
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/home_kitchen.gd" id="36"]
+[ext_resource type="Script" path="res://Scripts/HouseInteracts/morning_light.gd" id="37"]
+
+[sub_resource type="Gradient" id="Light_gradient"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="Light_texture"]
+gradient = SubResource("Light_gradient")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
 
 [sub_resource type="RectangleShape2D" id="Shape_bed"]
 size = Vector2(64, 32)
@@ -371,6 +383,20 @@ theme_override_font_sizes/font_size = 24
 text = "Cajas"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Madrugada" type="Node2D" parent="."]
+visible = false
+script = ExtResource("37")
+
+[node name="Oscuridad" type="CanvasModulate" parent="Madrugada"]
+color = Color(0.58, 0.58, 0.74, 1)
+
+[node name="LuzBalcon" type="PointLight2D" parent="Madrugada"]
+position = Vector2(64, 142)
+color = Color(0.86, 0.9, 1, 1)
+energy = 0.8
+texture = SubResource("Light_texture")
+texture_scale = 1.5
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1401545714]
 zoom = Vector2(5, 5)

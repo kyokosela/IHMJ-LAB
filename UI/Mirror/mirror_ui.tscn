@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://djm2btfbe6vve" path="res://Assets/UI/Mirror/brush_selection.png" id="5_brush_hl"]
 [ext_resource type="Texture2D" uid="uid://nfvnxgww6vs4" path="res://Assets/UI/Mirror/faucet_selection.png" id="6_faucet_hl"]
 
-[node name="MirrorUI" type="Control" node_paths=PackedStringArray("mayui_rect", "brush_rect", "towel_rect", "feedback_label", "exit_panel", "highlights", "hits") groups=["mirror_ui"]]
+[node name="MirrorUI" type="Control" node_paths=PackedStringArray("mayui_rect", "brush_rect", "towel_rect", "feedback_label", "exit_panel", "highlights", "hits") groups=["mirror_ui", "tutorial_mouse_ui"]]
 visible = false
 layout_mode = 3
 anchors_preset = 15

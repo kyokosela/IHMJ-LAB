@@ -72,6 +72,10 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   tutorial?" = `exit_door.gd` → `in_tutorial_morning()` (P76).
 - Frases del cuarto (2026-11-25, DIALOGOS): nevera antes de ducharse (`home_kitchen.gd`: no abre la cocina), calendario
   (`calendar.gd` + `calendario_1/2.dtl`) y escritorio después de comer (`desk.gd`) (P77).
+- Arranque del tutorial (2026-11-25, Bloque 1-1 y Flow): Mayui despierta con Maloliente y Hambre (`tutorial.gd`), cuarto
+  a oscuras con luz del balcón (nodo `Madrugada`) y ayudas en `UI/Tutorial/tutorial_hud.tscn` (dentro de `PlayerUI`): lista
+  de tareas (`Task.display_name`), cómo moverse/usar y ratón en cocina y espejo (grupo `tutorial_mouse_ui`). Todo se apaga al
+  salir la primera vez (P78).
 - Existe `Scenes/Playground_Integration.tscn` (herramienta de pruebas, desordenada). Congelada.
 - Próximo paso: ver `NEXT.md` si existe.
 

@@ -23,19 +23,28 @@ func _ready():
 		_has_pending_locked = false
 
 func set_item(p_item: Item):
+	if item and item.item_changed.is_connected(_on_item_changed):
+		item.item_changed.disconnect(_on_item_changed)
 	item = p_item
+	if item: item.item_changed.connect(_on_item_changed)
 	if not is_node_ready():
 		_pending_update = true
 		return
 	_update_display()
 
+## El mismo objeto cambio (ej. se comio lo de la olla): se vuelve a dibujar.
+func _on_item_changed() -> void:
+	if is_node_ready(): _update_display()
+
 func _update_display():
 	if item:
-		icon_rect.texture = item.data.texture if item.data.texture else PlaceholderTexture2D.new()
-		
+		var item_texture : Texture2D = item.get_display_texture()
+		icon_rect.texture = item_texture if item_texture else PlaceholderTexture2D.new()
+
+		tooltip_text = tr(item.data.item_name)   # el nombre sale al pasar el cursor
 		if name_label:
 			name_label.text = item.data.item_name
-			name_label.visible = true
+			name_label.visible = item_texture == null   # escrito sobre la casilla solo si no hay dibujo que lo identifique
 		
 		if item.uses_left > 1:
 			amount_label.text = str(item.uses_left)
@@ -44,6 +53,7 @@ func _update_display():
 			amount_label.visible = false
 	else:
 		icon_rect.texture = null
+		tooltip_text = ""
 		if name_label: name_label.visible = false
 		amount_label.visible = false
 
@@ -69,6 +79,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	var preview = TextureRect.new()
 	preview.texture = icon_rect.texture
 	preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	preview.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	preview.custom_minimum_size = Vector2(64, 64)
 	preview.modulate = Color(1, 1, 1, 0.7)
 	

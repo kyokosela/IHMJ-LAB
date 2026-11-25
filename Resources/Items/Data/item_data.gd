@@ -43,6 +43,8 @@ enum QUALITY {
 @export var is_holder : bool = false
 ## Tipos de items que puede contener (vacío = cualquiera)
 @export var holdable_types : Array[TYPE] = []
+## Dibujo segun lo que contenga: item_unique_name del contenido -> textura (si no esta, se usa texture)
+@export var held_textures : Dictionary[String, Texture2D] = {}
 
 @export_group("Durability")
 ## Si este item puede romperse cuando el player tiene estrés

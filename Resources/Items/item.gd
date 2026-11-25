@@ -122,4 +122,11 @@ func release_held_item() -> Item:
 ## Verifica si tiene algo contenido
 func has_held_item() -> bool:
 	return held_item != null
+
+## Dibujo a mostrar: el que tenga para lo que contiene (ItemData.held_textures); si no, el del objeto.
+func get_display_texture() -> Texture2D:
+	if data == null: return null
+	if held_item != null and data.held_textures.has(held_item.data.item_unique_name):
+		return data.held_textures[held_item.data.item_unique_name]
+	return data.texture
 #endregion

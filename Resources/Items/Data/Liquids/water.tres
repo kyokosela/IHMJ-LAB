@@ -67,7 +67,7 @@ metadata/_custom_type_script = "uid://dbp4u6dyakclb"
 
 [resource]
 script = ExtResource("9_itemdata")
-item_name = "Water"
+item_name = "_WATER_"
 item_unique_name = "water"
 item_type = 1
 behavior = SubResource("Resource_behavior")

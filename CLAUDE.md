@@ -24,6 +24,9 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   `KitchenMultiUI.tscn`: capas de 1900x1080, dos alacenas que abren (12 casillas), olla, fuego, humo y agua; pendientes P37–P44). Comida casera (decisión de Ramiro): bolsa -> tabla -> **Combinar** (olla + ingredientes) -> estufa 45 min -> comer
   desde la olla; regla de lo cocinado del dev: `preparation` no_prepared -> prepared -> cooked. `Tools/probar_crafteos.gd` debe terminar
   en 0 FALLA (nada se duplica ni se pierde, ni al salir de la zona con la estufa cocinando). Pendientes del dev: P25–P31 en `DECISIONES_Y_PENDIENTES.md`.
+  Íconos PROVISIONALES (imágenes de Gemini) en `Assets/Items/*.png`, asignados en `texture` / `held_textures` de cada `.tres`
+  (`Item.get_display_texture`; el arte real solo reemplaza los PNG con el mismo nombre; P38). Los originales (`Docs/ItemIAgenerated`)
+  no van en git.
   Diseñados y pendientes de OK: Desmayo por lugar y Sueño acumulado.
 - Prueba de juego de Ramiro (2026-11-24), corregido: lo picado y lo cocinado se queda en su estación y lo combinado en la casilla
   de resultado; la alarma tiene Cancelar/Esc; el ratón funciona en la PC (tapaba un Control del `Player.tscn`) y se quitó la app

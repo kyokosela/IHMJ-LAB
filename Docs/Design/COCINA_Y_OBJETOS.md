@@ -15,7 +15,7 @@
 | Bolsa de ingredientes | 2 | se pica en la tabla; así como está no se come |
 | Olla | 1 | guarda ingredientes, comida o agua |
 
-El cuadro rosa y negro es "sin imagen": faltan los íconos (P38) y los nombres en español (P39).
+Los dibujos son **provisionales** (imágenes de Gemini, en `Assets/Items`); la olla y la taza cambian según lo que llevan. El nombre de cada objeto sale al pasar el cursor. El cuadro rosa y negro es "sin imagen": quedan la cafetera, el café y el agua sueltos (P38).
 
 ## 3. Recetas conectadas
 | Dónde | Pones | Sale | Tiempo |

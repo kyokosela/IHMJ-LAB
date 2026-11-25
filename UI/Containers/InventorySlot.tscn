@@ -11,6 +11,7 @@ offset_bottom = 64.0
 script = ExtResource("1_script")
 
 [node name="Icon" type="TextureRect" parent="."]
+texture_filter = 4
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_c5ngj")
 expand_mode = 1

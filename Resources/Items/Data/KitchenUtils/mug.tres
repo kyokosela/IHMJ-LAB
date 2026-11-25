@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="2_2kw42"]
 [ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="8_4b1ou"]
 [ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="12_dwkmp"]
+[ext_resource type="Texture2D" path="res://Assets/Items/mug.png" id="ico"]
+[ext_resource type="Texture2D" path="res://Assets/Items/coffee_mug.png" id="ico_coffee"]
 
 [sub_resource type="Resource" id="Resource_182fq"]
 script = ExtResource("1_uipfv")
@@ -11,6 +13,10 @@ metadata/_custom_type_script = "uid://do0pdg85om6vq"
 
 [resource]
 script = ExtResource("12_dwkmp")
+texture = ExtResource("ico")
+held_textures = Dictionary[String, Texture2D]({
+"coffee": ExtResource("ico_coffee")
+})
 item_name = "_MUG_"
 item_unique_name = "mug"
 item_type = 4

@@ -257,6 +257,21 @@ func _t_transicion() -> void:
 	zm.previous_zone = -1
 	await process_frame
 
+# ------------------------------------------------------------------ dibujos de las casillas
+## La casilla de la UI para ese indice (o null).
+func _casilla(casillas: Node, indice: int) -> Node:
+	for c in casillas.get_children():
+		if not c.is_queued_for_deletion() and c.get("slot_index") == indice:
+			return c
+	return null
+
+## Nombre del dibujo que muestra la casilla de la UI para ese indice.
+func _dibujo(casillas: Node, indice: int) -> String:
+	var c : Node = _casilla(casillas, indice)
+	if c == null: return "(sin casilla)"
+	var t = c.get_node("Icon").texture
+	return t.resource_path.get_file() if t != null else "(nada)"
+
 # ------------------------------------------------------------------ F. apartamento
 ## Espera a que no haya ningun dialogo en curso (cierra los que Dialogic vaya arrancando con retraso).
 func _esperar_calma() -> void:
@@ -486,7 +501,24 @@ func _t_cocina() -> void:
 	var olla_llena = inv.slots[res_idx].item
 	_check("Boton Combinar: la olla con los ingredientes queda en la casilla de resultado", olla_llena != null and olla_llena.data.item_unique_name == "cooking_pot" and olla_llena.held_item != null and olla_llena.held_item.data.item_unique_name == "ingredients")
 	_check("...y no salta sola a las manos", pm.player.inventory.get_hands_items().size() == en_manos)
+	_check("La casilla muestra el dibujo de la olla con ingredientes", _dibujo(ui.simple_craft_result_grid, res_idx) == "cooking_pot_ingredients.png", _dibujo(ui.simple_craft_result_grid, res_idx))
 	var Obj = load("res://Resources/Items/item.gd")
+	var sin_dibujo := ["ingredients_bag", "ingredients_unpack", "home_meal", "KitchenUtils/cooking_pot", "KitchenUtils/water_cooking_pot", "KitchenUtils/mug", "Coffee/coffee_mug", "Coffee/coffee_bag"].filter(func(n): return load("res://Resources/Items/Data/%s.tres" % n).texture == null)
+	_check("Los objetos de la cocina tienen dibujo", sin_dibujo.is_empty(), str(sin_dibujo))
+	var taza = Obj.new(load("res://Resources/Items/Data/KitchenUtils/mug.tres"))
+	taza.hold(Obj.new(load("res://Resources/Items/Data/Liquids/coffee.tres")))
+	var olla_agua = Obj.new(load("res://Resources/Items/Data/KitchenUtils/cooking_pot.tres"))
+	olla_agua.hold(Obj.new(load("res://Resources/Items/Data/Liquids/water.tres")))
+	_check("La taza con cafe y la olla con agua cambian de dibujo", taza.get_display_texture().resource_path.get_file() == "coffee_mug.png" and olla_agua.get_display_texture().resource_path.get_file() == "water_pot.png")
+	var casilla = _casilla(ui.simple_craft_result_grid, res_idx)
+	_check("Sin nombre encima del dibujo: sale en espanol al pasar el cursor", casilla != null and not casilla.name_label.visible and casilla.tooltip_text == "Olla", casilla.tooltip_text if casilla != null else "sin casilla")
+	var suelta = load("res://UI/Containers/InventorySlot.tscn").instantiate()
+	root.add_child(suelta)
+	suelta.set_item(Obj.new(load("res://Resources/Items/Data/Coffee/coffee_pot.tres")))
+	_check("Un objeto sin dibujo (cafetera) conserva el nombre escrito", suelta.name_label.visible and suelta.tooltip_text == "Cafetera", suelta.tooltip_text)
+	suelta.set_item(Obj.new(load("res://Resources/Items/Data/home_meal.tres")))
+	_check("La comida casera se llama en espanol", suelta.tooltip_text == "Comida casera" and not suelta.name_label.visible, suelta.tooltip_text)
+	suelta.queue_free()
 	inv.slots[entradas[0]].item = Obj.new(load("res://Resources/Items/Data/KitchenUtils/cooking_pot.tres"))
 	inv.slots[entradas[1]].item = Obj.new(load("res://Resources/Items/Data/ingredients_unpack.tres"))
 	inv.inventory_changed.emit()
@@ -525,7 +557,9 @@ func _t_cocina() -> void:
 	for i in manos.get_hands_indices():
 		if manos.get_slot(i).item == comida_olla:
 			mano_idx = i
+	_check("En la mano se ve la olla con comida", _dibujo(ui.player_hands_grid, mano_idx) == "cooking_pot_food.png", _dibujo(ui.player_hands_grid, mano_idx))
 	manos.use_item_at(mano_idx)
+	_check("Despues de comer la casilla pasa a la olla vacia", _dibujo(ui.player_hands_grid, mano_idx) == "cooking_pot.png", _dibujo(ui.player_hands_grid, mano_idx))
 	_check("Comer: sube la energia, quita el Hambre y cuenta como comida casera", pm.get_stat_value("ENERGY") > energia0 and not pm.has_effect("HUNGER") and pm.daily.home_meals == 1, "energia %.1f -> %.1f" % [energia0, pm.get_stat_value("ENERGY")])
 	_check("Comer marca la tarea COOK del tutorial", tarea.task_done)
 	_check("La comida se gasta, la olla queda vacia en las manos y el ItemData compartido no se gasta", comida_olla.held_item == null and manos.get_hands_items().size() == 1 and comida.data.uses == 1, "uses del dato: %d" % comida.data.uses)	# 6) Esc cierra la UI y Mayui vuelve a moverse

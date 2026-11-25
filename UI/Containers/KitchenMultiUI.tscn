@@ -613,6 +613,7 @@ columns = 5
 
 [node name="OverflowDialog" type="Control" parent="."]
 visible = false
+texture_filter = 4
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

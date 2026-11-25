@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://df2q5ei6ve3yq" path="res://Resources/Items/Conditions/threshold_entry.gd" id="5_j3pvm"]
 [ext_resource type="Resource" uid="uid://dmk8i8fxtpbyx" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_prep.tres" id="6_lhmln"]
 [ext_resource type="Resource" uid="uid://dm4jblotjlc1k" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_cooked.tres" id="7_7kqf6"]
+[ext_resource type="Texture2D" path="res://Assets/Items/ingredients.png" id="ico"]
 
 [sub_resource type="Resource" id="Resource_xtnmp"]
 script = ExtResource("5_j3pvm")
@@ -49,6 +50,7 @@ metadata/_custom_type_script = "uid://wotj3baput20"
 
 [resource]
 script = ExtResource("3_1o678")
+texture = ExtResource("ico")
 item_name = "_INGREDIENTS_"
 item_unique_name = "ingredients"
 item_description = "Ingredients

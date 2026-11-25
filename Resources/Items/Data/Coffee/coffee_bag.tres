@@ -5,6 +5,7 @@
 [ext_resource type="Resource" uid="uid://clnvuiyjwonm4" path="res://Resources/Items/Conditions/preparation.tres" id="3_mmgdg"]
 [ext_resource type="Script" uid="uid://wotj3baput20" path="res://Resources/Items/Conditions/item_condition_modifier.gd" id="3_olymb"]
 [ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="4_7cv4k"]
+[ext_resource type="Texture2D" path="res://Assets/Items/coffee_bag.png" id="ico"]
 
 [sub_resource type="Resource" id="Resource_abfwp"]
 script = ExtResource("1_25cod")
@@ -12,6 +13,7 @@ metadata/_custom_type_script = "uid://do0pdg85om6vq"
 
 [resource]
 script = ExtResource("4_7cv4k")
+texture = ExtResource("ico")
 item_name = "_COFFEE_BAG_"
 item_unique_name = "coffee_bag"
 item_type = 1

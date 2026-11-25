@@ -222,7 +222,7 @@ func _update_craft_preview():
 	
 	if craft_preview_label:
 		if recipe:
-			craft_preview_label.text = "= " + recipe.result_item.item_name
+			craft_preview_label.text = "= " + tr(recipe.result_item.item_name)
 		else:
 			craft_preview_label.text = ""
 	
@@ -319,8 +319,8 @@ func _create_basic_slot(item: Item, _slot_index: int) -> Control:
 	
 	if item:
 		var texture_rect = TextureRect.new()
-		texture_rect.texture = item.data.texture
-		texture_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+		texture_rect.texture = item.get_display_texture()
+		texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		panel.add_child(texture_rect)
 	
@@ -435,7 +435,8 @@ func _show_overflow_dialog(items: Array[Item]):
 func _create_delete_button(item: Item, container: InventoryContainer, index: int) -> Button:
 	var btn = Button.new()
 	btn.text = item.data.item_name
-	btn.icon = item.data.texture
+	btn.icon = item.get_display_texture()
+	btn.add_theme_constant_override("icon_max_width", 48)
 	btn.pressed.connect(_on_delete_item.bind(container, index))
 	return btn
 

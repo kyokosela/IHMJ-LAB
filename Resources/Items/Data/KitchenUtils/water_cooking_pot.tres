@@ -12,6 +12,7 @@
 [ext_resource type="Resource" uid="uid://otjo218bj3mf" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_hot.tres" id="10_7quq1"]
 [ext_resource type="Resource" uid="uid://b18f3g76hqy6t" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_cold.tres" id="11_t7kp0"]
 [ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="12_nx1o4"]
+[ext_resource type="Texture2D" path="res://Assets/Items/water_pot.png" id="ico"]
 
 [sub_resource type="Resource" id="Resource_wr5e0"]
 script = ExtResource("1_x3gid")
@@ -100,6 +101,7 @@ metadata/_custom_type_script = "uid://dbp4u6dyakclb"
 
 [resource]
 script = ExtResource("12_nx1o4")
+texture = ExtResource("ico")
 item_name = "_WATER_POT_"
 item_unique_name = "water_pot"
 item_type = 1

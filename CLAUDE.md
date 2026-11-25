@@ -132,6 +132,9 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_voy_tarde.gd`
 - Prueba de la casa (cuarto, baño y balcón: paredes, muebles, puertas, frases y caminar con las teclas hasta cada cosa; ~2 min):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_cuarto.gd`
+- Jugar la mañana entera como una persona (teclas, clics y arrastres de ratón; ~1 min; agregar `-- <carpeta>` sin
+  `--headless` para guardar fotos):
+  `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/jugar_manana.gd`
 - Si algo no se refleja en Godot: cerrar Godot, borrar la carpeta oculta `.godot/` y reabrir.
 
 ## MODELOS (plan Pro, ahorrar tokens)

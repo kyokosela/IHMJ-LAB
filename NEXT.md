@@ -1,14 +1,27 @@
-# Sesión autónoma 2026-11-25 (Ramiro vuelve hacia las 17:00)
+# Para Ramiro: lo avanzado el 2026-11-25 y qué sigue
 
-Pedido: avanzar todo lo pendiente **del tutorial de la mañana** sin inventar nada; él revisa al volver (solo ve imágenes
-desde el teléfono). Reglas: un commit local por paso verificado, **no subir** (push), no descargar nada, no borrar nada suyo,
-decisiones pequeñas y reversibles anotadas en `Docs/Design/DECISIONES_Y_PENDIENTES.md`. Capturas por SendUserFile.
+Todo quedó en commits **locales** (sin subir). Pruebas: las 8 y `Tools/jugar_manana.gd` en **0 FALLA** (605 comprobaciones).
 
-## Pasos
-1. [x] Cuarto en L (P74). Pruebas: efectos, flujo, crafteos, ropa, espejo, tutorial, voy_tarde, cuarto en 0 FALLA.
-2. [x] Baño como escena aparte (P75). Las 8 pruebas en 0 FALLA.
-3. [x] Balcón (P76).
-4. [x] Resto del guion sin arte nuevo: calendario, escritorio y nevera (P77); arranque (P78). Las 8 pruebas en 0 FALLA.
-5. [ ] Revisión final, docs, informe con capturas y borrar la reanudación automática (CronList / CronDelete).
+## Hecho
+- Cuarto en L (P74), baño aparte (P75), balcón con tendedero (P76).
+- Frases de tu guion: nevera antes de ducharse, calendario, escritorio, balcón (P76, P77).
+- Arranque de la mañana: a oscuras, Maloliente y Hambre, lista de tareas y ayudas (P78).
+- La mañana entera se juega con teclas y ratón, de despertar al casero.
 
-Pruebas todas juntas: ver `ENTORNO` en CLAUDE.md.
+## Al probar (F5), mira esto
+1. ¿El cuarto, el baño y el balcón se sienten bien? ¿Algo estorba al caminar?
+2. ¿La oscuridad y los textos de ayuda te gustan?
+3. Las puertas: se cruzan caminando hacia ellas.
+
+## Preguntas (una a la vez, en este orden)
+1. ¿Subo los commits a GitHub?
+2. P74: los carteles al acercarte salen enormes, ¿los achico?
+3. P77 / P25: nevera y comida instantánea (tus documentos se contradicen).
+4. P67: ¿el alquiler es viernes (casero) o miércoles (tu diseño)?
+5. P78: ¿dinero inicial 1000 (Bloque 1-1) o 350?
+6. P76: ¿qué hace el tendedero?
+7. El "0" arriba a la izquierda es un control de la escena del jugador: ¿lo quito?
+
+## Necesita arte o texto (no lo inventé)
+Tileset y props reales · comida instantánea y comer sentada · silueta y sonido de la ducha · sonidos del cuarto ·
+renders de diálogo · cuadros de caminar · "¿apagué la estufa?" al salir.

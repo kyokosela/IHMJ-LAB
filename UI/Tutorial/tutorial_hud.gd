@@ -14,12 +14,16 @@ const DONE_COLOR := Color(0.55, 0.8, 0.55)
 @onready var walk_panel : Control = %WalkHint
 @onready var walk_label : Label = %WalkLabel
 @onready var mouse_panel : Control = %MouseHint
+@onready var mouse_label : Label = $MouseHint/MouseLabel
 
 var _shown_tasks : String = "" ## para no redibujar la lista si no cambio
 
 func _process(_delta: float) -> void:
 	var morning : bool = _morning_at_home()
-	mouse_panel.visible = morning and Dialogic.current_timeline == null and _mouse_ui_open()
+	var mouse_ui : CanvasItem = _mouse_ui_open()
+	mouse_panel.visible = morning and Dialogic.current_timeline == null and mouse_ui != null
+	if mouse_panel.visible:   # cada pantalla puede traer su ayuda (metadato "tutorial_hint"; la cocina explica como comer)
+		mouse_label.text = tr(mouse_ui.get_meta("tutorial_hint", "_HINT_MOUSE_"))
 	tasks_panel.visible = morning and GameManager.modal_count == 0
 	if tasks_panel.visible:
 		_refresh_tasks()
@@ -47,8 +51,12 @@ func _something_in_front() -> bool:
 			return true
 	return false
 
-func _mouse_ui_open() -> bool:
-	return get_tree().get_nodes_in_group(MOUSE_UI_GROUP).any(func(node: Node) -> bool: return node is CanvasItem and node.is_visible_in_tree())
+## La pantalla de raton que esta abierta, o null.
+func _mouse_ui_open() -> CanvasItem:
+	for node in get_tree().get_nodes_in_group(MOUSE_UI_GROUP):
+		if node is CanvasItem and node.is_visible_in_tree():
+			return node
+	return null
 
 ## Una fila por tarea de la lista del dev (en su orden) y al final salir. La primera que falta va resaltada.
 func _refresh_tasks() -> void:

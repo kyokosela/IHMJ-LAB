@@ -360,5 +360,11 @@ func _jugar() -> void:
 	_check("El casero la intercepta", casero)
 	_check("Sale a tiempo (antes de las 08:00)", tm.minutes < 8 * 60, hora)
 	print("   (salio a las %s)" % hora)
-	if dlg.current_timeline != null:
-		dlg.end_timeline()
+	dichos.clear()
+	for i in 40:   # se contesta al casero solo con Z, opciones incluidas
+		if dlg.current_timeline == null:
+			break
+		await _z()
+		await create_timer(0.6).timeout
+	await create_timer(0.6).timeout
+	_check("Con Z se contesta al casero (opcion incluida), termina y Mayui puede seguir", dlg.current_timeline == null and root.get_node("NarrativeFlags").has_flag("casero_intro_done") and pm.player.movement.can_move and dichos.has("Entendido."), "dialogo=%s %s" % [str(dlg.current_timeline != null), str(dichos.slice(-4))])

@@ -19,8 +19,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 - Pasillo y recepción (2026-11-25, según los planos de Ramiro, por revisar): `Hallway.tscn` (zona 6; escaleras y puerta M-21)
   y `Lobby.tscn` (piso 1; recepción, casero, puerta a la calle en bus). La puerta de casa lleva al pasillo. Fondos
   provisionales en `Assets/Building/` (P80). Los carteles al acercarte son pequeños (`interactable.gd`, P74); la puerta del
-  tutorial repite el aviso en vez de quedarse muda (`task.gd`, P69); la estufa vacía tiene frases (`stove_empty_lines` en
-  `KitchenMultiUI.tscn`); la ducha muestra la silueta tras la cortina (`UI/Shower/`, señal `ducha_fuera` en
+  tutorial repite el aviso en vez de quedarse muda (`task.gd`, P69); Z también elige en las preguntas
+  (`Dialogic.Choices.use_input_action`, P82); la estufa vacía tiene frases (`stove_empty_lines` en `KitchenMultiUI.tscn`); la ducha muestra la silueta tras la cortina (`UI/Shower/`, señal `ducha_fuera` en
   `ducha_tutorial.dtl`, P70).
 - Diseño unificado y pendiente de revisión de Ramiro: `Docs/Design/SISTEMA_GAMEPLAY.md`. Hoja de ruta F1–F5 en
   `DECISIONES_Y_PENDIENTES.md`; NO empezar una fase sin que Ramiro apruebe las decisiones D# que la tocan.

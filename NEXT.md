@@ -1,14 +1,16 @@
 # Para Ramiro: lo avanzado el 2026-11-25 y qué probar
 
-Todo quedó en commits **locales** (12 sin subir). Pruebas automáticas: **633 comprobaciones, 0 fallas** (las 8, la mañana
+Todo quedó en commits **locales** (sin subir). Pruebas automáticas: **635 comprobaciones, 0 fallas** (las 8, la mañana
 entera con teclas y ratón, y el "jugador torpe"). Prueban que funciona, no que se sienta bien: eso lo dices tú.
 
 ## Nuevo en la tarde
 - **Pasillo y recepción** (según tus planos): sales de casa, bajas las escaleras y el casero te espera abajo (P80).
 - **Ducha** con tu escena: la silueta tras la cortina (P70).
 - **Carteles** pequeños al acercarte y sin la casilla "0" arriba (P74, P79).
+- **Casero**: con **Z** ya puedes elegir su respuesta (antes te quedabas trabado; P82).
 - **Puerta**: si insistes ya no se queda muda (P69).
 - **Estufa** vacía: salen tus frases.
+- **Ayuda de la cocina**: ahora dice cómo comer (la olla en tus manos y clic derecho).
 - Prueba nueva del "jugador torpe": desordenar la cocina no pierde ni duplica ingredientes.
 
 De la mañana: cuarto en L, baño, balcón, frases de tu guion y arranque a oscuras (P74–P78).

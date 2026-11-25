@@ -51,6 +51,9 @@ func _ready() -> void:
 
 	if Dialogic.has_signal("signal_event") and not Dialogic.signal_event.is_connected(_on_dialogic_signal_event):
 		Dialogic.signal_event.connect(_on_dialogic_signal_event)
+	# En las preguntas, la tecla que avanza los dialogos (Z) tambien elige la opcion marcada. Sin esto, quien juega con Z
+	# quedaba trabado en la pregunta del casero (solo servian Enter, Espacio o el clic).
+	Dialogic.Choices.use_input_action = true
 
 #region Entrega por zona
 ## Zona donde esta Mayui ahora: la del mundo realmente cargado (no la "destino" mientras viaja).

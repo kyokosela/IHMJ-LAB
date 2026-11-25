@@ -372,6 +372,8 @@ func _on_station_craft_button_pressed(station_id: String):
 	if _stove_without_food(station_id):
 		if Dialogic.current_timeline == null:
 			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], stove_empty_lines.get_message())
+		# sin esto el boton se queda con el foco y Enter o Espacio lo vuelven a pulsar en vez de pasar lo que dice Mayui
+		(station_craft_buttons[station_id] as Button).release_focus()
 		return
 
 	# Iniciar el craft de la estación manualmente

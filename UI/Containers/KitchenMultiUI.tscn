@@ -98,6 +98,7 @@ overflow_items_grid = NodePath("OverflowDialog/Panel/VBox/OverflowItemsGrid")
 overflow_target_grid = NodePath("OverflowDialog/Panel/VBox/TargetGrid")
 slot_scene = ExtResource("2_slot")
 stove_empty_lines = SubResource("Chain_stove_empty")
+metadata/tutorial_hint = "_HINT_KITCHEN_"
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1

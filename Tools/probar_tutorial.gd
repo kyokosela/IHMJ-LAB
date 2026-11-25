@@ -272,7 +272,7 @@ func _t_manana() -> void:
 	cocina.can_interact = true
 	cocina.execute()
 	await create_timer(0.1).timeout
-	_check("En la cocina: como usar el raton", ayudas.mouse_panel.visible and not ayudas.tasks_panel.visible)
+	_check("En la cocina: como usar el raton y como comer", ayudas.mouse_panel.visible and not ayudas.tasks_panel.visible and ayudas.mouse_label.text.contains("clic derecho"), ayudas.mouse_label.text)
 	var kc = cocina.container
 	var inv = kc.inventory
 	var bolsa := -1

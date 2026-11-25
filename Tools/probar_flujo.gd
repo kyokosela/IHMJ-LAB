@@ -536,9 +536,13 @@ func _t_cocina() -> void:
 	var escuchar := func(info) -> void: en_la_estufa.append(str(info.get("text", "")))
 	dlg.Text.text_started.connect(escuchar)
 	var hora_estufa : int = tm.minutes
+	var con_foco := 0
 	for i in 4:
 		var antes : int = en_la_estufa.size()
+		cocinar.grab_focus()   # como al hacer clic
 		cocinar.pressed.emit()
+		if cocinar.has_focus():
+			con_foco += 1
 		for j in 30:   # espera a que lo diga y despues lo pasa
 			await create_timer(0.1).timeout
 			if en_la_estufa.size() > antes:
@@ -550,6 +554,7 @@ func _t_cocina() -> void:
 			await create_timer(0.1).timeout
 	dlg.Text.text_started.disconnect(escuchar)
 	await _esperar_calma()
+	_check("...y el boton suelta el foco: Enter y Espacio pasan el mensaje en vez de volver a pulsarlo", con_foco == 0, "%d veces con foco" % con_foco)
 	_check("Estufa sin comida: 'Cocinar' sigue activo y Mayui dice tus frases (la ultima se repite), sin gastar tiempo", activo and en_la_estufa == ["No tiene sentido.", "Necesito algo para cocinar.", "Es mejor que deje de revisar acá.", "Es mejor que deje de revisar acá."] and tm.minutes == hora_estufa, "%s activo=%s" % [str(en_la_estufa), activo])
 	# 3) bolsa -> tabla de picar -> ingredientes
 	var bolsa_idx : int = guardados[0]

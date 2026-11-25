@@ -6,7 +6,8 @@ class_name sceneChanger
 var collshape : CollisionShape2D
 
 @export var shape : Shape2D : 
-	set(value) : shape = value; if Engine.is_editor_hint() : collshape.shape = shape
+	# en el editor, al abrir la escena, collshape todavia no existe (mismo cuidado que en Interactable)
+	set(value) : shape = value; if Engine.is_editor_hint() and collshape : collshape.shape = shape
 
 @export var new_scene_id : ZoneManager.ZONES
 

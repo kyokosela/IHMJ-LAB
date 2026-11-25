@@ -172,7 +172,7 @@ func _trigger_late_warning() -> void:
 func _is_tutorial_morning_at_home() -> bool:
 	if not TaskManager.is_task_list_active("TUTORIAL_DOOR") or NarrativeFlags.has_flag("tutorial_door_done"):
 		return false
-	return ZoneManager.zone_node != null and ZoneManager.zone_node.zone_id == ZoneManager.ZONES.APARTMENT
+	return ZoneManager.zone_node != null and ZoneManager.is_home(ZoneManager.zone_node.zone_id)
 
 func _trigger_casero_intro() -> void:
 	if NarrativeFlags.has_flag("casero_intro_done"):

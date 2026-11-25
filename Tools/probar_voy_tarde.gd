@@ -77,8 +77,24 @@ func _t_voy_tarde() -> void:
 	oido = await _pasar_tiempo("00:11")
 	_check("Pasadas las 07:30: 'Voy tarde.'", oido == ["Voy tarde."], str(oido))
 	await _calma()
+	# la segunda frase tambien se dice en el bano: es parte de la casa
+	casa.release_player()
+	root.remove_child(casa)
+	casa.free()
+	casa = (load("res://Scenes/World/Bathroom.tscn") as PackedScene).instantiate()
+	root.add_child(casa)
+	current_scene = casa
+	await create_timer(1.5).timeout
 	oido = await _pasar_tiempo("00:10")
-	_check("Pasadas las 07:40: 'Debería apresurarme.'", oido == ["Debería apresurarme."], str(oido))
+	_check("Pasadas las 07:40, en el bano: 'Debería apresurarme.'", oido == ["Debería apresurarme."], str(oido))
+	await _calma()
+	casa.release_player()
+	root.remove_child(casa)
+	casa.free()
+	casa = (load("res://Scenes/World/Apartment.tscn") as PackedScene).instantiate()
+	root.add_child(casa)
+	current_scene = casa
+	await create_timer(1.5).timeout
 	await _calma()
 	var armario = casa.get_node("UILayer/WardrobeUI")
 	armario.open()

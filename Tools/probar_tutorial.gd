@@ -123,6 +123,11 @@ func _vestir(casa: Node, prenda: String) -> void:
 	await create_timer(0.4).timeout
 	armario.close()
 
+## Pisa una puerta como el jugador y espera a llegar a la zona.
+func _cruzar(puerta: Node, zona: int) -> bool:
+	_poner(puerta.global_position)
+	return await _llegar(zona)
+
 ## Espera a que Mayui este en la zona pedida y ya pueda moverse.
 func _llegar(zona: int) -> bool:
 	for i in 80:
@@ -165,7 +170,8 @@ func _t_manana() -> void:
 	_poner(NEUTRO)
 	await create_timer(0.3).timeout
 	var puerta = casa.get_node("MainDoor")
-	var abrir := func() -> void: puerta.execute()
+	# la puerta de la casa cargada en cada momento (al pasar por el bano el cuarto se vuelve a cargar)
+	var abrir := func() -> void: zm.zone_node.get_node("MainDoor").execute()
 	# primera vez: caminando de verdad contra la puerta
 	var dicho : String = await _decir(func() -> void: _poner(puerta.global_position))
 	_check("Caminar a la puerta: dice '...' y no sale", dicho.strip_edges() == "..." and zm.zone_node == casa, dicho)
@@ -190,7 +196,10 @@ func _t_manana() -> void:
 		antes_de_ducha.append_array(await _hablar(func() -> void: mueble.execute()))
 	_check("Antes de ducharse el armario no se abre y dice tus frases (la ultima se repite)", not armario.visible and antes_de_ducha == ["Primero debería ducharme.", "No voy a ponerme ropa estando así.", "No perder el tiempo aquí.", "No perder el tiempo aquí."], str(antes_de_ducha))
 	await _calma()
-	_junto(Vector2(104, 24), Vector2.LEFT)   # junto a la ducha
+	_check("La puerta del bano lleva al bano", await _cruzar(casa.get_node("DoorToBathroom"), 4))
+	casa = zm.zone_node
+	await _calma()
+	_junto(Vector2(40, 8), Vector2.LEFT)   # junto a la ducha
 	await create_timer(0.5).timeout
 	var oido : Array = await _hablar_con_z()
 	_check("La ducha queda hecha y Mayui sale en toalla", _tarea("BATHE") and pm.get_outfit_id() == "towel")
@@ -201,6 +210,13 @@ func _t_manana() -> void:
 	_check("Insistiendo en la ducha: tus 3 frases y el aviso", insistencia == ["Ya estoy limpia.", "El agua no es gratis.", "No necesito otra.", "Realmente debería salir de acá para poder cambiarme."], str(insistencia))
 	oido = await _hablar_con_z()
 	_check("Despues del aviso la ducha ya no contesta", oido.is_empty(), str(oido))
+	_check("Del bano se vuelve al cuarto", await _cruzar(casa.get_node("DoorToApartment"), 0))
+	casa = zm.zone_node
+	mueble = casa.get_node("Wardrobe")
+	armario = casa.get_node("UILayer/WardrobeUI")
+	armario.changing_seconds = 0.05
+	puerta = casa.get_node("MainDoor")
+	await _calma()
 	_poner(NEUTRO)
 	await create_timer(0.3).timeout
 	dicho = await _decir(abrir)
@@ -263,6 +279,9 @@ func _t_manana() -> void:
 
 	print("D. Cepillarse, salir y el casero")
 	await _calma()
+	_check("Vuelve al bano a cepillarse", await _cruzar(casa.get_node("DoorToBathroom"), 4))
+	casa = zm.zone_node
+	await _calma()
 	var lavamanos = casa.get_node("Sink")
 	lavamanos.can_interact = true
 	lavamanos.execute()
@@ -273,6 +292,10 @@ func _t_manana() -> void:
 	espejo.close()
 	await _calma()
 	_check("Cepillarse completa la ultima tarea", _tarea("TEETH") and tk.is_task_list_done("TUTORIAL_DOOR"))
+	_check("Sale del bano", await _cruzar(casa.get_node("DoorToApartment"), 0))
+	casa = zm.zone_node
+	puerta = casa.get_node("MainDoor")
+	await _calma()
 	await _vestir(casa, "home")
 	_check("En la manana del tutorial no se puede volver a la pijama", pm.get_outfit_id() == "work")
 	await _calma()

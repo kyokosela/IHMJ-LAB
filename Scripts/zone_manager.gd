@@ -7,19 +7,26 @@ enum ZONES {
 	APARTMENT,
 	LOBBY,
 	OFFICE,
-	COMMERCIAL
+	COMMERCIAL,
+	BATHROOM
 }
 
 const zone_paths: Array[String] = [
 	"res://Scenes/World/Apartment.tscn",
 	"res://Scenes/World/Lobby.tscn",
 	"res://Scenes/World/Office.tscn",
-	"res://Scenes/World/Commercial.tscn"
+	"res://Scenes/World/Commercial.tscn",
+	"res://Scenes/World/Bathroom.tscn"
 ]
 
 const ZONES_REQUIRING_TRANSPORT: Array[ZONES] = [
 	ZONES.OFFICE,
 	ZONES.COMMERCIAL
+]
+
+## Cuartos del apartamento: pasar entre ellos no es viajar (no gasta energia ni tiempo, no hay calle ni bus).
+const HOME_ROOMS : Array[ZONES] = [
+	ZONES.BATHROOM
 ]
 
 const STREET_RISK_BASE_CHANCE : float = 0.10
@@ -30,7 +37,8 @@ const STREET_RISK_TIME_PENALTY : String = "00:10"
 const ZONE_FADE_TIME : float = 1.0
 
 var current_zone: int = ZONES.APARTMENT
-var previous_zone: int = -1
+var previous_zone: int = -1 ## de donde viene Mayui (elige el punto de aparicion)
+var _travel_origin: int = -1 ## donde empezo el ultimo viaje: volver ahi no acumula cansancio
 var _changing_zone : bool = false ## true desde que se toca la puerta hasta que la nueva zona termina de aclarar
 var _change_id : int = 0
 var zone_node: World:
@@ -49,10 +57,15 @@ var energy_cost_incremental: float = 0
 var time_cost_base: String = "00:05"
 var time_cost_incremental: String = "00:05"
 
+## La zona es parte de la casa de Mayui (el apartamento o uno de sus cuartos).
+func is_home(zone_id: int) -> bool:
+	return zone_id == ZONES.APARTMENT or zone_id in HOME_ROOMS
+
 func change_zone(new_zone_id: ZONES) -> void:
 	if _changing_zone:
 		return # ya se esta viajando: una puerta pisada otra vez no debe repetir el cambio
-	var by_bus : bool = _requires_transport(new_zone_id)
+	var indoors : bool = is_home(current_zone) and is_home(new_zone_id)
+	var by_bus : bool = not indoors and _requires_transport(new_zone_id)
 	if by_bus:
 		if not EconomyManager.can_afford_bus():
 			push_warning("Cannot afford bus fare")
@@ -64,24 +77,11 @@ func change_zone(new_zone_id: ZONES) -> void:
 	_change_id += 1
 	GameManager.modal_count += 1
 
-	if new_zone_id == previous_zone:
-		time_cost_incremental = time_cost_base
+	if indoors:
+		previous_zone = current_zone
+		current_zone = new_zone_id
 	else:
-		time_cost_incremental = TimeUtils.increase_time(time_cost_incremental, time_cost_base)
-	# En bus se paga con dinero, no con energia, y el viaje no cuenta como cansancio de caminar
-	if not by_bus:
-		if new_zone_id == previous_zone:
-			energy_cost_incremental = energy_cost_base
-		else:
-			energy_cost_incremental += energy_cost_base
-
-	previous_zone = current_zone
-	current_zone = new_zone_id
-
-	if not by_bus:
-		PlayerManager.decrease_stat("ENERGY", energy_cost_incremental)
-	TimeManager.add_to_current_time(PlayerManager.get_time_cost_with_effects(time_cost_incremental))
-	_process_street_risk()
+		_travel(new_zone_id, by_bus)
 
 	TransitionManager.fadeIn(ZONE_FADE_TIME)
 	await TransitionManager.transition_finished
@@ -89,6 +89,28 @@ func change_zone(new_zone_id: ZONES) -> void:
 	zone_node.release_player() # antes de cerrar la escena, no durante (evita crash)
 	tree.call_deferred("change_scene_to_file", zone_paths[new_zone_id])
 	_guard_stuck_lock(_change_id)
+
+## Salir de casa o moverse por fuera: cuesta tiempo, energia (a pie) y puede pasar algo en la calle.
+func _travel(new_zone_id: ZONES, by_bus: bool) -> void:
+	if new_zone_id == _travel_origin:
+		time_cost_incremental = time_cost_base
+	else:
+		time_cost_incremental = TimeUtils.increase_time(time_cost_incremental, time_cost_base)
+	# En bus se paga con dinero, no con energia, y el viaje no cuenta como cansancio de caminar
+	if not by_bus:
+		if new_zone_id == _travel_origin:
+			energy_cost_incremental = energy_cost_base
+		else:
+			energy_cost_incremental += energy_cost_base
+
+	_travel_origin = current_zone
+	previous_zone = current_zone
+	current_zone = new_zone_id
+
+	if not by_bus:
+		PlayerManager.decrease_stat("ENERGY", energy_cost_incremental)
+	TimeManager.add_to_current_time(PlayerManager.get_time_cost_with_effects(time_cost_incremental))
+	_process_street_risk()
 
 ## La nueva zona ya cargo y empezo a aclarar: cuando termine, Mayui vuelve a moverse.
 func _unlock_after_fade() -> void:
@@ -124,6 +146,8 @@ func get_zone_name(zone_id: ZONES) -> String:
 			return "Oficina"
 		ZONES.COMMERCIAL:
 			return "Zona Comercial"
+		ZONES.BATHROOM:
+			return "Baño"
 	return "Desconocido"
 
 func _process_street_risk() -> void:

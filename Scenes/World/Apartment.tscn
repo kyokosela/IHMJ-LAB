@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://c5tmcnj0wdxvt" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
 [ext_resource type="Script" uid="uid://ptp5mp2uvryo" path="res://Scripts/HouseInteracts/integration_action.gd" id="3"]
 [ext_resource type="Texture2D" path="res://Assets/Apartment/cuarto_provisional.png" id="4"]
-[ext_resource type="Script" uid="uid://big4o7sjh0g0y" path="res://Scripts/HouseInteracts/bathe.gd" id="5"]
+[ext_resource type="Script" path="res://Scripts/scene_changer.gd" id="5"]
 [ext_resource type="Script" uid="uid://c2qbhsn6tgmrc" path="res://Resources/StringChain/string_chain.gd" id="6"]
 [ext_resource type="Script" uid="uid://cdqqyuliu6jyp" path="res://Resources/StringChain/string_chain_array.gd" id="7"]
 [ext_resource type="Script" uid="uid://btpm0l5mnnxxf" path="res://Prefabs/Interactable/interactable_container.gd" id="8"]
@@ -23,9 +23,7 @@
 [ext_resource type="Resource" path="res://Resources/Items/Data/ingredients_bag.tres" id="21"]
 [ext_resource type="PackedScene" uid="uid://cktm7n04xp2qy" path="res://UI/Containers/KitchenMultiUI.tscn" id="22"]
 [ext_resource type="PackedScene" uid="uid://dd0p5w6n0rqyj" path="res://UI/Containers/wardrobe_ui.tscn" id="26"]
-[ext_resource type="PackedScene" path="res://UI/Mirror/mirror_ui.tscn" id="27"]
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/exit_door.gd" id="28"]
-[ext_resource type="Resource" path="res://DialoguePlugin/TIMELINE/ducha_tutorial.dtl" id="29"]
 
 [sub_resource type="RectangleShape2D" id="Shape_bed"]
 size = Vector2(64, 32)
@@ -36,17 +34,17 @@ size = Vector2(32, 16)
 [sub_resource type="RectangleShape2D" id="Shape_kitchen"]
 size = Vector2(32, 64)
 
-[sub_resource type="RectangleShape2D" id="Shape_shower"]
-size = Vector2(16, 32)
-
-[sub_resource type="RectangleShape2D" id="Shape_sink"]
-size = Vector2(16, 16)
-
 [sub_resource type="RectangleShape2D" id="Shape_door"]
 size = Vector2(14, 14)
 
 [sub_resource type="RectangleShape2D" id="Wall_top_left"]
-size = Vector2(96, 112)
+size = Vector2(80, 112)
+
+[sub_resource type="RectangleShape2D" id="Wall_above_bath"]
+size = Vector2(16, 64)
+
+[sub_resource type="RectangleShape2D" id="Wall_below_bath"]
+size = Vector2(16, 32)
 
 [sub_resource type="RectangleShape2D" id="Wall_top_door_left"]
 size = Vector2(32, 48)
@@ -71,36 +69,6 @@ size = Vector2(32, 16)
 
 [sub_resource type="RectangleShape2D" id="Shape_boxes"]
 size = Vector2(32, 32)
-
-[sub_resource type="Resource" id="Lines_shower_cooldown"]
-script = ExtResource("7")
-string_list = Array[String](["_TAKE_BATH_#1_", "_TAKE_BATH_#2_", "_TAKE_BATH_#3_"])
-
-[sub_resource type="Resource" id="Chain_shower_cooldown"]
-script = ExtResource("6")
-string_list = Array[ExtResource("7")]([SubResource("Lines_shower_cooldown")])
-cooldown_message = "_TAKE_BATH_COOLDOWN_"
-max_cycles = 1
-
-[sub_resource type="Resource" id="Lines_no_energy"]
-script = ExtResource("7")
-string_list = Array[String](["No tengo suficiente energía."])
-behaviour = 3
-
-[sub_resource type="Resource" id="Chain_no_energy"]
-script = ExtResource("6")
-string_list = Array[ExtResource("7")]([SubResource("Lines_no_energy")])
-
-[sub_resource type="Resource" id="Lines_sink_eat_first"]
-script = ExtResource("7")
-string_list = Array[String](["Primero debería comer algo.", "Luego.", "Primero voy a comer."])
-behaviour = 3
-
-[sub_resource type="Resource" id="Chain_sink_eat_first"]
-script = ExtResource("6")
-string_list = Array[ExtResource("7")]([SubResource("Lines_sink_eat_first")])
-apply_times = false
-apply_energy = false
 
 [sub_resource type="Resource" id="Lines_bed_tutorial"]
 script = ExtResource("7")
@@ -143,8 +111,16 @@ centered = false
 [node name="Paredes" type="StaticBody2D" parent="."]
 
 [node name="ArribaIzquierda" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(32, 8)
+position = Vector2(24, 8)
 shape = SubResource("Wall_top_left")
+
+[node name="SobrePuertaBano" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(72, -16)
+shape = SubResource("Wall_above_bath")
+
+[node name="BajoPuertaBano" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(72, 48)
+shape = SubResource("Wall_below_bath")
 
 [node name="ArribaIzquierdaDePuerta" type="CollisionShape2D" parent="Paredes"]
 position = Vector2(96, -24)
@@ -221,6 +197,29 @@ scale = Vector2(0.2, 0.2)
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_font_sizes/font_size = 24
 text = "Balcón"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PuertaBano" type="Node2D" parent="."]
+position = Vector2(76, 24)
+
+[node name="Marco" type="Polygon2D" parent="PuertaBano"]
+color = Color(0.43, 0.4, 0.39, 1)
+polygon = PackedVector2Array(-4, -9, 4, -9, 4, 9, -4, 9)
+
+[node name="Hoja" type="Polygon2D" parent="PuertaBano"]
+color = Color(0.81, 0.76, 0.74, 1)
+polygon = PackedVector2Array(-3, -8, 3, -8, 3, 8, -3, 8)
+
+[node name="Label" type="Label" parent="PuertaBano"]
+offset_left = -36.0
+offset_top = -12.0
+offset_right = 124.0
+offset_bottom = 38.0
+scale = Vector2(0.2, 0.2)
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_font_sizes/font_size = 24
+text = "Baño"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -307,6 +306,18 @@ position = Vector2(120, 8)
 script = ExtResource("2")
 entity = "Player"
 from_zone = 1
+
+[node name="SpawnFromBathroom" type="Marker2D" parent="." groups=["spawn_point"]]
+position = Vector2(88, 24)
+script = ExtResource("2")
+entity = "Player"
+from_zone = 4
+
+[node name="DoorToBathroom" type="Area2D" parent="."]
+position = Vector2(72, 24)
+script = ExtResource("5")
+shape = SubResource("Shape_door")
+new_scene_id = 4
 
 [node name="Bed" type="Area2D" parent="." unique_id=1390192927 groups=["Interactable"]]
 position = Vector2(128, 128)
@@ -444,80 +455,6 @@ alacenas"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Shower" type="Area2D" parent="." unique_id=511588362 groups=["Interactable"]]
-position = Vector2(88, 16)
-script = ExtResource("5")
-interaction_name = "APT_SHOWER"
-is_cooldown_at_execute = true
-cooldown_timer_message = SubResource("Chain_shower_cooldown")
-stat_req_list = Dictionary[String, int]({
-"ENERGY": 10
-})
-stat_messages = SubResource("Chain_no_energy")
-time_cost = "00:20"
-dialog = ExtResource("29")
-shape = SubResource("Shape_shower")
-display_text = "Bañarse"
-reusable = true
-show_again_at_end = true
-is_solid = true
-
-[node name="Borde" type="Polygon2D" parent="Shower"]
-color = Color(0.15, 0.35, 0.45, 1)
-polygon = PackedVector2Array(-8, -16, 8, -16, 8, 16, -8, 16)
-
-[node name="Mueble" type="Polygon2D" parent="Shower"]
-color = Color(0.5, 0.74, 0.82, 1)
-polygon = PackedVector2Array(-7, -15, 7, -15, 7, 15, -7, 15)
-
-[node name="Label" type="Label" parent="Shower" unique_id=635745923]
-offset_left = -8.0
-offset_top = -16.0
-offset_right = 72.0
-offset_bottom = 144.0
-scale = Vector2(0.2, 0.2)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 20
-text = "Ducha"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Sink" type="Area2D" parent="." unique_id=1994543045 groups=["Interactable"]]
-position = Vector2(88, 56)
-script = ExtResource("3")
-action_type = 50
-interaction_name = "APT_SINK"
-event_messages = SubResource("Chain_sink_eat_first")
-shape = SubResource("Shape_sink")
-display_text = "Lavamanos"
-reusable = true
-show_again_at_end = true
-is_solid = true
-
-[node name="Borde" type="Polygon2D" parent="Sink"]
-color = Color(0.35, 0.38, 0.42, 1)
-polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-
-[node name="Mueble" type="Polygon2D" parent="Sink"]
-color = Color(0.82, 0.86, 0.9, 1)
-polygon = PackedVector2Array(-7, -7, 7, -7, 7, 7, -7, 7)
-
-[node name="Label" type="Label" parent="Sink" unique_id=99547917]
-offset_left = -8.0
-offset_top = -8.0
-offset_right = 72.0
-offset_bottom = 72.0
-scale = Vector2(0.2, 0.2)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/line_spacing = -4
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 18
-text = "Lava-
-manos"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="MainDoor" type="Area2D" parent="." unique_id=1350934528]
 unique_name_in_owner = true
 position = Vector2(120, -8)
@@ -557,5 +494,3 @@ station_craft_buttons = {
 }
 
 [node name="WardrobeUI" parent="UILayer" instance=ExtResource("26")]
-
-[node name="MirrorUI" parent="UILayer" instance=ExtResource("27")]

@@ -309,8 +309,13 @@ func _t_ui() -> void:
 	esc.pressed = true
 	ui._unhandled_input(esc)
 	_check("Esc cierra el armario y Mayui vuelve a moverse", not ui.visible and gm.modal_count == 0)
-	# banarse -> toalla -> armario
-	escena.get_node("Shower").custom_execute()
+	# banarse -> toalla -> armario (la ducha esta en el bano: se trae solo ese nodo, sin cambiar de zona)
+	var bano : Node = (load("res://Scenes/World/Bathroom.tscn") as PackedScene).instantiate()
+	var ducha : Node = bano.get_node("Shower")
+	bano.remove_child(ducha)
+	bano.free()
+	escena.add_child(ducha)
+	ducha.custom_execute()
 	_check("Al banarse Mayui queda con la toalla", pm.get_outfit_id() == "towel")
 	armario.can_interact = true
 	armario.execute()

@@ -11,8 +11,9 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 (ni playground, ni minijuegos, ni ciudad, ni contenido narrativo nuevo).
 
 ## ESTADO (actualizar al cerrar cada sesión)
-- El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Lobby, Oficina y
-  Comercial; cada una con cámara (zoom 5). Los eventos con diálogo esperan a que Mayui esté en su zona
+- El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Baño, Lobby, Oficina y
+  Comercial; cada una con cámara (zoom 5). Apartamento y Baño son la casa (`ZoneManager.is_home`): pasar entre ellos no
+  cuesta tiempo ni energía (`ZoneManager.HOME_ROOMS`). Los eventos con diálogo esperan a que Mayui esté en su zona
   (`narrative_event_handler.gd`, tabla `event_zones`). Z interactúa y avanza diálogos. Reloj arriba al centro.
 - Diseño unificado y pendiente de revisión de Ramiro: `Docs/Design/SISTEMA_GAMEPLAY.md`. Hoja de ruta F1–F5 en
   `DECISIONES_Y_PENDIENTES.md`; NO empezar una fase sin que Ramiro apruebe las decisiones D# que la tocan.
@@ -61,8 +62,11 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 - Cuarto de Mayui (2026-11-25, forma aprobada por Ramiro: **L invertida**): fondo provisional
   `Assets/Apartment/cuarto_provisional.png` (recortado de la captura del tileset), paredes en el nodo `Paredes`, muebles
   provisionales de colores **sólidos**, puerta principal en un hueco de la pared (solo al caminar hacia ella) y cámara fija con
-  el cuarto entero en pantalla. Mayui despierta junto a la cama. Si se mueve un mueble, actualizar `MAPA` en
+  el cuarto entero en pantalla. Mayui despierta junto a la cama. Si se mueve un mueble, actualizar su plano en
   `Tools/probar_cuarto.gd` y correrla (P74).
+- Baño (2026-11-25): escena aparte `Scenes/World/Bathroom.tscn` (puerta `sceneChanger` a la izquierda de la entrada) con la
+  ducha (`Shower`, antes en el cuarto), el lavamanos (`Sink`) y `UILayer/MirrorUI`. Fondo `Assets/Apartment/bano_provisional.png`
+  y cortina `cortina_ducha.png`, recortada del tileset del equipo (P75).
 - Existe `Scenes/Playground_Integration.tscn` (herramienta de pruebas, desordenada). Congelada.
 - Próximo paso: ver `NEXT.md` si existe.
 
@@ -117,7 +121,7 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_tutorial.gd`
 - Prueba del "Voy tarde" (reloj pasadas las 7:30):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_voy_tarde.gd`
-- Prueba del cuarto (paredes, muebles sólidos y caminar con las teclas hasta cada cosa; tarda ~45 s):
+- Prueba de la casa (cuarto y baño: paredes, muebles sólidos, puertas y caminar con las teclas hasta cada cosa; ~50 s):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_cuarto.gd`
 - Si algo no se refleja en Godot: cerrar Godot, borrar la carpeta oculta `.godot/` y reabrir.
 

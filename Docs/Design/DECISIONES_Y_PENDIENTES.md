@@ -112,6 +112,7 @@
 | **P72** | **Frases de la ropa casual** (4 líneas la primera vez, luego 2 y el aviso): sin poner, porque la ropa casual aún no está en el armario (sin prenda colgada ni ítem, P48) | tu artista / siguiente fase |
 | **P73** | **"Voy tarde"** ✅: tu guion dice que sale si te quedas en el cuarto, "hacia las 7:30", pero no dice cuándo van la 2.ª y la 3.ª frase. Puse **07:30, 07:40 y 07:50** (eventos `DAY1_VOY_TARDE_1..3` en `Resources/Events/Schedule`, cambiables en el Inspector). Se guía solo por la hora (no distingue "acciones irrelevantes"); espera a que cierres el diálogo o la pantalla abierta | tú: ¿te sirven esas horas? |
 | **P74** | **Cuarto en L** ✅ (forma aprobada): piso y paredes recortados de tu captura del tileset; muebles **provisionales** de colores, sólidos. La puerta principal es un hueco en la pared: solo se activa al caminar hacia ella (antes bastaba pasar cerca). Los carteles al acercarte ("Dormir", "Cocina"…) salen enormes y tapan el cuarto: ya eran así, pero ahora se nota | tú: ¿achico los carteles? artista: tileset en PNG/Aseprite |
+| **P75** | **Baño** ✅ escena aparte (ducha, lavamanos, espejo). Decisiones mías, reversibles: pasar entre cuarto y baño **no gasta tiempo ni energía** ni tiene riesgo de calle; usa el mismo fundido de 2 s que las demás zonas; no puse inodoro (tu guion no lo menciona); azulejos con los colores y la cortina recortada de la captura de tu tileset; "Voy tarde" también sale en el baño | tú: ¿acorto el fundido dentro de casa? |
 
 ---
 

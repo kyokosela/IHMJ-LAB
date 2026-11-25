@@ -72,6 +72,8 @@ func _t_zonas() -> void:
 		["res://Scenes/World/Lobby.tscn", 0, Vector2(100, 100), "Lobby viniendo del apartamento: punto general"],
 		["res://Scenes/World/Apartment.tscn", 1, Vector2(120, 8), "Apartamento viniendo del lobby: junto a la puerta"],
 		["res://Scenes/World/Apartment.tscn", -1, Vector2(88, 120), "Apartamento al empezar: junto a la cama"],
+		["res://Scenes/World/Apartment.tscn", 4, Vector2(88, 24), "Apartamento viniendo del bano: junto a la puerta del bano"],
+		["res://Scenes/World/Bathroom.tscn", 0, Vector2(72, 40), "Bano: junto a su puerta"],
 		["res://Scenes/World/Office.tscn", 1, Vector2(100, 160), "Oficina: su unico punto"],
 	]
 	for c in casos:
@@ -224,6 +226,16 @@ func _t_transicion() -> void:
 	current_scene = escena
 	await create_timer(1.3).timeout          # que termine el fundido de entrada de la escena
 	var mov = pm.player.movement
+	# entre cuartos de la casa (Apartamento <-> Bano) no es viajar: ni energia, ni tiempo
+	var energia_casa : float = pm.get_stat_value("ENERGY")
+	var hora_casa : int = tm.minutes
+	zm.change_zone(4)
+	_check("Al entrar al bano Mayui queda quieta durante el cambio", not mov.can_move and gm.modal_count == 1)
+	await _esperar_zona(4)
+	_check("Llega al bano sin gastar energia ni tiempo y puede moverse", current_scene.zone_id == 4 and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa and mov.can_move, "zona %d, energia %.1f, +%d min" % [current_scene.zone_id, pm.get_stat_value("ENERGY"), tm.minutes - hora_casa])
+	zm.change_zone(0)
+	await _esperar_zona(0)
+	_check("Vuelve al cuarto junto a la puerta del bano, tambien sin costo", current_scene.zone_id == 0 and pm.player.global_position.is_equal_approx(Vector2(88, 24)) and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, str(pm.player.global_position))
 	var energia_pie : float = pm.get_stat_value("ENERGY")
 	var t0 := Time.get_ticks_msec()
 	zm.change_zone(1)
@@ -249,6 +261,20 @@ func _t_transicion() -> void:
 	await create_timer(1.3).timeout
 	while gm.modal_count > 0 and Time.get_ticks_msec() - t0 < 5000:
 		await create_timer(0.05).timeout
+	# ir y volver a pie no acumula cansancio, aunque se pase por el bano entremedio
+	zm.current_zone = 0
+	zm.previous_zone = -1
+	zm.change_zone(1)
+	await _esperar_zona(1)
+	zm.change_zone(0)
+	await _esperar_zona(0)
+	zm.change_zone(4)
+	await _esperar_zona(4)
+	zm.change_zone(0)
+	await _esperar_zona(0)
+	zm.change_zone(1)
+	await _esperar_zona(1)
+	_check("Salir otra vez tras pasar por el bano cuesta lo basico (el bano no cuenta como viaje)", zm.energy_cost_incremental == zm.energy_cost_base, "%.1f" % zm.energy_cost_incremental)
 	if current_scene != null:
 		current_scene.release_player()
 		current_scene.queue_free()
@@ -256,6 +282,13 @@ func _t_transicion() -> void:
 	zm.current_zone = 0
 	zm.previous_zone = -1
 	await process_frame
+
+## Espera a que Mayui este en la zona pedida y ya pueda moverse.
+func _esperar_zona(zona: int) -> void:
+	for i in 80:
+		await create_timer(0.1).timeout
+		if zm.zone_node != null and is_instance_valid(zm.zone_node) and zm.zone_node.zone_id == zona and not zm._changing_zone:
+			return
 
 # ------------------------------------------------------------------ dibujos de las casillas
 ## La casilla de la UI para ese indice (o null).
@@ -305,7 +338,7 @@ func _t_apartamento() -> void:
 	print("F. Apartamento: ducha con cooldown y lavamanos (espejo)")
 	gm.new_game()
 	pm.reset_engine_state(true)
-	var escena = await _cargar("res://Scenes/World/Apartment.tscn", -1)
+	var escena = await _cargar("res://Scenes/World/Bathroom.tscn", 0)
 	var ducha = escena.get_node("Shower")
 	var usos_ducha := [0]
 	ducha.executed.connect(func(): usos_ducha[0] += 1)
@@ -319,9 +352,9 @@ func _t_apartamento() -> void:
 	var dicho : Array = await _ejecutar_y_oir(ducha)
 	_check("Segunda ducha seguida: no se repite ni pasa el tiempo", usos_ducha[0] == 1 and tm.minutes == hora1, "usos %d, +%d min" % [usos_ducha[0], tm.minutes - hora1])
 	_check("...y Mayui avisa que ya se bano", dicho.size() > 0 and dicho[0].strip_edges() == "Ya estoy limpia.", str(dicho))
-	# salir y volver al apartamento: la ducha sigue en cooldown
+	# salir y volver al bano: la ducha sigue en cooldown
 	await _soltar(escena)
-	escena = await _cargar("res://Scenes/World/Apartment.tscn", 1)
+	escena = await _cargar("res://Scenes/World/Bathroom.tscn", 0)
 	var ducha2 = escena.get_node("Shower")
 	var hora2 : int = tm.minutes
 	dicho = await _ejecutar_y_oir(ducha2)
@@ -350,6 +383,9 @@ func _t_apartamento() -> void:
 	# cama: se puede salir de la pantalla de la alarma sin dormir (boton Cancelar o Esc). En la manana del tutorial la cama
 	# no deja dormir (probar_tutorial.gd): aqui se prueba despues de ella.
 	root.get_node("NarrativeFlags").set_flag("tutorial_door_done")
+	await _soltar(escena)
+	escena = await _cargar("res://Scenes/World/Apartment.tscn", -1)
+	await _esperar_calma()
 	var cama = escena.get_node("Bed")
 	pm.slept_today = false
 	for salida in ["Cancelar", "Esc"]:

@@ -6,7 +6,7 @@ decisiones pequeñas y reversibles anotadas en `Docs/Design/DECISIONES_Y_PENDIEN
 
 ## Pasos
 1. [x] Cuarto en L (P74). Pruebas: efectos, flujo, crafteos, ropa, espejo, tutorial, voy_tarde, cuarto en 0 FALLA.
-2. [ ] Baño como escena aparte (puerta en la pared izquierda del tramo de entrada; sin costo de caminata).
+2. [x] Baño como escena aparte (P75). Las 8 pruebas en 0 FALLA.
 3. [ ] Balcón (puerta de abajo): frases de DIALOGOS en el tutorial; escena con tendedero.
 4. [ ] Resto del guion sin arte nuevo: calendario, escritorio, nevera antes de ducharse, y lo que se pueda del arranque
    (lista de tareas, luz de la mañana).

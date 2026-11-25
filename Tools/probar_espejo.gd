@@ -41,9 +41,10 @@ func _clic() -> InputEventMouseButton:
 	c.pressed = true
 	return c
 
+## El espejo esta en el bano.
 func _entrar() -> Node:
 	zm.previous_zone = -1
-	var escena : Node = (load("res://Scenes/World/Apartment.tscn") as PackedScene).instantiate()
+	var escena : Node = (load("res://Scenes/World/Bathroom.tscn") as PackedScene).instantiate()
 	root.add_child(escena)
 	await create_timer(1.2).timeout
 	return escena

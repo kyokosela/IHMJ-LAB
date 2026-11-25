@@ -146,6 +146,9 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 - El "jugador torpe" (insiste en todo, desordena la cocina al azar y comprueba que nada se pierde y que aún se puede
   terminar; ~4 min; `-- <acciones> <semillas...>` para más combinaciones):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_torpe.gd`
+- Teclas y clics al azar por la casa y el edificio (busca atascos y paredes atravesadas; ~5 min):
+  `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_mono.gd`
+  En las pruebas, los diálogos de Dialogic solo reciben teclas con `Input.parse_input_event` (`root.push_input` no los avanza).
 - Si algo no se refleja en Godot: cerrar Godot, borrar la carpeta oculta `.godot/` y reabrir.
 
 ## MODELOS (plan Pro, ahorrar tokens)

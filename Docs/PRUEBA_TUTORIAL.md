@@ -18,7 +18,8 @@ Primero juega **de corrido, como un jugador**; en la segunda vuelta intenta romp
 
 ## Segunda vuelta: rómpelo
 - [ ] Pulsa teclas deprisa y Esc a mitad de una animación (armario, cepillo, ducha).
-- [ ] En la cocina arrastra cosas a sitios raros; sal mientras la estufa cocina y vuelve.
+- [ ] En la cocina arrastra cosas a sitios raros; llena la olla en el fregadero y vacíala (Usar otra vez); sal mientras la
+  estufa cocina y vuelve.
 - [ ] Antes de salir, cocina también la segunda bolsa y usa Esperar: pasadas las 07:30 Mayui debería avisar que va tarde
   (el reloj solo avanza cuando haces cosas).
 
@@ -28,7 +29,7 @@ parecen a tus planos? ¿Algo se siente lento?
 
 ## No hace falta reportar (ya está anotado)
 No hay sonidos · muebles y fondos provisionales · comida instantánea y ropa casual sin poner · con pijama o toalla las
-piernas no se mueven al caminar · la olla llena de agua solo se vacía bebiéndola.
+piernas no se mueven al caminar.
 
 ## Cómo reportar
 Una línea por problema, mientras juegas: **paso — qué hiciste — qué pasó — qué esperabas**. Foto con **Win + Shift + S**.

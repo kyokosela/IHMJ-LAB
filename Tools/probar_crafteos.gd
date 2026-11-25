@@ -257,7 +257,10 @@ func _t_cocina() -> void:
 	var con_agua2 = inv.slots[donde].item if donde != -1 else null
 	_check("La olla ahora trae agua", con_agua2 != null and con_agua2.held_item != null and con_agua2.held_item.data.item_unique_name == "water")
 	inv.interact_inventory(fregadero, inv, donde)
-	_check("Una olla que ya tiene agua no se vuelve a llenar", not kc.has_valid_station_craft("sink"))
+	_check("Una olla con agua en el fregadero se puede vaciar con 'Usar'", kc.has_valid_station_craft("sink") and kc.start_manual_station_craft("sink"))
+	var vaciada = kc.get_station_item("sink")
+	_check("Vaciarla deja la olla vacia, sin duplicarla", vaciada != null and vaciada.data.item_unique_name == "cooking_pot" and vaciada.held_item == null and _ollas(kc) == 1, "ollas %d" % _ollas(kc))
+	_check("...y se puede llenar otra vez", kc.start_manual_station_craft("sink") and kc.get_station_item("sink").held_item != null and kc.get_station_item("sink").held_item.data.item_unique_name == "water")
 	inv.interact_inventory(estufa, inv, fregadero)
 	_check("Una olla con agua en la estufa tiene receta (calentar)", kc.has_valid_station_craft("stove"))
 	var estacion = kc.get_station("stove")

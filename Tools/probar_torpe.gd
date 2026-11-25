@@ -25,7 +25,7 @@ var dichos : Array = []
 var raton := Vector2.ZERO
 var azar := RandomNumberGenerator.new()
 var bitacora : Array = []
-var agua_bebida := 0
+var agua_vaciada := 0
 
 func _check(nombre: String, ok: bool, detalle: String = "") -> void:
 	if ok:
@@ -546,10 +546,10 @@ func _cocinar_como_sea() -> String:
 				await _llevar("cooking_pot", "mano", 0)
 				await _clic(_casilla_mano(0), MOUSE_BUTTON_RIGHT)
 			"water":
-				pasos.append("vacia el agua bebiendola")
-				agua_bebida += 1
-				await _llevar("cooking_pot", "mano", 0)
-				await _clic(_casilla_mano(0), MOUSE_BUTTON_RIGHT)
+				pasos.append("vacia el agua en el fregadero")
+				agua_vaciada += 1
+				await _llevar("cooking_pot", "cocina", kc.get_station_slot_index("sink"))
+				await _clic(_ui().station_craft_buttons["sink"])
 			"ingredients":
 				pasos.append("a la estufa")
 				await _llevar("cooking_pot", "cocina", estufa)
@@ -604,5 +604,5 @@ func _terminar_la_manana() -> void:
 		if zm.zone_node != null and is_instance_valid(zm.zone_node) and zm.zone_node.zone_id == 6:
 			break
 	_check("Despues de todo, la puerta deja salir ('Aqui vamos.')", zm.zone_node.zone_id == 6, "zona %d, %s" % [zm.zone_node.zone_id, str(oido)])
-	print("   (salio a las %s; veces que hubo que beberse el agua: %d)" % [tm.get_current_time(), agua_bebida])
+	print("   (salio a las %s; veces que hubo que vaciar la olla en el fregadero: %d)" % [tm.get_current_time(), agua_vaciada])
 	await _calma()

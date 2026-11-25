@@ -24,10 +24,23 @@ result_held_item_conditions = Dictionary[String, float]({
 })
 metadata/_custom_type_script = "uid://de0p0f0ihls31"
 
+[sub_resource type="Resource" id="Resource_slot_pot_water"]
+script = ExtResource("2_slot")
+item_id = "cooking_pot"
+requires_held_item = true
+required_held_item_id = "water"
+metadata/_custom_type_script = "uid://bh8urv85cwvl5"
+
+[sub_resource type="Resource" id="Resource_craft_empty_pot"]
+script = ExtResource("1_craft")
+needed_items = Array[ExtResource("2_slot")]([SubResource("Resource_slot_pot_water")])
+result_item = ExtResource("3_cooking_pot")
+metadata/_custom_type_script = "uid://de0p0f0ihls31"
+
 [resource]
 script = ExtResource("1_station")
 station_id = "sink"
 station_name = "Fregadero"
 inherent_util = "water"
-available_crafts = Array[ExtResource("1_craft")]([SubResource("Resource_craft_fill_pot")])
+available_crafts = Array[ExtResource("1_craft")]([SubResource("Resource_craft_fill_pot"), SubResource("Resource_craft_empty_pot")])
 blocked_states = Array[String]([])

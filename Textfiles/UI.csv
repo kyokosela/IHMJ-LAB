@@ -28,4 +28,4 @@ _TASK_LEAVE_,Salir a trabajar,Leave for work
 _HINT_MOVE_,"Muévete con las flechas o WASD. Primero la ducha: el baño está a la izquierda de la puerta principal.","Move with the arrows or WASD. Shower first: the bathroom is left of the front door."
 _HINT_USE_,Z (o Enter): usar,Z (or Enter): use
 _HINT_MOUSE_,"Usa el ratón: haz clic en lo que quieras usar. Esc: salir.","Use the mouse: click what you want to use. Esc: leave."
-_HINT_KITCHEN_,"Arrastra las cosas y usa los botones. Para comer: la olla en tus manos y clic derecho. Esc: salir.","Drag things and use the buttons. To eat: hold the pot and right-click it. Esc: leave."
+_HINT_KITCHEN_,"Arrastra las cosas y usa los botones. Para comer: la olla en tus manos y clic derecho, o llévala al escritorio. Esc: salir.","Drag things and use the buttons. To eat: hold the pot and right-click it, or take it to the desk. Esc: leave."

@@ -11,6 +11,7 @@ entera con teclas y ratón, y el "jugador torpe"). Prueban que funciona, no que 
 - **Puerta**: si insistes ya no se queda muda (P69).
 - **Estufa** vacía: salen tus frases.
 - **Fregadero**: "Usar" también vacía la olla con agua (P81).
+- **Escritorio**: lleva la olla y come en la mesa ("No sabe a nada.", P27).
 - **Ayuda de la cocina**: ahora dice cómo comer (la olla en tus manos y clic derecho).
 - Prueba nueva del "jugador torpe": desordenar la cocina no pierde ni duplica ingredientes.
 - Prueba de **teclas al azar** por casa, pasillo y recepción (1.200 acciones): sin atascos ni paredes atravesadas.

@@ -10,8 +10,9 @@ Primero juega **de corrido, como un jugador**; en la segunda vuelta intenta romp
 - [ ] **3. Baño** (puerta a la izquierda de la entrada) → **ducha** (Z): silueta tras la cortina, "Qué frío.", sales en toalla.
 - [ ] **4. Armario:** clic en el uniforme. Dice que huele bien y le ruge el estómago. La pijama no se pone.
 - [ ] **5. Cocina:** abre la alacena → bolsa a la **tabla** → Picar → olla e ingredientes en **Combinar** → Combinar → olla a
-  la **estufa** → Cocinar → Esperar → olla a tus **manos** → **clic derecho** para comer. Prueba Cocinar con la estufa vacía.
-- [ ] **6. Escritorio** (después de comer): sus frases.
+  la **estufa** → Cocinar → Esperar → olla a tus **manos** → Esc. Prueba también Cocinar con la estufa vacía.
+- [ ] **6. Escritorio:** con la olla en las manos, Z: se oscurece, Mayui come y dice "No sabe a nada." (en la cocina también
+  se puede comer con clic derecho). Z otra vez: sus frases.
 - [ ] **7. Baño → lavamanos:** clic en el cepillo; clic en el espejo; sal con Esc.
 - [ ] **8. Puerta:** "Aquí vamos." → pasillo → escaleras (izquierda) → recepción → **casero** (responde con Z) → puerta de la
   calle → bus (S/10). Deberías salir antes de las 08:00. La oficina es la versión vieja: no hace falta probarla.

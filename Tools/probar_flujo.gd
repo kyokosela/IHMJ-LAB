@@ -44,6 +44,7 @@ func _initialize() -> void:
 	await _t_transicion()
 	await _t_apartamento()
 	await _t_cocina()
+	await _t_escritorio()
 	print("=== %d comprobaciones OK, %d con FALLA ===" % [passed, failed])
 	quit(1 if failed > 0 else 0)
 
@@ -672,5 +673,42 @@ func _t_cocina() -> void:
 		if manos.get_slot(i).item == olla2:
 			manos.use_item_at(i)
 	_check("La segunda comida tambien se puede comer", pm.get_stat_value("ENERGY") > energia1 and pm.daily.home_meals == 2, "energia %.1f -> %.1f, comidas %d" % [energia1, pm.get_stat_value("ENERGY"), pm.daily.home_meals])
+	await _esperar_calma()
+	await _soltar(escena)
+
+# ------------------------------------------------------------------ escritorio
+func _t_escritorio() -> void:
+	print("I. Escritorio: comer en la mesa (tu guion)")
+	root.get_node("ContainerManager").container_states.clear()
+	gm.new_game()
+	pm.reset_engine_state(true)
+	root.get_node("NarrativeFlags").clear_flag("tutorial_door_done")
+	var lista = root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR")
+	lista.get_task_res("BATHE").task_done = true
+	var tarea = lista.get_task_res("COOK")
+	tarea.task_done = false
+	var escena = await _cargar("res://Scenes/World/Apartment.tscn", -1)
+	await _esperar_calma()
+	var mesa = escena.get_node("Escritorio")
+	var manos = pm.player.inventory
+	manos.inventory.clear()
+	var objeto = load("res://Resources/Items/item.gd")
+	var olla = objeto.new(load("res://Resources/Items/Data/KitchenUtils/cooking_pot.tres"))
+	olla.held_item = objeto.new(load("res://Resources/Items/Data/ingredients_unpack.tres"))
+	olla.update_states()
+	manos.add_to_hands(olla)
+	var dicho : Array = await _ejecutar_y_oir(mesa)
+	_check("Antes de comer, con la comida cruda, el escritorio calla y no se come", dicho.is_empty() and olla.held_item != null and not tarea.task_done, str(dicho))
+	olla.held_item = objeto.new(load("res://Resources/Items/Data/home_meal.tres"))
+	olla.held_item.update_states()
+	pm.add_effect(load("res://Resources/Effects/Effects/hunger.tres").duplicate())
+	pm.get_stat_res("ENERGY").value = 20.0
+	dicho = await _ejecutar_y_oir(mesa)
+	_check("Con la olla de comida en la mano, Mayui come en la mesa y dice 'No sabe a nada.'", dicho == ["No sabe a nada."], str(dicho))
+	_check("...quita el Hambre, sube la energia, marca la tarea y deja la olla vacia en la mano", not pm.has_effect("HUNGER") and pm.get_stat_value("ENERGY") > 20.0 and tarea.task_done and olla.held_item == null and manos.get_hands_items() == [olla], "energia %.1f, tarea %s" % [pm.get_stat_value("ENERGY"), tarea.task_done])
+	await _esperar_calma()
+	_check("Despues de comer en la mesa Mayui puede moverse", gm.modal_count == 0 and pm.player.movement.can_move, "modal %d" % gm.modal_count)
+	dicho = await _ejecutar_y_oir(mesa)
+	_check("Despues de comer: tus frases del escritorio", dicho == ["No puedo quedarme aquí."], str(dicho))
 	await _esperar_calma()
 	await _soltar(escena)

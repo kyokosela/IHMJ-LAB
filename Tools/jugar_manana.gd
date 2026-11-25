@@ -304,18 +304,23 @@ func _jugar() -> void:
 	var rejilla_manos : Array = [ui.player_hands_grid]
 	await _arrastrar(await _slot(rejilla_estufa, estufa), await _slot(rejilla_manos, mano))
 	_check("Pasa la comida a las manos", not manos.inventory.slots[mano].is_empty())
-	await _clic(await _slot(rejilla_manos, mano), MOUSE_BUTTON_RIGHT)
-	await _hablar(func() -> void: await create_timer(0.2).timeout)
-	await _foto("7_comio")
-	_check("Clic derecho: come (tarea de comer y sin Hambre)", _tarea("COOK") and not pm.has_effect("HUNGER"))
 	await _tecla(KEY_ESCAPE)
 	await create_timer(0.3).timeout
 	_check("Esc cierra la cocina", not ui.visible and gm.modal_count == 0)
 
-	print("4. Escritorio y calendario")
+	print("4. Comer en el escritorio (tu guion)")
 	await _ir(Vector2i(2, 4), Vector2i.LEFT, "el escritorio")
-	var oido : Array = await _hablar()
-	_check("El escritorio habla", oido == ["No puedo quedarme aquí."], str(oido))
+	dichos.clear()
+	await _z()
+	await create_timer(0.7).timeout
+	await _foto("7_come_en_la_mesa")
+	await create_timer(0.8).timeout
+	var oido : Array = dichos.duplicate()
+	oido.append_array(await _hablar(func() -> void: await create_timer(0.1).timeout))
+	await _foto("7b_comio")
+	_check("Come en la mesa: 'No sabe a nada.', tarea de comer y sin Hambre", oido.has("No sabe a nada.") and _tarea("COOK") and not pm.has_effect("HUNGER"), str(oido))
+	oido = await _hablar()
+	_check("El escritorio habla despues de comer", oido == ["No puedo quedarme aquí."], str(oido))
 
 	print("5. Dientes (clic en el espejo)")
 	await _cruzar(Vector2i(5, 1), Vector2i.LEFT, 4)

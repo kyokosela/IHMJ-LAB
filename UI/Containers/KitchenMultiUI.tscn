@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cktm7n04xp2qy"]
+[gd_scene load_steps=19 format=3 uid="uid://cktm7n04xp2qy"]
 
 [ext_resource type="Script" uid="uid://bcu07g38u7lmb" path="res://UI/Containers/kitchen_multi_ui.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://dck78dejn3w0l" path="res://UI/Containers/InventorySlot.tscn" id="2_slot"]
@@ -6,12 +6,25 @@
 [ext_resource type="Texture2D" uid="uid://x4qtx4k7n33u" path="res://Assets/UI/Kitchen/shelf_closed.png" id="4_shelf_closed"]
 [ext_resource type="Texture2D" uid="uid://chotq46l3w03a" path="res://Assets/UI/Kitchen/shelf_open.png" id="5_shelf_open"]
 [ext_resource type="Texture2D" uid="uid://cdlbrmnelbkr1" path="res://Assets/UI/Kitchen/shelf_closed_left.png" id="6_shelf_left"]
+[ext_resource type="Script" uid="uid://c2qbhsn6tgmrc" path="res://Resources/StringChain/string_chain.gd" id="13_chain"]
+[ext_resource type="Script" uid="uid://cdqqyuliu6jyp" path="res://Resources/StringChain/string_chain_array.gd" id="14_lines"]
 [ext_resource type="Texture2D" uid="uid://byu6or3x847je" path="res://Assets/UI/Kitchen/pot_open.png" id="7_pot_open"]
 [ext_resource type="Texture2D" uid="uid://bupyxj7wxgv4m" path="res://Assets/UI/Kitchen/pot_closed.png" id="8_pot_closed"]
 [ext_resource type="Texture2D" uid="uid://cdbyopfx7ssfy" path="res://Assets/UI/Kitchen/water.png" id="9_water"]
 [ext_resource type="Texture2D" uid="uid://dmwsymscybeew" path="res://Assets/UI/Kitchen/fire.png" id="10_fire"]
 [ext_resource type="Texture2D" uid="uid://dgf88p7ar8olj" path="res://Assets/UI/Kitchen/smoke.png" id="11_smoke"]
 [ext_resource type="Texture2D" uid="uid://bjx0c83lfadrx" path="res://Assets/UI/Kitchen/shelf_open_left.png" id="12_shelf_open_left"]
+
+[sub_resource type="Resource" id="Lines_stove_empty"]
+script = ExtResource("14_lines")
+string_list = Array[String](["_STOVE_EMPTY_#1_", "_STOVE_EMPTY_#2_", "_STOVE_EMPTY_COOLDOWN_"])
+behaviour = 2
+
+[sub_resource type="Resource" id="Chain_stove_empty"]
+script = ExtResource("13_chain")
+string_list = Array[ExtResource("14_lines")]([SubResource("Lines_stove_empty")])
+apply_times = false
+apply_energy = false
 
 [sub_resource type="StyleBoxFlat" id="Style_backdrop"]
 bg_color = Color(0, 0, 0, 1)
@@ -84,6 +97,7 @@ overflow_dialog = NodePath("OverflowDialog")
 overflow_items_grid = NodePath("OverflowDialog/Panel/VBox/OverflowItemsGrid")
 overflow_target_grid = NodePath("OverflowDialog/Panel/VBox/TargetGrid")
 slot_scene = ExtResource("2_slot")
+stove_empty_lines = SubResource("Chain_stove_empty")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1

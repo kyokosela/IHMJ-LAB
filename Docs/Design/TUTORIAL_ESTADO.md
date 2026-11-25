@@ -20,7 +20,7 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 | Armario | primero ducharse; frases para uniforme, pijama, casual y ropa sucia; ruge el estómago | ✅ antes de la ducha no se abre; la pijama no se pone; uniforme y estómago (como texto). La cesta habla si hay ropa sucia (en el tutorial aún no la hay, P71). ❌ casual (aún no se puede poner, P72) y sonido del estómago |
 | Nevera | frases (antes de ducharse, sin compras, comida instantánea) | ✅ antes de ducharse (no abre la cocina, P77). ❌ sin compras y comida instantánea (P25) |
 | Comida | comida instantánea y café | ❌ hoy se cocina comida casera (P25) |
-| Estufa y escritorio | frases; Mayui come sentada | ✅ escritorio después de comer (P77). ❌ estufa sin comida y comer sentada (dibujo) |
+| Estufa y escritorio | frases; Mayui come sentada | ✅ escritorio después de comer (P77) y estufa sin comida (el botón "Cocinar" con la estufa vacía). ❌ comer sentada (dibujo) |
 | Lavamanos y espejo | todas | ✅ |
 | "Voy tarde" (hacia las 7:30) | si se alarga en el cuarto: 3 frases | ✅ a las 07:30, 07:40 y 07:50, una por vez, sin interrumpir diálogos ni pantallas (P73) |
 | Balcón | frases | ✅ tus 3 frases; después de la mañana se sale (P76) |

@@ -14,6 +14,9 @@ signal overflow_resolution_needed(items: Array[Item])
 ## Completado: boton "Esperar" (visible mientras la estacion trabaja) y el aviso de cuanto tiempo pasara.
 @export var station_wait_buttons: Dictionary[String,Button] = {}
 @export var wait_dialog: ConfirmationDialog
+## Completado: tus frases de "[Estufa] sin comida" (DIALOGOS): con la estufa vacia "Cocinar" sigue activo y Mayui las dice.
+@export var stove_empty_lines: StringChain
+const STOVE_ID : String = "stove"
 ## Completado (arte ilustrado de la cocina, Assets/UI/Kitchen): props que cambian segun el estado de la estacion.
 @export var station_item_props: Dictionary[String,CanvasItem] = {}    ## visibles mientras la estacion tiene un objeto (la olla)
 @export var station_active_props: Dictionary[String,CanvasItem] = {}  ## visibles mientras la estacion trabaja (fuego y humo, agua)
@@ -187,7 +190,7 @@ func _update_stations_ui():
 		
 			var has_valid_recipe = kitchen.has_valid_station_craft(station.station_id)
 			
-			craft_btn.disabled = not has_valid_recipe or station.is_locked
+			craft_btn.disabled = station.is_locked or (not has_valid_recipe and not _stove_without_food(station.station_id))
 			craft_btn.visible = not station.is_locked
 
 		var wait_button = station_wait_buttons.get(station.station_id)
@@ -359,9 +362,18 @@ func _on_craft_button_pressed():
 	if result:
 		kitchen.set_simple_craft_result(result)
 
+## Completado: estufa sin nada encima y con frases para eso.
+func _stove_without_food(station_id: String) -> bool:
+	return station_id == STOVE_ID and stove_empty_lines != null and kitchen.get_station_item(station_id) == null
+
 func _on_station_craft_button_pressed(station_id: String):
 	if not kitchen: return
-	
+
+	if _stove_without_food(station_id):
+		if Dialogic.current_timeline == null:
+			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], stove_empty_lines.get_message())
+		return
+
 	# Iniciar el craft de la estación manualmente
 	var success = kitchen.start_manual_station_craft(station_id)
 	if success:

@@ -523,6 +523,28 @@ func _t_cocina() -> void:
 	inv.slots[idx_estufa].item = null
 	inv.inventory_changed.emit()
 	_check("Estufa vacia y libre: vuelve a no haber olla ni fuego", not olla_estufa.visible and not fuego_estufa.visible)
+	# tu guion "[Estufa] sin comida": con la estufa vacia el boton sigue activo y Mayui lo dice
+	var cocinar : Button = ui.station_craft_buttons["stove"]
+	var activo : bool = not cocinar.disabled
+	var en_la_estufa : Array = []
+	var escuchar := func(info) -> void: en_la_estufa.append(str(info.get("text", "")))
+	dlg.Text.text_started.connect(escuchar)
+	var hora_estufa : int = tm.minutes
+	for i in 4:
+		var antes : int = en_la_estufa.size()
+		cocinar.pressed.emit()
+		for j in 30:   # espera a que lo diga y despues lo pasa
+			await create_timer(0.1).timeout
+			if en_la_estufa.size() > antes:
+				break
+		for j in 30:
+			if dlg.current_timeline == null:
+				break
+			dlg.handle_next_event()
+			await create_timer(0.1).timeout
+	dlg.Text.text_started.disconnect(escuchar)
+	await _esperar_calma()
+	_check("Estufa sin comida: 'Cocinar' sigue activo y Mayui dice tus frases (la ultima se repite), sin gastar tiempo", activo and en_la_estufa == ["No tiene sentido.", "Necesito algo para cocinar.", "Es mejor que deje de revisar acá.", "Es mejor que deje de revisar acá."] and tm.minutes == hora_estufa, "%s activo=%s" % [str(en_la_estufa), activo])
 	# 3) bolsa -> tabla de picar -> ingredientes
 	var bolsa_idx : int = guardados[0]
 	_arrastrar(inv, kc.get_station_slot_index("cutting"), bolsa_idx)

@@ -23,6 +23,7 @@
 [ext_resource type="Resource" path="res://Resources/Items/Data/ingredients_bag.tres" id="21"]
 [ext_resource type="PackedScene" uid="uid://cktm7n04xp2qy" path="res://UI/Containers/KitchenMultiUI.tscn" id="22"]
 [ext_resource type="PackedScene" uid="uid://dd0p5w6n0rqyj" path="res://UI/Containers/wardrobe_ui.tscn" id="26"]
+[ext_resource type="PackedScene" path="res://UI/Mirror/mirror_ui.tscn" id="27"]
 
 [sub_resource type="RectangleShape2D" id="Shape_interact"]
 size = Vector2(48, 48)
@@ -48,14 +49,16 @@ behaviour = 3
 script = ExtResource("6")
 string_list = Array[ExtResource("7")]([SubResource("Lines_no_energy")])
 
-[sub_resource type="Resource" id="Lines_sink_clean"]
+[sub_resource type="Resource" id="Lines_sink_eat_first"]
 script = ExtResource("7")
-string_list = Array[String](["No lo necesito ahora."])
+string_list = Array[String](["Primero debería comer algo.", "Luego.", "Primero voy a comer."])
 behaviour = 3
 
-[sub_resource type="Resource" id="Chain_sink_clean"]
+[sub_resource type="Resource" id="Chain_sink_eat_first"]
 script = ExtResource("6")
-string_list = Array[ExtResource("7")]([SubResource("Lines_sink_clean")])
+string_list = Array[ExtResource("7")]([SubResource("Lines_sink_eat_first")])
+apply_times = false
+apply_energy = false
 
 [sub_resource type="Resource" id="Kitchen_rules"]
 script = ExtResource("17")
@@ -174,12 +177,11 @@ text = "Nevera y cocina"
 [node name="Sink" type="Area2D" parent="." unique_id=1994543045 groups=["Interactable"]]
 position = Vector2(120, 140)
 script = ExtResource("3")
-action_type = 31
+action_type = 50
 interaction_name = "APT_SINK"
-effect_list = Array[String](["SMELLY"])
-effect_messages = SubResource("Chain_sink_clean")
+event_messages = SubResource("Chain_sink_eat_first")
 shape = SubResource("Shape_interact")
-display_text = "Lavarse"
+display_text = "Lavamanos"
 reusable = true
 show_again_at_end = true
 
@@ -231,3 +233,5 @@ station_craft_buttons = {
 }
 
 [node name="WardrobeUI" parent="UILayer" instance=ExtResource("26")]
+
+[node name="MirrorUI" parent="UILayer" instance=ExtResource("27")]

@@ -39,6 +39,7 @@ func _initialize() -> void:
 	await _t_bloqueo_con_ui()
 	await _t_dialogos()
 	_t_historia()
+	await _t_madina()
 	_t_asistencia()
 	await _t_transicion()
 	await _t_apartamento()
@@ -156,6 +157,20 @@ func _t_historia() -> void:
 	neh._pending.clear()
 	neh.story_enabled = antes
 
+## Hablar con Madina con la historia apagada no debe soltar sus dialogos de relleno.
+func _t_madina() -> void:
+	var neh = root.get_node("NarrativeEventHandler")
+	var antes : bool = neh.story_enabled
+	neh.story_enabled = false
+	var escena = await _cargar("res://Scenes/World/Office.tscn", 1)
+	tm.day = 2   # el dia en que antes salia su historia de la cafeteria
+	var dicho : Array = await _ejecutar_y_oir(escena.get_node("MadinaNPC"))
+	_check("Historia apagada: Madina solo responde '...'", dicho.size() > 0 and dicho[0].strip_edges() == "...", str(dicho))
+	await _esperar_calma()
+	await _soltar(escena)
+	tm.day = 1
+	neh.story_enabled = antes
+
 # ------------------------------------------------------------------ E. asistencia
 func _t_asistencia() -> void:
 	print("E. Asistencia: una falta por dia y un solo despido")
@@ -209,9 +224,11 @@ func _t_transicion() -> void:
 	current_scene = escena
 	await create_timer(1.3).timeout          # que termine el fundido de entrada de la escena
 	var mov = pm.player.movement
+	var energia_pie : float = pm.get_stat_value("ENERGY")
 	var t0 := Time.get_ticks_msec()
 	zm.change_zone(1)
 	_check("Al tocar la puerta Mayui queda quieta", not mov.can_move and gm.modal_count == 1)
+	_check("A pie (Apartamento -> Lobby) se gasta energia", pm.get_stat_value("ENERGY") < energia_pie, "%.1f -> %.1f" % [energia_pie, pm.get_stat_value("ENERGY")])
 	zm.change_zone(2)                         # una puerta pisada otra vez durante el viaje no cuenta
 	_check("Una segunda puerta durante el viaje se ignora", gm.modal_count == 1 and zm.current_zone == 1, "zona %d" % zm.current_zone)
 	await create_timer(1.3).timeout           # ya oscuro y con la escena cambiada: sigue quieta
@@ -222,6 +239,16 @@ func _t_transicion() -> void:
 	_check("El viaje dura 2 s en total (1 s oscurece, 1 s aclara)", total > 1.9 and total < 2.6, "%.2f s" % total)
 	_check("Al terminar Mayui vuelve a moverse", mov.can_move and gm.modal_count == 0)
 	_check("Llego al lobby viniendo del apartamento", current_scene != null and current_scene.zone_id == 1 and pm.player.global_position.is_equal_approx(Vector2(100, 100)), str(pm.player.global_position))
+	# en bus: se paga con dinero, no con energia
+	var economia = root.get_node("EconomyManager")
+	var energia_bus : float = pm.get_stat_value("ENERGY")
+	var dinero : int = economia.money
+	zm.change_zone(2)
+	_check("En bus (Lobby -> Oficina) cuesta S/10 y no gasta energia", pm.get_stat_value("ENERGY") == energia_bus and economia.money == dinero - 10, "energia %.1f -> %.1f, dinero %d -> %d" % [energia_bus, pm.get_stat_value("ENERGY"), dinero, economia.money])
+	t0 = Time.get_ticks_msec()
+	await create_timer(1.3).timeout
+	while gm.modal_count > 0 and Time.get_ticks_msec() - t0 < 5000:
+		await create_timer(0.05).timeout
 	if current_scene != null:
 		current_scene.release_player()
 		current_scene.queue_free()
@@ -260,7 +287,7 @@ func _ejecutar_y_oir(accion) -> Array:
 	return dicho
 
 func _t_apartamento() -> void:
-	print("F. Apartamento: ducha con cooldown y lavamanos con requisito")
+	print("F. Apartamento: ducha con cooldown y lavamanos (espejo)")
 	gm.new_game()
 	pm.reset_engine_state(true)
 	var escena = await _cargar("res://Scenes/World/Apartment.tscn", -1)
@@ -286,18 +313,50 @@ func _t_apartamento() -> void:
 	_check("Al volver de otra zona la ducha SIGUE en cooldown", ducha2.cooldown_executed and tm.minutes == hora2 and dicho.size() > 0, "+%d min, dijo %s" % [tm.minutes - hora2, str(dicho)])
 	tm.add_to_current_time("05:01")
 	_check("Pasadas 5 h el cooldown termina y se puede volver a duchar", not ducha2.cooldown_executed and not ducha2.is_cooldown and ducha2.can_interact)
-	# lavamanos: solo si hay suciedad
+	# lavamanos (pantalla del espejo): antes de comer Mayui avisa; despues de comer se abre
 	var lavamanos = escena.get_node("Sink")
+	var espejo = escena.get_node("UILayer/MirrorUI")
 	var usos_lav := [0]
 	lavamanos.executed.connect(func(): usos_lav[0] += 1)
-	pm.remove_effect("SMELLY")
+	var cocinar = root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR").get_task_res("COOK")
+	cocinar.task_done = false
 	dicho = await _ejecutar_y_oir(lavamanos)
-	_check("Lavamanos sin suciedad: no se usa y Mayui avisa", usos_lav[0] == 0 and dicho.size() > 0 and dicho[0].contains("necesito"), str(dicho))
-	pm.add_effect(load("res://Resources/Effects/Effects/smelly.tres").duplicate())
+	_check("Lavamanos antes de comer (tutorial): no abre el espejo y Mayui avisa que primero debe comer", usos_lav[0] == 0 and not espejo.visible and dicho.size() > 0 and dicho[0].contains("comer"), str(dicho))
+	cocinar.task_done = true
 	await _ejecutar_y_oir(lavamanos)
-	_check("Lavamanos con suciedad: se usa y la quita", usos_lav[0] == 1 and not pm.has_effect("SMELLY"))
+	_check("Lavamanos despues de comer: abre la pantalla del espejo y Mayui queda quieta", usos_lav[0] == 1 and espejo.visible and gm.modal_count == 1)
+	espejo.close()
+	cocinar.task_done = false
 	await _esperar_calma()
+	# cama: se puede salir de la pantalla de la alarma sin dormir (boton Cancelar o Esc)
+	var cama = escena.get_node("Bed")
+	pm.slept_today = false
+	for salida in ["Cancelar", "Esc"]:
+		var hora3 : int = tm.minutes
+		cama.can_interact = true
+		cama.execute()
+		await create_timer(0.3).timeout
+		var alarma : Node = _buscar_alarma()
+		_check("Dormir abre la pantalla de la alarma (%s)" % salida, alarma != null and gm.modal_count == 1)
+		if alarma == null:
+			continue
+		if salida == "Cancelar":
+			alarma.get_node("Center/Panel/VBox/Margin/Inner/Buttons/CancelButton").pressed.emit()
+		else:
+			var esc := InputEventAction.new()
+			esc.action = "ui_cancel"
+			esc.pressed = true
+			alarma._unhandled_input(esc)
+		await create_timer(0.3).timeout
+		_check("%s: sale sin dormir, sin pasar el tiempo y Mayui vuelve a moverse" % salida, _buscar_alarma() == null and gm.modal_count == 0 and tm.minutes == hora3 and not pm.slept_today and dlg.current_timeline == null)
 	await _soltar(escena)
+
+func _buscar_alarma() -> Node:
+	for capa in root.get_children():
+		var ui : Node = capa.get_node_or_null("AlarmUI")
+		if ui != null and not ui.is_queued_for_deletion():
+			return ui
+	return null
 
 # ------------------------------------------------------------------ H. cocina real (tu sistema de contenedores)
 ## Mueve un objeto de un slot a otro del mismo inventario, igual que arrastrar en la UI (interact_inventory).
@@ -338,7 +397,7 @@ func _cocinar_una(kc):
 		return null
 	var entradas : Array = kc.get_simple_craft_input_indices()
 	inv.slots[entradas[0]].item = olla
-	_arrastrar(inv, entradas[1], kc.get_simple_craft_result_index())
+	_arrastrar(inv, entradas[1], kc.get_station_slot_index("cutting"))
 	if kc.check_simple_craft() == null:
 		return null
 	var llena = kc.execute_simple_craft()
@@ -408,18 +467,31 @@ func _t_cocina() -> void:
 	_arrastrar(inv, kc.get_station_slot_index("cutting"), bolsa_idx)
 	_check("Con la bolsa en la tabla hay receta (picar)", kc.has_valid_station_craft("cutting"))
 	_check("Se puede picar", kc.start_manual_station_craft("cutting"))
-	var resultado = inv.slots[kc.get_simple_craft_result_index()].item
-	_check("Picar da ingredientes", resultado != null and resultado.data.item_unique_name == "ingredients", str(resultado))
+	var resultado = kc.get_station_item("cutting")
+	_check("Picar da ingredientes y se quedan en la tabla", resultado != null and resultado.data.item_unique_name == "ingredients" and inv.slots[kc.get_simple_craft_result_index()].is_empty(), str(resultado))
 	# 4) olla + ingredientes en "Combinar" -> olla con ingredientes -> estufa 45 min -> olla con la comida caliente
 	var olla = _tomar_olla(kc)
 	_check("La olla esta en la alacena y se puede sacar", olla != null)
 	var entradas : Array = kc.get_simple_craft_input_indices()
+	var res_idx : int = kc.get_simple_craft_result_index()
 	inv.slots[entradas[0]].item = olla
-	_arrastrar(inv, entradas[1], kc.get_simple_craft_result_index())
-	_check("Olla vacia + ingredientes en 'Combinar' ofrecen meter los ingredientes", kc.check_simple_craft() != null)
-	var olla_llena = kc.execute_simple_craft()
-	_check("Combinar da la olla con los ingredientes dentro", olla_llena != null and olla_llena.data.item_unique_name == "cooking_pot" and olla_llena.held_item != null and olla_llena.held_item.data.item_unique_name == "ingredients")
-	inv.slots[idx_estufa].item = olla_llena
+	_arrastrar(inv, entradas[1], kc.get_station_slot_index("cutting"))
+	_check("Olla vacia + ingredientes en 'Combinar' ofrecen meter los ingredientes", kc.check_simple_craft() != null and not ui.craft_button.disabled)
+	var en_manos : int = pm.player.inventory.get_hands_items().size()
+	ui.craft_button.pressed.emit()
+	var olla_llena = inv.slots[res_idx].item
+	_check("Boton Combinar: la olla con los ingredientes queda en la casilla de resultado", olla_llena != null and olla_llena.data.item_unique_name == "cooking_pot" and olla_llena.held_item != null and olla_llena.held_item.data.item_unique_name == "ingredients")
+	_check("...y no salta sola a las manos", pm.player.inventory.get_hands_items().size() == en_manos)
+	var Obj = load("res://Resources/Items/item.gd")
+	inv.slots[entradas[0]].item = Obj.new(load("res://Resources/Items/Data/KitchenUtils/cooking_pot.tres"))
+	inv.slots[entradas[1]].item = Obj.new(load("res://Resources/Items/Data/ingredients_unpack.tres"))
+	inv.inventory_changed.emit()
+	_check("Con un resultado sin sacar, Combinar se apaga", ui.craft_button.disabled)
+	ui.craft_button.pressed.emit()
+	_check("...y apretarlo no gasta ingredientes ni pisa el resultado", inv.slots[res_idx].item == olla_llena and not inv.slots[entradas[0]].is_empty() and not inv.slots[entradas[1]].is_empty())
+	inv.slots[entradas[0]].clear()
+	inv.slots[entradas[1]].clear()
+	_arrastrar(inv, idx_estufa, res_idx)
 	inv.inventory_changed.emit()
 	_check("La olla con ingredientes en la estufa tiene receta (cocinar)", kc.has_valid_station_craft("stove"))
 	_check("Se puede cocinar", kc.start_manual_station_craft("stove"))

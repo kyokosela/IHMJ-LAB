@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ClothingData" load_steps=10 format=3]
+[gd_resource type="Resource" script_class="ClothingData" load_steps=12 format=3]
 
 [ext_resource type="Script" uid="uid://dcv5vn3vb7u0w" path="res://Resources/Clothing/clothingdata.gd" id="1_data"]
 [ext_resource type="Texture2D" uid="uid://c2ibfm3xrfyy0" path="res://Assets/UI/Wardrobe/work_clean.png" id="2_clean"]
@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://b7pj23c4rbpgg" path="res://Assets/UI/Wardrobe/work_selection.png" id="6_selection"]
 [ext_resource type="Texture2D" uid="uid://b8s4e2epuer1q" path="res://Assets/UI/Wardrobe/render_work.png" id="7_render"]
 [ext_resource type="Texture2D" uid="uid://djfevsnxgo1yk" path="res://Assets/UI/Wardrobe/render_work_changing.png" id="8_render_changing"]
+[ext_resource type="Texture2D" uid="uid://cb7wmafeuidau" path="res://Assets/UI/Mirror/work_mirror.png" id="9_mirror"]
+[ext_resource type="Texture2D" uid="uid://w6b5k0tc4pyi" path="res://Assets/UI/Mirror/work_mirror_alt.png" id="10_mirror_alt"]
 
 [resource]
 script = ExtResource("1_data")
@@ -20,4 +22,6 @@ wet_dirty = ExtResource("5_wet_dirty")
 selection = ExtResource("6_selection")
 render = ExtResource("7_render")
 render_changing = ExtResource("8_render_changing")
+mirror = ExtResource("9_mirror")
+mirror_alt = ExtResource("10_mirror_alt")
 metadata/_custom_type_script = "uid://dcv5vn3vb7u0w"

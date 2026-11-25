@@ -52,7 +52,8 @@ var time_cost_incremental: String = "00:05"
 func change_zone(new_zone_id: ZONES) -> void:
 	if _changing_zone:
 		return # ya se esta viajando: una puerta pisada otra vez no debe repetir el cambio
-	if _requires_transport(new_zone_id):
+	var by_bus : bool = _requires_transport(new_zone_id)
+	if by_bus:
 		if not EconomyManager.can_afford_bus():
 			push_warning("Cannot afford bus fare")
 			return
@@ -64,16 +65,21 @@ func change_zone(new_zone_id: ZONES) -> void:
 	GameManager.modal_count += 1
 
 	if new_zone_id == previous_zone:
-		energy_cost_incremental = energy_cost_base
 		time_cost_incremental = time_cost_base
 	else:
-		energy_cost_incremental += energy_cost_base
 		time_cost_incremental = TimeUtils.increase_time(time_cost_incremental, time_cost_base)
+	# En bus se paga con dinero, no con energia, y el viaje no cuenta como cansancio de caminar
+	if not by_bus:
+		if new_zone_id == previous_zone:
+			energy_cost_incremental = energy_cost_base
+		else:
+			energy_cost_incremental += energy_cost_base
 
 	previous_zone = current_zone
 	current_zone = new_zone_id
 
-	PlayerManager.decrease_stat("ENERGY", energy_cost_incremental)
+	if not by_bus:
+		PlayerManager.decrease_stat("ENERGY", energy_cost_incremental)
 	TimeManager.add_to_current_time(PlayerManager.get_time_cost_with_effects(time_cost_incremental))
 	_process_street_risk()
 

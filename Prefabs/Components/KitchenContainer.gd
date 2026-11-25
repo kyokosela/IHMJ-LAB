@@ -191,9 +191,14 @@ func _execute_station_craft(station: Station, recipe: Crafts, items: Array[Item]
 		else:
 			inventory.slots[slot_index].clear()
 	
-	if not _try_place_result(result):
+	# Completado: el resultado se queda en la estacion donde se hizo (lo picado en la tabla, la olla en la estufa o el fregadero).
+	# Solo si la estacion la ocupa un objeto devuelto por la receta, va al resultado de Combinar o a la alacena.
+	if inventory.slots[slot_index].is_empty():
+		inventory.slots[slot_index].item = result
+		inventory.slot_changed.emit(slot_index)
+	elif not _try_place_result(result):
 		overflow_detected.emit([result])
-	
+
 	station_craft_completed.emit(station.station_id, result)
 	inventory.inventory_changed.emit()
 #endregion
@@ -206,6 +211,15 @@ func get_simple_craft_input_indices() -> Array[int]:
 ## Obtiene el índice del slot de resultado de craft simple
 func get_simple_craft_result_index() -> int:
 	return _simple_craft_result_index
+
+## Completado: lo combinado se queda en la casilla de resultado hasta que el jugador lo saque; mientras tanto no se combina otra vez.
+func is_simple_craft_result_free() -> bool:
+	return inventory.slots[_simple_craft_result_index].is_empty()
+
+func set_simple_craft_result(item: Item) -> void:
+	inventory.slots[_simple_craft_result_index].item = item
+	inventory.slot_changed.emit(_simple_craft_result_index)
+	inventory.inventory_changed.emit()
 
 ## Obtiene los items en los slots de craft simple
 func get_simple_craft_items() -> Array[Item]:

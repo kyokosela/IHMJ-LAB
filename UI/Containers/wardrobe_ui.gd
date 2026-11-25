@@ -1,7 +1,7 @@
 extends Control
 class_name WardrobeUI
 ## UI del armario (especificacion de Ramiro): Mayui con la ropa actual a la izquierda y las prendas colgadas a la derecha.
-## Se maneja con el mouse: al pasar sobre una prenda se resalta; al hacer clic Mayui muestra el cuadro "cambiandose" 1.5 s y
+## Se maneja con el mouse: al pasar sobre una prenda se resalta; al hacer clic Mayui muestra el cuadro "cambiandose" 1 s y
 ## luego el render con la ropa nueva (vestirse suma 2 min al reloj). La imagen de cada prenda depende de su estado (limpia,
 ## sucia, mojada, mojada y sucia). La ropa vive en PlayerManager (outfit y wardrobe). Esc cierra.
 
@@ -14,7 +14,7 @@ signal outfit_chosen(item: Item)
 ## id de outfit ("home", "work") -> nodo con los hijos Layer (la prenda), Highlight (resaltado) y Hit (zona de clic)
 @export var garment_slots : Dictionary[String, Control] = {}
 
-var changing_seconds : float = 1.5   ## cuanto dura el cuadro "cambiandose"
+var changing_seconds : float = 1.0   ## cuanto dura el cuadro "cambiandose"
 var _busy : bool = false
 var _locked : bool = false
 var _hanging : Dictionary = {}       ## id de outfit -> Item colgado

@@ -88,6 +88,8 @@ enum ActionType {
 	# Weekend activities
 	OPEN_ARCADE,
 	OPEN_MARKET,
+	# Apartment (UI)
+	OPEN_MIRROR,
 }
 
 @export var action_type: ActionType = ActionType.OPEN_WORKSPACE
@@ -169,6 +171,11 @@ func custom_execute() -> void:
 			var armario = get_tree().get_first_node_in_group("wardrobe_ui")
 			if armario != null:
 				armario.open()
+		ActionType.OPEN_MIRROR:
+			# Completado: el lavamanos abre la pantalla del espejo (cepillarse, verse la cara, lavar ropa).
+			var espejo = get_tree().get_first_node_in_group("mirror_ui")
+			if espejo != null:
+				espejo.open()
 		# Effects - Apply
 		ActionType.APPLY_HUNGER:
 			_apply_effect(EFFECT_HUNGER, "Hambre aplicada")
@@ -246,6 +253,18 @@ func custom_execute() -> void:
 				_open_overlay(MARKET_SCENE, "market_closed")
 			else:
 				_show_feedback("El mercado no está disponible hoy")
+
+## Completado: durante el tutorial el lavamanos no se abre antes de comer ("Primero deberia comer algo.", en event_messages).
+## check_events() es el gancho del dev para bloquear una accion y mostrar sus mensajes.
+func check_events() -> bool:
+	if action_type == ActionType.OPEN_MIRROR and _tutorial_needs_meal():
+		return false
+	return super()
+
+func _tutorial_needs_meal() -> bool:
+	if not TaskManager.is_task_list_active("TUTORIAL_DOOR") or TaskManager.is_task_list_done("TUTORIAL_DOOR"):
+		return false
+	return not TaskManager.get_task_list_res("TUTORIAL_DOOR").get_task_res("COOK").task_done
 
 func _call_scene_method(method_name: String) -> void:
 	var scene := get_tree().current_scene
@@ -360,6 +379,10 @@ func _open_overlay(scene: PackedScene, closed_signal: String) -> void:
 		canvas.queue_free())
 
 func _talk_madina() -> void:
+	# Sus dialogos son de la historia de relleno, que esta apagada hasta disenar los NPC: responde sin contenido.
+	if not NarrativeEventHandler.story_enabled:
+		Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], "...")
+		return
 	match TimeManager.day:
 		2:
 			Dialogic.start("madina_cafe_day2")

@@ -17,6 +17,10 @@ class_name ClothingData
 @export var render: Texture2D  ## Mayui con esta ropa (lado izquierdo del armario)
 @export var render_changing: Texture2D  ## cuadro "cambiandose" (1.5 s) antes de mostrar el render
 
+@export_group("Mirror (lavamanos)")
+@export var mirror: Texture2D  ## Mayui de pie frente al espejo
+@export var mirror_alt: Texture2D  ## Mayui cepillandose
+
 @export_group("Basket Textures")
 @export var empty: Texture2D
 @export var full: Texture2D

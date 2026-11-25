@@ -500,6 +500,10 @@ func request_sleep(bed_type: int = BED_TYPE.TYPE_C) -> void:
 	ui.setup(bed_type)
 	var result : Array = await ui.sleep_confirmed
 	canvas.queue_free()
+	if result[0] == "":   # Cancelar / Esc: no duerme ni pasa el tiempo
+		GameManager.modal_count -= 1
+		_sleep_in_progress = false
+		return
 	await sleep(result[0], result[1])
 	GameManager.modal_count -= 1
 	_sleep_in_progress = false
@@ -816,7 +820,7 @@ func _on_day_changed_primary_effects(_day: int) -> void:
 #region Estado y utilidades del motor
 func _new_daily() -> Dictionary:
 	return {"home_meals": 0, "instant_meals": 0, "bathed": false, "gambled": false,
-		"sanity_loss": 0.0, "mitigated": 0, "street_events": 0}
+		"sanity_loss": 0.0, "mitigated": 0, "street_events": 0, "brushed": false}
 
 ## Reinicia los contadores del motor. Con full = true tambien limpia efectos, cordura y sueno
 ## (lo usan las pruebas automaticas y las partidas nuevas).
@@ -988,6 +992,11 @@ func register_bath(cold: bool = false) -> void:
 			add_stress_cause("COLD_WATER")
 	else:
 		mitigate_stress(1, "HOT_BATH")
+
+## Llamar al cepillarse los dientes en el espejo del lavamanos. La Suciedad de la boca (2.a capa de la Suciedad) aun no existe.
+const BRUSH_TIME : String = "00:05"   ## propuesta (SISTEMA_GAMEPLAY: Cepillarse tarda 5 min)
+func register_brush() -> void:
+	daily.brushed = true
 
 ## Agua fria: Atenta I durante 1 h. Si ya habia Atenta (por Insomnio) no se toca; con Hipersomnia
 ## (su opuesta) solo la reduce 1 nivel.

@@ -178,10 +178,11 @@ func _t_cocina() -> void:
 	inv.interact_inventory(corte, inv, origen)
 	_check("Con la bolsa en la tabla hay receta (picar)", kc.has_valid_station_craft("cutting"))
 	_check("Se puede picar", kc.start_manual_station_craft("cutting"))
-	var ing = inv.slots[res_idx].item
+	var ing = kc.get_station_item("cutting")
 	_check("Picar gasta la bolsa y da 1 ingredientes", _contar(kc, "ingredients_bag") == 1 and _contar(kc, "ingredients") == 1, "bolsas %d, ingredientes %d" % [_contar(kc, "ingredients_bag"), _contar(kc, "ingredients")])
 	_check("Los ingredientes picados quedan 'prepared'", ing != null and ing.has_state("prepared"))
-	_check("La tabla queda libre despues de picar", kc.get_station_item("cutting") == null)
+	_check("Lo picado se queda en la tabla (no salta al resultado de Combinar)", ing != null and ing.data.item_unique_name == "ingredients" and inv.slots[res_idx].is_empty() and not kc.get_station("cutting").is_locked)
+	inv.slots[corte].clear()
 
 	# --- COMBINAR (olla + ingredientes): nunca mas de lo que hay, esten en la casilla que esten
 	var olla_idx : int = _donde(kc, "cooking_pot")
@@ -197,7 +198,7 @@ func _t_cocina() -> void:
 		_check("Olla en la casilla %d + ingredientes en la %d: sale UNA olla con los ingredientes dentro (repitiendo el clic no sale mas)" % [orden[0] + 1, orden[1] + 1], salidas.size() == 1 and s0.data.item_unique_name == "cooking_pot" and s0.held_item != null and s0.held_item.data.item_unique_name == "ingredients" and s0.held_item.has_state("prepared"), "salieron %d" % salidas.size())
 		_check("Las dos casillas de entrada quedan vacias (se gastaron la olla vieja y los ingredientes)", _casillas_vacias(kc, entradas))
 		olla = _item(RUTA_OLLA)   # la de la siguiente vuelta
-	_check("Las ollas que salen de 'Combinar' no se quedan en la cocina (van a las manos)", _ollas(kc) == 0)
+	_check("execute_simple_craft no deja copias en la cocina (la pantalla pone la olla en el resultado)", _ollas(kc) == 0)
 	_vaciar_entradas(kc)
 	_check("Sin nada en las casillas no sale nada", _combinar_spam(kc).is_empty())
 
@@ -251,7 +252,7 @@ func _t_cocina() -> void:
 	_check("La olla vacia en el fregadero tiene receta (llenarla)", kc.has_valid_station_craft("sink"))
 	_check("Se puede llenar la olla", kc.start_manual_station_craft("sink"))
 	_check("Llenarla no duplica ni pierde la olla", _ollas(kc) == 1, "ollas %d" % _ollas(kc))
-	_check("El fregadero queda libre", kc.get_station_item("sink") == null)
+	_check("La olla llena se queda en el fregadero y este queda libre", kc.get_station_item("sink") != null and kc.get_station_item("sink").data.item_unique_name == "cooking_pot" and not kc.get_station("sink").is_locked)
 	var donde : int = _donde(kc, "cooking_pot")
 	var con_agua2 = inv.slots[donde].item if donde != -1 else null
 	_check("La olla ahora trae agua", con_agua2 != null and con_agua2.held_item != null and con_agua2.held_item.data.item_unique_name == "water")
@@ -264,7 +265,7 @@ func _t_cocina() -> void:
 	_check("La estufa queda ocupada mientras calienta", estacion.is_locked)
 	_check("No se puede empezar otra vez mientras trabaja", not kc.start_manual_station_craft("stove"))
 	tm.minutes_delta.emit(25)   # pasan los 25 min
-	_check("A los 25 min la estufa se libera sola", not estacion.is_locked and kc.get_station_item("stove") == null)
+	_check("A los 25 min la estufa se libera sola y la olla se queda en ella", not estacion.is_locked and kc.get_station_item("stove") != null and kc.get_station_item("stove").data.item_unique_name == "cooking_pot")
 	_check("Calentar no duplica ni pierde la olla", _ollas(kc) == 1, "ollas %d" % _ollas(kc))
 	donde = _donde(kc, "cooking_pot")
 	var caliente = inv.slots[donde].item if donde != -1 else null
@@ -284,7 +285,7 @@ func _t_cocina() -> void:
 	tm.minutes_delta.emit(44)
 	_check("A los 44 min todavia no esta lista (la olla sigue en la estufa con los ingredientes)", estacion.is_locked and kc.get_station_item("stove") != null and kc.get_station_item("stove").held_item.data.item_unique_name == "ingredients" and _contar(kc, "home_meal") == 0)
 	tm.minutes_delta.emit(1)
-	_check("A los 45 min la estufa se libera", not estacion.is_locked and kc.get_station_item("stove") == null)
+	_check("A los 45 min la estufa se libera y la olla con la comida se queda en ella", not estacion.is_locked and kc.get_station_item("stove") != null and kc.get_station_item("stove").held_item.data.item_unique_name == "home_meal")
 	_check("Cocinar no duplica ni pierde la olla ni deja ingredientes sueltos", _ollas(kc) == 1 and _contar(kc, "ingredients") == 0 and _contar(kc, "home_meal") == 0, "ollas %d" % _ollas(kc))
 	donde = _donde(kc, "cooking_pot")
 	var lista = inv.slots[donde].item if donde != -1 else null
@@ -366,5 +367,5 @@ func _t_cocina() -> void:
 	inv = kc.inventory
 	var d2 : int = _donde(kc, "cooking_pot")
 	_check("Si la comida se termino estando fuera, al volver ya esta lista y la estufa libre", not estacion.is_locked and d2 != -1 and inv.slots[d2].item.held_item != null and inv.slots[d2].item.held_item.data.item_unique_name == "home_meal", "olla en %d" % d2)
-	_check("Y no queda nada duplicado ni ingredientes sueltos", _contar(kc, "ingredients") == 1 and kc.get_station_item("stove") == null, "ingredientes %d" % _contar(kc, "ingredients"))
+	_check("Y no queda nada duplicado ni ingredientes sueltos", _contar(kc, "ingredients") == 1 and kc.get_station_item("stove") != null and kc.get_station_item("stove").held_item.data.item_unique_name == "home_meal", "ingredientes %d" % _contar(kc, "ingredients"))
 	await _salir(escena)

@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="SpritePreset" load_steps=8 format=3]
 
 [ext_resource type="Texture2D" uid="uid://c7xrwleix05oo" path="res://Assets/Mayui/mayui_accesories.png" id="1_obalc"]
-[ext_resource type="Texture2D" uid="uid://cxmgoxewya4il" path="res://Assets/Mayui/mayui_work_body.png" id="2_o7osb"]
+[ext_resource type="Texture2D" uid="uid://c6oj4alx63sg4" path="res://Assets/Mayui/mayui_home_body.png" id="2_o7osb"]
 [ext_resource type="Texture2D" uid="uid://bhkln5nq45lwf" path="res://Assets/Mayui/mayui_eyes.png" id="3_16dyh"]
 [ext_resource type="Texture2D" uid="uid://ci8n5ia3dji02" path="res://Assets/Mayui/mayui_hair.png" id="4_1yh44"]
 [ext_resource type="Texture2D" uid="uid://7ywufu1mplt2" path="res://Assets/Mayui/mayui_face.png" id="5_ap4uw"]
-[ext_resource type="Texture2D" uid="uid://o384ea47yxv5" path="res://Assets/Mayui/mayui_work_legs.png" id="6_q148m"]
+[ext_resource type="Texture2D" uid="uid://cbb0vh5fn2y4s" path="res://Assets/Mayui/mayui_home_legs.png" id="6_q148m"]
 [ext_resource type="Script" uid="uid://bswuea3inx1i8" path="res://Resources/SpriteStacks/Mayui/sprite_preset.gd" id="7_kybbi"]
 
 [resource]

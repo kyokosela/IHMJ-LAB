@@ -1,6 +1,7 @@
 extends SceneTree
 ## Pruebas automaticas de la ROPA: lo que lleva puesto Mayui, el armario (PlayerManager.outfit / wardrobe), los estados de
-## cada prenda (limpia, sucia, mojada), sus efectos en el jugador y la UI del armario (mouse, cuadro de cambio, 2 min).
+## cada prenda (limpia, sucia, mojada), sus efectos en el jugador, su sprite en el mundo (hojas de Assets/Mayui) y la UI del
+## armario (mouse, cuadro de cambio, 2 min).
 ##
 ## Uso (desde la carpeta del proyecto):
 ##   Godot_v4.6-stable_win64_console.exe --headless --path . -s res://Tools/probar_ropa.gd
@@ -33,6 +34,7 @@ func _initialize() -> void:
 	gm.game_started = true
 	_t_modelo()
 	_t_estados()
+	_t_sprites()
 	await _t_ui()
 	print("=== %d comprobaciones OK, %d con FALLA ===" % [passed, failed])
 	quit(1 if failed > 0 else 0)
@@ -166,9 +168,102 @@ func _t_estados() -> void:
 	_sin_efectos()
 	pm.reset_outfits()
 
-# ------------------------------------------------------------------ C. UI del armario
+# ------------------------------------------------------------------ C. sprites de Mayui por ropa
+## Cada ropa tiene su sprite en el mundo (Resources/SpriteStacks/Mayui/mayui_<ropa>.tres): hojas de 20 cuadros de 26x32 en
+## Assets/Mayui. Cuerpo y piernas son propios de cada ropa; cara, ojos y accesorios son los de siempre y el pelo de la toalla de
+## espaldas es mas oscuro (mojado). Las hojas nuevas las arma Tools/armar_hojas_mayui.ps1 desde los .aseprite de tu artista.
+func _t_sprites() -> void:
+	print("C. Sprites de Mayui por ropa")
+	var base := "res://Resources/SpriteStacks/Mayui/"
+	var capas := ["accesories", "body", "eyes", "hair", "head", "legs"]
+	var presets := {}
+	for id in ["work", "home", "towel", "outfit1"]:
+		presets[id] = load(base + "mayui_%s.tres" % id)
+	var completos := true
+	var detalle := ""
+	for id in presets.keys():
+		var p = presets[id]
+		if p.preset_name != "mayui_%s" % id:
+			completos = false
+			detalle += " nombre(%s)" % id
+		for capa in capas:
+			var tex : Texture2D = p.layers.get(capa)
+			if tex == null or tex.get_width() != 520 or tex.get_height() != 32:
+				completos = false
+				detalle += " %s/%s" % [id, capa]
+	_check("Las 4 ropas (trabajo, casa, toalla y Outfit 1) tienen las 6 capas del sprite, cada una de 20 cuadros de 26x32", completos, detalle)
+	var propias := true
+	for id in ["home", "towel", "outfit1"]:
+		for capa in ["body", "legs"]:
+			if presets[id].layers[capa] == presets["work"].layers[capa]:
+				propias = false
+	_check("La ropa de casa, la toalla y el Outfit 1 ya no usan el cuerpo ni las piernas del uniforme", propias)
+	var cuerpos_distintos : bool = presets["home"].layers["body"] != presets["towel"].layers["body"] and presets["home"].layers["body"] != presets["outfit1"].layers["body"] and presets["towel"].layers["body"] != presets["outfit1"].layers["body"]
+	_check("Cada ropa tiene su propio cuerpo", cuerpos_distintos)
+	var compartidas := true
+	for id in ["home", "towel", "outfit1"]:
+		for capa in ["accesories", "eyes", "head"]:
+			if presets[id].layers[capa] != presets["work"].layers[capa]:
+				compartidas = false
+	_check("La cara, los ojos y los accesorios son los mismos en todas las ropas", compartidas)
+	_check("El pelo es el mismo en todas las ropas, salvo el de la toalla", presets["home"].layers["hair"] == presets["work"].layers["hair"] and presets["outfit1"].layers["hair"] == presets["work"].layers["hair"] and presets["towel"].layers["hair"] != presets["work"].layers["hair"])
+	var pelo_normal : Image = (presets["work"].layers["hair"] as Texture2D).get_image()
+	var pelo_toalla : Image = (presets["towel"].layers["hair"] as Texture2D).get_image()
+	var solo_espalda := true
+	for slot in range(20):
+		var igual := true
+		for y in range(32):
+			for x in range(26):
+				if pelo_normal.get_pixel(slot * 26 + x, y) != pelo_toalla.get_pixel(slot * 26 + x, y):
+					igual = false
+		var de_espaldas : bool = slot == 3 or slot >= 16
+		if igual == de_espaldas:
+			solo_espalda = false
+	_check("El pelo mojado de la toalla solo cambia en los cuadros de espaldas (3 y 16 a 19)", solo_espalda)
+	var sin_vacios := true
+	var vacios := ""
+	for id in ["home", "towel", "outfit1"]:
+		for capa in ["body", "legs"]:
+			var img : Image = (presets[id].layers[capa] as Texture2D).get_image()
+			for slot in range(20):
+				var n := 0
+				for y in range(32):
+					for x in range(26):
+						if img.get_pixel(slot * 26 + x, y).a > 0.03:
+							n += 1
+				if n == 0:
+					sin_vacios = false
+					vacios += " %s/%s/%d" % [id, capa, slot]
+	_check("Ningun cuadro del cuerpo ni de las piernas de las hojas nuevas esta vacio", sin_vacios, vacios)
+	# en el juego: al ponerse cada ropa, las capas del jugador usan las hojas de esa ropa
+	var comp = pm.player.sprite
+	var registrados := true
+	for id in ["work", "home", "towel", "outfit1"]:
+		registrados = registrados and comp.has_preset("mayui_%s" % id)
+	_check("El sprite del jugador conoce los 4 presets (trabajo, casa, toalla y Outfit 1)", registrados)
+	var nodos_ok := true
+	var nodos_detalle := ""
+	pm.reset_outfits()
+	for id in ["home", "work", "towel", "outfit1"]:
+		match id:
+			"home":
+				pm.reset_outfits()
+			"work":
+				pm.wear_clothes(pm.wardrobe[0])   # tras reset_outfits lo unico colgado es el uniforme
+			"towel":
+				pm.wear_towel()
+			"outfit1":
+				comp.change_preset_by_name("mayui_outfit1")
+		for capa in capas:
+			if comp.get_node(capa).texture != presets[id].layers[capa]:
+				nodos_ok = false
+				nodos_detalle += " %s/%s" % [id, capa]
+	_check("Al ponerse cada ropa las 6 capas del jugador muestran las hojas de esa ropa", nodos_ok, nodos_detalle)
+	pm.reset_outfits()
+
+# ------------------------------------------------------------------ D. UI del armario
 func _t_ui() -> void:
-	print("C. UI del armario")
+	print("D. UI del armario")
 	gm.new_game()
 	pm.reset_engine_state(true)
 	var tarea = root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR").get_task_res("CLOTHES")
@@ -181,6 +276,7 @@ func _t_ui() -> void:
 	var ui = escena.get_node("UILayer/WardrobeUI")
 	var casa = load("res://Resources/Clothing/home_clothes.tres")
 	var trabajo = load("res://Resources/Clothing/work_clothes.tres")
+	_check("El cuadro de cambio de ropa dura 1 s", ui.changing_seconds == 1.0)
 	ui.changing_seconds = 0.05
 	_check("El armario empieza cerrado", not ui.visible)
 	var armario = escena.get_node("Wardrobe")

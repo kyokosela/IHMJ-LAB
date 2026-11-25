@@ -116,3 +116,8 @@ text = "Dormir con alarma"
 custom_minimum_size = Vector2(120, 44)
 layout_mode = 2
 text = "Sin alarma"
+
+[node name="CancelButton" type="Button" parent="Center/Panel/VBox/Margin/Inner/Buttons"]
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
+text = "Cancelar"

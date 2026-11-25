@@ -214,7 +214,7 @@ func _update_craft_preview():
 			craft_preview_label.text = ""
 	
 	if craft_button:
-		craft_button.disabled = recipe == null
+		craft_button.disabled = recipe == null or not kitchen.is_simple_craft_result_free()
 
 func _update_storage_ui():
 	if not storage_grid: return
@@ -340,13 +340,11 @@ func _on_simple_craft_executed(result: Item):
 	_update_simple_craft_ui()
 
 func _on_craft_button_pressed():
+	# Completado: lo combinado se queda en la casilla de resultado (antes saltaba solo a las manos)
+	if not kitchen or not kitchen.is_simple_craft_result_free(): return
 	var result = kitchen.execute_simple_craft()
 	if result:
-		# Intentar dar al player
-		if player_inventory.has_any_space():
-			player_inventory.add_item(result)
-		else:
-			_show_overflow_dialog([result])
+		kitchen.set_simple_craft_result(result)
 
 func _on_station_craft_button_pressed(station_id: String):
 	if not kitchen: return

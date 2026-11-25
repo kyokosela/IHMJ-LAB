@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://tcey4tkkfvd8"]
+[gd_scene load_steps=38 format=3 uid="uid://tcey4tkkfvd8"]
 
 [ext_resource type="Script" uid="uid://76eoxychonuw" path="res://Prefabs/Player/Player.gd" id="1_t5con"]
 [ext_resource type="Script" uid="uid://cx06pj7isyhot" path="res://Prefabs/Components/movement_component.gd" id="2_1cl7s"]
@@ -21,6 +21,8 @@
 [ext_resource type="Texture2D" uid="uid://ci8n5ia3dji02" path="res://Assets/Mayui/mayui_hair.png" id="11_us0jv"]
 [ext_resource type="Texture2D" uid="uid://bhkln5nq45lwf" path="res://Assets/Mayui/mayui_eyes.png" id="12_03ewh"]
 [ext_resource type="Texture2D" uid="uid://c7xrwleix05oo" path="res://Assets/Mayui/mayui_accesories.png" id="13_hxf3l"]
+[ext_resource type="Resource" path="res://Resources/SpriteStacks/Mayui/mayui_home.tres" id="14_home"]
+[ext_resource type="Resource" path="res://Resources/SpriteStacks/Mayui/mayui_outfit1.tres" id="15_outfit1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h0qm3"]
 size = Vector2(5, 5)
@@ -226,7 +228,7 @@ metadata/_custom_type_script = "uid://dpxpbvvq6y80g"
 [node name="SpriteComponent" type="Node2D" parent="." node_paths=PackedStringArray("animation_player")]
 script = ExtResource("2_8ipit")
 animation_player = NodePath("AnimationPlayer")
-custom_presets = Array[ExtResource("7_3j425")]([ExtResource("7_2lcig"), ExtResource("8_us0jv")])
+custom_presets = Array[ExtResource("7_3j425")]([ExtResource("7_2lcig"), ExtResource("8_us0jv"), ExtResource("14_home"), ExtResource("15_outfit1")])
 current_preset = ExtResource("7_2lcig")
 sync_hframes = 20
 sync_offset = Vector2(0, -10)
@@ -301,6 +303,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="SpinBox" type="SpinBox" parent="CanvasLayer/Control"]
 layout_mode = 0

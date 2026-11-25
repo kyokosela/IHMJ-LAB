@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="TaskList" load_steps=6 format=3 uid="uid://bmtiaxm2713vx"]
+[gd_resource type="Resource" script_class="TaskList" load_steps=7 format=3 uid="uid://bmtiaxm2713vx"]
 
 [ext_resource type="Script" uid="uid://cdn2myf7sucsn" path="res://Resources/Task/taskList.gd" id="1_jt4gu"]
 [ext_resource type="Script" uid="uid://sd12b60ojakk" path="res://Resources/Task/task.gd" id="2_daoyb"]
@@ -23,8 +23,14 @@ task_unique_name = "CLOTHES"
 task_message = Array[String](["_DOOR_CLOTHES_#1_", "_DOOR_CLOTHES_#2_", "_DOOR_CLOTHES_#3_"])
 metadata/_custom_type_script = "uid://sd12b60ojakk"
 
+[sub_resource type="Resource" id="Resource_teeth"]
+script = ExtResource("2_daoyb")
+task_unique_name = "TEETH"
+event_dependencies = Array[String](["TUTORIAL"])
+metadata/_custom_type_script = "uid://sd12b60ojakk"
+
 [resource]
 script = ExtResource("1_jt4gu")
 task_list_unique_name = "TUTORIAL_DOOR"
-task_list = Array[ExtResource("2_daoyb")]([SubResource("Resource_8bxtn"), SubResource("Resource_cbckm"), SubResource("Resource_205fr")])
+task_list = Array[ExtResource("2_daoyb")]([SubResource("Resource_8bxtn"), SubResource("Resource_205fr"), SubResource("Resource_cbckm"), SubResource("Resource_teeth")])
 metadata/_custom_type_script = "uid://cdn2myf7sucsn"

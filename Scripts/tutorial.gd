@@ -3,6 +3,7 @@ extends World
 const FLAG_SHOWERED   := "morning_showered"
 const FLAG_DRESSED    := "morning_dressed"
 const FLAG_ATE        := "morning_ate"
+const FLAG_TEETH      := "morning_teeth"
 const FLAG_DOOR_DONE  := "tutorial_door_done"
 const FLAG_INTRO_SHOWN := "tutorial_intro_shown"
 
@@ -23,6 +24,7 @@ func _ready() -> void:
 
 	_connect_routine_interactables()
 	PlayerManager.outfit_changed.connect(_on_outfit_changed)
+	TaskManager.connect_to_task("TUTORIAL_DOOR", "TEETH", _on_teeth_brushed)
 	_on_outfit_changed(null)   # por si ya lleva el uniforme puesto
 
 	if not NarrativeFlags.has_flag(FLAG_INTRO_SHOWN):
@@ -48,6 +50,10 @@ func _on_outfit_changed(_item) -> void:
 	if PlayerManager.get_outfit_id() == "work":
 		NarrativeFlags.set_flag(FLAG_DRESSED)
 
+## Cepillarse en el espejo del lavamanos marca la tarea TEETH.
+func _on_teeth_brushed() -> void:
+	NarrativeFlags.set_flag(FLAG_TEETH)
+
 func _on_door_entered(body) -> void:
 	if not body is Player:
 		return
@@ -61,6 +67,8 @@ func _on_door_entered(body) -> void:
 		missing.append("ducharte")
 	if not NarrativeFlags.has_flag(FLAG_DRESSED):
 		missing.append("cambiarte")
+	if not NarrativeFlags.has_flag(FLAG_TEETH):
+		missing.append("cepillarte")
 
 	if not missing.is_empty():
 		Dialogic.create_quick_dialog(

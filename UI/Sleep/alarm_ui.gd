@@ -27,6 +27,7 @@ func _ready() -> void:
 	_refresh_wake_chance()
 	confirm_button.pressed.connect(_on_confirm)
 	no_alarm_button.pressed.connect(_on_no_alarm)
+	get_node(INNER + "/Buttons/CancelButton").pressed.connect(_on_cancel)
 	get_node(INNER + "/AlarmSection/HourRow/PlusButton").pressed.connect(_on_hour_up)
 	get_node(INNER + "/AlarmSection/HourRow/MinusButton").pressed.connect(_on_hour_down)
 	confirm_button.grab_focus()
@@ -89,3 +90,13 @@ func _on_confirm() -> void:
 func _on_no_alarm() -> void:
 	sleep_confirmed.emit("00:00", _bed_type)
 	queue_free()
+
+## Salir sin dormir: boton Cancelar o Esc. La hora vacia le dice a PlayerManager.request_sleep que no duerma.
+func _on_cancel() -> void:
+	sleep_confirmed.emit("", _bed_type)
+	queue_free()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		_on_cancel()

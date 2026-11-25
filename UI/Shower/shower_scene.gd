@@ -2,7 +2,7 @@ extends Control
 class_name ShowerScene
 ## La escena de la ducha (Flow de juego.txt: "aparece una transicion, dibujo de la silueta de Mayui a traves de las cortinas").
 ## PROVISIONAL hasta que haya arte: la silueta es su render con la toalla oscurecido y los azulejos, la cortina y el agua se
-## dibujan por codigo (nodos Wall y Curtain). Falta el sonido (no hay audio en el proyecto).
+## dibujan por codigo (nodos Wall y Curtain). El agua suena cuando exista Audio/SFX/shower.ogg.
 ## La abre bathe.gd. En el tutorial se va con la senal "ducha_fuera" de ducha_tutorial.dtl (despues de "Que frio."); sin
 ## dialogo, sola a los scene_seconds segundos. Mientras se ve, Mayui queda quieta (GameManager.modal_count).
 

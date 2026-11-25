@@ -254,12 +254,21 @@ func custom_execute() -> void:
 			else:
 				_show_feedback("El mercado no está disponible hoy")
 
-## Completado: durante el tutorial el lavamanos no se abre antes de comer ("Primero deberia comer algo.", en event_messages).
+## Completado: durante el tutorial el lavamanos no se abre antes de comer ("Primero deberia comer algo.", en event_messages)
+## ni el armario antes de ducharse ("Primero deberia ducharme.").
 ## check_events() es el gancho del dev para bloquear una accion y mostrar sus mensajes.
 func check_events() -> bool:
 	if action_type == ActionType.OPEN_MIRROR and _tutorial_needs_meal():
 		return false
+	if action_type == ActionType.CHANGE_CLOTHES and _tutorial_needs_bath():
+		return false
 	return super()
+
+## La manana del tutorial termina la primera vez que Mayui sale con la rutina completa (exit_door.gd).
+func _tutorial_needs_bath() -> bool:
+	if not TaskManager.is_task_list_active("TUTORIAL_DOOR") or NarrativeFlags.has_flag("tutorial_door_done"):
+		return false
+	return not TaskManager.get_task_list_res("TUTORIAL_DOOR").get_task_res("BATHE").task_done
 
 func _tutorial_needs_meal() -> bool:
 	if not TaskManager.is_task_list_active("TUTORIAL_DOOR") or TaskManager.is_task_list_done("TUTORIAL_DOOR"):

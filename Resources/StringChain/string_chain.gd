@@ -22,7 +22,7 @@ var energy_cycle_started : bool
 var tries : int = 0
 var message_index : int = -1
 
-var message_order_index : int = 0
+var message_order_index : int = -1   ## ORDER: dice la lista en orden desde la primera y se queda en la ultima
 var message_cycle_index : int = 0
 
 func get_message() -> String :
@@ -70,7 +70,7 @@ func get_message() -> String :
 func reset() -> void :
 	tries = 0
 	message_index = -1
-	message_order_index = 0
+	message_order_index = -1
 	message_cycle_index = 0
 	time_cycle_started = false
 	energy_cycle_started = false

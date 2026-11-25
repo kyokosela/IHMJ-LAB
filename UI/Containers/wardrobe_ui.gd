@@ -14,6 +14,14 @@ signal outfit_chosen(item: Item)
 ## id de outfit ("home", "work") -> nodo con los hijos Layer (la prenda), Highlight (resaltado) y Hit (zona de clic)
 @export var garment_slots : Dictionary[String, Control] = {}
 
+@export_group("Frases (tu guion)")
+## id de outfit -> lo que dice Mayui si quiere ponersela en la manana del tutorial (no se cambia: solo vale el uniforme)
+@export var tutorial_refusals : Dictionary[String, StringChain] = {}
+@export var basket_lines : StringChain          ## al tocar la cesta con ropa sucia
+@export var uniform_dialog : DialogicTimeline   ## al ponerse el uniforme en el tutorial, ya duchada (una vez)
+
+const UNIFORM_SAID_FLAG : String = "tutorial_uniform_said"
+var _basket_full : bool = false
 var changing_seconds : float = 1.0   ## cuanto dura el cuadro "cambiandose"
 var _busy : bool = false
 var _locked : bool = false
@@ -29,6 +37,7 @@ func _ready() -> void:
 	if basket_hit != null:
 		basket_hit.mouse_entered.connect(_on_basket_hover.bind(true))
 		basket_hit.mouse_exited.connect(_on_basket_hover.bind(false))
+		basket_hit.gui_input.connect(_on_basket_input)
 
 func _exit_tree() -> void:
 	if _locked:
@@ -77,6 +86,7 @@ func refresh() -> void:
 	for item in PlayerManager.wardrobe:
 		if item.has_state("dirty"):
 			any_dirty = true
+	_basket_full = any_dirty
 	basket_rect.texture = _basket.full if any_dirty else _basket.empty
 	basket_highlight.texture = _basket.full_selection if any_dirty else _basket.empty_selection
 	basket_highlight.visible = false
@@ -95,11 +105,19 @@ func _on_basket_hover(inside: bool) -> void:
 		basket_highlight.visible = inside
 
 func _on_garment_input(event: InputEvent, id: String) -> void:
-	if _busy: return
+	if _busy or _is_talking(): return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var item : Item = _hanging.get(id)
-		if item != null:
-			_choose(item)
+		if item == null: return
+		if tutorial_refusals.has(id) and _in_tutorial_morning():
+			_say(tutorial_refusals[id])
+			return
+		_choose(item)
+
+func _on_basket_input(event: InputEvent) -> void:
+	if _busy or _is_talking() or not _basket_full or basket_lines == null: return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_say(basket_lines)
 
 ## Clic en una prenda: cuadro "cambiandose" -> Mayui se la pone (sprite, estado y efectos) -> render nuevo.
 func _choose(item: Item) -> void:
@@ -117,3 +135,28 @@ func _choose(item: Item) -> void:
 	refresh()
 	_busy = false
 	outfit_chosen.emit(item)
+	_comment_uniform()
+
+#region Frases
+## Tu guion: ya duchada y con el uniforme puesto, en el tutorial Mayui lo comenta y le ruge el estomago.
+func _comment_uniform() -> void:
+	if uniform_dialog == null or PlayerManager.get_outfit_id() != "work" or not _in_tutorial_morning(): return
+	if NarrativeFlags.has_flag(UNIFORM_SAID_FLAG) or not _bath_done(): return
+	NarrativeFlags.set_flag(UNIFORM_SAID_FLAG)
+	Dialogic.start(uniform_dialog)
+
+func _say(lines: StringChain) -> void:
+	Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], lines.get_message())
+
+func _is_talking() -> bool:
+	return Dialogic.current_timeline != null
+
+## La manana del tutorial termina la primera vez que Mayui sale con la rutina completa (exit_door.gd).
+func _in_tutorial_morning() -> bool:
+	return TaskManager.is_task_list_active("TUTORIAL_DOOR") and not NarrativeFlags.has_flag("tutorial_door_done")
+
+func _bath_done() -> bool:
+	var tasks : TaskList = TaskManager.get_task_list_res("TUTORIAL_DOOR")
+	var bath : Task = tasks.get_task_res("BATHE") if tasks != null else null
+	return bath != null and bath.task_done
+#endregion

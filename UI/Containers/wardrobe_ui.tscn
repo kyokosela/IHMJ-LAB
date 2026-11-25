@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dd0p5w6n0rqyj"]
+[gd_scene load_steps=18 format=3 uid="uid://dd0p5w6n0rqyj"]
 
 [ext_resource type="Script" uid="uid://dfn7rhufpg4au" path="res://UI/Containers/wardrobe_ui.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://pmc6kpm5dlqn" path="res://Assets/UI/Wardrobe/wardrobe.png" id="3_cabinet"]
@@ -9,6 +9,31 @@
 [ext_resource type="Texture2D" uid="uid://dp27mhhgpbuh7" path="res://Assets/UI/Wardrobe/home_selection.png" id="8_home_hl"]
 [ext_resource type="Texture2D" uid="uid://c2ibfm3xrfyy0" path="res://Assets/UI/Wardrobe/work_clean.png" id="9_work_layer"]
 [ext_resource type="Texture2D" uid="uid://b7pj23c4rbpgg" path="res://Assets/UI/Wardrobe/work_selection.png" id="10_work_hl"]
+[ext_resource type="Script" uid="uid://c2qbhsn6tgmrc" path="res://Resources/StringChain/string_chain.gd" id="11_chain"]
+[ext_resource type="Script" uid="uid://cdqqyuliu6jyp" path="res://Resources/StringChain/string_chain_array.gd" id="12_lines"]
+[ext_resource type="Resource" path="res://DialoguePlugin/TIMELINE/armario_uniforme.dtl" id="13_uniform"]
+
+[sub_resource type="Resource" id="Lines_pyjama"]
+script = ExtResource("12_lines")
+string_list = Array[String](["_WARDROBE_HOME_#1_", "_WARDROBE_HOME_#2_", "_WARDROBE_HOME_#3_", "_WARDROBE_HOME_COOLDOWN_"])
+behaviour = 2
+
+[sub_resource type="Resource" id="Chain_pyjama"]
+script = ExtResource("11_chain")
+string_list = Array[ExtResource("12_lines")]([SubResource("Lines_pyjama")])
+apply_times = false
+apply_energy = false
+
+[sub_resource type="Resource" id="Lines_basket"]
+script = ExtResource("12_lines")
+string_list = Array[String](["_WARDROBE_DIRTY_#1_", "_WARDROBE_DIRTY_#2_", "_WARDROBE_DIRTY_#3_", "_WARDROBE_DIRTY_COOLDOWN_"])
+behaviour = 2
+
+[sub_resource type="Resource" id="Chain_basket"]
+script = ExtResource("11_chain")
+string_list = Array[ExtResource("12_lines")]([SubResource("Lines_basket")])
+apply_times = false
+apply_energy = false
 
 [node name="WardrobeUI" type="Control" node_paths=PackedStringArray("render_rect", "basket_rect", "basket_highlight", "basket_hit", "garment_slots") groups=["wardrobe_ui"]]
 visible = false
@@ -27,6 +52,11 @@ garment_slots = {
 "home": NodePath("Canvas/Home"),
 "work": NodePath("Canvas/Work")
 }
+tutorial_refusals = Dictionary[String, ExtResource("11_chain")]({
+"home": SubResource("Chain_pyjama")
+})
+basket_lines = SubResource("Chain_basket")
+uniform_dialog = ExtResource("13_uniform")
 
 [node name="Backdrop" type="ColorRect" parent="."]
 layout_mode = 1

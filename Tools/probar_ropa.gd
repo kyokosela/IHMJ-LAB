@@ -266,6 +266,8 @@ func _t_ui() -> void:
 	print("D. UI del armario")
 	gm.new_game()
 	pm.reset_engine_state(true)
+	# Aqui se prueba el armario libre: la manana del tutorial (con sus frases y bloqueos) la juega probar_tutorial.gd
+	root.get_node("NarrativeFlags").set_flag("tutorial_door_done")
 	var tarea = root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR").get_task_res("CLOTHES")
 	tarea.task_done = false
 	zm.previous_zone = -1
@@ -278,6 +280,7 @@ func _t_ui() -> void:
 	_check("El cuadro de cambio de ropa dura 1 s", ui.changing_seconds == 1.0)
 	ui.changing_seconds = 0.05
 	_check("El armario empieza cerrado", not ui.visible)
+	await _sin_dialogos()   # "Tengo que ducharme.": mientras Mayui habla el armario no atiende clics
 	var armario = escena.get_node("Wardrobe")
 	armario.can_interact = true
 	armario.execute()
@@ -321,8 +324,38 @@ func _t_ui() -> void:
 	ui.refresh()
 	_check("Una prenda mojada y sucia muestra su imagen de mojada y sucia", ui.garment_slots["home"].get_node("Layer").texture == casa.wet_dirty)
 	_check("Con ropa sucia colgada la cesta se ve llena", ui.basket_rect.texture == load("res://Resources/Clothing/basket.tres").full)
+	await _sin_dialogos()   # las lineas de la ducha
+	var dlg = root.get_node("Dialogic")
+	var dicho : Array = []
+	var escuchar := func(info) -> void: dicho.append(str(info.get("text", "")))
+	dlg.Text.text_started.connect(escuchar)
+	ui._on_basket_input(clic)
+	for i in 30:
+		await create_timer(0.1).timeout
+		if not dicho.is_empty():
+			break
+	_check("Tocar la cesta con ropa sucia: 'Luego lavaré esto.'", dicho.size() > 0 and dicho[0].strip_edges() == "Luego lavaré esto.", str(dicho))
+	dlg.Text.text_started.disconnect(escuchar)
+	dlg.end_timeline()
+	await create_timer(0.3).timeout
 	ui._unhandled_input(esc)
 	await _soltar(escena)
+
+## Cierra lo que Mayui este diciendo (espera a que siga callada un momento: Dialogic tarda en arrancar). Antes de cerrar
+## deja que la frase aparezca: cerrarla a media animacion hace que Dialogic la vuelva a escribir en el dialogo siguiente.
+func _sin_dialogos() -> void:
+	var dlg = root.get_node("Dialogic")
+	var calma := 0
+	for i in 30:
+		await create_timer(0.2).timeout
+		if dlg.current_timeline != null:
+			await create_timer(1.2).timeout
+			dlg.end_timeline()
+			calma = 0
+		else:
+			calma += 1
+			if calma >= 3:
+				return
 
 func _soltar(escena: Node) -> void:
 	escena.release_player()

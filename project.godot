@@ -56,6 +56,7 @@ directories/dch_directory={
 "test_char": "res://DialoguePlugin/CHARACTERS/test_char.dch"
 }
 directories/dtl_directory={
+"armario_uniforme": "res://DialoguePlugin/TIMELINE/armario_uniforme.dtl",
 "casero_intro": "res://DialoguePlugin/TIMELINE/casero_intro.dtl",
 "casero_rent_final": "res://DialoguePlugin/TIMELINE/casero_rent_final.dtl",
 "casero_rent_reminder": "res://DialoguePlugin/TIMELINE/casero_rent_reminder.dtl",

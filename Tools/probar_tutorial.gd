@@ -82,8 +82,12 @@ func _pulsar_z() -> void:
 
 ## Como el jugador: pulsa Z y sigue pulsando hasta que se cierre el dialogo. Devuelve las lineas oidas.
 func _hablar_con_z() -> Array:
+	return await _hablar(_pulsar_z)
+
+## Hace algo (pulsar Z, clic en el armario...), pasa con Z todo lo que se diga y devuelve las lineas oidas.
+func _hablar(accion: Callable) -> Array:
 	dichos.clear()
-	await _pulsar_z()
+	await accion.call()
 	await create_timer(0.8).timeout
 	for i in 14:
 		if dlg.current_timeline == null:
@@ -150,10 +154,15 @@ func _t_manana() -> void:
 	dicho = await _decir(abrir)
 	_check("Agotadas las frases no abre un cuadro vacio, y la puerta sigue respondiendo despues", dicho == "" and dlg.current_timeline == null and puerta.can_interact, "'%s'" % dicho)
 
-	print("B. Ducha y uniforme")
+	print("B. Armario antes de ducharse, ducha y uniforme")
 	await _calma()
-	await _vestir(casa, "work")
-	_check("(prueba) se pone el uniforme antes de ducharse", pm.get_outfit_id() == "work")
+	var mueble = casa.get_node("Wardrobe")
+	var armario = casa.get_node("UILayer/WardrobeUI")
+	armario.changing_seconds = 0.05
+	var antes_de_ducha : Array = []
+	for i in 4:
+		antes_de_ducha.append_array(await _hablar(func() -> void: mueble.execute()))
+	_check("Antes de ducharse el armario no se abre y dice tus frases (la ultima se repite)", not armario.visible and antes_de_ducha == ["Primero debería ducharme.", "No voy a ponerme ropa estando así.", "No perder el tiempo aquí.", "No perder el tiempo aquí."], str(antes_de_ducha))
 	await _calma()
 	_poner(casa.get_node("Shower").global_position)
 	await create_timer(0.5).timeout
@@ -169,9 +178,19 @@ func _t_manana() -> void:
 	_poner(Vector2(100, 100))
 	await create_timer(0.3).timeout
 	dicho = await _decir(abrir)
-	_check("En toalla la puerta dice 'Ni loca.' (haberse vestido antes no cuenta)", dicho.strip_edges() == "Ni loca.", dicho)
+	_check("En toalla la puerta dice 'Ni loca.'", dicho.strip_edges() == "Ni loca.", dicho)
 	await _calma()
-	await _vestir(casa, "work")
+	mueble.can_interact = true
+	mueble.execute()
+	_check("Ya duchada, el armario se abre", armario.visible)
+	var pijama : Array = []
+	for i in 5:
+		pijama.append_array(await _hablar(func() -> void: armario._on_garment_input(_clic(), "home")))
+	_check("En el tutorial la pijama no se pone: tus 3 frases y el aviso", pm.get_outfit_id() == "towel" and pijama == ["Me encantaría volver a dormir, pero las facturas no se pagan solas.", "Resiste, Mayui, debes ser fuerte.", "Que no.", "Voy a llegar tarde.", "Voy a llegar tarde."], str(pijama))
+	var uniforme : Array = await _hablar(func() -> void: armario._on_garment_input(_clic(), "work"))
+	_check("Al ponerse el uniforme: tus frases y el estomago", pm.get_outfit_id() == "work" and uniforme == ["Huele bien, parece que no se me olvidó lavarlo.", "(Le ruge el estómago.)", "Es verdad, ayer no cené por estar organizando mis cosas...", "Nadie me advirtió que mudarse era tan complicado."], str(uniforme))
+	armario.close()
+	_check("El armario se cierra y Mayui queda libre", not armario.visible and gm.modal_count == 0)
 	dicho = await _decir(abrir)
 	_check("Vestida y sin comer: 'Debería comer algo.'", dicho.strip_edges() == "Debería comer algo.", dicho)
 
@@ -229,10 +248,8 @@ func _t_manana() -> void:
 	await _calma()
 	_check("Cepillarse completa la ultima tarea", _tarea("TEETH") and tk.is_task_list_done("TUTORIAL_DOOR"))
 	await _vestir(casa, "home")
-	dicho = await _decir(abrir)
-	_check("Con todo hecho pero sin el uniforme puesto, no sale", pm.get_outfit_id() == "home" and zm.zone_node == casa and not tk.is_task_list_done("TUTORIAL_DOOR") and not dicho.contains("Aquí vamos."), dicho)
+	_check("En la manana del tutorial no se puede volver a la pijama", pm.get_outfit_id() == "work")
 	await _calma()
-	await _vestir(casa, "work")
 	dicho = await _decir(abrir)
 	_check("Con la rutina completa: 'Aquí vamos.'", dicho.strip_edges() == "Aquí vamos.", dicho)
 	var hora_salida : String = tm.get_current_time()
@@ -257,6 +274,11 @@ func _t_manana() -> void:
 	await _calma()
 	await create_timer(2.5).timeout
 	_check("Al volver se queda en casa (la puerta no la saca sola)", zm.zone_node == casa and not zm._changing_zone)
+	casa.get_node("Wardrobe").can_interact = true
+	casa.get_node("Wardrobe").execute()
+	await _vestir(casa, "home")
+	_check("Despues del tutorial el armario es libre: se puede poner la pijama", pm.get_outfit_id() == "home")
+	await _calma()
 	dichos.clear()
 	_poner(casa.get_node("MainDoor").global_position)
 	_check("Despues del tutorial caminar a la puerta deja salir directo, sin frases", await _llegar(1) and not " ".join(dichos).contains("Aquí vamos."), str(dichos))

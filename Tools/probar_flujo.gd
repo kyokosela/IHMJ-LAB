@@ -347,7 +347,9 @@ func _t_apartamento() -> void:
 	espejo.close()
 	cocinar.task_done = false
 	await _esperar_calma()
-	# cama: se puede salir de la pantalla de la alarma sin dormir (boton Cancelar o Esc)
+	# cama: se puede salir de la pantalla de la alarma sin dormir (boton Cancelar o Esc). En la manana del tutorial la cama
+	# no deja dormir (probar_tutorial.gd): aqui se prueba despues de ella.
+	root.get_node("NarrativeFlags").set_flag("tutorial_door_done")
 	var cama = escena.get_node("Bed")
 	pm.slept_today = false
 	for salida in ["Cancelar", "Esc"]:

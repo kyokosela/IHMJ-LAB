@@ -123,6 +123,14 @@ func _llegar(zona: int) -> bool:
 			return true
 	return false
 
+## La pantalla de la alarma de dormir, si esta abierta.
+func _buscar_alarma() -> Node:
+	for capa in root.get_children():
+		var ui : Node = capa.get_node_or_null("AlarmUI")
+		if ui != null and not ui.is_queued_for_deletion():
+			return ui
+	return null
+
 func _tarea(id: String) -> bool:
 	return tk.get_task_list_res("TUTORIAL_DOOR").get_task_res(id).task_done
 
@@ -138,6 +146,17 @@ func _t_manana() -> void:
 	await create_timer(1.5).timeout
 	_check("La partida empieza a las 06:00 con Mayui en ropa de casa", tm.get_current_time() == "06:00" and pm.get_outfit_id() == "home", tm.get_current_time())
 	_check("Al levantarse Mayui dice 'Tengo que ducharme.'", " ".join(dichos).contains("Tengo que ducharme."), str(dichos))
+	await _calma()
+	var cama = casa.get_node("Bed")
+	_poner(cama.global_position)
+	await create_timer(0.5).timeout
+	var volver : Array = []
+	for i in 5:
+		volver.append_array(await _hablar_con_z())
+	_check("No se puede volver a la cama: tus 3 frases y el aviso (se repite)", volver == ["Si vuelvo ahí, no salgo.", "Cinco minutos más nunca son cinco minutos.", "Después del trabajo… tal vez.", "Debo dejar de perder el tiempo. Voy a llegar tarde.", "Debo dejar de perder el tiempo. Voy a llegar tarde."], str(volver))
+	_check("...sin abrir la alarma ni pasar el tiempo", _buscar_alarma() == null and gm.modal_count == 0 and tm.get_current_time() == "06:00" and not pm.slept_today, tm.get_current_time())
+	_poner(Vector2(100, 100))
+	await create_timer(0.3).timeout
 	var puerta = casa.get_node("MainDoor")
 	var abrir := func() -> void: puerta.execute()
 	# primera vez: caminando de verdad contra la puerta
@@ -278,6 +297,15 @@ func _t_manana() -> void:
 	casa.get_node("Wardrobe").execute()
 	await _vestir(casa, "home")
 	_check("Despues del tutorial el armario es libre: se puede poner la pijama", pm.get_outfit_id() == "home")
+	await _calma()
+	var cama2 = casa.get_node("Bed")
+	cama2.can_interact = true
+	cama2.execute()
+	await create_timer(0.4).timeout
+	var alarma : Node = _buscar_alarma()
+	_check("Despues del tutorial la cama deja dormir (abre la alarma)", alarma != null and gm.modal_count == 1)
+	if alarma != null:
+		alarma.get_node("Center/Panel/VBox/Margin/Inner/Buttons/CancelButton").pressed.emit()
 	await _calma()
 	dichos.clear()
 	_poner(casa.get_node("MainDoor").global_position)

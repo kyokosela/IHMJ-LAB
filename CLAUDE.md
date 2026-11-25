@@ -39,7 +39,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   (`Interacts.csv`); el uniforme tiene que estar **puesto** al salir; la primera vez dice "Aquí vamos."; después deja salir directo.
   El arreglo provisional de la puerta en `tutorial.gd` está retirado (queda solo el arranque y "Tengo que ducharme."). El casero pasó a
   las 06:00 (sigue esperando a que Mayui llegue al lobby). `Tools/probar_tutorial.gd` juega la mañana completa (la meta) y debe
-  terminar en 0 FALLA. Próximo paso: frases de la cama.
+  terminar en 0 FALLA. La cama tampoco deja volver a dormir en esa mañana (mismo `check_events`, frases `_BED_*`). Próximo paso
+  del guion sin arte: el "Voy tarde" de las 7:30.
 - Armario del tutorial (2026-11-24): antes de ducharse no se abre (`check_events` en `integration_action.gd`, `event_messages` del
   nodo `Wardrobe`); en la mañana del tutorial (hasta la bandera `tutorial_door_done`) la pijama no se pone; al ponerse el uniforme
   ya duchada suena `armario_uniforme.dtl`; la cesta habla si hay ropa sucia. Frases en `wardrobe_ui.tscn` (StringChain en modo

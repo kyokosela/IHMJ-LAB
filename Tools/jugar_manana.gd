@@ -312,12 +312,10 @@ func _jugar() -> void:
 	await _ir(Vector2i(2, 4), Vector2i.LEFT, "el escritorio")
 	dichos.clear()
 	await _z()
-	await create_timer(0.7).timeout
+	await create_timer(1.7).timeout   # se oscurece, come, aclara y lo comenta
 	await _foto("7_come_en_la_mesa")
-	await create_timer(0.8).timeout
 	var oido : Array = dichos.duplicate()
 	oido.append_array(await _hablar(func() -> void: await create_timer(0.1).timeout))
-	await _foto("7b_comio")
 	_check("Come en la mesa: 'No sabe a nada.', tarea de comer y sin Hambre", oido.has("No sabe a nada.") and _tarea("COOK") and not pm.has_effect("HUNGER"), str(oido))
 	oido = await _hablar()
 	_check("El escritorio habla despues de comer", oido == ["No puedo quedarme aquí."], str(oido))

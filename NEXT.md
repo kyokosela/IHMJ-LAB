@@ -1,7 +1,8 @@
 # Para Ramiro: lo avanzado el 2026-11-25 y qué probar
 
-Todo quedó en commits **locales** (sin subir). Pruebas automáticas: **635 comprobaciones, 0 fallas** (las 8, la mañana
-entera con teclas y ratón, y el "jugador torpe"). Prueban que funciona, no que se sienta bien: eso lo dices tú.
+Todo quedó en commits **locales** (sin subir). Pruebas automáticas sobre la versión final: **644 comprobaciones, 0 fallas**
+(las 8, la mañana entera con teclas y ratón, el "jugador torpe" y teclas al azar). Prueban que funciona, no que se sienta
+bien: eso lo dices tú.
 
 ## Nuevo en la tarde
 - **Pasillo y recepción** (según tus planos): sales de casa, bajas las escaleras y el casero te espera abajo (P80).
@@ -14,6 +15,8 @@ entera con teclas y ratón, y el "jugador torpe"). Prueban que funciona, no que 
 - **Escritorio**: lleva la olla y come en la mesa ("No sabe a nada.", P27).
 - Mayui **mueve las piernas** con pijama y toalla (pasos provisionales hasta que dibujen los reales, P54).
 - **Ayuda de la cocina**: ahora dice cómo comer (la olla en tus manos y clic derecho).
+- **Sonido** preparado: al copiar los archivos en `Audio/SFX/` suenan solos (hoy no hay ninguno).
+- Sin avisos en la consola al arrancar (salvo el de cierre).
 - Prueba nueva del "jugador torpe": desordenar la cocina no pierde ni duplica ingredientes.
 - Prueba de **teclas al azar** por casa, pasillo y recepción (1.200 acciones): sin atascos ni paredes atravesadas.
 
@@ -32,5 +35,6 @@ El pedido de arte y sonido para el equipo está en `Docs/Para el equipo/pedido_d
 6. P76: ¿qué hace el tendedero?
 
 ## Necesita arte o texto (no lo inventé)
-Tileset y props reales (cuarto, baño, balcón, pasillo y recepción) · comida instantánea y comer sentada · sonidos ·
-dibujo real de la ducha · renders de diálogo · cuadros de caminar · la ropa casual colgada · "¿apagué la estufa?" al salir.
+Tileset y props reales (cuarto, baño, balcón, pasillo y recepción) · comida instantánea · Mayui sentada · los archivos de
+sonido · dibujo real de la ducha · renders de diálogo · cuadros de caminar (hoy provisionales) · la ropa casual colgada ·
+"¿apagué la estufa?" al salir.

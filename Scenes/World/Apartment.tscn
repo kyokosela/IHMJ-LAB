@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://cktm7n04xp2qy" path="res://UI/Containers/KitchenMultiUI.tscn" id="22"]
 [ext_resource type="PackedScene" uid="uid://dd0p5w6n0rqyj" path="res://UI/Containers/wardrobe_ui.tscn" id="26"]
 [ext_resource type="PackedScene" path="res://UI/Mirror/mirror_ui.tscn" id="27"]
+[ext_resource type="Script" path="res://Scripts/HouseInteracts/exit_door.gd" id="28"]
 
 [sub_resource type="RectangleShape2D" id="Shape_interact"]
 size = Vector2(48, 48)
@@ -195,9 +196,14 @@ text = "Lavamanos"
 [node name="MainDoor" type="Area2D" parent="." unique_id=1350934528]
 unique_name_in_owner = true
 position = Vector2(200, 100)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MainDoor" unique_id=67740030]
+script = ExtResource("28")
+interaction_name = "APT_DOOR"
+task_lists = Array[String](["TUTORIAL_DOOR"])
 shape = SubResource("Shape_door")
+reusable = true
+show_again_at_end = true
+signal_type = 1
+collision_trigger = true
 
 [node name="Label" type="Label" parent="MainDoor" unique_id=1181374000]
 offset_left = -30.0

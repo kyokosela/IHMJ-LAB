@@ -6,7 +6,8 @@
 - Los objetos se **arrastran**. **Clic derecho** (o doble clic) sobre un objeto en tus manos = usarlo (comer, beber).
 - **Estaciones** (estufa, fregadero, tabla): reciben un objeto, su botón hace la receta y **el resultado se queda ahí**.
 - **Combinar:** dos casillas arriba y el resultado en la de abajo. No combina otra vez hasta que saques el resultado.
-- **El reloj solo avanza cuando haces acciones.** Una receta con tiempo termina cuando el reloj avanza; hoy no se puede esperar en la cocina (P56).
+- **Todo se queda donde lo dejas** al salir de la cocina, también lo que esté en Combinar.
+- **El reloj solo avanza cuando haces acciones.** Mientras una receta con tiempo corre, **Esperar** (en la estufa) avisa cuánto tiempo pasará y, si aceptas, adelanta el reloj hasta que termine.
 
 ## 2. Con qué empiezas
 | Objeto | Cantidad | Para qué |
@@ -34,7 +35,7 @@ Hoy solo se puede **llenar la olla y calentarla**. No se combina con nada: la co
 | Comes | Energía | Además |
 |---|---|---|
 | Comida casera | **+42** (tu diseño dice +30, P58) | quita Hambre · cuenta como comida casera · caliente: −1 Estrés · completa la tarea de cocinar |
-| Ingredientes picados **sin cocinar** | **+42** | **lo mismo que la comida casera** y también completa la tarea: se puede saltar la estufa (P57) |
+| Ingredientes picados **sin cocinar** | no se pueden comer | ni sueltos ni dentro de la olla |
 | Bolsa sin picar | no se puede | — |
 
 Con Inapetencia, comer puede fallar y da menos energía. El café (Hiperactividad; caliente: 1 de 6 veces −1 Estrés; frío: +10 de energía) está programado pero no se consigue. La comida instantánea todavía no existe (P25).
@@ -52,6 +53,8 @@ Con Inapetencia, comer puede fallar y da menos energía. El café (Hiperactivida
 **Para tu dev (causa de los ❌, P59):** `ItemBehavior.apply_enviroment` recibe las *propiedades* del ambiente (`temperature`) en vez de sus *condiciones* (`warm`), así que los modificadores nunca se aplican; `home_meal` no tiene `base_decay_time` y su temperatura no tiene `can_decay`; agua y café quedan con `base_decay_time` = 1; `can_decay` vive en el recurso de comportamiento, que comparten varios objetos.
 
 ## 7. Propuesta de balance (🟡 para discutir; nada de esto está hecho)
+**Ya decidido:** la comida se pudre si no está en la nevera, como en la vida real, con las especificaciones que ya traen los objetos. Falta definir la nevera.
+
 Idea: que jugar bien sea **cocinar con anticipación para ganar tiempo en la mañana**.
 
 | Temperatura | Cómo se consigue | Al consumir |

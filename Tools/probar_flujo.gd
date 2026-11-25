@@ -496,7 +496,18 @@ func _t_cocina() -> void:
 	_check("La olla con ingredientes en la estufa tiene receta (cocinar)", kc.has_valid_station_craft("stove"))
 	_check("Se puede cocinar", kc.start_manual_station_craft("stove"))
 	_check("La estufa trabaja: se ven el fuego y el humo", kc.get_station("stove").is_locked and fuego_estufa.visible)
-	tm.minutes_delta.emit(45)   # pasan los 45 minutos
+	# boton Esperar: avisa cuanto tiempo pasara y solo adelanta el reloj si se acepta
+	var esperar = ui.station_wait_buttons["stove"]
+	var aviso = ui.wait_dialog
+	_check("Mientras cocina aparece 'Esperar' en la estufa", esperar.visible and not aviso.visible)
+	var hora_cocina : int = tm.minutes
+	esperar.pressed.emit()
+	_check("'Esperar' avisa cuanto tiempo pasara (45 min) sin adelantar nada todavia", aviso.visible and aviso.dialog_text.contains("45 min") and tm.minutes == hora_cocina and kc.get_station("stove").is_locked, aviso.dialog_text)
+	aviso.hide()
+	_check("Si se cancela no pasa el tiempo", tm.minutes == hora_cocina and kc.get_station("stove").is_locked)
+	esperar.pressed.emit()
+	aviso.confirmed.emit()
+	_check("Si se acepta pasan justo los 45 min, la comida queda lista y se quita 'Esperar'", (tm.minutes - hora_cocina + 1440) % 1440 == 45 and not kc.get_station("stove").is_locked and not esperar.visible and not aviso.visible, "paso %d min" % ((tm.minutes - hora_cocina + 1440) % 1440))
 	var comida_olla = _tomar_olla(kc)
 	var comida = comida_olla.held_item if comida_olla != null else null
 	_check("A los 45 min la estufa se libera y la olla trae la comida casera", not kc.get_station("stove").is_locked and comida != null and comida.data.item_unique_name == "home_meal")
@@ -522,7 +533,14 @@ func _t_cocina() -> void:
 	# 7) la cocina se puede abrir otra vez
 	cocina.execute()
 	_check("La cocina se puede abrir mas de una vez", ui.visible and gm.modal_count == 1)
+	# lo que se deja en "Combinar" se queda ahi al salir (no salta a las manos)
+	var olla_dejada = load("res://Resources/Items/item.gd").new(load("res://Resources/Items/Data/KitchenUtils/cooking_pot.tres"))
+	inv.slots[entradas[0]].item = olla_dejada
+	inv.inventory_changed.emit()
+	var manos_antes : int = pm.player.inventory.get_hands_items().size()
 	ui._unhandled_input(esc)
+	_check("Al salir, lo que quedo en 'Combinar' sigue ahi y las manos no cambian", not ui.visible and inv.slots[entradas[0]].item == olla_dejada and pm.player.inventory.get_hands_items().size() == manos_antes)
+	inv.slots[entradas[0]].clear()
 	# 8) salir y volver: lo guardado se conserva y no se vuelve a llenar la nevera
 	await _soltar(escena)
 	escena = await _cargar("res://Scenes/World/Apartment.tscn", 1)

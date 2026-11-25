@@ -208,7 +208,6 @@ func _t_tutorial() -> void:
 	_check("La puerta del tutorial pide ducha, ropa, comer y cepillarse (en el orden de tu guion)", lista.task_list.size() == 4 and [lista.task_list[0].task_unique_name, lista.task_list[1].task_unique_name, lista.task_list[2].task_unique_name, lista.task_list[3].task_unique_name] == ["BATHE", "CLOTHES", "COOK", "TEETH"])
 	for t in lista.task_list:
 		t.task_done = false
-	root.get_node("NarrativeFlags").clear_flag("morning_teeth")
 	var escena : Node = await _entrar()
 	var ui = escena.get_node("UILayer/MirrorUI")
 	ui.brush_seconds = 0.2
@@ -216,6 +215,5 @@ func _t_tutorial() -> void:
 	ui._on_hit_input(_clic(), "brush")
 	await create_timer(0.5).timeout
 	_check("Cepillarse marca la tarea TEETH del tutorial", lista.get_task_res("TEETH").task_done)
-	_check("Cepillarse completa 'cepillarte' de la puerta del tutorial", root.get_node("NarrativeFlags").has_flag("morning_teeth"))
 	ui.close()
 	await _salir(escena)

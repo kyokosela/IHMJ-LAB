@@ -78,7 +78,11 @@ func execute() -> void :
 	
 	for task_list in task_lists :
 		if TaskManager.is_task_list_active(task_list) and !TaskManager.is_task_list_done(task_list) :
-			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], TaskManager.get_task_list_message(task_list))
+			var task_message : String = TaskManager.get_task_list_message(task_list)
+			if task_message.is_empty() :   # Completado: la tarea agoto sus frases (cooldown); antes abria un cuadro vacio
+				_on_ended_message()
+				return
+			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], task_message)
 			Dialogic.timeline_ended.connect(_on_ended_message, CONNECT_ONE_SHOT)
 			return
 		

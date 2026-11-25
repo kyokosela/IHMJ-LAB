@@ -275,6 +275,20 @@ func _t_cocina() -> void:
 	inv.slots[estufa].clear()
 	inv.slots[res_idx].clear()
 
+	# --- crudo no se come: ni los ingredientes sueltos ni la olla sin cocinar
+	var crudo_mano = _item(RUTA_INGREDIENTES)
+	manos.add_item(crudo_mano)
+	var olla_cruda = _olla_con_ingredientes()
+	manos.add_item(olla_cruda)
+	pm.get_stat_res("ENERGY").value = 20.0
+	tarea.task_done = false
+	var comidas0 : int = pm.daily.home_meals
+	for i in manos.get_hands_indices():
+		manos.use_item_at(i)
+	_check("Sin cocinar no se come (ni suelto ni desde la olla): sin energia, sin comida, sin tarea y nada se gasta", pm.get_stat_value("ENERGY") == 20.0 and not tarea.task_done and pm.daily.home_meals == comidas0 and olla_cruda.held_item != null and manos.get_hands_items().size() == 2, "energia %.1f, en manos %d" % [pm.get_stat_value("ENERGY"), manos.get_hands_items().size()])
+	manos.remove_from_hands(crudo_mano)
+	manos.remove_from_hands(olla_cruda)
+
 	# --- LA COMIDA CASERA: olla + ingredientes -> estufa 45 min -> comer desde la olla
 	var pot = _olla_con_ingredientes()
 	inv.slots[estufa].item = pot

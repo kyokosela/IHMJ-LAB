@@ -4,8 +4,13 @@ class_name Ingredients
 func update_states(_item: Item) -> void:
 	super(_item)
 
+## Completado: solo se come lo cocinado (preparation "cooked"). Antes los ingredientes picados ("prepared") se comian igual que la
+## comida, sueltos o desde la olla: daban la misma energia y marcaban la tarea COOK del tutorial.
+func can_use(_item: Item) -> bool:
+	return super(_item) and _item.has_state("cooked")
+
 func use(_item: Item) -> void:
-	if _item.has_state("no_prepared"): return #nose
+	if not can_use(_item): return
 
 	var base_energy_gain : float = 30.0
 	match _item.data.item_quality:

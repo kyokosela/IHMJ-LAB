@@ -123,6 +123,14 @@ func get_station_item(station_id: String) -> Item:
 	var slot = inventory.slots[slot_index]
 	return slot.item if not slot.is_empty() else null
 
+## Completado: cuanto falta ("HH:MM") para que termine la estacion; "" si no esta trabajando con tiempo (boton Esperar).
+func get_station_time_left(station_id: String) -> String:
+	var station = get_station(station_id)
+	if station == null or not station.is_locked: return ""
+	var event = EventManager.get_event(station.active_craft_event) as LapseEvent
+	if event == null: return ""
+	return event.timer_count if not event.timer_count.is_empty() else event.time_lapse_value
+
 ## Inicia un craft en una estación
 func start_station_craft(station_id: String, recipe: Crafts = null) -> bool:
 	var station = get_station(station_id)

@@ -268,7 +268,6 @@ func _t_ui() -> void:
 	pm.reset_engine_state(true)
 	var tarea = root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR").get_task_res("CLOTHES")
 	tarea.task_done = false
-	root.get_node("NarrativeFlags").clear_flag("morning_dressed")
 	zm.previous_zone = -1
 	var escena : Node = (load("res://Scenes/World/Apartment.tscn") as PackedScene).instantiate()
 	root.add_child(escena)
@@ -301,7 +300,6 @@ func _t_ui() -> void:
 	_check("Despues se ve el render con el uniforme y Mayui lo lleva puesto", not ui._busy and ui.render_rect.texture == trabajo.render and pm.get_outfit_id() == "work" and _preset() == "mayui_work")
 	_check("Vestirse tarda 2 minutos", (tm.get_minutes() - antes + 1440) % 1440 == 2, "paso %d" % ((tm.get_minutes() - antes + 1440) % 1440))
 	_check("Ponerse el uniforme marca la tarea CLOTHES del tutorial", tarea.task_done)
-	_check("Ponerse el uniforme completa 'cambiarse' del tutorial", root.get_node("NarrativeFlags").has_flag("morning_dressed"))
 	_check("Ahora cuelga la ropa de casa y el uniforme ya no", ui.garment_slots["home"].visible and not ui.garment_slots["work"].visible)
 	var esc := InputEventAction.new()
 	esc.action = "ui_cancel"

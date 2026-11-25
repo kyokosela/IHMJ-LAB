@@ -47,9 +47,9 @@ func new_game() -> void:
 
 	SaveManager.clear()
 	PlayerManager.reset_engine_state()
-	PlayerManager.reset_outfits()   # ropa inicial: ropa de casa puesta y el uniforme colgado
-	TimeManager.minutes = 480  # 08:00
-	
+	TimeManager.minutes = 360  # 06:00 (tu guion: la manana en casa va de 6:00 a 8:00)
+	PlayerManager.reset_outfits()   # ropa inicial: ropa de casa puesta y el uniforme colgado (despues del reloj: nace limpia)
+
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
 	
@@ -60,12 +60,11 @@ func new_game() -> void:
 	_load_schedule_events()
 	_skip_past_events()
 
-## Los eventos del dia actual cuya hora ya paso al iniciar la partida (ej. 06:30 y 07:30
-## cuando se empieza a las 08:00) se marcan como ya ocurridos. Si no, se disparan todos
-## juntos en el primer cambio de reloj (ej. al ducharse).
+## Los eventos del dia actual cuya hora ya paso al iniciar la partida se marcan como ya
+## ocurridos. Si no, se disparan todos juntos en el primer cambio de reloj (ej. al ducharse).
 ## Los eventos que dependen de una zona (NarrativeEventHandler.event_zones, ej. el casero en
-## el lobby) NO se saltan: se disparan al primer cambio de reloj y quedan pendientes hasta
-## que Mayui llegue a su zona.
+## el lobby, programado a las 06:00) NO se saltan: se disparan al primer cambio de reloj y
+## quedan pendientes hasta que Mayui llegue a su zona.
 func _skip_past_events() -> void:
 	for event in EventManager.events:
 		if not (event is EventScheduled) or event.start == null:

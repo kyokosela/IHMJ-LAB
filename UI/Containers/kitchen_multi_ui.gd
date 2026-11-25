@@ -11,6 +11,9 @@ signal overflow_resolution_needed(items: Array[Item])
 @export var station_labels: Dictionary[String,Label] = {}
 @export var station_progress_bars: Dictionary[String,ProgressBar] = {}
 @export var station_craft_buttons: Dictionary[String,Button] = {}
+## Completado: boton "Esperar" (visible mientras la estacion trabaja) y el aviso de cuanto tiempo pasara.
+@export var station_wait_buttons: Dictionary[String,Button] = {}
+@export var wait_dialog: ConfirmationDialog
 ## Completado (arte ilustrado de la cocina, Assets/UI/Kitchen): props que cambian segun el estado de la estacion.
 @export var station_item_props: Dictionary[String,CanvasItem] = {}    ## visibles mientras la estacion tiene un objeto (la olla)
 @export var station_active_props: Dictionary[String,CanvasItem] = {}  ## visibles mientras la estacion trabaja (fuego y humo, agua)
@@ -39,6 +42,7 @@ signal overflow_resolution_needed(items: Array[Item])
 
 var kitchen: KitchenContainer
 var player_inventory: PlayerInventoryContainer
+var _waiting_station: String = ""  ## estacion por la que se esta preguntando en wait_dialog
 
 func _ready():
 	if craft_button:
@@ -52,6 +56,12 @@ func _ready():
 		var btn = station_craft_buttons[station_id] as Button
 		if btn:
 			btn.pressed.connect(_on_station_craft_button_pressed.bind(station_id))
+	for station_id in station_wait_buttons.keys():
+		var wait_btn = station_wait_buttons[station_id] as Button
+		if wait_btn:
+			wait_btn.pressed.connect(_on_station_wait_pressed.bind(station_id))
+	if wait_dialog:
+		wait_dialog.confirmed.connect(_on_wait_confirmed)
 
 func open(p_container: InteractableContainer):
 	super.open(p_container)
@@ -69,17 +79,16 @@ func open(p_container: InteractableContainer):
 
 func close():
 	if kitchen:
-	
-		var overflow = kitchen.return_simple_craft_items(player_inventory)
-		if not overflow.is_empty():
-			_show_overflow_dialog(overflow)
-			return 
-		
+		# Completado: lo que se deja en "Combinar" se queda ahi, igual que en las estaciones (antes saltaba solo a las manos al
+		# cerrar). La cocina guarda todas sus casillas.
 		_disconnect_kitchen_signals()
 	
 	if player_inventory:
 		_disconnect_player_signals()
-	
+
+	_waiting_station = ""
+	if wait_dialog:
+		wait_dialog.hide()
 	kitchen = null
 	player_inventory = null
 	super.close()
@@ -180,6 +189,10 @@ func _update_stations_ui():
 			
 			craft_btn.disabled = not has_valid_recipe or station.is_locked
 			craft_btn.visible = not station.is_locked
+
+		var wait_button = station_wait_buttons.get(station.station_id)
+		if wait_button and is_instance_valid(wait_button):
+			wait_button.visible = station.is_locked
 
 func _update_simple_craft_ui():
 	if not simple_craft_input_grid: return
@@ -355,6 +368,34 @@ func _on_station_craft_button_pressed(station_id: String):
 		_update_stations_ui()
 	else:
 		print("KitchenUI: Could not start craft at ", station_id)
+#endregion
+
+#region Esperar
+## Completado: el reloj solo avanza con acciones; "Esperar" avisa cuanto tiempo pasara y, si se acepta, adelanta el reloj
+## justo hasta que la estacion termine.
+func _on_station_wait_pressed(station_id: String) -> void:
+	if not kitchen or not wait_dialog: return
+	var left : String = kitchen.get_station_time_left(station_id)
+	if left == "": return
+	_waiting_station = station_id
+	var minutes : int = TimeUtils.get_minutes(left)
+	var end_time : String = TimeManager.format_minutes((TimeManager.minutes + minutes) % TimeManager.DAY_MINUTES)
+	wait_dialog.dialog_text = "Pasarán %s hasta que esté listo (serán las %s).\n¿Esperar?" % [_duration_text(minutes), end_time]
+	wait_dialog.popup_centered()
+
+func _on_wait_confirmed() -> void:
+	var station_id : String = _waiting_station
+	_waiting_station = ""
+	wait_dialog.hide()
+	if not kitchen or station_id == "": return
+	var left : String = kitchen.get_station_time_left(station_id)
+	if left != "":
+		TimeManager.add_to_current_time(left)
+
+func _duration_text(minutes: int) -> String:
+	if minutes < 60: return "%d min" % minutes
+	if minutes % 60 == 0: return "%d h" % (minutes / 60)
+	return "%d h %d min" % [minutes / 60, minutes % 60]
 #endregion
 
 #region Overflow Dialog

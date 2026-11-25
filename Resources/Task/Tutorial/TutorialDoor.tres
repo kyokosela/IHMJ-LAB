@@ -13,19 +13,20 @@ metadata/_custom_type_script = "uid://sd12b60ojakk"
 [sub_resource type="Resource" id="Resource_cbckm"]
 script = ExtResource("2_daoyb")
 task_unique_name = "COOK"
-task_message = Array[String](["_DOOR_FOOD_#1_", "_DOOR_FOOD_#2_"])
+task_message = Array[String](["_DOOR_FOOD_#1_", "_DOOR_FOOD_#2_", "_DOOR_FOOD_#3_", "_DOOR_FOOD_COOLDOWN_"])
 event_dependencies = Array[String](["TUTORIAL"])
 metadata/_custom_type_script = "uid://sd12b60ojakk"
 
 [sub_resource type="Resource" id="Resource_205fr"]
 script = ExtResource("2_daoyb")
 task_unique_name = "CLOTHES"
-task_message = Array[String](["_DOOR_CLOTHES_#1_", "_DOOR_CLOTHES_#2_", "_DOOR_CLOTHES_#3_"])
+task_message = Array[String](["_DOOR_CLOTHES_#1_", "_DOOR_CLOTHES_#2_", "_DOOR_CLOTHES_#3_", "_DOOR_CLOTHES_COOLDOWN_"])
 metadata/_custom_type_script = "uid://sd12b60ojakk"
 
 [sub_resource type="Resource" id="Resource_teeth"]
 script = ExtResource("2_daoyb")
 task_unique_name = "TEETH"
+task_message = Array[String](["_DOOR_TEETH_#1_"])
 event_dependencies = Array[String](["TUTORIAL"])
 metadata/_custom_type_script = "uid://sd12b60ojakk"
 

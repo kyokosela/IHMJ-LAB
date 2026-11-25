@@ -23,13 +23,20 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   comer con clic derecho/doble clic desde las manos, COOK marcada). Su UI ya usa el arte de IHMJ ART (`Assets/UI/Kitchen/`, escena
   `KitchenMultiUI.tscn`: capas de 1900x1080, dos alacenas que abren (12 casillas), olla, fuego, humo y agua; pendientes P37–P44). Comida casera (decisión de Ramiro): bolsa -> tabla -> **Combinar** (olla + ingredientes) -> estufa 45 min -> comer
   desde la olla; regla de lo cocinado del dev: `preparation` no_prepared -> prepared -> cooked. `Tools/probar_crafteos.gd` debe terminar
-  en 0 FALLA (nada se duplica ni se pierde, ni al salir de la zona con la estufa cocinando). Falta del Paso 2: puerta con `task_lists` (hoy `tutorial.gd` usa
-  banderas propias y debe retirarse). Pendientes del dev: P25–P31 en `DECISIONES_Y_PENDIENTES.md`.
+  en 0 FALLA (nada se duplica ni se pierde, ni al salir de la zona con la estufa cocinando). Pendientes del dev: P25–P31 en `DECISIONES_Y_PENDIENTES.md`.
   Diseñados y pendientes de OK: Desmayo por lugar y Sueño acumulado.
 - Prueba de juego de Ramiro (2026-11-24), corregido: lo picado y lo cocinado se queda en su estación y lo combinado en la casilla
   de resultado; la alarma tiene Cancelar/Esc; el ratón funciona en la PC (tapaba un Control del `Player.tscn`) y se quitó la app
-  de prueba que borraba a Mayui; Madina responde "..." con la historia apagada; el bus no gasta energía. Guía de recetas, objetos y
-  estados: `Docs/Design/COCINA_Y_OBJETOS.md`. Pendientes P56–P65 (primero P56: botón Esperar en la estufa).
+  de prueba que borraba a Mayui; Madina responde "..." con la historia apagada; el bus no gasta energía. Segunda ronda: solo se come
+  lo cocinado, lo de Combinar se queda al salir y la estufa tiene **Esperar** (avisa y adelanta el reloj). Guía de recetas, objetos y
+  estados: `Docs/Design/COCINA_Y_OBJETOS.md`. Guion contra juego: `Docs/Design/TUTORIAL_ESTADO.md` (la mañana tiene guion en Notion
+  → DIALOGOS y está a medias; el trabajo no tiene guion). Pendientes P56–P68.
+- Puerta y hora del tutorial (2026-11-24): la partida empieza a las **06:00**. La puerta (`MainDoor`, `Scripts/HouseInteracts/exit_door.gd`)
+  usa la lista de tareas del dev (`TutorialDoor.tres`: ducha, uniforme, comer, cepillarse) con las frases del guion
+  (`Interacts.csv`); el uniforme tiene que estar **puesto** al salir; la primera vez dice "Aquí vamos."; después deja salir directo.
+  El arreglo provisional de la puerta en `tutorial.gd` está retirado (queda solo el arranque y "Tengo que ducharme."). El casero pasó a
+  las 06:00 (sigue esperando a que Mayui llegue al lobby). `Tools/probar_tutorial.gd` juega la mañana completa (la meta) y debe
+  terminar en 0 FALLA. Próximo paso: frases de la ducha, el armario y la cama.
 - Ropa (2026-11-22): `PlayerManager` guarda lo que lleva Mayui (`outfit`) y lo colgado (`wardrobe`); cada prenda es un `Item` tipo CLOTH con `cleanliness` y `wetness`; la ropa se ensucia/seca con el reloj y afecta Suciedad, Debilitamiento y Estrés (números propuestos, P45). La UI del armario es `UI/Containers/wardrobe_ui.tscn` (mouse, 1 s de cambio, 2 min) con el arte de `Assets/UI/Wardrobe/`. Bañarse deja la toalla. Espejo del lavamanos HECHO (`UI/Mirror/mirror_ui.tscn`: cepillo = Cepillarse una vez al día con tarea TEETH, espejo = verse la cara, llave = lavar ropa; el vaso, el tubo y el cepillo van DELANTE del marco, porque el espejo está pegado a la pared (recorte `CupFront`, P51); antes de comer en el tutorial Mayui lo impide; pendientes P49, P51-P53; `Tools/probar_espejo.gd` debe terminar en 0 FALLA). Sprites del mundo de la ropa de casa, la toalla y el Outfit 1 HECHOS (P48; solo cuadros quietos, `Tools/armar_hojas_mayui.ps1` arma las hojas de `Assets/Mayui` desde los `.aseprite` de `Docs`; faltan sus cuadros de caminar, P54, y la cabeza, P55). PENDIENTE: cesta (P47), prenda/ítem del Outfit 1, eventos que ensucian (P46). `Tools/probar_ropa.gd` debe terminar en 0 FALLA.
 - Flujo del juego (2026-11-22): `Tools/probar_flujo.gd` (debe terminar en 0 FALLA) cubre aparición por zona
   (`SpawnPoint.from_zone`), Mayui quieta con UI abierta (`GameManager.modal_count += 1` al abrir y `-= 1` al cerrar),
@@ -51,7 +58,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
    - Acciones = `InteractableAction` (`time_cost`, `stat_req_list`, `cooldown_time`, `task_lists`, mensajes): la "ficha"
      ya existe como propiedades; se configuran en el Inspector de cada escena. Hijas reales: `bathe.gd`, `bed.gd`, etc.
    - Tutorial = `TaskManager` + `TaskList` (`Resources/Task/Tutorial/TutorialDoor.tres`) + evento `TUTORIAL`.
-     `Scripts/tutorial.gd` y `Scenes/World/Apartment.tscn` son un placeholder de IA con banderas propias: deben sustituirse.
+     `Scripts/tutorial.gd` y `Scenes/World/Apartment.tscn` nacieron como placeholder de IA: la puerta ya usa las tareas; falta
+     sustituir sus acciones sueltas (`integration_action.gd`) por las del dev.
    - Para ver los efectos en juego: `UI/Debug/debug_panel.tscn` (ya muestra cordura, efectos, día y hora); ampliarlo, no duplicarlo.
    - **Cocina, almacenamiento e ítems = sistema de un dev (Ghoko), ya hecho: seguirlo ESTRICTAMENTE, con sus reglas.** No crear código
      nuevo: solo completar o complementar lo que falta con cambios mínimos DENTRO de sus clases (`InteractableContainer`,
@@ -85,6 +93,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_ropa.gd`
 - Pruebas del espejo del lavamanos y de cepillarse (tarda ~15 s):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_espejo.gd`
+- Prueba de la mañana completa del tutorial, de despertar a encontrar al casero:
+  `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_tutorial.gd`
 - Si algo no se refleja en Godot: cerrar Godot, borrar la carpeta oculta `.godot/` y reabrir.
 
 ## MODELOS (plan Pro, ahorrar tokens)

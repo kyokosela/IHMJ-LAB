@@ -1,0 +1,36 @@
+# Tutorial: guion contra juego
+Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y su página **DIALOGOS**), `Flow de juego.txt` y `Textfiles/Interact/Interacts.csv`.
+
+## Respuesta corta
+- **La mañana en casa sí tiene guion escrito** (DIALOGOS). En el juego solo está una parte.
+- **El trabajo no tiene guion** (Bloque 1-2: solo objetivos). La tarjeta *Flujo (gameplay)* cuenta la llegada a la empresa (revisión en la entrada, Madina, Sativa, Veda, tu escritorio), sin diálogos y marcada "Sin iniciar".
+
+## La mañana: qué está y qué falta
+| Momento | Qué pide el guion | En el juego |
+|---|---|---|
+| Despertar | "Tengo que ducharme." | ✅ |
+| Hora | de 6:00 a 8:00 | ✅ empieza a las 06:00 (la prueba automática sale de casa a las 07:31) |
+| Al empezar | lista de tareas en una esquina, efectos Suciedad y Hambre visibles, cuarto a oscuras, sonidos, ayudas de teclas | ❌ |
+| Cama | no deja volver a dormir (3 frases) | ❌ abre la pantalla de dormir |
+| Puerta | frases según lo que falte: ducha, uniforme, comida, dientes | ✅ con la lista de tareas; el uniforme tiene que estar puesto al salir. Si insistes mucho, se queda callada (P69) |
+| Puerta al terminar | "Aquí vamos." | ✅ la primera vez; después deja salir directo |
+| Ducha | primera vez, repetir, "Qué frío", silueta tras la cortina, estornudo al salir | ❌ solo frases provisionales al repetir |
+| Armario | primero ducharse; frases para uniforme, pijama, casual y ropa sucia; ruge el estómago | ❌ sin frases y deja ponerse cualquier cosa |
+| Nevera | frases (antes de ducharse, sin compras, comida instantánea) | ❌ no hay nevera aparte |
+| Comida | comida instantánea y café | ❌ hoy se cocina comida casera (P25) |
+| Estufa y escritorio | frases; Mayui come sentada | ❌ no hay escritorio |
+| Lavamanos y espejo | todas | ✅ |
+| Balcón, calendario, "voy tarde" a las 7:30 | frases | ❌ no existen |
+| Casero en el lobby | explica el cobro | ✅ pero dice **viernes** y tu diseño dice **miércoles** (D6) |
+
+## Detalles a decidir en los textos
+- Puerta sin cepillarse: DIALOGOS no trae esa frase. Usé la de `Flow de juego.txt` ("Me levare la boca antes de salir.") como "Me lavaré la boca antes de salir." (P53).
+- Sobre la nevera tus documentos se contradicen: DIALOGOS dice que no hay ingredientes; `Flow de juego.txt` pone 2 bolsas.
+
+## Orden que recomiendo
+1. ✅ Empezar a las 6:00.
+2. ✅ Puerta con tu guion, usando la lista de tareas que ya existe (retirada la puerta provisional de `tutorial.gd`).
+3. Frases de la ducha, el armario y la cama.
+4. Nevera y pudrición de la comida ([COCINA_Y_OBJETOS.md](COCINA_Y_OBJETOS.md)).
+5. Comida instantánea, café, escritorio, balcón y calendario (necesitan arte).
+6. Escribir el guion del trabajo (Bloque 1-2).

@@ -366,8 +366,8 @@ func _t_sueno() -> void:
 	_check("Insomnio: 2 noches apropiadas seguidas lo anulan", not _has("INSOMNIA"))
 	# La marca de 16 h de vigilia NO cuenta mientras se duerme (lo encontro la prueba de la cama real)
 	_reset()
+	tm.minutes = 8 * 60                  # el reloj se pone ANTES de crear el contador: ese salto no es vigilia
 	evm.create_lapse_event("16:00", pm.apply_vigil_sleepy, "AUTO_SLEEPY_LAPSE", "SLEEPY_TIMER", true)
-	tm.minutes = 8 * 60
 	tm.add_to_current_time("14:00")      # 22:00, despierta
 	pm._sleeping = true
 	tm.add_to_current_time("10:00")      # duerme y cruza la marca de 16 h a media noche

@@ -32,7 +32,7 @@ region = Rect2(12, 50, 664, 462)
 atlas = ExtResource("12_shelf_open_left")
 region = Rect2(12, 50, 664, 462)
 
-[node name="KitchenMultiUI" type="Control" node_paths=PackedStringArray("station_containers", "station_labels", "station_progress_bars", "station_craft_buttons", "station_item_props", "station_active_props", "simple_craft_input_grid", "simple_craft_result_grid", "craft_button", "craft_preview_label", "storage_grid", "storage_grid_2", "player_hands_grid", "player_bag_grid", "overflow_dialog", "overflow_items_grid", "overflow_target_grid")]
+[node name="KitchenMultiUI" type="Control" node_paths=PackedStringArray("station_containers", "station_labels", "station_progress_bars", "station_craft_buttons", "station_wait_buttons", "wait_dialog", "station_item_props", "station_active_props", "simple_craft_input_grid", "simple_craft_result_grid", "craft_button", "craft_preview_label", "storage_grid", "storage_grid_2", "player_hands_grid", "player_bag_grid", "overflow_dialog", "overflow_items_grid", "overflow_target_grid")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -60,6 +60,10 @@ station_craft_buttons = {
 "sink": NodePath("Panel/MainContainer/StationsSection/SinkStation/VBox/SinkCraftButton"),
 "stove": NodePath("Panel/MainContainer/StationsSection/StoveStation/VBox/StoveCraftButton")
 }
+station_wait_buttons = {
+"stove": NodePath("Panel/MainContainer/StationsSection/StoveStation/VBox/StoveWaitButton")
+}
+wait_dialog = NodePath("WaitDialog")
 station_item_props = {
 "sink": NodePath("Panel/MainContainer/Art/PotOpen"),
 "stove": NodePath("Panel/MainContainer/Art/PotClosed")
@@ -307,6 +311,15 @@ offset_right = 310.0
 offset_bottom = 656.0
 disabled = true
 text = "Cocinar"
+
+[node name="StoveWaitButton" type="Button" parent="Panel/MainContainer/StationsSection/StoveStation/VBox"]
+visible = false
+layout_mode = 0
+offset_left = 190.0
+offset_top = 650.0
+offset_right = 310.0
+offset_bottom = 686.0
+text = "Esperar"
 
 [node name="SinkStation" type="Control" parent="Panel/MainContainer/StationsSection"]
 layout_mode = 1
@@ -658,6 +671,11 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 columns = 3
+
+[node name="WaitDialog" type="ConfirmationDialog" parent="."]
+title = "Esperar"
+ok_button_text = "Esperar"
+cancel_button_text = "Cancelar"
 
 [connection signal="toggled" from="Panel/MainContainer/ShelfButton" to="Panel/MainContainer/StorageSection" method="set_visible"]
 [connection signal="toggled" from="Panel/MainContainer/ShelfLeftButton" to="Panel/MainContainer/StorageSectionLeft" method="set_visible"]

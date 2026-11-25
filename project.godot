@@ -57,6 +57,8 @@ directories/dch_directory={
 }
 directories/dtl_directory={
 "armario_uniforme": "res://DialoguePlugin/TIMELINE/armario_uniforme.dtl",
+"calendario_1": "res://DialoguePlugin/TIMELINE/calendario_1.dtl",
+"calendario_2": "res://DialoguePlugin/TIMELINE/calendario_2.dtl",
 "casero_intro": "res://DialoguePlugin/TIMELINE/casero_intro.dtl",
 "casero_rent_final": "res://DialoguePlugin/TIMELINE/casero_rent_final.dtl",
 "casero_rent_reminder": "res://DialoguePlugin/TIMELINE/casero_rent_reminder.dtl",

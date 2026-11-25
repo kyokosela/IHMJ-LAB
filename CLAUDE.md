@@ -70,6 +70,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 - Balcón (2026-11-25): escena `Scenes/World/Balcony.tscn` con tendedero (sin mecánica); la puerta de abajo
   (`balcony_door.gd`) en la mañana del tutorial solo dice tus frases y después lleva al balcón. "¿Sigue la mañana del
   tutorial?" = `exit_door.gd` → `in_tutorial_morning()` (P76).
+- Frases del cuarto (2026-11-25, DIALOGOS): nevera antes de ducharse (`home_kitchen.gd`: no abre la cocina), calendario
+  (`calendar.gd` + `calendario_1/2.dtl`) y escritorio después de comer (`desk.gd`) (P77).
 - Existe `Scenes/Playground_Integration.tscn` (herramienta de pruebas, desordenada). Congelada.
 - Próximo paso: ver `NEXT.md` si existe.
 
@@ -124,7 +126,7 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_tutorial.gd`
 - Prueba del "Voy tarde" (reloj pasadas las 7:30):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_voy_tarde.gd`
-- Prueba de la casa (cuarto y baño: paredes, muebles sólidos, puertas y caminar con las teclas hasta cada cosa; ~50 s):
+- Prueba de la casa (cuarto, baño y balcón: paredes, muebles, puertas, frases y caminar con las teclas hasta cada cosa; ~2 min):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_cuarto.gd`
 - Si algo no se refleja en Godot: cerrar Godot, borrar la carpeta oculta `.godot/` y reabrir.
 

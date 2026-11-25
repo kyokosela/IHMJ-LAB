@@ -47,7 +47,7 @@ const PLANOS := {
 	},
 }
 const TECLAS := {Vector2i.LEFT: "move_left", Vector2i.RIGHT: "move_right", Vector2i.UP: "move_up", Vector2i.DOWN: "move_down"}
-const MUEBLES := ["Bed", "Wardrobe", "Kitchen", "Shower", "Sink"]
+const MUEBLES := ["Bed", "Wardrobe", "Kitchen", "Shower", "Sink", "Calendario", "Escritorio"]
 
 var pm
 var gm
@@ -68,8 +68,8 @@ func _check(nombre: String, ok: bool, detalle: String = "") -> void:
 		print("  FALLA: ", nombre, " ", detalle)
 
 func _initialize() -> void:
-	var guardia := create_timer(150.0)
-	guardia.timeout.connect(func(): print("  FALLA: la prueba se colgo (150 s)"); quit(2))
+	var guardia := create_timer(240.0)
+	guardia.timeout.connect(func(): print("  FALLA: la prueba se colgo (240 s)"); quit(2))
 	pm = root.get_node("PlayerManager")
 	gm = root.get_node("GameManager")
 	tk = root.get_node("TaskManager")
@@ -242,6 +242,22 @@ func _t_cuarto() -> void:
 	oido = await _hablar(_pulsar_z)
 	_check("Armario antes de ducharse: Z dice su frase", oido == ["Primero debería ducharme."], str(oido))
 
+	await _ir_a("Kitchen", Vector2i(7, 3), Vector2i.RIGHT)
+	var frases : Array = []
+	for i in 4:
+		frases.append_array(await _hablar(_pulsar_z))
+	_check("Nevera antes de ducharse: tus frases y el aviso, sin abrir la cocina", frases == ["No quiero ni pensar en comida así.", "Luego.", "Quiero bañarme primero.", "Quiero bañarme primero."] and not casa.get_node("UILayer/KitchenMultiUI").visible, str(frases))
+
+	await _ir_a("Escritorio", Vector2i(2, 4), Vector2i.LEFT)
+	oido = await _hablar(_pulsar_z)
+	_check("Escritorio antes de comer: no dice nada", oido.is_empty(), str(oido))
+	await _empujar(Vector2i.UP)
+	_check("Calendario: desde la misma baldosa, mirando a la pared", _delante() == ["Calendario"], str(_delante()))
+	frases = await _hablar(_pulsar_z)
+	_check("Calendario, primera vez: tus 2 lineas", frases == ["El viernes pagan.", "Tengo que asegurarme de ir al supermercado con tiempo."], str(frases))
+	frases = await _hablar(_pulsar_z)
+	_check("Calendario, segunda vez: tus otras 2 lineas", frases == ["Tampoco puedo olvidarme del alquiler…", "Quiero evitar discutir con el casero otra vez."], str(frases))
+
 	dichos.clear()
 	var recorrido : bool = await _caminar_a(Vector2i(6, 0)) and await _caminar_a(Vector2i(9, 0)) and await _caminar_a(Vector2i(7, 0))
 	await create_timer(0.5).timeout
@@ -290,6 +306,21 @@ func _t_despues_del_bano() -> void:
 	_check("Armario despues de ducharse: Z lo abre", armario.visible and gm.modal_count == 1)
 	armario.close()
 	await create_timer(0.3).timeout
+
+	# calendario despues de volver del bano: se acuerda de lo ya leido
+	_check("Calendario: se llega caminando", await _caminar_a(Vector2i(2, 4)), str(pm.player.global_position))
+	await _empujar(Vector2i.UP)
+	var frases : Array = []
+	for i in 2:
+		frases.append_array(await _hablar(_pulsar_z))
+	_check("Calendario ya leido (tras volver del bano): el aviso", frases == ["Suficiente, tengo que irme.", "Suficiente, tengo que irme."], str(frases))
+	# escritorio despues de comer
+	tk.get_task_list_res("TUTORIAL_DOOR").get_task_res("COOK").task_done = true
+	await _empujar(Vector2i.LEFT)
+	frases = []
+	for i in 4:
+		frases.append_array(await _hablar(_pulsar_z))
+	_check("Escritorio despues de comer: tus frases y el aviso", frases == ["No puedo quedarme aquí.", "Voy tarde.", "Ya terminé de comer, no tengo nada que hacer acá.", "Ya terminé de comer, no tengo nada que hacer acá."], str(frases))
 
 	# esquinas: las paredes frenan y la camara no se mueve
 	for esquina in [[Vector2i(9, 0), Vector2i.RIGHT, Vector2i.UP], [Vector2i(2, 8), Vector2i.LEFT, Vector2i.DOWN], [Vector2i(0, 5), Vector2i.LEFT, Vector2i.UP]]:

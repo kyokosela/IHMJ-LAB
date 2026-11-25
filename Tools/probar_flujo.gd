@@ -475,6 +475,8 @@ func _t_cocina() -> void:
 	pm.reset_engine_state(true)
 	var tarea = root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR").get_task_res("COOK")
 	tarea.task_done = false
+	# en la manana del tutorial la cocina no se abre antes de ducharse: aqui Mayui ya se duchó
+	root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR").get_task_res("BATHE").task_done = true
 	var escena = await _cargar("res://Scenes/World/Apartment.tscn", -1)
 	await _esperar_calma()
 	var cocina = escena.get_node("Kitchen")

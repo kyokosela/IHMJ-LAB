@@ -127,6 +127,7 @@ theme_override_font_sizes/font_size = 20
 text = "Tendedero"
 
 [node name="Camera2D" type="Camera2D" parent="."]
+process_callback = 0
 zoom = Vector2(5, 5)
 limit_left = -144
 limit_top = -100

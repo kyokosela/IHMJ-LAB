@@ -20,6 +20,7 @@ func _ready() -> void:
 			var auto_camera := Camera2D.new()
 			auto_camera.name = "AutoCamera"
 			auto_camera.zoom = default_camera_zoom
+			auto_camera.process_callback = Camera2D.CAMERA2D_PROCESS_PHYSICS   # con interpolacion de fisica, o Godot avisa
 			add_child(auto_camera)
 			optional_camera_node = auto_camera
 		PlayerManager.player.reparent(self, false)
@@ -28,7 +29,10 @@ func _ready() -> void:
 		if spawn != null:
 			PlayerManager.player.movement.tile_destination = spawn.global_position
 			PlayerManager.player.global_position = spawn.global_position
-		if optional_camera_node: optional_camera_node.reparent(PlayerManager.player, false)
+		if optional_camera_node:
+			# la camara viaja con Mayui y vuelve al cerrar la zona: sin dueno, Godot no avisa en cada arranque
+			optional_camera_node.owner = null
+			optional_camera_node.reparent(PlayerManager.player, false)
 	
 	if PlayerManager.player: 
 		entities["Player"] = PlayerManager.player

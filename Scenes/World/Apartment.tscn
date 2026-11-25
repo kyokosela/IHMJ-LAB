@@ -399,6 +399,7 @@ texture = SubResource("Light_texture")
 texture_scale = 1.5
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1401545714]
+process_callback = 0
 zoom = Vector2(5, 5)
 limit_left = -112
 limit_top = -52

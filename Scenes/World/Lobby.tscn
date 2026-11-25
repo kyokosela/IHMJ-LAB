@@ -154,6 +154,7 @@ position = Vector2(80, 216)
 shape = SubResource("Muro14")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+process_callback = 0
 zoom = Vector2(5, 5)
 limit_left = -112
 limit_top = -16

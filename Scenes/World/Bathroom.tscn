@@ -133,6 +133,7 @@ color = Color(0.86, 0.94, 0.97, 1)
 polygon = PackedVector2Array(-4, -7, -1, -7, -4, 0)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+process_callback = 0
 zoom = Vector2(5, 5)
 limit_left = -152
 limit_top = -92

@@ -1,6 +1,6 @@
 # Para Ramiro: lo avanzado el 2026-11-25 y qué sigue
 
-Todo quedó en commits **locales** (sin subir). Pruebas: las 8 y `Tools/jugar_manana.gd` en **0 FALLA** (605 comprobaciones).
+Todo quedó en commits **locales** (sin subir). Pruebas: las 8 y `Tools/jugar_manana.gd` en **0 FALLA** (575 comprobaciones).
 
 ## Hecho
 - Cuarto en L (P74), baño aparte (P75), balcón con tendedero (P76).

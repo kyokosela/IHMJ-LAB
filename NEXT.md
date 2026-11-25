@@ -1,27 +1,33 @@
-# Para Ramiro: lo avanzado el 2026-11-25 y qué sigue
+# Para Ramiro: lo avanzado el 2026-11-25 y qué probar
 
-Todo quedó en commits **locales** (sin subir). Pruebas: las 8 y `Tools/jugar_manana.gd` en **0 FALLA** (575 comprobaciones).
+Todo quedó en commits **locales** (12 sin subir). Pruebas automáticas: **633 comprobaciones, 0 fallas** (las 8, la mañana
+entera con teclas y ratón, y el "jugador torpe"). Prueban que funciona, no que se sienta bien: eso lo dices tú.
 
-## Hecho
-- Cuarto en L (P74), baño aparte (P75), balcón con tendedero (P76).
-- Frases de tu guion: nevera antes de ducharse, calendario, escritorio, balcón (P76, P77).
-- Arranque de la mañana: a oscuras, Maloliente y Hambre, lista de tareas y ayudas (P78).
-- La mañana entera se juega con teclas y ratón, de despertar al casero.
+## Nuevo en la tarde
+- **Pasillo y recepción** (según tus planos): sales de casa, bajas las escaleras y el casero te espera abajo (P80).
+- **Ducha** con tu escena: la silueta tras la cortina (P70).
+- **Carteles** pequeños al acercarte y sin la casilla "0" arriba (P74, P79).
+- **Puerta**: si insistes ya no se queda muda (P69).
+- **Estufa** vacía: salen tus frases.
+- Prueba nueva del "jugador torpe": desordenar la cocina no pierde ni duplica ingredientes.
+
+De la mañana: cuarto en L, baño, balcón, frases de tu guion y arranque a oscuras (P74–P78).
 
 ## Al probar (F5), mira esto
-1. ¿El cuarto, el baño y el balcón se sienten bien? ¿Algo estorba al caminar?
-2. ¿La oscuridad y los textos de ayuda te gustan?
-3. Las puertas: se cruzan caminando hacia ellas.
+1. La mañana entera: ducha → uniforme → cocinar y comer → dientes → puerta → escaleras → casero.
+2. ¿El pasillo y la recepción se parecen a tus planos?
+3. La escena de la ducha y el tamaño de los carteles.
+4. No toques las teclas **H** ni **J**: son de prueba del programador.
 
 ## Preguntas (una a la vez, en este orden)
 1. ¿Subo los commits a GitHub?
-2. P74: los carteles al acercarte salen enormes, ¿los achico?
-3. P77 / P25: nevera y comida instantánea (tus documentos se contradicen).
-4. P67: ¿el alquiler es viernes (casero) o miércoles (tu diseño)?
-5. P78: ¿dinero inicial 1000 (Bloque 1-1) o 350?
-6. P76: ¿qué hace el tendedero?
-7. El "0" arriba a la izquierda es un control de la escena del jugador: ¿lo quito?
+2. P80: ¿tu piso 2 es así (3 puertas, la tuya, M-21, arriba a la derecha)? ¿Qué hay en la recepción?
+3. P81: la olla llena de agua solo se vacía bebiéndola: ¿hago que el fregadero la vacíe?
+4. P77 / P25: nevera y comida instantánea (tus documentos se contradicen).
+5. P67: ¿el alquiler es viernes (casero) o miércoles (tu diseño)?
+6. P78: ¿dinero inicial 1000 (Bloque 1-1) o 350? ¿Te gustan la oscuridad y las ayudas?
+7. P76: ¿qué hace el tendedero?
 
 ## Necesita arte o texto (no lo inventé)
-Tileset y props reales · comida instantánea y comer sentada · silueta y sonido de la ducha · sonidos del cuarto ·
-renders de diálogo · cuadros de caminar · "¿apagué la estufa?" al salir.
+Tileset y props reales (cuarto, baño, balcón, pasillo y recepción) · comida instantánea y comer sentada · sonidos ·
+dibujo real de la ducha · renders de diálogo · cuadros de caminar · la ropa casual colgada · "¿apagué la estufa?" al salir.

@@ -6,6 +6,8 @@ class_name Interactable
 #region SETUP
 
 signal executed ## Se emite cuando el jugador realiza la [b]interacción[/b]
+const LABEL_SCALE : float = 0.2 ## tamano del cartel que sale al acercarte (display_text)
+const LABEL_COLOR : Color = Color(1, 0.85, 0.35)
 enum SIGNAL_TYPE {AREA, BODY}
 enum TOGGLE_MODE {TOGGLE,SHOW,HIDE}
 var collshape : CollisionShape2D
@@ -88,10 +90,18 @@ func _ready() -> void:
 		label.text = tr(display_text)
 		label.visible = false
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		if shape != null : 
-			label.position.y -= shape.size.y / 4
-			label.position.x -= shape.size.x / 2
+		# Completado: con la camara a zoom 5 el cartel salia enorme y tapaba el cuarto: ahora va pequeno, amarillo con borde y
+		# centrado justo encima del objeto.
+		label.add_theme_font_size_override("font_size", 30)
+		label.add_theme_color_override("font_color", LABEL_COLOR)
+		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.9))
+		label.add_theme_constant_override("outline_size", 8)
+		label.scale = Vector2(LABEL_SCALE, LABEL_SCALE)
+		label.z_index = 10
 		add_child(label)
+		var medida : Vector2 = label.get_combined_minimum_size() * LABEL_SCALE
+		var arriba : float = shape.get_rect().position.y if shape != null else 0.0
+		label.position = Vector2(-medida.x / 2.0, arriba - medida.y)
 		elements.append(label)
 
 func custom_expression_handler()-> void:

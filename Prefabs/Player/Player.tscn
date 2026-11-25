@@ -306,6 +306,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="SpinBox" type="SpinBox" parent="CanvasLayer/Control"]
+visible = false
 layout_mode = 0
 offset_right = 86.5625
 offset_bottom = 31.0

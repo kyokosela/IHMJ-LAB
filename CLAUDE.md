@@ -16,6 +16,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   (`ZoneManager.is_home`): pasar entre ellos y salir al pasillo no cuesta tiempo ni energía (`_is_free_step`). Los eventos con
   diálogo esperan a que Mayui esté en su zona (`narrative_event_handler.gd`, tabla `event_zones`). Z interactúa y avanza
   diálogos. Reloj arriba al centro.
+- Pasos de caminar PROVISIONALES de casa/toalla/Outfit 1 (`Tools/pasos_provisionales.ps1`, desde el cuadro quieto; el arte
+  real se pega en las mismas hojas, P54). El escritorio permite comer ahí (P27) y el fregadero vacía la olla (P81).
 - Pasillo y recepción (2026-11-25, según los planos de Ramiro, por revisar): `Hallway.tscn` (zona 6; escaleras y puerta M-21)
   y `Lobby.tscn` (piso 1; recepción, casero, puerta a la calle en bus). La puerta de casa lleva al pasillo. Fondos
   provisionales en `Assets/Building/` (P80). Los carteles al acercarte son pequeños (`interactable.gd`, P74); la puerta del

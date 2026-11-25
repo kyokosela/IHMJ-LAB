@@ -29,8 +29,8 @@ Primero juega **de corrido, como un jugador**; en la segunda vuelta intenta romp
 parecen a tus planos? ¿Algo se siente lento?
 
 ## No hace falta reportar (ya está anotado)
-No hay sonidos · muebles y fondos provisionales · comida instantánea y ropa casual sin poner · con pijama o toalla las
-piernas no se mueven al caminar.
+No hay sonidos · muebles y fondos provisionales · comida instantánea y ropa casual sin poner · los pasos con pijama y
+toalla son provisionales (di si se ven mal).
 
 ## Cómo reportar
 Una línea por problema, mientras juegas: **paso — qué hiciste — qué pasó — qué esperabas**. Foto con **Win + Shift + S**.

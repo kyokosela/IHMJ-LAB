@@ -135,6 +135,17 @@ string_list = Array[ExtResource("7")]([SubResource("Lines_fridge_bath")])
 apply_times = false
 apply_energy = false
 
+[sub_resource type="Resource" id="Lines_fridge_towel"]
+script = ExtResource("7")
+string_list = Array[String](["_DOOR_CLOTHES_COOLDOWN_"])
+behaviour = 2
+
+[sub_resource type="Resource" id="Chain_fridge_towel"]
+script = ExtResource("6")
+string_list = Array[ExtResource("7")]([SubResource("Lines_fridge_towel")])
+apply_times = false
+apply_energy = false
+
 [sub_resource type="Resource" id="Lines_desk"]
 script = ExtResource("7")
 string_list = Array[String](["_DESK_#1_", "_DESK_#2_", "_DESK_COOLDOWN_"])
@@ -527,6 +538,7 @@ vertical_alignment = 1
 position = Vector2(144, 64)
 script = ExtResource("36")
 before_bath_messages = SubResource("Chain_fridge_bath")
+towel_messages = SubResource("Chain_fridge_towel")
 initial_items = Array[ExtResource("20")]([ExtResource("38"), ExtResource("19")])
 container_ui = NodePath("../UILayer/KitchenMultiUI")
 shape = SubResource("Shape_kitchen")

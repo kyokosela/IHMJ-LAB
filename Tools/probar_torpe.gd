@@ -242,7 +242,13 @@ func _insistir_con_la_ducha() -> void:
 
 # ------------------------------------------------------------------ 3. el armario a las prisas
 func _armario() -> void:
-	print("C. El armario a las prisas")
+	print("C. La cocina en toalla y el armario a las prisas")
+	var mudas := 0
+	for i in 7:
+		await _junto(COCINA_DESDE, Vector2.RIGHT)
+		if (await _hacer()).is_empty():
+			mudas += 1
+	_check("En toalla la cocina responde las 7 veces sin abrirse", mudas == 0 and not _ui().visible and _libre_para_seguir(), "%d sin decir nada" % mudas)
 	await _junto(Vector2(120, 104), Vector2.RIGHT)
 	await _tecla(KEY_Z)
 	await create_timer(0.4).timeout

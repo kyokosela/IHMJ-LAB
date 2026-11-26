@@ -229,6 +229,12 @@ func _jugar() -> void:
 	_check("Se ducha y sale en toalla", _tarea("BATHE") and pm.get_outfit_id() == "towel")
 	await _cruzar(Vector2i(4, 2), Vector2i.RIGHT, 0)
 
+	print("1b. En toalla, directo a la cocina (como en tu prueba)")
+	await _ir(Vector2i(7, 3), Vector2i.RIGHT, "la cocina en toalla")
+	var en_toalla : Array = await _hablar()
+	_check("En toalla no deja cocinar: 'Necesito ponerme algo.'", en_toalla == ["Necesito ponerme algo."] and not zm.zone_node.get_node("UILayer/KitchenMultiUI").visible and gm.modal_count == 0, str(en_toalla))
+	await _foto("3b_en_toalla")
+
 	print("2. Uniforme (clic en el armario)")
 	await _ir(Vector2i(7, 6), Vector2i.RIGHT, "el armario")
 	await _z()

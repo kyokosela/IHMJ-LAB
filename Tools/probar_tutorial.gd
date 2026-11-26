@@ -265,6 +265,13 @@ func _t_manana() -> void:
 	dicho = await _decir(abrir)
 	_check("En toalla la puerta dice 'Ni loca.'", dicho.strip_edges() == "Ni loca.", dicho)
 	await _calma()
+	var nevera = casa.get_node("Kitchen")
+	nevera.can_interact = true
+	var en_toalla : Array = await _hablar(func() -> void: nevera.execute())
+	var sigue_libre : bool = nevera.can_interact
+	en_toalla.append_array(await _hablar(func() -> void: nevera.execute()))
+	_check("En toalla la cocina no se abre: 'Necesito ponerme algo.' (se repite)", sigue_libre and en_toalla == ["Necesito ponerme algo.", "Necesito ponerme algo."] and not casa.get_node("UILayer/KitchenMultiUI").visible and gm.modal_count == 0, "%s libre=%s" % [str(en_toalla), sigue_libre])
+	await _calma()
 	mueble.can_interact = true
 	mueble.execute()
 	_check("Ya duchada, el armario se abre", armario.visible)

@@ -333,6 +333,9 @@ func _t_despues_del_bano() -> void:
 	print("D. Cuarto: ya duchada")
 	await _ir_a("Kitchen", Vector2i(7, 3), Vector2i.RIGHT)
 	var cocina = casa.get_node("UILayer/KitchenMultiUI")
+	var en_toalla : Array = await _hablar(_pulsar_z)
+	_check("En toalla la cocina no se abre: 'Necesito ponerme algo.'", en_toalla == ["Necesito ponerme algo."] and not cocina.visible and gm.modal_count == 0, str(en_toalla))
+	pm.wear_clothes(pm.wardrobe.filter(func(i) -> bool: return pm.outfit_id_of(i) == "work")[0])   # ya con el uniforme
 	await _pulsar_z()
 	await create_timer(0.5).timeout
 	_check("Cocina: Z abre la pantalla y Mayui queda quieta", cocina.visible and gm.modal_count == 1)
@@ -394,7 +397,7 @@ func _t_edificio() -> void:
 	print("G. Del cuarto a la calle: pasillo y recepcion")
 	for id in ["BATHE", "CLOTHES", "COOK", "TEETH"]:   # la rutina completa, con el uniforme puesto
 		tk.done_task("TUTORIAL_DOOR", id)
-	pm.wear_clothes(pm.wardrobe.filter(func(i) -> bool: return pm.outfit_id_of(i) == "work")[0])
+	_check("(prueba) sigue con el uniforme puesto", pm.get_outfit_id() == "work", pm.get_outfit_id())
 	_check("Del cuarto se camina hasta la puerta principal", await _caminar_a(Vector2i(7, 0)), str(pm.player.global_position))
 	var energia : float = pm.get_stat_value("ENERGY")
 	var hora : int = tm.minutes

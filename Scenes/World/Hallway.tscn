@@ -157,12 +157,14 @@ position = Vector2(56, 64)
 script = ExtResource("3")
 shape = SubResource("Puerta_Stairs")
 new_scene_id = 1
+push_to_use = true
 
 [node name="DoorToApartment" type="Area2D" parent="."]
 position = Vector2(104, 24)
 script = ExtResource("3")
 shape = SubResource("Puerta_DoorToApartment")
 new_scene_id = 0
+push_to_use = true
 
 [node name="SpawnPoint" type="Marker2D" parent="." groups=["spawn_point"]]
 position = Vector2(72, 56)

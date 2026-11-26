@@ -144,3 +144,4 @@ position = Vector2(48, -8)
 script = ExtResource("9")
 shape = SubResource("Shape_door")
 new_scene_id = 0
+push_to_use = true

@@ -36,6 +36,7 @@ var last_facing_dir : Vector2 = Vector2.DOWN ## Ultima direccion en la que la en
 var tile_destination : Vector2 = Vector2.ZERO ## Posicion a la que el entity interpola para movimiento suave
 var is_moving : bool = false ## Determina si la entidad esta en movimiento o no
 var is_running : bool = false
+var _pushed_direction : Vector2 = Vector2.ZERO ## empujon ya avisado a lo que estorba (puertas); se olvida al soltar la tecla
 #endregion
 
 #region DEFAULTS
@@ -138,13 +139,23 @@ func _try_start_next_move() -> void: ## Intenta empezar el siguiente movimiento 
 	
 	if is_tile_blocked(next_step):
 		buffered_input = Vector2.ZERO
+		_notify_push(next_step)
 		return
-		
+
+	_pushed_direction = Vector2.ZERO
 	tile_destination = entity.global_position + next_step * tile_size
 	is_moving = true
-	
+
 	buffered_input = Vector2.ZERO
 	buffer_timer = 0.0
+
+## Completado: caminar contra algo que lo entiende (puertas y escaleras: metodo "pushed") se lo avisa, una vez por empujon.
+func _notify_push(direction : Vector2) -> void:
+	if direction == _pushed_direction: return
+	_pushed_direction = direction
+	var obstacle := collision_raycast.get_collider() as Node
+	if obstacle != null and obstacle.get_parent() != null and obstacle.get_parent().has_method("pushed"):
+		obstacle.get_parent().pushed(entity)
 
 func _get_priority_step(direction: Vector2) -> Vector2: ## Retorna la direccion por prioridad. La prioridad es determinada por el eje del ultimo input
 	if last_input_axis.x != 0 and direction.x != 0:
@@ -191,4 +202,5 @@ func stop():
 	x_direction = 0
 	y_direction = 0
 	buffered_input = Vector2.ZERO
+	_pushed_direction = Vector2.ZERO
 #endregion

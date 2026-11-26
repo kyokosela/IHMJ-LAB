@@ -34,14 +34,10 @@ func _process(_delta: float) -> void:
 	tasks_panel.visible = morning and GameManager.modal_count == 0
 	if tasks_panel.visible:
 		_refresh_tasks()
-	var lines : PackedStringArray = []
-	if morning and not GameManager.is_input_blocked():
-		if not _task_done("BATHE"):
-			lines.append(tr("_HINT_MOVE_"))
-		if _something_in_front():
-			lines.append(tr("_HINT_USE_"))
-	walk_panel.visible = not lines.is_empty()
-	walk_label.text = "\n".join(lines)
+	# Como moverse, una vez al principio (hasta ducharse). Lo que se puede usar ya lo dice el punto sobre cada cosa.
+	walk_panel.visible = morning and not GameManager.is_input_blocked() and not _task_done("BATHE")
+	if walk_panel.visible:
+		walk_label.text = tr("_HINT_MOVE_")
 
 func _morning_at_home() -> bool:
 	var zone : World = ZoneManager.zone_node if is_instance_valid(ZoneManager.zone_node) else null
@@ -50,13 +46,6 @@ func _morning_at_home() -> bool:
 func _task_done(task_name: String) -> bool:
 	var task : Task = TaskManager.get_task_list_res(ExitDoor.TUTORIAL_LIST).get_task_res(task_name)
 	return task != null and task.task_done
-
-func _something_in_front() -> bool:
-	for node in get_tree().get_nodes_in_group("Interactable"):
-		var thing := node as Interactable
-		if thing != null and thing.is_inside and thing.can_interact and not thing.collision_trigger:
-			return true
-	return false
 
 ## La pantalla de raton que esta abierta, o null.
 func _mouse_ui_open() -> CanvasItem:

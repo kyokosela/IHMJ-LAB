@@ -6,8 +6,9 @@ class_name Interactable
 #region SETUP
 
 signal executed ## Se emite cuando el jugador realiza la [b]interacción[/b]
-const LABEL_SCALE : float = 0.2 ## tamano del cartel que sale al acercarte (display_text)
-const LABEL_COLOR : Color = Color(1, 0.85, 0.35)
+const DOT_PIXELS : int = 40 ## el punto sobre lo que se puede usar: este tamano a escala DOT_SCALE
+const DOT_SCALE : float = 0.2
+const DOT_COLOR : Color = Color(1, 0.85, 0.35)
 enum SIGNAL_TYPE {AREA, BODY}
 enum TOGGLE_MODE {TOGGLE,SHOW,HIDE}
 var collshape : CollisionShape2D
@@ -20,7 +21,7 @@ var index_code: bool = GameManager.index_code if GameManager and not Engine.is_e
 # Fix: Añadido null check de collshape para prevenir errores de asignación de shape cuando collshape aún no está inicializado
 @export var shape : Shape2D : 
 	set(value) : shape = value; if Engine.is_editor_hint() and collshape: collshape.shape = shape
-@export var display_text : String ## default: _INTERACT_BASE_MESSAGE_, Texto que se mostrara en pantalla al entrar en el rango del area, si esta vacio no mostrara nada
+@export var display_text : String ## nombre del objeto: si no esta vacio, al tenerlo delante sale un punto sobre el
 @export var children_visible : bool ## Si es [b]verdadero[/b] ocultara a todos los nodos de tipo [b]control[/b] que se encuentren como hijos
 @export var reusable : bool ## La acción se podra realizar varias veces si es verdadera, en caso contrario la interacción solo se ejecutara una unica vez
 @export var show_again_at_end : bool ## Mostrar elementos despues de acabar la ejecucion si es necesario
@@ -28,6 +29,10 @@ var index_code: bool = GameManager.index_code if GameManager and not Engine.is_e
 @export var signal_type : SIGNAL_TYPE = SIGNAL_TYPE.AREA ## Tipo de señal que utilizara el Interactable
 @export var is_solid : bool
 @export var collision_trigger : bool
+## Completado: puertas. Son solidas y se usan caminando contra ellas (una vez por empujon); no hace falta Z.
+@export var push_to_use : bool
+## Completado: donde va el punto, desde el centro. En (0, 0) queda encima del objeto; cambiarlo si ahi cae sobre otro mueble.
+@export var mark_offset : Vector2
 @export_group("Time Interaction")
 @export var consume_time: bool = false:
 	set(value):
@@ -49,7 +54,7 @@ var random_final_time: String = ""
 
 var is_inside : bool
 var can_interact : bool = true
-var interact_label : Label
+var interact_mark : Panel ## el punto sobre el objeto
 var elements : Array
 var area_ref : Area2D
 var body_ref : Node2D
@@ -74,7 +79,7 @@ func _ready() -> void:
 	collshape.shape = shape
 	add_child(collshape)
 	
-	if is_solid :
+	if is_solid or push_to_use :
 		var collision = collshape.duplicate()
 		var static_body := StaticBody2D.new()
 		static_body.add_child(collision)
@@ -86,23 +91,32 @@ func _ready() -> void:
 			elements.append(x)
 	
 	if !display_text.is_empty() :
-		var label := Label.new()
-		label.text = tr(display_text)
-		label.visible = false
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		# Completado: con la camara a zoom 5 el cartel salia enorme y tapaba el cuarto: ahora va pequeno, amarillo con borde y
-		# centrado justo encima del objeto.
-		label.add_theme_font_size_override("font_size", 30)
-		label.add_theme_color_override("font_color", LABEL_COLOR)
-		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.9))
-		label.add_theme_constant_override("outline_size", 8)
-		label.scale = Vector2(LABEL_SCALE, LABEL_SCALE)
-		label.z_index = 10
-		add_child(label)
-		var medida : Vector2 = label.get_combined_minimum_size() * LABEL_SCALE
-		var arriba : float = shape.get_rect().position.y if shape != null else 0.0
-		label.position = Vector2(-medida.x / 2.0, arriba - medida.y)
-		elements.append(label)
+		_add_mark()
+
+## Completado: en vez de un cartel con el nombre, un punto grande sobre lo que se puede usar (el dibujo ya dice que es). Es un
+## Control para mostrarse y ocultarse con los demas.
+func _add_mark() -> void:
+	var estilo := StyleBoxFlat.new()
+	estilo.bg_color = DOT_COLOR
+	estilo.border_color = Color(0, 0, 0, 0.9)
+	estilo.set_border_width_all(6)
+	estilo.set_corner_radius_all(DOT_PIXELS / 2)
+	interact_mark = Panel.new()
+	interact_mark.add_theme_stylebox_override("panel", estilo)
+	var sin_sombra := CanvasItemMaterial.new()   # se ve igual a oscuras (la manana del tutorial)
+	sin_sombra.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	interact_mark.material = sin_sombra
+	interact_mark.size = Vector2(DOT_PIXELS, DOT_PIXELS)
+	interact_mark.scale = Vector2(DOT_SCALE, DOT_SCALE)
+	interact_mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	interact_mark.z_index = 10
+	interact_mark.visible = false
+	add_child(interact_mark)
+	var lado : float = DOT_PIXELS * DOT_SCALE
+	var arriba : float = shape.get_rect().position.y if shape != null else 0.0
+	var centro : Vector2 = mark_offset if mark_offset != Vector2.ZERO else Vector2(0, arriba - lado / 2.0 - 1.0)
+	interact_mark.position = centro - Vector2(lado, lado) / 2.0
+	elements.append(interact_mark)
 
 func custom_expression_handler()-> void:
 
@@ -136,12 +150,17 @@ func custom_expression_handler()-> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Engine.is_editor_hint(): return
-	if event.is_action_pressed("Interact") and is_inside and can_interact and !collision_trigger:
+	if event.is_action_pressed("Interact") and is_inside and can_interact and !collision_trigger and !push_to_use:
 		# No interactuar mientras hay un dialogo o una UI modal abierta: si no, la misma Z
 		# que usas para avanzar/cerrar vuelve a disparar la accion.
 		if GameManager.is_input_blocked(): return
 		execute()
-		
+
+## Completado: lo llama el movimiento de Mayui al caminar contra una puerta (push_to_use).
+func pushed(who : Node) -> void:
+	if push_to_use and who is Player and can_interact and not GameManager.is_input_blocked():
+		execute()
+
 # Completado: "estar delante" se anota siempre, este o no disponible la accion. Antes, apartarse justo mientras estaba ocupada
 # (teclas deprisa) no se anotaba y quedaba pegada: su cartel fijo y Z en otro mueble hacia hablar a este.
 func _on_body_entered(_body : Node2D) -> void :

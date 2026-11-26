@@ -296,17 +296,21 @@ position = Vector2(76, 24)
 
 [node name="Marco" type="Polygon2D" parent="PuertaBano"]
 color = Color(0.43, 0.4, 0.39, 1)
-polygon = PackedVector2Array(-4, -9, 4, -9, 4, 9, -4, 9)
+polygon = PackedVector2Array(-4, -24, 4, -24, 4, 8, -4, 8)
 
 [node name="Hoja" type="Polygon2D" parent="PuertaBano"]
 color = Color(0.81, 0.76, 0.74, 1)
-polygon = PackedVector2Array(-3, -8, 3, -8, 3, 8, -3, 8)
+polygon = PackedVector2Array(-3, -23, 3, -23, 3, 7, -3, 7)
+
+[node name="Pomo" type="Polygon2D" parent="PuertaBano"]
+color = Color(0.35, 0.31, 0.29, 1)
+polygon = PackedVector2Array(-2, -8, 0, -8, 0, -6, -2, -6)
 
 [node name="Label" type="Label" parent="PuertaBano"]
 offset_left = -36.0
-offset_top = -12.0
+offset_top = -13.0
 offset_right = 124.0
-offset_bottom = 38.0
+offset_bottom = 37.0
 scale = Vector2(0.2, 0.2)
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_font_sizes/font_size = 24
@@ -428,6 +432,7 @@ position = Vector2(72, 24)
 script = ExtResource("5")
 shape = SubResource("Shape_door")
 new_scene_id = 4
+push_to_use = true
 
 [node name="SpawnFromBalcony" type="Marker2D" parent="." groups=["spawn_point"]]
 position = Vector2(56, 136)
@@ -443,8 +448,7 @@ event_messages = SubResource("Chain_balcony")
 shape = SubResource("Shape_balcony_door")
 reusable = true
 show_again_at_end = true
-signal_type = 1
-collision_trigger = true
+push_to_use = true
 
 [node name="Bed" type="Area2D" parent="." unique_id=1390192927 groups=["Interactable"]]
 position = Vector2(128, 128)
@@ -454,6 +458,7 @@ interaction_name = "APT_BED"
 event_messages = SubResource("Chain_bed_tutorial")
 shape = SubResource("Shape_bed")
 display_text = "Dormir"
+mark_offset = Vector2(-20, -9)
 reusable = true
 show_again_at_end = true
 is_solid = true
@@ -491,6 +496,7 @@ interaction_name = "APT_WARDROBE"
 event_messages = SubResource("Chain_wardrobe_bath_first")
 shape = SubResource("Shape_wardrobe")
 display_text = "Cambiarse"
+mark_offset = Vector2(-15, -2)
 reusable = true
 show_again_at_end = true
 is_solid = true
@@ -592,8 +598,7 @@ task_lists = Array[String](["TUTORIAL_DOOR"])
 shape = SubResource("Shape_door")
 reusable = true
 show_again_at_end = true
-signal_type = 1
-collision_trigger = true
+push_to_use = true
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 layer = 3

@@ -111,11 +111,15 @@ position = Vector2(84, 40)
 
 [node name="Marco" type="Polygon2D" parent="Puerta"]
 color = Color(0.43, 0.4, 0.39, 1)
-polygon = PackedVector2Array(-4, -9, 4, -9, 4, 9, -4, 9)
+polygon = PackedVector2Array(-4, -24, 4, -24, 4, 8, -4, 8)
 
 [node name="Hoja" type="Polygon2D" parent="Puerta"]
 color = Color(0.81, 0.76, 0.74, 1)
-polygon = PackedVector2Array(-3, -8, 3, -8, 3, 8, -3, 8)
+polygon = PackedVector2Array(-3, -23, 3, -23, 3, 7, -3, 7)
+
+[node name="Pomo" type="Polygon2D" parent="Puerta"]
+color = Color(0.35, 0.31, 0.29, 1)
+polygon = PackedVector2Array(0, -8, 2, -8, 2, -6, 0, -6)
 
 [node name="Espejo" type="Node2D" parent="."]
 position = Vector2(56, -14)
@@ -229,6 +233,7 @@ position = Vector2(88, 40)
 script = ExtResource("9")
 shape = SubResource("Shape_door")
 new_scene_id = 0
+push_to_use = true
 
 [node name="LabelSalida" type="Label" parent="."]
 offset_left = 96.0

@@ -238,9 +238,9 @@ func _t_plano(titulo: String) -> void:
 			consulta.position = _centro(casilla)
 			consulta.exclude = [pm.player.get_rid()]
 			var estorba : bool = espacio.intersect_point(consulta).any(func(golpe: Dictionary) -> bool: return golpe.collider is StaticBody2D)
-			if estorba == (_libre(casilla) or casilla in plano.puertas):
+			if estorba == _libre(casilla):   # las puertas y escaleras tambien estorban: se usan caminando contra ellas
 				mal.append(casilla)
-	_check("Cada baldosa estorba o se puede pisar segun el plano (incluye las paredes)", mal.is_empty(), str(mal))
+	_check("Cada baldosa estorba o se puede pisar segun el plano (incluye paredes y puertas)", mal.is_empty(), str(mal))
 	var libres := 0
 	for fila in plano.mapa:
 		libres += fila.count(".")
@@ -290,8 +290,23 @@ func _t_cuarto() -> void:
 	_check("Puerta: pasar por delante no la activa", recorrido and dichos.is_empty() and dlg.current_timeline == null, str(dichos))
 	oido = await _hablar(func() -> void: await _paso(Vector2i.UP))
 	_check("Puerta: al caminar hacia ella sin la rutina habla y no deja salir", oido == ["..."] and current_scene == casa, str(oido))
-	await _paso(Vector2i.DOWN)
-	_check("Puerta: se puede volver a bajar", pm.player.global_position.is_equal_approx(_centro(Vector2i(7, 0))), str(pm.player.global_position))
+	_check("Puerta: Mayui no se mete en el dibujo", pm.player.global_position.is_equal_approx(_centro(Vector2i(7, 0))), str(pm.player.global_position))
+	oido = await _hablar(func() -> void: await _paso(Vector2i.UP))
+	_check("Puerta: otro empujon vuelve a activarla, sin alejarse antes", oido == ["No puedo salir así."], str(oido))
+	dichos.clear()
+	await _pulsar_z()
+	await create_timer(0.8).timeout
+	_check("Puerta: Z delante de ella no hace nada (se usa caminando)", dichos.is_empty() and dlg.current_timeline == null, str(dichos))
+	Input.action_press("move_up")
+	await create_timer(0.3).timeout
+	var primera : Array = dichos.duplicate()
+	for i in 3:   # se pasa lo dicho sin soltar la tecla
+		await _pulsar_z()
+		await create_timer(0.8).timeout
+	var seguidas : int = dichos.size()
+	Input.action_release("move_up")
+	await create_timer(0.3).timeout
+	_check("Puerta: mantener la tecla la activa una sola vez", seguidas == 1, "%s -> %s" % [str(primera), str(dichos)])
 
 	_check("Bano: se llega caminando a su puerta", await _caminar_a(Vector2i(5, 1)), str(pm.player.global_position))
 	var energia : float = pm.get_stat_value("ENERGY")
@@ -361,9 +376,8 @@ func _t_balcon() -> void:
 	print("E. Balcon")
 	_check("Balcon: se llega caminando a su puerta", await _caminar_a(Vector2i(3, 8)), str(pm.player.global_position))
 	var oidas : Array = []
-	for i in 3:
+	for i in 3:   # tres empujones seguidos, sin retroceder
 		oidas.append_array(await _hablar(func() -> void: await _paso(Vector2i.DOWN)))
-		await _paso(Vector2i.UP)
 	_check("Balcon en la manana del tutorial: tus 2 frases y el aviso, sin salir", oidas == ["No tengo tiempo.", "Luego.", "Debo apresurarme."] and casa.zone_id == 0, str(oidas))
 	root.get_node("NarrativeFlags").set_flag("tutorial_door_done")
 	var energia : float = pm.get_stat_value("ENERGY")

@@ -58,13 +58,13 @@ size = Vector2(32, 64)
 size = Vector2(14, 14)
 
 [sub_resource type="RectangleShape2D" id="Wall_top_left"]
-size = Vector2(80, 112)
+size = Vector2(64, 112)
 
 [sub_resource type="RectangleShape2D" id="Wall_above_bath"]
-size = Vector2(16, 48)
+size = Vector2(32, 48)
 
 [sub_resource type="RectangleShape2D" id="Wall_below_bath"]
-size = Vector2(16, 48)
+size = Vector2(32, 48)
 
 [sub_resource type="RectangleShape2D" id="Wall_top_door_left"]
 size = Vector2(32, 48)
@@ -198,15 +198,15 @@ centered = false
 [node name="Paredes" type="StaticBody2D" parent="."]
 
 [node name="ArribaIzquierda" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(24, 8)
+position = Vector2(16, 8)
 shape = SubResource("Wall_top_left")
 
 [node name="SobrePuertaBano" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(72, -24)
+position = Vector2(64, -24)
 shape = SubResource("Wall_above_bath")
 
 [node name="BajoPuertaBano" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(72, 40)
+position = Vector2(64, 40)
 shape = SubResource("Wall_below_bath")
 
 [node name="ArribaIzquierdaDePuerta" type="CollisionShape2D" parent="Paredes"]
@@ -304,19 +304,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PuertaBano" type="Node2D" parent="."]
-position = Vector2(76, 8)
-
-[node name="Marco" type="Polygon2D" parent="PuertaBano"]
-color = Color(0.43, 0.4, 0.39, 1)
-polygon = PackedVector2Array(-4, -24, 4, -24, 4, 8, -4, 8)
-
-[node name="Hoja" type="Polygon2D" parent="PuertaBano"]
-color = Color(0.81, 0.76, 0.74, 1)
-polygon = PackedVector2Array(-3, -23, 3, -23, 3, 7, -3, 7)
-
-[node name="Pomo" type="Polygon2D" parent="PuertaBano"]
-color = Color(0.35, 0.31, 0.29, 1)
-polygon = PackedVector2Array(-2, -8, 0, -8, 0, -6, -2, -6)
+position = Vector2(60, 8)
 
 [node name="Label" type="Label" parent="PuertaBano"]
 offset_left = -36.0
@@ -434,13 +422,13 @@ entity = "Player"
 from_zone = 6
 
 [node name="SpawnFromBathroom" type="Marker2D" parent="." groups=["spawn_point"]]
-position = Vector2(88, 8)
+position = Vector2(72, 8)
 script = ExtResource("2")
 entity = "Player"
 from_zone = 4
 
 [node name="DoorToBathroom" type="Area2D" parent="."]
-position = Vector2(72, 8)
+position = Vector2(56, 8)
 script = ExtResource("5")
 shape = SubResource("Shape_door")
 new_scene_id = 4

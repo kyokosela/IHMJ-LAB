@@ -23,22 +23,19 @@ size = Vector2(16, 16)
 size = Vector2(14, 14)
 
 [sub_resource type="RectangleShape2D" id="Wall_top"]
-size = Vector2(112, 48)
+size = Vector2(128, 48)
 
 [sub_resource type="RectangleShape2D" id="Wall_bottom"]
-size = Vector2(112, 16)
+size = Vector2(128, 16)
 
 [sub_resource type="RectangleShape2D" id="Wall_left"]
 size = Vector2(16, 64)
 
 [sub_resource type="RectangleShape2D" id="Wall_right_top"]
-size = Vector2(16, 32)
+size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="Wall_right_bottom"]
-size = Vector2(16, 16)
-
-[sub_resource type="RectangleShape2D" id="Wall_behind_door"]
-size = Vector2(16, 48)
+size = Vector2(32, 16)
 
 [sub_resource type="Resource" id="Lines_shower_cooldown"]
 script = ExtResource("7")
@@ -94,11 +91,11 @@ centered = false
 [node name="Paredes" type="StaticBody2D" parent="."]
 
 [node name="Arriba" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(40, -24)
+position = Vector2(48, -24)
 shape = SubResource("Wall_top")
 
 [node name="Abajo" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(40, 72)
+position = Vector2(48, 72)
 shape = SubResource("Wall_bottom")
 
 [node name="Izquierda" type="CollisionShape2D" parent="Paredes"]
@@ -106,31 +103,12 @@ position = Vector2(-8, 32)
 shape = SubResource("Wall_left")
 
 [node name="DerechaArriba" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(88, 16)
+position = Vector2(96, 16)
 shape = SubResource("Wall_right_top")
 
 [node name="DerechaAbajo" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(88, 56)
+position = Vector2(96, 56)
 shape = SubResource("Wall_right_bottom")
-
-[node name="DetrasDeLaPuerta" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(104, 40)
-shape = SubResource("Wall_behind_door")
-
-[node name="Puerta" type="Node2D" parent="."]
-position = Vector2(84, 40)
-
-[node name="Marco" type="Polygon2D" parent="Puerta"]
-color = Color(0.43, 0.4, 0.39, 1)
-polygon = PackedVector2Array(-4, -24, 4, -24, 4, 8, -4, 8)
-
-[node name="Hoja" type="Polygon2D" parent="Puerta"]
-color = Color(0.81, 0.76, 0.74, 1)
-polygon = PackedVector2Array(-3, -23, 3, -23, 3, 7, -3, 7)
-
-[node name="Pomo" type="Polygon2D" parent="Puerta"]
-color = Color(0.35, 0.31, 0.29, 1)
-polygon = PackedVector2Array(0, -8, 2, -8, 2, -6, 0, -6)
 
 [node name="Espejo" type="Node2D" parent="."]
 position = Vector2(56, -14)
@@ -156,7 +134,7 @@ limit_right = 232
 limit_bottom = 124
 
 [node name="SpawnPoint" type="Marker2D" parent="." groups=["spawn_point"]]
-position = Vector2(72, 40)
+position = Vector2(88, 40)
 script = ExtResource("2")
 entity = "Player"
 
@@ -241,16 +219,16 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DoorToApartment" type="Area2D" parent="."]
-position = Vector2(88, 40)
+position = Vector2(104, 40)
 script = ExtResource("9")
 shape = SubResource("Shape_door")
 new_scene_id = 0
 push_to_use = true
 
 [node name="LabelSalida" type="Label" parent="."]
-offset_left = 96.0
+offset_left = 108.0
 offset_top = 36.0
-offset_right = 256.0
+offset_right = 268.0
 offset_bottom = 86.0
 scale = Vector2(0.2, 0.2)
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)

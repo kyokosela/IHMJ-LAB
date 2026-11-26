@@ -182,7 +182,7 @@ Inventario: **2 manos** (2 slots); manos ocupadas bloquean ciertas interacciones
 |---|---|---|
 | Moneda | Savia (S/) | ✅ |
 | Dinero inicial | S/350 | 🟡 |
-| Salario | S/200 por día laborado (L–V) = S/1000/semana · se paga el viernes 17:00 | 🟡 monto (viene del Documento Maestro v2, que no está en el repo, P11) · ✅ viernes · 🔧 D7 |
+| Salario | **Base bajita + extra por cada acierto en los minijuegos** (Ramiro, 2026-11-26; [OFICINA_BORRADOR](OFICINA_BORRADOR.md)). El juego aún paga lo anterior: S/200 por día laborado (L–V), el viernes 17:00 | ✅ base + aciertos · 🔴 montos y día de pago (P96) |
 | Alquiler | S/230 · vence el viernes 17:00 · se paga al casero en la recepción (Lobby) | 🟡 monto · viernes (Ramiro, 2026-11-25) / 🔧 D6 |
 | Bus | S/10 por viaje | 🟡 |
 | Servicios públicos | viernes 13:00 (monto 🔴 P8) · RootNet (internet) va dentro de las facturas | ✅ PR6 |
@@ -191,7 +191,9 @@ Inventario: **2 manos** (2 slots); manos ocupadas bloquean ciertas interacciones
 - El dinero visible nunca es negativo; pueden existir **deudas invisibles** (banco, matones, amigos) que, cuanto más suben, más Estrés causan (FJ4). 🔴 P10
 - **Llegar tarde** (después de 08:10; 🟡 tolerancia de 10 min porque tu Flujo dice que a las 8:05 "no vas tarde", D23) = llamado de atención acumulable (🟡 −S/20). **Irse antes sin permiso** = llamado + pérdida de parte del día (🟡 −S/50). **Faltas:** 1.ª y 2.ª avisos · 3.ª recorte de salario (🟡 −S/100) · 4.ª **despido** (PR49).
 - **Horas extra:** no se pagan; cumplen la meta del día pero añaden efectos negativos (PR52). **3 o más tareas extra al día** dan el token de ascensión (PR20).
-- **Evaluación del viernes:** pantalla de resultados + correo semanal (PR64–65). No cambia el salario; solo el progreso del token.
+- **Evaluación del viernes:** pantalla de resultados + correo semanal (PR64–65). El salario ya depende de los aciertos (ver arriba).
+- **Savia como vida** (idea en desarrollo, P96): además de dinero, todos la necesitan a diario para no pudrirse. Todavía sin
+  reglas ni números: [OFICINA_BORRADOR](OFICINA_BORRADOR.md).
 - **Alquiler impago:** el sábado el casero avisa (si no pagaste) · domingo: aviso final o desalojo el lunes. (El jueves recuerda que vence al día siguiente.)
 
 ---

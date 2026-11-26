@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cktm7n04xp2qy"]
+[gd_scene load_steps=23 format=3 uid="uid://cktm7n04xp2qy"]
 
 [ext_resource type="Script" uid="uid://bcu07g38u7lmb" path="res://UI/Containers/kitchen_multi_ui.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://dck78dejn3w0l" path="res://UI/Containers/InventorySlot.tscn" id="2_slot"]
@@ -16,6 +16,9 @@
 [ext_resource type="Texture2D" uid="uid://bjx0c83lfadrx" path="res://Assets/UI/Kitchen/shelf_open_left.png" id="12_shelf_open_left"]
 [ext_resource type="Resource" path="res://DialoguePlugin/TIMELINE/comida_instantanea.dtl" id="15_found"]
 [ext_resource type="Resource" path="res://DialoguePlugin/TIMELINE/comida_instantanea_lista.dtl" id="16_ready"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Kitchen/pot_content_water.png" id="17_content_water"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Kitchen/pot_content_ingredients.png" id="18_content_ingredients"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Kitchen/pot_content_food.png" id="19_content_food"]
 
 [sub_resource type="Resource" id="Lines_stove_empty"]
 script = ExtResource("14_lines")
@@ -30,6 +33,10 @@ apply_energy = false
 
 [sub_resource type="StyleBoxFlat" id="Style_backdrop"]
 bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="AtlasTexture" id="Atlas_sink_front"]
+atlas = ExtResource("3_kitchen")
+region = Rect2(740, 725, 320, 80)
 
 [sub_resource type="AtlasTexture" id="Atlas_shelf_closed"]
 atlas = ExtResource("4_shelf_closed")
@@ -47,7 +54,7 @@ region = Rect2(12, 50, 664, 462)
 atlas = ExtResource("12_shelf_open_left")
 region = Rect2(12, 50, 664, 462)
 
-[node name="KitchenMultiUI" type="Control" node_paths=PackedStringArray("station_containers", "station_labels", "station_progress_bars", "station_craft_buttons", "station_wait_buttons", "wait_dialog", "station_item_props", "station_active_props", "simple_craft_input_grid", "simple_craft_result_grid", "craft_button", "craft_preview_label", "storage_grid", "storage_grid_2", "player_hands_grid", "player_bag_grid", "overflow_dialog", "overflow_items_grid", "overflow_target_grid") groups=["tutorial_mouse_ui"]]
+[node name="KitchenMultiUI" type="Control" node_paths=PackedStringArray("station_containers", "station_labels", "station_progress_bars", "station_craft_buttons", "station_wait_buttons", "wait_dialog", "station_item_props", "station_active_props", "station_content_props", "simple_craft_input_grid", "simple_craft_result_grid", "craft_button", "craft_preview_label", "storage_grid", "storage_grid_2", "player_hands_grid", "player_bag_grid", "overflow_dialog", "overflow_items_grid", "overflow_target_grid") groups=["tutorial_mouse_ui"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -86,6 +93,14 @@ station_item_props = {
 station_active_props = {
 "sink": NodePath("Panel/MainContainer/Art/SinkActive"),
 "stove": NodePath("Panel/MainContainer/Art/StoveActive")
+}
+station_content_props = {
+"sink": NodePath("Panel/MainContainer/Art/PotContent")
+}
+content_textures = {
+"home_meal": ExtResource("19_content_food"),
+"ingredients": ExtResource("18_content_ingredients"),
+"water": ExtResource("17_content_water")
 }
 simple_craft_input_grid = NodePath("Panel/MainContainer/CraftSection/SimpleCraft/VBox/InputContainer/InputGrid")
 simple_craft_result_grid = NodePath("Panel/MainContainer/CraftSection/SimpleCraft/VBox/ResultContainer/ResultGrid")
@@ -160,6 +175,17 @@ mouse_filter = 2
 texture = ExtResource("7_pot_open")
 expand_mode = 1
 
+[node name="PotContent" type="TextureRect" parent="Panel/MainContainer/Art"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+
 [node name="SinkActive" type="Control" parent="Panel/MainContainer/Art"]
 visible = false
 layout_mode = 1
@@ -179,6 +205,16 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("9_water")
+expand_mode = 1
+
+[node name="SinkFront" type="TextureRect" parent="Panel/MainContainer/Art"]
+layout_mode = 0
+offset_left = 740.0
+offset_top = 725.0
+offset_right = 1060.0
+offset_bottom = 805.0
+mouse_filter = 2
+texture = SubResource("Atlas_sink_front")
 expand_mode = 1
 
 [node name="PotClosed" type="TextureRect" parent="Panel/MainContainer/Art"]

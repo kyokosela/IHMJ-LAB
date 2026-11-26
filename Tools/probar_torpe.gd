@@ -469,8 +469,11 @@ func _olla_con_agua() -> void:
 	await _llevar("cooking_pot", "cocina", fregadero)
 	await _clic(_ui().station_craft_buttons["sink"])
 	_check("El fregadero llena la olla", _en_la_olla() == "water", _en_la_olla())
+	await _clic(_ui().station_craft_buttons["sink"])   # clic de mas mientras cae el agua: el boton esta apagado
+	_check("Un clic de mas mientras cae el agua no la vacia", _en_la_olla() == "water", _en_la_olla())
+	await create_timer(1.1).timeout
 	await _clic(_ui().station_craft_buttons["sink"])
-	_check("Usar otra vez la vacia", _en_la_olla() == "", _en_la_olla())
+	_check("'Vaciar' la vacia", _en_la_olla() == "", _en_la_olla())
 	await _clic(_ui().station_craft_buttons["sink"])
 	await _llevar("cooking_pot", "mano", 0)
 	await _clic(_casilla_mano(0), MOUSE_BUTTON_RIGHT)   # se bebe el agua

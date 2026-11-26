@@ -22,19 +22,20 @@ result_held_item = ExtResource("4_water")
 result_held_item_conditions = Dictionary[String, float]({
 "coldness": 50.0
 })
+active_seconds = 1.0
 metadata/_custom_type_script = "uid://de0p0f0ihls31"
 
-[sub_resource type="Resource" id="Resource_slot_pot_water"]
+[sub_resource type="Resource" id="Resource_slot_pot_full"]
 script = ExtResource("2_slot")
 item_id = "cooking_pot"
 requires_held_item = true
-required_held_item_id = "water"
 metadata/_custom_type_script = "uid://bh8urv85cwvl5"
 
 [sub_resource type="Resource" id="Resource_craft_empty_pot"]
 script = ExtResource("1_craft")
-needed_items = Array[ExtResource("2_slot")]([SubResource("Resource_slot_pot_water")])
+needed_items = Array[ExtResource("2_slot")]([SubResource("Resource_slot_pot_full")])
 result_item = ExtResource("3_cooking_pot")
+button_text = "Vaciar"
 metadata/_custom_type_script = "uid://de0p0f0ihls31"
 
 [resource]

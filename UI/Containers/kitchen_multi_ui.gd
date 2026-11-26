@@ -20,6 +20,11 @@ const STOVE_ID : String = "stove"
 ## Completado (arte ilustrado de la cocina, Assets/UI/Kitchen): props que cambian segun el estado de la estacion.
 @export var station_item_props: Dictionary[String,CanvasItem] = {}    ## visibles mientras la estacion tiene un objeto (la olla)
 @export var station_active_props: Dictionary[String,CanvasItem] = {}  ## visibles mientras la estacion trabaja (fuego y humo, agua)
+## Completado: lo que se ve dentro de la olla abierta de la estacion segun lo que lleve (agua, ingredientes, comida).
+@export var station_content_props: Dictionary[String,TextureRect] = {}
+@export var content_textures: Dictionary[String,Texture2D] = {}   ## item_unique_name de lo que lleva dentro -> dibujo
+var _button_texts: Dictionary = {}   ## texto propio de cada boton de estacion
+var _showing: Dictionary = {}        ## estacion -> Tween, mientras se ve su dibujo tras una receta instantanea
 
 @export_group("Simple Craft")
 @export var simple_craft_input_grid: Container
@@ -71,6 +76,7 @@ func _ready():
 	for station_id in station_craft_buttons.keys():
 		var btn = station_craft_buttons[station_id] as Button
 		if btn:
+			_button_texts[station_id] = btn.text
 			btn.pressed.connect(_on_station_craft_button_pressed.bind(station_id))
 	for station_id in station_wait_buttons.keys():
 		var wait_btn = station_wait_buttons[station_id] as Button
@@ -105,6 +111,8 @@ func close():
 	_waiting_station = ""
 	if wait_dialog:
 		wait_dialog.hide()
+	for station_id : String in _showing.keys():
+		_stop_showing(station_id)
 	kitchen = null
 	player_inventory = null
 	super.close()
@@ -183,9 +191,14 @@ func _update_stations_ui():
 			item_prop.visible = item != null and item.data.has_util("cookware")
 		var active_prop = station_active_props.get(station.station_id)
 		if active_prop and is_instance_valid(active_prop):
-			active_prop.visible = station.is_locked
+			active_prop.visible = station.is_locked or _showing.has(station.station_id)
+		var content_prop : TextureRect = station_content_props.get(station.station_id)
+		if content_prop and is_instance_valid(content_prop):
+			var held : Item = item.held_item if item != null and item.data.has_util("cookware") else null
+			content_prop.texture = content_textures.get(held.data.item_unique_name) if held != null else null
+			content_prop.visible = content_prop.texture != null
 
-	
+
 		var label = station_labels.get(station.station_id)
 		if label and is_instance_valid(label):
 			label.text = station.station_name
@@ -204,9 +217,13 @@ func _update_stations_ui():
 		if craft_btn and is_instance_valid(craft_btn):
 		
 			var has_valid_recipe = kitchen.has_valid_station_craft(station.station_id)
-			
-			craft_btn.disabled = station.is_locked or (not has_valid_recipe and not _stove_without_food(station.station_id))
+			var showing : bool = _showing.has(station.station_id)
+
+			craft_btn.disabled = station.is_locked or showing or (not has_valid_recipe and not _stove_without_food(station.station_id))
 			craft_btn.visible = not station.is_locked
+			# dice lo que hara ahora ("Vaciar"); mientras cae el agua, su texto de siempre
+			var next : Crafts = station.find_valid_recipe([item]) if item != null and not showing else null
+			craft_btn.text = next.button_text if next != null and next.button_text != "" else _button_texts.get(station.station_id, "")
 
 		var wait_button = station_wait_buttons.get(station.station_id)
 		if wait_button and is_instance_valid(wait_button):
@@ -437,20 +454,49 @@ func _stove_without_food(station_id: String) -> bool:
 
 func _on_station_craft_button_pressed(station_id: String):
 	if not kitchen: return
+	# sin esto el boton se queda con el foco y Enter o Espacio lo vuelven a pulsar (vaciarian la olla sin querer, o no
+	# pasarian lo que dice Mayui)
+	(station_craft_buttons[station_id] as Button).release_focus()
 
 	if _stove_without_food(station_id):
 		if Dialogic.current_timeline == null:
 			Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], stove_empty_lines.get_message())
-		# sin esto el boton se queda con el foco y Enter o Espacio lo vuelven a pulsar en vez de pasar lo que dice Mayui
-		(station_craft_buttons[station_id] as Button).release_focus()
 		return
 
 	# Iniciar el craft de la estación manualmente
+	var item : Item = kitchen.get_station_item(station_id)
+	var recipe : Crafts = kitchen.get_station(station_id).find_valid_recipe([item]) if item != null else null
 	var success = kitchen.start_manual_station_craft(station_id)
 	if success:
+		if recipe != null and recipe.is_instant() and recipe.active_seconds > 0.0:
+			_show_active(station_id, recipe.active_seconds)
 		_update_stations_ui()
 	else:
 		print("KitchenUI: Could not start craft at ", station_id)
+
+## Completado: una receta instantanea deja ver un momento el dibujo de la estacion trabajando (el agua cayendo, que aparece y
+## se va suave); mientras tanto su boton queda apagado.
+func _show_active(station_id: String, seconds: float) -> void:
+	var prop : CanvasItem = station_active_props.get(station_id)
+	if prop == null: return
+	_stop_showing(station_id)
+	var tween := create_tween()
+	_showing[station_id] = tween
+	prop.modulate.a = 0.0
+	tween.tween_property(prop, "modulate:a", 1.0, seconds * 0.1)
+	tween.tween_interval(seconds * 0.65)
+	tween.tween_property(prop, "modulate:a", 0.0, seconds * 0.25)
+	await tween.finished
+	_stop_showing(station_id)
+	if kitchen:
+		_update_stations_ui()
+
+## Deja el dibujo como estaba (al terminar o al cerrar la cocina).
+func _stop_showing(station_id: String) -> void:
+	if not _showing.has(station_id): return
+	(_showing[station_id] as Tween).kill()
+	_showing.erase(station_id)
+	(station_active_props[station_id] as CanvasItem).modulate.a = 1.0
 #endregion
 
 #region Esperar

@@ -282,8 +282,14 @@ func _jugar() -> void:
 	var oido_caja : Array = await _hablar(func() -> void: await _arrastrar(await _slot(almacen, caja), await _slot(rejilla_manos, mano)))
 	_check("Saca la unica caja a la mano: tus 3 frases", not manos.inventory.slots[mano].is_empty() and oido_caja == ["Solo queda esta porquería.", "Las compré porque estaban baratas.", "Su sabor es muy insípido."], str(oido_caja))
 	await _arrastrar(await _slot(almacen, olla), await _slot(rejilla_fregadero, fregadero))
-	await _clic(ui.station_craft_buttons["sink"])
-	_check("Clic en Usar: la olla se llena de agua", not inv.slots[fregadero].is_empty() and inv.slots[fregadero].item.held_item != null)
+	await _foto("5b_olla_en_el_fregadero")
+	var grifo : Button = ui.station_craft_buttons["sink"]
+	await _clic(grifo)
+	_check("Clic en Usar: la olla se llena y se ve caer el agua", not inv.slots[fregadero].is_empty() and inv.slots[fregadero].item.held_item != null and ui.station_active_props["sink"].visible and ui.station_content_props["sink"].visible)
+	await _foto("5c_cae_el_agua")
+	await create_timer(1.1).timeout
+	_check("El agua deja de caer, se ve dentro de la olla y el boton dice 'Vaciar'", not ui.station_active_props["sink"].visible and ui.station_content_props["sink"].visible and grifo.text == "Vaciar" and not grifo.disabled, grifo.text)
+	await _foto("5d_olla_con_agua")
 	await _arrastrar(await _slot(rejilla_fregadero, fregadero), await _slot(rejilla_estufa, estufa))
 	await _clic(ui.station_craft_buttons["stove"])
 	await _foto("6_cocinando")

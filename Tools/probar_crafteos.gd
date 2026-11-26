@@ -46,6 +46,7 @@ func _initialize() -> void:
 	await _t_cocina()
 	await _t_casillas()
 	await _t_instantanea()
+	await _t_fregadero()
 	print("=== %d comprobaciones OK, %d con FALLA ===" % [passed, failed])
 	quit(1 if failed > 0 else 0)
 
@@ -264,6 +265,72 @@ func _t_instantanea() -> void:
 	await _callar(root.get_node("Dialogic"))
 	await _salir(escena)
 
+# ------------------------------------------------------------------ E. el fregadero en la pantalla
+func _t_fregadero() -> void:
+	print("E. El fregadero en la pantalla: la olla dentro, lo que lleva, el agua al usar y 'Vaciar'")
+	cm.container_states.clear()
+	gm.new_game()
+	pm.reset_engine_state(true)
+	var escena : Node = await _entrar(-1)
+	await _callar(root.get_node("Dialogic"))
+	var cocina = escena.get_node("Kitchen")
+	var ui = escena.get_node("UILayer/KitchenMultiUI")
+	ui.open(cocina)
+	await create_timer(0.3).timeout
+	var kc = cocina.container
+	var inv = kc.inventory
+	_reiniciar_estaciones(kc)
+	var fregadero : int = kc.get_station_slot_index("sink")
+	var boton : Button = ui.station_craft_buttons["sink"]
+	var chorro : CanvasItem = ui.station_active_props["sink"]
+	var contenido : TextureRect = ui.station_content_props["sink"]
+	var olla_dibujo : CanvasItem = ui.station_item_props["sink"]
+	var arte : Node = olla_dibujo.get_parent()
+	var frente : TextureRect = arte.get_node("SinkFront")
+	var dibujo := func() -> String: return contenido.texture.resource_path.get_file() if contenido.visible else ""
+
+	_check("Sin nada en el fregadero: 'Usar' apagado, sin olla ni agua", boton.text == "Usar" and boton.disabled and not olla_dibujo.visible and not chorro.visible and dibujo.call() == "", "%s %s" % [boton.text, boton.disabled])
+	_check("El frente del fregadero se dibuja encima de la olla, de lo que lleva y del chorro", frente.visible and frente.get_index() > olla_dibujo.get_index() and frente.get_index() > contenido.get_index() and frente.get_index() > arte.get_node("SinkActive").get_index())
+	_check("El frente tapa la olla desde el borde del fregadero (pixel 725) y es el mismo dibujo de la cocina", frente.position == Vector2(740, 725) and frente.size == Vector2(320, 80) and frente.texture.atlas == arte.get_node("Background").texture and frente.texture.region == Rect2(740, 725, 320, 80))
+	inv.interact_inventory(fregadero, inv, _donde(kc, "cooking_pot"))
+	_check("Olla vacia en el fregadero: se ve vacia y el boton dice 'Usar'", olla_dibujo.visible and dibujo.call() == "" and boton.text == "Usar" and not boton.disabled, "%s '%s'" % [boton.text, dibujo.call()])
+
+	boton.grab_focus()
+	boton.pressed.emit()
+	await create_timer(0.3).timeout
+	_check("Al usar: cae el agua, la olla ya la muestra dentro y el boton espera", chorro.visible and chorro.modulate.a > 0.9 and dibujo.call() == "pot_content_water.png" and boton.disabled and boton.text == "Usar", "chorro %s (%.2f), '%s', %s" % [chorro.visible, chorro.modulate.a, dibujo.call(), boton.text])
+	_check("El boton suelta el foco (Enter no vacia la olla sin querer)", not boton.has_focus())
+	await create_timer(1.1).timeout
+	_check("Despues del chorro: deja de caer, la olla sigue con agua y el boton se enciende diciendo 'Vaciar'", not chorro.visible and chorro.modulate.a == 1.0 and not boton.disabled and boton.text == "Vaciar" and dibujo.call() == "pot_content_water.png", "chorro %s, %s '%s'" % [chorro.visible, boton.text, dibujo.call()])
+	boton.pressed.emit()
+	await create_timer(0.2).timeout
+	_check("Vaciar: la olla queda vacia, sin chorro, y vuelve 'Usar'", inv.slots[fregadero].item.held_item == null and not chorro.visible and dibujo.call() == "" and boton.text == "Usar" and not boton.disabled and _ollas(kc) == 1, "%s '%s'" % [boton.text, dibujo.call()])
+
+	for caso in [["ingredientes", _olla_con_ingredientes(), "pot_content_ingredients.png"], ["comida", _olla_con_comida(), "pot_content_food.png"]]:
+		inv.slots[fregadero].item = caso[1]
+		inv.inventory_changed.emit()
+		await create_timer(0.2).timeout
+		_check("Una olla con %s se ve con lo suyo y ofrece 'Vaciar'" % caso[0], dibujo.call() == caso[2] and boton.text == "Vaciar" and not boton.disabled, "%s '%s'" % [boton.text, dibujo.call()])
+		boton.pressed.emit()
+		await create_timer(0.2).timeout
+		_check("Vaciar la olla con %s: queda vacia, una sola olla y sin chorro" % caso[0], inv.slots[fregadero].item.held_item == null and _ollas(kc) == 1 and not chorro.visible and dibujo.call() == "" and boton.text == "Usar")
+
+	# cerrar la cocina mientras cae el agua y volver a abrirla: no se queda pegada
+	boton.pressed.emit()
+	ui.close()
+	await create_timer(0.1).timeout
+	ui.open(cocina)
+	await create_timer(1.2).timeout
+	_check("Cerrar mientras cae el agua y volver: sin chorro pegado y el boton responde", not chorro.visible and chorro.modulate.a == 1.0 and not ui.station_craft_buttons["sink"].disabled and ui.station_craft_buttons["sink"].text == "Vaciar")
+	ui.close()
+	await _salir(escena)
+
+## Una olla con la comida casera dentro (como la que sale de la estufa).
+func _olla_con_comida():
+	var o = _item(RUTA_OLLA)
+	o.held_item = _item(RUTA_COMIDA)
+	return o
+
 ## Suelta en la casilla n de una rejilla de la pantalla lo que hay en (origen, indice), como al soltar con el raton.
 func _soltar_en(ui: Node, rejilla: Node, origen, indice: int, n: int = 0) -> void:
 	var casillas : Array = rejilla.get_children().filter(func(c) -> bool: return not c.is_queued_for_deletion())
@@ -422,7 +489,7 @@ func _t_cocina() -> void:
 	var con_agua2 = inv.slots[donde].item if donde != -1 else null
 	_check("La olla ahora trae agua", con_agua2 != null and con_agua2.held_item != null and con_agua2.held_item.data.item_unique_name == "water")
 	inv.interact_inventory(fregadero, inv, donde)
-	_check("Una olla con agua en el fregadero se puede vaciar con 'Usar'", kc.has_valid_station_craft("sink") and kc.start_manual_station_craft("sink"))
+	_check("Una olla con agua en el fregadero se puede vaciar", kc.has_valid_station_craft("sink") and kc.start_manual_station_craft("sink"))
 	var vaciada = kc.get_station_item("sink")
 	_check("Vaciarla deja la olla vacia, sin duplicarla", vaciada != null and vaciada.data.item_unique_name == "cooking_pot" and vaciada.held_item == null and _ollas(kc) == 1, "ollas %d" % _ollas(kc))
 	_check("...y se puede llenar otra vez", kc.start_manual_station_craft("sink") and kc.get_station_item("sink").held_item != null and kc.get_station_item("sink").held_item.data.item_unique_name == "water")

@@ -24,6 +24,12 @@ var time_left : String
 ## Se evalúan en orden, el primero que coincida se usa
 @export var variable_results : Array[CraftResult] = []
 
+@export_group("Station")
+## Completado: texto del boton de la estacion cuando esta es la receta que va a hacer ("Vaciar"); vacio = el del boton.
+@export var button_text : String = ""
+## Completado: si es instantanea, segundos que se ve el dibujo de la estacion trabajando (el agua del fregadero).
+@export var active_seconds : float = 0.0
+
 ## Obtiene el CraftResult apropiado basado en los items
 func get_matching_result(items: Array[Item]) -> CraftResult:
 	for craft_result in variable_results:

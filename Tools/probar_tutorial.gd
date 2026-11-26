@@ -281,7 +281,7 @@ func _t_manana() -> void:
 	dicho = await _decir(abrir)
 	_check("Vestida y sin comer: 'Debería comer algo.'", dicho.strip_edges() == "Debería comer algo.", dicho)
 
-	print("C. Cocinar y comer")
+	print("C. Cocinar y comer (la unica comida instantanea de la casa)")
 	await _calma()
 	var cocina = casa.get_node("Kitchen")
 	var ui = casa.get_node("UILayer/KitchenMultiUI")
@@ -291,36 +291,41 @@ func _t_manana() -> void:
 	_check("En la cocina: como usar el raton y como comer", ayudas.mouse_panel.visible and not ayudas.tasks_panel.visible and ayudas.mouse_label.text.contains("clic derecho"), ayudas.mouse_label.text)
 	var kc = cocina.container
 	var inv = kc.inventory
-	var bolsa := -1
+	var guardados : Array = []
+	var caja := -1
 	var olla := -1
 	for i in kc.get_storage_indices():
 		if inv.slots[i].is_empty():
 			continue
-		if inv.slots[i].item.data.item_unique_name == "ingredients_bag" and bolsa == -1:
-			bolsa = i
-		if inv.slots[i].item.data.item_unique_name == "cooking_pot":
+		var nombre : String = inv.slots[i].item.data.item_unique_name
+		guardados.append(nombre)
+		if nombre == "instant_box":
+			caja = i
+		if nombre == "cooking_pot":
 			olla = i
-	var tabla : int = kc.get_station_slot_index("cutting")
+	_check("En la alacena hay una sola comida instantanea y la olla", guardados == ["instant_box", "cooking_pot"], str(guardados))
+	var fregadero : int = kc.get_station_slot_index("sink")
 	var estufa : int = kc.get_station_slot_index("stove")
 	var entradas : Array = kc.get_simple_craft_input_indices()
-	inv.interact_inventory(tabla, inv, bolsa)
-	ui.station_craft_buttons["cutting"].pressed.emit()
-	inv.interact_inventory(entradas[0], inv, olla)
-	inv.interact_inventory(entradas[1], inv, tabla)
-	ui.craft_button.pressed.emit()
-	inv.interact_inventory(estufa, inv, kc.get_simple_craft_result_index())
+	inv.interact_inventory(fregadero, inv, olla)
+	ui.station_craft_buttons["sink"].pressed.emit()
+	inv.interact_inventory(estufa, inv, fregadero)
 	ui.station_craft_buttons["stove"].pressed.emit()
 	ui.station_wait_buttons["stove"].pressed.emit()
 	await create_timer(0.2).timeout
 	ui.wait_dialog.get_ok_button().pressed.emit()
 	await _calma()
+	inv.interact_inventory(entradas[0], inv, estufa)
+	inv.interact_inventory(entradas[1], inv, caja)
+	var listas : Array = await _hablar(func() -> void: ui.craft_button.pressed.emit())
+	_check("Al combinar el agua caliente con la caja: tus 2 frases", listas == ["Al menos su etiqueta no miente.", "Realmente es instantáneo."], str(listas))
 	var manos = pm.player.inventory
 	var mano : int = manos.get_hands_indices()[0]
-	manos.inventory.interact_inventory(mano, inv, estufa)
+	manos.inventory.interact_inventory(mano, inv, kc.get_simple_craft_result_index())
 	ui.close()
 	manos.use_item_at(mano)
 	await _calma()
-	_check("Cocinar con 'Esperar' y comer completa la tarea de comer", _tarea("COOK") and pm.daily.home_meals == 1)
+	_check("Cocinar con 'Esperar' y comer completa la tarea de comer", _tarea("COOK") and pm.daily.instant_meals == 1)
 	_check("Comer quita el Hambre", not pm.has_effect("HUNGER"))
 	dicho = await _decir(abrir)
 	_check("Comida y sin cepillarse: 'Me lavaré la boca antes de salir.'", dicho.strip_edges() == "Me lavaré la boca antes de salir.", dicho)

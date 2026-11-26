@@ -253,7 +253,7 @@ func _t_instantanea() -> void:
 	inv.interact_inventory(entradas[0], inv, estufa)
 	var salidas : Array = _combinar_spam(kc)
 	_check("Combinar da UNA comida instantanea cocinada y caliente", salidas.size() == 1 and salidas[0].data.item_unique_name == "instant_meal" and salidas[0].has_state("cooked") and salidas[0].has_state("hot"), "%d" % salidas.size())
-	_check("...gasta una sola caja y devuelve la olla vacia, sin duplicarla", _contar(kc, "instant_box") == 2 and inv.slots[entradas[0]].item != null and inv.slots[entradas[0]].item.held_item == null and _ollas(kc) == 1, "cajas %d, ollas %d" % [_contar(kc, "instant_box"), _ollas(kc)])
+	_check("...gasta la unica caja y devuelve la olla vacia, sin duplicarla", _contar(kc, "instant_box") == 0 and inv.slots[entradas[0]].item != null and inv.slots[entradas[0]].item.held_item == null and _ollas(kc) == 1, "cajas %d, ollas %d" % [_contar(kc, "instant_box"), _ollas(kc)])
 	manos.add_item(salidas[0])
 	pm.add_effect(load("res://Resources/Effects/Effects/hunger.tres").duplicate())
 	pm.get_stat_res("ENERGY").value = 20.0
@@ -326,8 +326,11 @@ func _t_cocina() -> void:
 
 	# --- cocina inicial
 	_check("Hay 12 casillas de almacenamiento (dos alacenas de 6)", kc.get_storage_indices().size() == 12)
-	_check("Trae 2 bolsas de ingredientes, 1 olla y 3 comidas instantaneas", _contar(kc, "ingredients_bag") == 2 and _contar(kc, "cooking_pot") == 1 and _contar(kc, "instant_box") == 3, "bolsas %d, ollas %d, cajas %d" % [_contar(kc, "ingredients_bag"), _contar(kc, "cooking_pot"), _contar(kc, "instant_box")])
+	_check("En casa hay solo 1 comida instantanea y 1 olla, sin bolsas de ingredientes", _contar(kc, "ingredients_bag") == 0 and _contar(kc, "cooking_pot") == 1 and _contar(kc, "instant_box") == 1, "bolsas %d, ollas %d, cajas %d" % [_contar(kc, "ingredients_bag"), _contar(kc, "cooking_pot"), _contar(kc, "instant_box")])
 	_check("La cocina acepta guardar ollas (objetos tipo contenedor)", kc.rules.can_store(load(RUTA_OLLA)))
+	# la comida casera sigue en tu sistema aunque ya no venga en casa (se comprara): la prueba pone 2 bolsas
+	for i in 2:
+		kc.add_item_by_data(load(RUTA_BOLSA))
 
 	# --- arrastrar no duplica ni pierde (ida y vuelta entre almacenamiento y tabla)
 	var origen : int = _donde(kc, "ingredients_bag")

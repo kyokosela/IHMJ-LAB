@@ -8,7 +8,7 @@ extends SceneTree
 ##   ... -s res://Tools/probar_torpe.gd -- 40 7 8 9      (40 acciones al azar con cada una de las semillas 7, 8 y 9)
 ## Termina con codigo 0 si todo pasa y 1 si algo falla.
 
-const UNIDADES := ["ingredients_bag", "ingredients", "home_meal"]
+const UNIDADES := ["instant_box", "instant_meal"] ## la unica racion de la casa, en cualquiera de sus formas
 const COCINA_DESDE := Vector2(120, 56) ## baldosa junto a la cocina, mirando a la derecha
 const NEUTRO := Vector2(104, 72) ## baldosa del cuarto sin nada alrededor
 
@@ -25,7 +25,6 @@ var dichos : Array = []
 var raton := Vector2.ZERO
 var azar := RandomNumberGenerator.new()
 var bitacora : Array = []
-var agua_vaciada := 0
 
 func _check(nombre: String, ok: bool, detalle: String = "") -> void:
 	if ok:
@@ -283,12 +282,14 @@ func _abrir_cocina() -> void:
 	await create_timer(0.3).timeout
 
 func _cerrar_cocina() -> void:
+	if dlg.current_timeline != null:   # primero se pasa lo que este diciendo: si no, Esc no llega a la cocina
+		await _calma()
 	if _ui().visible:
 		await _tecla(KEY_ESCAPE)
 		await create_timer(0.2).timeout
 	await _calma()
 
-## Deja la cocina como al empezar: 2 bolsas y la olla en la alacena, nada en las manos y la tarea de comer sin hacer.
+## Deja la cocina como al empezar: la caja y la olla en la alacena, nada en las manos y la tarea de comer sin hacer.
 func _cocina_de_cero() -> void:
 	await _cerrar_cocina()
 	var kc = _cocina()
@@ -298,10 +299,9 @@ func _cocina_de_cero() -> void:
 			estacion.unlock()
 	kc.inventory.clear()
 	pm.player.inventory.inventory.clear()
-	for ruta in ["res://Resources/Items/Data/ingredients_bag.tres", "res://Resources/Items/Data/ingredients_bag.tres",
-			"res://Resources/Items/Data/KitchenUtils/cooking_pot.tres"]:
+	for ruta in ["res://Resources/Items/Data/instant_box.tres", "res://Resources/Items/Data/KitchenUtils/cooking_pot.tres"]:
 		kc.add_item_by_data(load(ruta))
-	pm.daily.home_meals = 0
+	pm.daily.instant_meals = 0
 	tk.get_task_list_res("TUTORIAL_DOOR").get_task_res("COOK").task_done = false
 
 func _anotar(item, cuenta: Dictionary, vistos: Dictionary) -> void:
@@ -325,11 +325,11 @@ func _inventario_total() -> Dictionary:
 ## "" si todo esta en orden; si no, que se rompio.
 func _revisar() -> String:
 	var cuenta := _inventario_total()
-	var unidades : int = pm.daily.home_meals
+	var unidades : int = pm.daily.instant_meals
 	for nombre in UNIDADES:
 		unidades += cuenta.get(nombre, 0)
-	if unidades != 2:
-		return "hay %d raciones de 2 (comidas %d, %s)" % [unidades, pm.daily.home_meals, str(cuenta)]
+	if unidades != 1:
+		return "hay %d raciones de 1 (comidas %d, %s)" % [unidades, pm.daily.instant_meals, str(cuenta)]
 	if cuenta.get("cooking_pot", 0) != 1:
 		return "hay %d ollas (%s)" % [cuenta.get("cooking_pot", 0), str(cuenta)]
 	if cuenta.get("repetido", 0) > 0:
@@ -453,15 +453,32 @@ func _accion_al_azar(viajes: Array) -> String:
 	await _ir_a_zona(0)
 	return "va al bano y vuelve"
 
+## Lo que tiene dentro la olla ("" si esta vacia).
+func _en_la_olla() -> String:
+	var olla := _donde_esta("cooking_pot")
+	if olla.is_empty() or olla[2].held_item == null:
+		return ""
+	return olla[2].held_item.data.item_unique_name
+
 func _olla_con_agua() -> void:
-	print("D0. La olla llena de agua")
+	print("D0. La olla con agua: llenar, vaciar y beberla antes de cocinar")
 	await _cocina_de_cero()
 	await _abrir_cocina()
 	await _abrir_alacenas()
-	await _llevar("cooking_pot", "cocina", _cocina().get_station_slot_index("sink"))
+	var fregadero : int = _cocina().get_station_slot_index("sink")
+	await _llevar("cooking_pot", "cocina", fregadero)
 	await _clic(_ui().station_craft_buttons["sink"])
-	var olla := _donde_esta("cooking_pot")
-	_check("El fregadero llena la olla", not olla.is_empty() and olla[2].held_item != null and olla[2].held_item.data.item_unique_name == "water")
+	_check("El fregadero llena la olla", _en_la_olla() == "water", _en_la_olla())
+	await _clic(_ui().station_craft_buttons["sink"])
+	_check("Usar otra vez la vacia", _en_la_olla() == "", _en_la_olla())
+	await _clic(_ui().station_craft_buttons["sink"])
+	await _llevar("cooking_pot", "mano", 0)
+	await _clic(_casilla_mano(0), MOUSE_BUTTON_RIGHT)   # se bebe el agua
+	await _calma()
+	_check("Beber el agua no gasta la caja ni la olla", _revisar() == "", _revisar())
+	await _llevar("cooking_pot", "cocina", fregadero)
+	if _en_la_olla() == "":
+		await _clic(_ui().station_craft_buttons["sink"])
 	var como := await _cocinar_como_sea()
 	_check("Con la olla llena de agua todavia se puede cocinar y comer", como == "", como)
 	_check("Con la olla de agua nada se pierde", _revisar() == "", _revisar())
@@ -526,63 +543,46 @@ func _llevar(nombre: String, sitio: String, indice: int) -> void:
 ## Como una persona que ya sabe cocinar: parte de como haya quedado todo. "" si consigue comer.
 func _cocinar_como_sea() -> String:
 	var kc = _cocina()
+	var fregadero : int = kc.get_station_slot_index("sink")
 	var estufa : int = kc.get_station_slot_index("stove")
-	var tabla : int = kc.get_station_slot_index("cutting")
 	var entradas : Array = kc.get_simple_craft_input_indices()
 	var pasos : Array = []
 	for vuelta in 14:
-		if pm.daily.home_meals > 0 and _tarea("COOK"):
+		if pm.daily.instant_meals > 0 and _tarea("COOK"):
 			return ""
-		if pm.daily.home_meals >= 2:
-			return "se acabaron las raciones sin marcar la tarea"
+		if pm.daily.instant_meals > 0:
+			return "se comio la unica racion sin marcar la tarea"
 		await _abrir_cocina()
 		await _abrir_alacenas()
 		if kc.is_station_locked("stove"):
 			pasos.append("espera")
 			await _confirmar_espera()
 			continue
+		if not _donde_esta("instant_meal").is_empty():
+			pasos.append("come")
+			await _llevar("instant_meal", "mano", 0)
+			await _clic(_casilla_mano(0), MOUSE_BUTTON_RIGHT)
+			continue
+		if _donde_esta("instant_box").is_empty():
+			return "no queda ni la caja ni la comida (%s)" % str(_inventario_total())
 		var olla := _donde_esta("cooking_pot")
 		if olla.is_empty():
 			return "no hay olla"
-		var dentro : String = "" if olla[2].held_item == null else olla[2].held_item.data.item_unique_name
-		match dentro:
-			"home_meal":
-				pasos.append("come")
-				await _llevar("cooking_pot", "mano", 0)
-				await _clic(_casilla_mano(0), MOUSE_BUTTON_RIGHT)
-			"water":
-				pasos.append("vacia el agua en el fregadero")
-				agua_vaciada += 1
-				await _llevar("cooking_pot", "cocina", kc.get_station_slot_index("sink"))
-				await _clic(_ui().station_craft_buttons["sink"])
-			"ingredients":
-				pasos.append("a la estufa")
-				await _llevar("cooking_pot", "cocina", estufa)
-				await _clic(_ui().station_craft_buttons["stove"])
-			_:
-				var picados := _donde_esta("ingredients")
-				if not picados.is_empty():
-					pasos.append("combina")
-					await _despejar("cocina", kc.get_simple_craft_result_index())
-					await _llevar("cooking_pot", "cocina", entradas[0])
-					await _llevar("ingredients", "cocina", entradas[1])
-					await _clic(_ui().craft_button)
-					await _despejar_resultado_a_estufa(estufa)
-				elif not _donde_esta("ingredients_bag").is_empty():
-					pasos.append("pica")
-					await _llevar("ingredients_bag", "cocina", tabla)
-					await _clic(_ui().station_craft_buttons["cutting"])
-				else:
-					return "no quedan ingredientes (%s)" % str(_inventario_total())
+		if olla[2].held_item == null:
+			pasos.append("llena la olla")
+			await _llevar("cooking_pot", "cocina", fregadero)
+			await _clic(_ui().station_craft_buttons["sink"])
+		elif not olla[2].held_item.has_state("hot"):
+			pasos.append("a la estufa")
+			await _llevar("cooking_pot", "cocina", estufa)
+			await _clic(_ui().station_craft_buttons["stove"])
+		else:
+			pasos.append("combina")
+			await _despejar("cocina", kc.get_simple_craft_result_index())
+			await _llevar("cooking_pot", "cocina", entradas[0])
+			await _llevar("instant_box", "cocina", entradas[1])
+			await _clic(_ui().craft_button)
 	return "no lo consigue: %s | %s" % [str(pasos), str(_inventario_total())]
-
-func _despejar_resultado_a_estufa(estufa: int) -> void:
-	var kc = _cocina()
-	var resultado : int = kc.get_simple_craft_result_index()
-	if kc.inventory.slots[resultado].is_empty():
-		return
-	await _despejar("cocina", estufa)
-	await _arrastrar(_casilla_cocina(resultado), _casilla_cocina(estufa))
 
 # ------------------------------------------------------------------ 5. y aun asi se termina
 func _terminar_la_manana() -> void:
@@ -609,5 +609,5 @@ func _terminar_la_manana() -> void:
 		if zm.zone_node != null and is_instance_valid(zm.zone_node) and zm.zone_node.zone_id == 6:
 			break
 	_check("Despues de todo, la puerta deja salir ('Aqui vamos.')", zm.zone_node.zone_id == 6, "zona %d, %s" % [zm.zone_node.zone_id, str(oido)])
-	print("   (salio a las %s; veces que hubo que vaciar la olla en el fregadero: %d)" % [tm.get_current_time(), agua_vaciada])
+	print("   (salio a las %s)" % tm.get_current_time())
 	await _calma()

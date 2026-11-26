@@ -495,11 +495,14 @@ func _t_cocina() -> void:
 	var inv = kc.inventory
 	var ui = escena.get_node("UILayer/KitchenMultiUI")
 	var mov = pm.player.movement
-	# 1) la nevera: 2 bolsas de ingredientes, la olla y 3 comidas instantaneas en el ALMACENAMIENTO (no en las estaciones)
+	# 1) la nevera: UNA comida instantanea y la olla en el ALMACENAMIENTO (no en las estaciones)
 	var guardados : Array = kc.get_storage_indices().filter(func(i): return not inv.slots[i].is_empty())
 	var nombres : Array = guardados.map(func(i): return inv.slots[i].item.data.item_unique_name)
-	_check("La nevera trae 2 bolsas, la olla y 3 comidas instantaneas en el almacenamiento", nombres == ["ingredients_bag", "ingredients_bag", "cooking_pot", "instant_box", "instant_box", "instant_box"], str(nombres))
+	_check("La nevera trae solo una comida instantanea y la olla en el almacenamiento", nombres == ["instant_box", "cooking_pot"], str(nombres))
 	_check("Las estaciones empiezan vacias", kc.get_station_item("cutting") == null and kc.get_station_item("stove") == null and kc.get_station_item("sink") == null)
+	# la comida casera sigue en tu sistema aunque ya no venga en casa (se comprara): la prueba pone 2 bolsas
+	for i in 2:
+		kc.add_item_by_data(load("res://Resources/Items/Data/ingredients_bag.tres"))
 	# 2) abrir la cocina: la UI se ve y Mayui queda quieta
 	cocina.can_interact = true
 	cocina.execute()
@@ -563,7 +566,7 @@ func _t_cocina() -> void:
 	_check("...y el boton suelta el foco: Enter y Espacio pasan el mensaje en vez de volver a pulsarlo", con_foco == 0, "%d veces con foco" % con_foco)
 	_check("Estufa sin comida: 'Cocinar' sigue activo y Mayui dice tus frases (la ultima se repite), sin gastar tiempo", activo and en_la_estufa == ["No tiene sentido.", "Necesito algo para cocinar.", "Es mejor que deje de revisar acá.", "Es mejor que deje de revisar acá."] and tm.minutes == hora_estufa, "%s activo=%s" % [str(en_la_estufa), activo])
 	# 3) bolsa -> tabla de picar -> ingredientes
-	var bolsa_idx : int = guardados[0]
+	var bolsa_idx : int = kc.get_storage_indices().filter(func(i): return not inv.slots[i].is_empty() and inv.slots[i].item.data.item_unique_name == "ingredients_bag")[0]
 	_arrastrar(inv, kc.get_station_slot_index("cutting"), bolsa_idx)
 	_check("Con la bolsa en la tabla hay receta (picar)", kc.has_valid_station_craft("cutting"))
 	_check("Se puede picar", kc.start_manual_station_craft("cutting"))
@@ -666,8 +669,8 @@ func _t_cocina() -> void:
 	await _esperar_calma()
 	kc = escena.get_node("Kitchen").container
 	inv = kc.inventory
-	var quedan : int = kc.get_storage_indices().filter(func(i): return not inv.slots[i].is_empty()).size()
-	_check("Al volver queda 1 bolsa y las 3 instantaneas (no se rellena la nevera ni se borra) y la olla sigue en las manos", quedan == 4 and pm.player.inventory.get_hands_items().size() == 1, "objetos guardados: %d" % quedan)
+	var quedan : Array = kc.get_storage_indices().filter(func(i): return not inv.slots[i].is_empty()).map(func(i): return inv.slots[i].item.data.item_unique_name)
+	_check("Al volver queda 1 bolsa y la instantanea (no se rellena la nevera ni se borra) y la olla sigue en las manos", quedan == ["instant_box", "ingredients_bag"] and pm.player.inventory.get_hands_items().size() == 1, "guardados: %s" % str(quedan))
 	# 9) la segunda comida: los usos son de cada objeto, no del dato compartido
 	var olla2 = _cocinar_una(kc)
 	_check("Se puede cocinar una segunda comida con la misma olla", olla2 != null and olla2.held_item != null and olla2.held_item.data.item_unique_name == "home_meal")

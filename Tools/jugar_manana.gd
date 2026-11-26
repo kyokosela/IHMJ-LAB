@@ -260,32 +260,31 @@ func _jugar() -> void:
 		await _clic(ui.get_node("Panel/MainContainer/ShelfLeftButton"))
 	await _foto("5_cocina_alacena")
 	var guardados : Array = kc.get_storage_indices()
-	var bolsa := -1
+	var caja := -1
 	var olla := -1
 	for i in guardados:
 		if inv.slots[i].is_empty():
 			continue
 		var nombre : String = inv.slots[i].item.data.item_unique_name
-		if nombre == "ingredients_bag" and bolsa == -1:
-			bolsa = i
+		if nombre == "instant_box":
+			caja = i
 		if nombre == "cooking_pot":
 			olla = i
 	var almacen : Array = [ui.storage_grid, ui.storage_grid_2]
-	var tabla : int = kc.get_station_slot_index("cutting")
+	var fregadero : int = kc.get_station_slot_index("sink")
 	var estufa : int = kc.get_station_slot_index("stove")
 	var entradas : Array = kc.get_simple_craft_input_indices()
-	var rejilla_tabla : Array = [ui.station_containers["cutting"]]
+	var rejilla_fregadero : Array = [ui.station_containers["sink"]]
 	var rejilla_estufa : Array = [ui.station_containers["stove"]]
-	await _arrastrar(await _slot(almacen, bolsa), await _slot(rejilla_tabla, tabla))
-	_check("Arrastra la bolsa a la tabla", not inv.slots[tabla].is_empty())
-	await _clic(ui.station_craft_buttons["cutting"])
-	_check("Clic en Picar", not inv.slots[tabla].is_empty() and inv.slots[tabla].item.data.item_unique_name != "ingredients_bag", str(inv.slots[tabla].item.data.item_unique_name if not inv.slots[tabla].is_empty() else "vacia"))
-	await _arrastrar(await _slot(almacen, olla), await _slot([ui.simple_craft_input_grid], entradas[0]))
-	await _arrastrar(await _slot(rejilla_tabla, tabla), await _slot([ui.simple_craft_input_grid], entradas[1]))
-	await _clic(ui.craft_button)
-	var resultado : int = kc.get_simple_craft_result_index()
-	_check("Clic en Combinar", not inv.slots[resultado].is_empty())
-	await _arrastrar(await _slot([ui.simple_craft_result_grid], resultado), await _slot(rejilla_estufa, estufa))
+	var manos = pm.player.inventory
+	var mano : int = manos.get_hands_indices()[0]
+	var rejilla_manos : Array = [ui.player_hands_grid]
+	var oido_caja : Array = await _hablar(func() -> void: await _arrastrar(await _slot(almacen, caja), await _slot(rejilla_manos, mano)))
+	_check("Saca la unica caja a la mano: tus 3 frases", not manos.inventory.slots[mano].is_empty() and oido_caja == ["Solo queda esta porquería.", "Las compré porque estaban baratas.", "Su sabor es muy insípido."], str(oido_caja))
+	await _arrastrar(await _slot(almacen, olla), await _slot(rejilla_fregadero, fregadero))
+	await _clic(ui.station_craft_buttons["sink"])
+	_check("Clic en Usar: la olla se llena de agua", not inv.slots[fregadero].is_empty() and inv.slots[fregadero].item.held_item != null)
+	await _arrastrar(await _slot(rejilla_fregadero, fregadero), await _slot(rejilla_estufa, estufa))
 	await _clic(ui.station_craft_buttons["stove"])
 	await _foto("6_cocinando")
 	await _clic(ui.station_wait_buttons["stove"])
@@ -299,11 +298,14 @@ func _jugar() -> void:
 		print("  (el aviso no recibio el clic simulado: se confirma con su boton)")
 		boton.pressed.emit()
 	await _hablar(func() -> void: await create_timer(0.2).timeout)
-	var manos = pm.player.inventory
-	var mano : int = manos.get_hands_indices()[0]
-	var rejilla_manos : Array = [ui.player_hands_grid]
-	await _arrastrar(await _slot(rejilla_estufa, estufa), await _slot(rejilla_manos, mano))
-	_check("Pasa la comida a las manos", not manos.inventory.slots[mano].is_empty())
+	await _arrastrar(await _slot(rejilla_estufa, estufa), await _slot([ui.simple_craft_input_grid], entradas[0]))
+	await _arrastrar(await _slot(rejilla_manos, mano), await _slot([ui.simple_craft_input_grid], entradas[1]))
+	var oido_lista : Array = await _hablar(func() -> void: await _clic(ui.craft_button))
+	var resultado : int = kc.get_simple_craft_result_index()
+	_check("Clic en Combinar (agua caliente + caja): sale la comida, con tus 2 frases", not inv.slots[resultado].is_empty() and inv.slots[resultado].item.data.item_unique_name == "instant_meal" and oido_lista == ["Al menos su etiqueta no miente.", "Realmente es instantáneo."], str(oido_lista))
+	await _foto("6b_lista")
+	await _arrastrar(await _slot([ui.simple_craft_result_grid], resultado), await _slot(rejilla_manos, mano))
+	_check("Pasa la comida a las manos", not manos.inventory.slots[mano].is_empty() and manos.inventory.slots[mano].item.data.item_unique_name == "instant_meal")
 	await _tecla(KEY_ESCAPE)
 	await create_timer(0.3).timeout
 	_check("Esc cierra la cocina", not ui.visible and gm.modal_count == 0)
@@ -314,7 +316,8 @@ func _jugar() -> void:
 	await _z()
 	await create_timer(4.0).timeout   # se oscurece, come un momento y aclara
 	await _foto("7_come_en_la_mesa")
-	_check("Come en la mesa sin frases, con tarea de comer y sin Hambre", dichos.is_empty() and gm.modal_count == 0 and _tarea("COOK") and not pm.has_effect("HUNGER"), str(dichos))
+	_check("Come en la mesa, con tarea de comer y sin Hambre, y dice 'No sabe a nada.'", dichos == ["No sabe a nada."] and gm.modal_count == 0 and _tarea("COOK") and not pm.has_effect("HUNGER"), str(dichos))
+	await _hablar(func() -> void: await create_timer(0.1).timeout)   # pasa la frase
 	var oido : Array = await _hablar()
 	_check("El escritorio habla despues de comer", oido == ["No puedo quedarme aquí."], str(oido))
 

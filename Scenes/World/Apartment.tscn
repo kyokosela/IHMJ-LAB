@@ -20,7 +20,6 @@
 [ext_resource type="Script" uid="uid://bo45lmkm6yiet" path="res://Resources/Containers/container_environment.gd" id="18"]
 [ext_resource type="Resource" uid="uid://bmt41wvyxm0ut" path="res://Resources/Items/Data/KitchenUtils/cooking_pot.tres" id="19"]
 [ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="20"]
-[ext_resource type="Resource" path="res://Resources/Items/Data/ingredients_bag.tres" id="21"]
 [ext_resource type="PackedScene" uid="uid://cktm7n04xp2qy" path="res://UI/Containers/KitchenMultiUI.tscn" id="22"]
 [ext_resource type="PackedScene" uid="uid://dd0p5w6n0rqyj" path="res://UI/Containers/wardrobe_ui.tscn" id="26"]
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/exit_door.gd" id="28"]
@@ -528,7 +527,7 @@ vertical_alignment = 1
 position = Vector2(144, 64)
 script = ExtResource("36")
 before_bath_messages = SubResource("Chain_fridge_bath")
-initial_items = Array[ExtResource("20")]([ExtResource("21"), ExtResource("21"), ExtResource("19"), ExtResource("38"), ExtResource("38"), ExtResource("38")])
+initial_items = Array[ExtResource("20")]([ExtResource("38"), ExtResource("19")])
 container_ui = NodePath("../UILayer/KitchenMultiUI")
 shape = SubResource("Shape_kitchen")
 display_text = "Cocina"

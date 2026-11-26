@@ -349,6 +349,7 @@ func _t_manana() -> void:
 	await _calma()
 	dicho = await _decir(abrir)
 	_check("Con la rutina completa: 'Aquí vamos.'", dicho.strip_edges() == "Aquí vamos.", dicho)
+	_check("Mientras lo dice, el cuarto sigue a oscuras (la luz no cambia de golpe)", casa.get_node("Madrugada").visible)
 	var hora_salida : String = tm.get_current_time()
 	var despues : Array = []
 	dlg.Text.text_started.connect(func(info) -> void: despues.append(str(info.get("text", "")).strip_edges()))

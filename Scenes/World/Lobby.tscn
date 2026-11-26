@@ -4,6 +4,8 @@
 [ext_resource type="Script" path="res://Prefabs/SpawnPoint/spawnpoint.gd" id="2"]
 [ext_resource type="Script" path="res://Scripts/scene_changer.gd" id="3"]
 [ext_resource type="Texture2D" path="res://Assets/Building/recepcion_provisional.png" id="4"]
+[ext_resource type="Script" path="res://Prefabs/Interactable/interactable.gd" id="5"]
+[ext_resource type="Resource" path="res://DialoguePlugin/TIMELINE/mantenimiento.dtl" id="6"]
 
 [sub_resource type="RectangleShape2D" id="Muro3"]
 size = Vector2(48, 16)
@@ -27,6 +29,9 @@ size = Vector2(224, 16)
 size = Vector2(14, 30)
 
 [sub_resource type="RectangleShape2D" id="Puerta_DoorToOffice"]
+size = Vector2(14, 14)
+
+[sub_resource type="RectangleShape2D" id="Puerta_Mantenimiento"]
 size = Vector2(14, 14)
 
 [node name="Lobby" type="Node2D" node_paths=PackedStringArray("optional_camera_node")]
@@ -126,8 +131,8 @@ position = Vector2(-8, 152)
 shape = SubResource("Muro3")
 
 [node name="M22" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(144, 152)
-shape = SubResource("Muro6")
+position = Vector2(152, 152)
+shape = SubResource("Muro5")
 
 [node name="M23" type="CollisionShape2D" parent="Paredes"]
 position = Vector2(-8, 168)
@@ -207,28 +212,15 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LabelRecepcion" type="Label" parent="."]
-offset_left = 28.0
-offset_top = 134.0
-offset_right = 348.0
-offset_bottom = 179.0
+offset_left = 6.0
+offset_top = 80.0
+offset_right = 306.0
+offset_bottom = 125.0
 scale = Vector2(0.2, 0.2)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 24
 text = "Recepción"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="LabelMantenimiento" type="Label" parent="."]
-offset_left = 108.0
-offset_top = 150.0
-offset_right = 428.0
-offset_bottom = 195.0
-scale = Vector2(0.2, 0.2)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 24
-text = "Mantenimiento"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -244,3 +236,12 @@ theme_override_font_sizes/font_size = 24
 text = "[Bus] → Oficina"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="DoorMaintenance" type="Area2D" parent="."]
+position = Vector2(104, 152)
+script = ExtResource("5")
+shape = SubResource("Puerta_Mantenimiento")
+dialog = ExtResource("6")
+reusable = true
+show_again_at_end = true
+push_to_use = true

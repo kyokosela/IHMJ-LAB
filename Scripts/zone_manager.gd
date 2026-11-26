@@ -28,10 +28,19 @@ const ZONES_REQUIRING_TRANSPORT: Array[ZONES] = [
 	ZONES.COMMERCIAL
 ]
 
-## Cuartos del apartamento: pasar entre ellos no es viajar (no gasta energia ni tiempo, no hay calle ni bus).
+## Cuartos del apartamento (la casa de Mayui, ademas del propio apartamento).
 const HOME_ROOMS : Array[ZONES] = [
 	ZONES.BATHROOM,
 	ZONES.BALCONY
+]
+## El edificio de Mayui. Dentro de un establecimiento pasar de una zona a otra no es viajar (no gasta energia ni tiempo, no
+## hay calle ni bus): solo la calle, de un establecimiento a otro, cuesta (tu regla del 2026-11-25).
+const HOME_BUILDING : Array[ZONES] = [
+	ZONES.APARTMENT,
+	ZONES.BATHROOM,
+	ZONES.BALCONY,
+	ZONES.HALLWAY,
+	ZONES.LOBBY
 ]
 
 const STREET_RISK_BASE_CHANCE : float = 0.10
@@ -66,12 +75,9 @@ var time_cost_incremental: String = "00:05"
 func is_home(zone_id: int) -> bool:
 	return zone_id == ZONES.APARTMENT or zone_id in HOME_ROOMS
 
-## Pasos que no son viajar: entre cuartos de la casa y de la puerta de casa al pasillo del edificio (y de vuelta).
-## Salir del pasillo a la recepcion cuesta lo que antes costaba salir de casa.
+## Pasos que no son viajar: los de dentro del edificio de Mayui (casa, pasillo y recepcion).
 func _is_free_step(from_zone: int, to_zone: int) -> bool:
-	if is_home(from_zone) and is_home(to_zone):
-		return true
-	return (from_zone == ZONES.APARTMENT and to_zone == ZONES.HALLWAY) or (from_zone == ZONES.HALLWAY and to_zone == ZONES.APARTMENT)
+	return from_zone in HOME_BUILDING and to_zone in HOME_BUILDING
 
 func change_zone(new_zone_id: ZONES) -> void:
 	if _changing_zone:

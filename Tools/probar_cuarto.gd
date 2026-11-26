@@ -402,15 +402,21 @@ func _t_edificio() -> void:
 	_check("Pasillo: aparece junto a M-21 sin gastar energia ni tiempo", pm.player.global_position.is_equal_approx(Vector2(88, 24)) and pm.get_stat_value("ENERGY") == energia and tm.minutes == hora, str(pm.player.global_position))
 	await _t_plano("H. Pasillo: paredes y piso")
 	_check("Pasillo: entero en pantalla", _camara_en(Vector2(80, 92)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
+	_check("Pasillo: se camina frente a M-22", await _caminar_a(Vector2i(4, 1)), str(pm.player.global_position))
+	var callada : Array = await _hablar(func() -> void: await _paso(Vector2i.LEFT))
+	_check("M-22 (de otro vecino) esta cerrada: no pasa nada", callada.is_empty() and casa.zone_id == 6 and pm.player.global_position.is_equal_approx(_centro(Vector2i(4, 1))), str(callada))
 	_check("Pasillo: se camina hasta las escaleras", await _caminar_a(Vector2i(4, 4)), str(pm.player.global_position))
 	_check("Las escaleras bajan a la recepcion", await _cruzar(Vector2i.LEFT, 1))
-	_check("Recepcion: aparece al pie de las escaleras; bajar gasta energia y tiempo", pm.player.global_position.is_equal_approx(Vector2(72, 56)) and pm.get_stat_value("ENERGY") < energia and tm.minutes > hora, "%s %.1f +%d" % [str(pm.player.global_position), pm.get_stat_value("ENERGY"), tm.minutes - hora])
+	_check("Recepcion: aparece al pie de las escaleras, sin gastar energia ni tiempo", pm.player.global_position.is_equal_approx(Vector2(72, 56)) and pm.get_stat_value("ENERGY") == energia and tm.minutes == hora, "%s %.1f +%d" % [str(pm.player.global_position), pm.get_stat_value("ENERGY"), tm.minutes - hora])
 	await create_timer(1.0).timeout
 	if dlg.current_timeline != null:   # el casero la intercepta (su dialogo tiene opciones: aqui se corta)
 		dlg.end_timeline()
 	await create_timer(1.5).timeout
 	await _t_plano("I. Recepcion: paredes y piso")
 	_check("Recepcion: entera en pantalla", _camara_en(Vector2(80, 92)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
+	_check("Recepcion: se camina a la puerta de mantenimiento", await _caminar_a(Vector2i(5, 9)), str(pm.player.global_position))
+	var aviso : Array = await _hablar(func() -> void: await _paso(Vector2i.RIGHT))
+	_check("Puerta de mantenimiento: dice lo que es y no deja pasar", aviso == ["Cuarto de mantenimiento."] and casa.zone_id == 1 and pm.player.global_position.is_equal_approx(_centro(Vector2i(5, 9))), str(aviso))
 	var dinero : int = root.get_node("EconomyManager").money
 	_check("Recepcion: se camina hasta la puerta de la calle", await _caminar_a(Vector2i(2, 10)), str(pm.player.global_position))
 	_check("La puerta de la calle lleva en bus a la oficina (S/10)", await _cruzar(Vector2i.DOWN, 2) and root.get_node("EconomyManager").money == dinero - 10, "dinero %d -> %d" % [dinero, root.get_node("EconomyManager").money])

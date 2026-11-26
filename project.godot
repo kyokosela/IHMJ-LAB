@@ -72,6 +72,7 @@ directories/dtl_directory={
 "madina_m88_object": "res://DialoguePlugin/TIMELINE/madina_m88_object.dtl",
 "madina_tension": "res://DialoguePlugin/TIMELINE/madina_tension.dtl",
 "madina_warning": "res://DialoguePlugin/TIMELINE/madina_warning.dtl",
+"mantenimiento": "res://DialoguePlugin/TIMELINE/mantenimiento.dtl",
 "sunday_prep": "res://DialoguePlugin/TIMELINE/sunday_prep.dtl",
 "task": "res://DialoguePlugin/TIMELINE/task.dtl",
 "test": "res://DialoguePlugin/TIMELINE/test.dtl",

@@ -241,15 +241,14 @@ func _t_transicion() -> void:
 	zm.change_zone(0)
 	await _esperar_zona(0)
 	_check("Vuelve al cuarto junto a la puerta del bano, tambien sin costo", current_scene.zone_id == 0 and pm.player.global_position.is_equal_approx(Vector2(88, 24)) and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, str(pm.player.global_position))
-	# de la puerta de casa al pasillo tampoco es viajar (el viaje empieza al bajar las escaleras)
+	# dentro del edificio nada es viajar: ni al pasillo ni a la recepcion
 	zm.change_zone(6)
 	await _esperar_zona(6)
 	_check("Al pasillo se sale sin gastar energia ni tiempo, junto a la puerta M-21", current_scene.zone_id == 6 and pm.player.global_position.is_equal_approx(Vector2(88, 24)) and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, str(pm.player.global_position))
-	var energia_pie : float = pm.get_stat_value("ENERGY")
 	var t0 := Time.get_ticks_msec()
 	zm.change_zone(1)
 	_check("Al tocar las escaleras Mayui queda quieta", not mov.can_move and gm.modal_count == 1)
-	_check("A pie (Pasillo -> Recepcion) se gasta energia", pm.get_stat_value("ENERGY") < energia_pie, "%.1f -> %.1f" % [energia_pie, pm.get_stat_value("ENERGY")])
+	_check("Pasillo -> Recepcion tampoco gasta energia ni tiempo (dentro del edificio)", pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, "energia %.1f, +%d min" % [pm.get_stat_value("ENERGY"), tm.minutes - hora_casa])
 	zm.change_zone(2)                         # una puerta pisada otra vez durante el viaje no cuenta
 	_check("Una segunda puerta durante el viaje se ignora", gm.modal_count == 1 and zm.current_zone == 1, "zona %d" % zm.current_zone)
 	await create_timer(1.3).timeout           # ya oscuro y con la escena cambiada: sigue quieta
@@ -270,20 +269,20 @@ func _t_transicion() -> void:
 	await create_timer(1.3).timeout
 	while gm.modal_count > 0 and Time.get_ticks_msec() - t0 < 5000:
 		await create_timer(0.05).timeout
-	# ir y volver a pie no acumula cansancio, aunque se pase por el bano entremedio
-	zm.current_zone = 0
-	zm.previous_zone = -1
+	# andar por la calle si cuesta: de la oficina de vuelta al edificio
+	var energia_calle : float = pm.get_stat_value("ENERGY")
+	var hora_calle : int = tm.minutes
 	zm.change_zone(1)
 	await _esperar_zona(1)
-	zm.change_zone(0)
-	await _esperar_zona(0)
-	zm.change_zone(4)
-	await _esperar_zona(4)
-	zm.change_zone(0)
-	await _esperar_zona(0)
-	zm.change_zone(1)
-	await _esperar_zona(1)
-	_check("Salir otra vez tras pasar por el bano cuesta lo basico (el bano no cuenta como viaje)", zm.energy_cost_incremental == zm.energy_cost_base, "%.1f" % zm.energy_cost_incremental)
+	_check("A pie por la calle (Oficina -> Recepcion) se gasta energia y tiempo", pm.get_stat_value("ENERGY") < energia_calle and tm.minutes > hora_calle, "%.1f -> %.1f, +%d min" % [energia_calle, pm.get_stat_value("ENERGY"), tm.minutes - hora_calle])
+	# recorrer el edificio despues no cuesta ni acumula cansancio
+	var cansancio : float = zm.energy_cost_incremental
+	var energia_dentro : float = pm.get_stat_value("ENERGY")
+	var hora_dentro : int = tm.minutes
+	for destino in [6, 0, 4, 0, 6, 1]:
+		zm.change_zone(destino)
+		await _esperar_zona(destino)
+	_check("Recorrer casa, pasillo y recepcion no gasta energia ni tiempo ni acumula cansancio", pm.get_stat_value("ENERGY") == energia_dentro and tm.minutes == hora_dentro and zm.energy_cost_incremental == cansancio and current_scene.zone_id == 1, "energia %.1f, +%d min" % [pm.get_stat_value("ENERGY"), tm.minutes - hora_dentro])
 	if current_scene != null:
 		current_scene.release_player()
 		current_scene.queue_free()

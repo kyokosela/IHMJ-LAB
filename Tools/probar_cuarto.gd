@@ -273,7 +273,7 @@ func _t_cuarto() -> void:
 	frases = await _hablar(_pulsar_z)
 	_check("Calendario, primera vez: tus 2 lineas", frases == ["El viernes pagan.", "Tengo que asegurarme de ir al supermercado con tiempo."], str(frases))
 	frases = await _hablar(_pulsar_z)
-	_check("Calendario, segunda vez: tus otras 2 lineas", frases == ["Tampoco puedo olvidarme del alquiler…", "Quiero evitar discutir con el casero otra vez."], str(frases))
+	_check("Calendario, segunda vez: tus otras 2 lineas", frases == ["Tampoco puedo olvidarme del alquiler…", "Quiero evitar problemas con el casero."], str(frases))
 
 	# Apartarse justo cuando algo esta ocupado (teclas deprisa) no debe dejarlo pegado
 	var calendario = casa.get_node("Calendario")

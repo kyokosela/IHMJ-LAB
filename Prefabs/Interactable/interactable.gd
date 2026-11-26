@@ -6,9 +6,9 @@ class_name Interactable
 #region SETUP
 
 signal executed ## Se emite cuando el jugador realiza la [b]interacción[/b]
-const DOT_PIXELS : int = 40 ## el punto sobre lo que se puede usar: este tamano a escala DOT_SCALE
-const DOT_SCALE : float = 0.2
-const DOT_COLOR : Color = Color(1, 0.85, 0.35)
+const DOT_SIZE : float = 6.0 ## diametro, en el mundo, del punto sobre lo que se puede usar (en pantalla, 5 veces)
+const DOT_PIXELS : int = 32 ## resolucion del dibujo del punto
+const DOT_COLOR : Color = Color(1.0, 0.93, 0.72)
 enum SIGNAL_TYPE {AREA, BODY}
 enum TOGGLE_MODE {TOGGLE,SHOW,HIDE}
 var collshape : CollisionShape2D
@@ -54,7 +54,7 @@ var random_final_time: String = ""
 
 var is_inside : bool
 var can_interact : bool = true
-var interact_mark : Panel ## el punto sobre el objeto
+var interact_mark : TextureRect ## el punto sobre el objeto
 var elements : Array
 var area_ref : Area2D
 var body_ref : Node2D
@@ -93,29 +93,34 @@ func _ready() -> void:
 	if !display_text.is_empty() :
 		_add_mark()
 
-## Completado: en vez de un cartel con el nombre, un punto grande sobre lo que se puede usar (el dibujo ya dice que es). Es un
-## Control para mostrarse y ocultarse con los demas.
+## Completado: en vez de un cartel con el nombre, un punto suave y difuminado sobre lo que se puede usar (el dibujo ya dice que
+## es). Es un Control para mostrarse y ocultarse con los demas.
 func _add_mark() -> void:
-	var estilo := StyleBoxFlat.new()
-	estilo.bg_color = DOT_COLOR
-	estilo.border_color = Color(0, 0, 0, 0.9)
-	estilo.set_border_width_all(6)
-	estilo.set_corner_radius_all(DOT_PIXELS / 2)
-	interact_mark = Panel.new()
-	interact_mark.add_theme_stylebox_override("panel", estilo)
+	var degradado := Gradient.new()   # centro claro que se difumina; un borde apenas oscuro para verlo sobre fondos claros
+	degradado.offsets = PackedFloat32Array([0.0, 0.4, 0.7, 1.0])
+	degradado.colors = PackedColorArray([Color(DOT_COLOR, 0.85), Color(DOT_COLOR, 0.7), Color(0.3, 0.22, 0.1, 0.22), Color(0.3, 0.22, 0.1, 0.0)])
+	var textura := GradientTexture2D.new()
+	textura.gradient = degradado
+	textura.width = DOT_PIXELS
+	textura.height = DOT_PIXELS
+	textura.fill = GradientTexture2D.FILL_RADIAL
+	textura.fill_from = Vector2(0.5, 0.5)
+	textura.fill_to = Vector2(0.5, 0.0)
+	interact_mark = TextureRect.new()
+	interact_mark.texture = textura
+	interact_mark.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	var sin_sombra := CanvasItemMaterial.new()   # se ve igual a oscuras (la manana del tutorial)
 	sin_sombra.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 	interact_mark.material = sin_sombra
 	interact_mark.size = Vector2(DOT_PIXELS, DOT_PIXELS)
-	interact_mark.scale = Vector2(DOT_SCALE, DOT_SCALE)
+	interact_mark.scale = Vector2.ONE * (DOT_SIZE / DOT_PIXELS)
 	interact_mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	interact_mark.z_index = 10
 	interact_mark.visible = false
 	add_child(interact_mark)
-	var lado : float = DOT_PIXELS * DOT_SCALE
 	var arriba : float = shape.get_rect().position.y if shape != null else 0.0
-	var centro : Vector2 = mark_offset if mark_offset != Vector2.ZERO else Vector2(0, arriba - lado / 2.0 - 1.0)
-	interact_mark.position = centro - Vector2(lado, lado) / 2.0
+	var centro : Vector2 = mark_offset if mark_offset != Vector2.ZERO else Vector2(0, arriba - DOT_SIZE / 2.0 - 1.0)
+	interact_mark.position = centro - Vector2.ONE * DOT_SIZE / 2.0
 	elements.append(interact_mark)
 
 func custom_expression_handler()-> void:

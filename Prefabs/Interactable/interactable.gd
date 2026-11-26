@@ -142,29 +142,33 @@ func _unhandled_input(event: InputEvent) -> void:
 		if GameManager.is_input_blocked(): return
 		execute()
 		
+# Completado: "estar delante" se anota siempre, este o no disponible la accion. Antes, apartarse justo mientras estaba ocupada
+# (teclas deprisa) no se anotaba y quedaba pegada: su cartel fijo y Z en otro mueble hacia hablar a este.
 func _on_body_entered(_body : Node2D) -> void :
 	#mejor se comprueba dentro del if para evitar errores con el motor
-	if _body is Player and !is_inside and can_interact and signal_type == SIGNAL_TYPE.BODY:
+	if _body is Player and !is_inside and signal_type == SIGNAL_TYPE.BODY:
 		body_ref = _body
-		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
+		if not can_interact: return
+		toggle_visible(TOGGLE_MODE.SHOW)
 		if collision_trigger : execute()
 
 func _on_body_exited(_body : Node2D) -> void :
-	if _body is Player and is_inside and can_interact and signal_type == SIGNAL_TYPE.BODY:
+	if _body is Player and is_inside and signal_type == SIGNAL_TYPE.BODY:
 		body_ref = null
 		toggle_visible(TOGGLE_MODE.HIDE)
 		is_inside = false
 
 func _on_area_entered(_area : Area2D) -> void :
-	if _area.is_in_group("Interactor") and can_interact and !is_inside and signal_type == SIGNAL_TYPE.AREA:
+	if _area.is_in_group("Interactor") and !is_inside and signal_type == SIGNAL_TYPE.AREA:
 		area_ref = _area
-		toggle_visible(TOGGLE_MODE.SHOW)
 		is_inside = true
+		if not can_interact: return
+		toggle_visible(TOGGLE_MODE.SHOW)
 		if collision_trigger : execute()
 
 func _on_area_exited(_area: Area2D) -> void :
-	if _area.is_in_group("Interactor") and can_interact and is_inside and signal_type == SIGNAL_TYPE.AREA:
+	if _area.is_in_group("Interactor") and is_inside and signal_type == SIGNAL_TYPE.AREA:
 		area_ref = null
 		toggle_visible(TOGGLE_MODE.HIDE)
 		is_inside = false

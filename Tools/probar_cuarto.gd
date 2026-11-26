@@ -275,6 +275,15 @@ func _t_cuarto() -> void:
 	frases = await _hablar(_pulsar_z)
 	_check("Calendario, segunda vez: tus otras 2 lineas", frases == ["Tampoco puedo olvidarme del alquiler…", "Quiero evitar discutir con el casero otra vez."], str(frases))
 
+	# Apartarse justo cuando algo esta ocupado (teclas deprisa) no debe dejarlo pegado
+	var calendario = casa.get_node("Calendario")
+	calendario.can_interact = false
+	await _empujar(Vector2i.LEFT)
+	calendario.can_interact = true
+	_check("Apartarse de algo ocupado lo suelta: delante queda solo el escritorio", _delante() == ["Escritorio"], str(_delante()))
+	oido = await _hablar(_pulsar_z)
+	_check("...y Z en el escritorio no hace hablar al calendario", oido.is_empty(), str(oido))
+
 	dichos.clear()
 	var recorrido : bool = await _caminar_a(Vector2i(6, 0)) and await _caminar_a(Vector2i(9, 0)) and await _caminar_a(Vector2i(7, 0))
 	await create_timer(0.5).timeout

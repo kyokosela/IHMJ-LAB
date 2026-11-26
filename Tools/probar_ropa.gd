@@ -277,8 +277,10 @@ func _t_ui() -> void:
 	var ui = escena.get_node("UILayer/WardrobeUI")
 	var casa = load("res://Resources/Clothing/home_clothes.tres")
 	var trabajo = load("res://Resources/Clothing/work_clothes.tres")
-	_check("El cuadro de cambio de ropa dura 1 s", ui.changing_seconds == 1.0)
+	_check("El cuadro de cambio de ropa dura 1 s, con transicion al entrar y salir y pausa tras cambiarse", ui.changing_seconds == 1.0 and ui.fade_seconds > 0.0 and ui.settle_seconds >= 0.8)
 	ui.changing_seconds = 0.05
+	ui.fade_seconds = 0.0
+	ui.settle_seconds = 0.0
 	_check("El armario empieza cerrado", not ui.visible)
 	await _sin_dialogos()   # "Tengo que ducharme.": mientras Mayui habla el armario no atiende clics
 	var armario = escena.get_node("Wardrobe")
@@ -309,6 +311,25 @@ func _t_ui() -> void:
 	esc.pressed = true
 	ui._unhandled_input(esc)
 	_check("Esc cierra el armario y Mayui vuelve a moverse", not ui.visible and gm.modal_count == 0)
+	# la transicion y la pausa tras cambiarse
+	ui.fade_seconds = 0.25
+	ui.settle_seconds = 1.0
+	armario.can_interact = true
+	armario.execute()
+	_check("Al entrar oscurece antes de mostrar el armario", not ui.visible and gm.modal_count == 1)
+	await create_timer(0.7).timeout
+	_check("...y luego se ve, ya aclarado", ui.visible and root.get_node("TransitionManager").color_rect.color.a < 0.05)
+	ui._on_garment_input(clic, "home")
+	await create_timer(0.2).timeout
+	ui._unhandled_input(esc)
+	await create_timer(0.1).timeout
+	_check("Justo despues de cambiarse Esc espera: se ve la ropa nueva", ui.visible and pm.get_outfit_id() == "home" and ui.render_rect.texture == casa.render)
+	await create_timer(1.0).timeout
+	ui._unhandled_input(esc)
+	await create_timer(0.7).timeout
+	_check("Pasada la pausa, Esc sale con la transicion y Mayui queda libre", not ui.visible and gm.modal_count == 0 and root.get_node("TransitionManager").color_rect.color.a < 0.05)
+	ui.fade_seconds = 0.0
+	ui.settle_seconds = 0.0
 	# banarse -> toalla -> armario (la ducha esta en el bano: se trae solo ese nodo, sin cambiar de zona)
 	var bano : Node = (load("res://Scenes/World/Bathroom.tscn") as PackedScene).instantiate()
 	var ducha : Node = bano.get_node("Shower")

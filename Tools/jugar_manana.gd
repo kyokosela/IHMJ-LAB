@@ -242,7 +242,7 @@ func _jugar() -> void:
 	await _hablar(func() -> void: await create_timer(0.1).timeout)
 	_check("Con un clic se pone el uniforme", pm.get_outfit_id() == "work" and _tarea("CLOTHES"), pm.get_outfit_id())
 	await _tecla(KEY_ESCAPE)
-	await create_timer(0.3).timeout
+	await create_timer(0.9).timeout
 	_check("Esc cierra el armario", not armario.visible and gm.modal_count == 0)
 
 	print("3. Cocinar y comer (arrastrando con el raton)")

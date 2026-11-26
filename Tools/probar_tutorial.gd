@@ -118,6 +118,7 @@ func _clic() -> InputEventMouseButton:
 func _vestir(casa: Node, prenda: String) -> void:
 	var armario = casa.get_node("UILayer/WardrobeUI")
 	armario.changing_seconds = 0.05
+	armario.fade_seconds = 0.0
 	armario.open()
 	armario._on_garment_input(_clic(), prenda)
 	await create_timer(0.4).timeout
@@ -221,6 +222,7 @@ func _t_manana() -> void:
 	var mueble = casa.get_node("Wardrobe")
 	var armario = casa.get_node("UILayer/WardrobeUI")
 	armario.changing_seconds = 0.05
+	armario.fade_seconds = 0.0
 	var antes_de_ducha : Array = []
 	for i in 4:
 		antes_de_ducha.append_array(await _hablar(func() -> void: mueble.execute()))
@@ -255,6 +257,7 @@ func _t_manana() -> void:
 	mueble = casa.get_node("Wardrobe")
 	armario = casa.get_node("UILayer/WardrobeUI")
 	armario.changing_seconds = 0.05
+	armario.fade_seconds = 0.0
 	puerta = casa.get_node("MainDoor")
 	await _calma()
 	_poner(NEUTRO)
@@ -374,6 +377,7 @@ func _t_manana() -> void:
 	await create_timer(2.5).timeout
 	_check("Al volver se queda en casa (la puerta no la saca sola)", zm.zone_node == casa and not zm._changing_zone)
 	_check("Despues del tutorial el cuarto ya no esta a oscuras ni salen las ayudas", not casa.get_node("Madrugada").visible and not ayudas.tasks_panel.visible)
+	casa.get_node("UILayer/WardrobeUI").fade_seconds = 0.0
 	casa.get_node("Wardrobe").can_interact = true
 	casa.get_node("Wardrobe").execute()
 	await _vestir(casa, "home")

@@ -3,7 +3,8 @@ class_name WardrobeUI
 ## UI del armario (especificacion de Ramiro): Mayui con la ropa actual a la izquierda y las prendas colgadas a la derecha.
 ## Se maneja con el mouse: al pasar sobre una prenda se resalta; al hacer clic Mayui muestra el cuadro "cambiandose" 1 s y
 ## luego el render con la ropa nueva (vestirse suma 2 min al reloj). La imagen de cada prenda depende de su estado (limpia,
-## sucia, mojada, mojada y sucia). La ropa vive en PlayerManager (outfit y wardrobe). Esc cierra.
+## sucia, mojada, mojada y sucia). La ropa vive en PlayerManager (outfit y wardrobe). Se entra y se sale oscureciendo un
+## momento; Esc cierra, salvo justo despues de cambiarse (settle_seconds), para que se vea la ropa puesta.
 
 signal outfit_chosen(item: Item)
 
@@ -23,6 +24,10 @@ signal outfit_chosen(item: Item)
 const UNIFORM_SAID_FLAG : String = "tutorial_uniform_said"
 var _basket_full : bool = false
 var changing_seconds : float = 1.0   ## cuanto dura el cuadro "cambiandose"
+var settle_seconds : float = 1.0     ## despues de cambiarse, Esc espera esto para que se vea la ropa puesta
+var fade_seconds : float = 0.25      ## al entrar y salir: oscurece, cambia y aclara (0: sin transicion)
+var _esc_ready_at : int = 0          ## instante (ms) desde el que Esc vuelve a cerrar
+var _moving : bool = false           ## entrando o saliendo
 var _busy : bool = false
 var _locked : bool = false
 var _hanging : Dictionary = {}       ## id de outfit -> Item colgado
@@ -46,24 +51,39 @@ func _exit_tree() -> void:
 
 ## Abre el armario: Mayui queda quieta mientras esta abierto (mismo contador que el PC y las demas UI).
 func open() -> void:
-	if visible: return
-	refresh()
-	visible = true
+	if visible or _moving: return
 	if not _locked:
 		_locked = true
 		GameManager.modal_count += 1
+	await _fade_through(func() -> void:
+		refresh()
+		visible = true)
 
 func close() -> void:
-	if _busy or not visible: return
-	visible = false
+	if _busy or _moving or not visible: return
+	await _fade_through(func() -> void: visible = false)
 	if _locked:
 		_locked = false
 		GameManager.modal_count -= 1
 
+## La transicion: oscurece, hace el cambio y aclara.
+func _fade_through(change: Callable) -> void:
+	if fade_seconds <= 0.0:
+		change.call()
+		return
+	_moving = true
+	TransitionManager.fadeIn(fade_seconds)
+	await get_tree().create_timer(fade_seconds).timeout
+	change.call()
+	TransitionManager.fadeOut(fade_seconds)
+	await get_tree().create_timer(fade_seconds).timeout
+	_moving = false
+
 func _unhandled_input(event: InputEvent) -> void:
 	if visible and event.is_action_pressed("ui_cancel"):
-		close()
 		get_viewport().set_input_as_handled()
+		if Time.get_ticks_msec() >= _esc_ready_at:
+			close()
 
 ## Redibuja segun lo que lleva puesto Mayui y lo que cuelga en el armario.
 func refresh() -> void:
@@ -105,7 +125,7 @@ func _on_basket_hover(inside: bool) -> void:
 		basket_highlight.visible = inside
 
 func _on_garment_input(event: InputEvent, id: String) -> void:
-	if _busy or _is_talking(): return
+	if _busy or _moving or _is_talking(): return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var item : Item = _hanging.get(id)
 		if item == null: return
@@ -133,6 +153,7 @@ func _choose(item: Item) -> void:
 	PlayerManager.wear_clothes(item)
 	TimeManager.add_to_current_time(PlayerManager.CHANGE_CLOTHES_TIME)
 	refresh()
+	_esc_ready_at = Time.get_ticks_msec() + int(settle_seconds * 1000.0)
 	_busy = false
 	outfit_chosen.emit(item)
 	_comment_uniform()

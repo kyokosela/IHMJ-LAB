@@ -343,10 +343,10 @@ func _t_despues_del_bano() -> void:
 	await _ir_a("Wardrobe", Vector2i(7, 6), Vector2i.RIGHT)
 	var armario = casa.get_node("UILayer/WardrobeUI")
 	await _pulsar_z()
-	await create_timer(0.5).timeout
+	await create_timer(0.9).timeout   # entra con su transicion
 	_check("Armario despues de ducharse: Z lo abre", armario.visible and gm.modal_count == 1)
 	armario.close()
-	await create_timer(0.3).timeout
+	await create_timer(0.9).timeout   # sale con su transicion
 
 	# calendario despues de volver del bano: se acuerda de lo ya leido
 	_check("Calendario: se llega caminando", await _caminar_a(Vector2i(2, 4)), str(pm.player.global_position))

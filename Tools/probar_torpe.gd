@@ -260,8 +260,9 @@ func _armario() -> void:
 	await create_timer(1.4).timeout
 	await _calma()
 	_check("Esc y clics a mitad del cambio: acaba con el uniforme puesto", pm.get_outfit_id() == "work" and _tarea("CLOTHES"), pm.get_outfit_id())
+	await create_timer(1.0).timeout   # la pausa tras cambiarse
 	await _tecla(KEY_ESCAPE)
-	await create_timer(0.3).timeout
+	await create_timer(0.9).timeout
 	_check("Cierra con Esc y Mayui puede moverse", not armario.visible and _libre_para_seguir(), "modal %d" % gm.modal_count)
 
 # ------------------------------------------------------------------ 4. la cocina al azar

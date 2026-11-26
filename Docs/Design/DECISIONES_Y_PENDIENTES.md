@@ -167,7 +167,7 @@
 | 15 | Advertencias de renta suben por pagos fallidos, no por días; sin deudas invisibles (dinero nunca <0) | `economy_manager.gd` | F4 |
 | 16 | Bus siempre disponible a S/10, sin horarios 07:30 / 17:30 | `zone_manager.gd` | F4 |
 | 17 | Tolerancia de llegada (D23) | `attendance_manager.gd` | F4 |
-| 18 | Guardado solo al final del día: no verificado (hay guardado de depuración con Shift+S/L) | `game_manager.gd` | F5 |
+| 18 | Guardado solo al final del día: no verificado (hay guardado de depuración con Shift+S/L) | `game_manager.gd` | ✅ se guarda al despertar, todo (2026-11-26, [GUARDADO](GUARDADO.md)); falta menú «Continuar» |
 
 ---
 

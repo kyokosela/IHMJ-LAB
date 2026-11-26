@@ -10,7 +10,8 @@ independiente. Revisado el 2026-11-26 sobre `6b5c8ba`: lectura de los cambios de
 (guardado, paga y alarma). **No** se revisaron a fondo las escenas, el rendimiento, un ejecutable exportado ni el código del
 equipo que no cambió.
 
-**Actualización (2026-11-26):** la alarma y la paga del viernes están **corregidas, con prueba**. Falta el guardado.
+**Actualización (2026-11-26):** la alarma, la paga del viernes y el guardado están **corregidos, con prueba** (el
+guardado, sin probar todavía jugando).
 
 ## 🚦 Veredicto
 
@@ -28,7 +29,7 @@ oficina se construye encima.
 
 | # | Riesgo | Gravedad | Evidencia | Arreglo | Tamaño |
 |---|---|---|---|---|---|
-| 1 | **El guardado no sirve para una semana de juego** | Alta | Probado: solo vuelve el dinero; se pierden día, hora, cordura, energía, efectos y ropa | Que cada sistema guarde lo suyo, guardar al dormir y una prueba | Mediano |
+| 1 | ✅ **El guardado no servía para una semana de juego** | Alta → resuelta | Solo volvía el dinero. Ahora cada sistema guarda lo suyo, al despertar, con prueba (`probar_guardado.gd`). Falta un menú «Continuar» y probarlo jugando | — | — |
 | 2 | **`player_manager.gd` lo hace todo** | Alta a futuro | 1.470 líneas, 110 funciones: efectos, sueño, cordura, hábitos y ropa | Partirlo en varios archivos sin cambiar lo que hace | Mediano |
 | 3 | **Errores que las pruebas no vieron** | Media | ✅ Corregidos con prueba: la paga del viernes (800 en vez de 1.000) y la alarma. Quedan en el prototipo de trabajo ([Trabajo](trabajo-y-computadora.md)): tardanza distinta al diseño, entrar antes de las 08:00 anota falta, 27 correos fijos en la evaluación, dos managers huérfanos y casi toda la agenda ocurre solo la primera semana | Corregirlos con prueba y decidir qué se conserva antes de construir la oficina | Mediano |
 | 4 | **Un ejecutable podría fallar** | Media | Estadísticas, eventos, ítems y correos se cargan listando carpetas con `DirAccess`, que en juegos exportados ve archivos `.remap` ([foro de Godot](https://forum.godotengine.org/t/a-proper-way-to-grab-a-list-of-directory-files-that-wont-break-on-export-file-remapping/91983)). El patrón viene del código original y se repitió. **Sin comprobar** | `ResourceLoader.list_directory()` y exportar una vez | Pequeño |
@@ -51,7 +52,7 @@ un correo o un personaje exige tocar código.
 
 ## 🛠️ Orden propuesto
 
-1. Guardado completo, con su prueba.
+1. ✅ Guardado completo, con su prueba.
 2. ✅ Alarma y paga del viernes · pendiente: limpieza del prototipo de trabajo.
 3. Partir `player_manager.gd` (las pruebas vigilan que nada cambie).
 4. Preparar la exportación y restaurar el revisor.

@@ -28,6 +28,7 @@ Desde la carpeta del proyecto:
 | `probar_voy_tarde.gd` | Avisos pasadas las 07:30 |
 | `probar_alarma.gd` | Despertador: pantalla, hora de despertar, Insomnio y deuda de sueño |
 | `probar_paga.gd` | Paga semanal: viernes 17:00, una sola vez, descuentos y casos límite |
+| `probar_guardado.gd` | Guardar al despertar y cargar como al abrir el juego: todo vuelve igual, incluida la estufa cocinando |
 | `probar_cuarto.gd` | Paredes, muebles y puertas de casa y edificio |
 | `jugar_manana.gd` | Juega la mañana con teclas y ratón; puede guardar fotos |
 | `probar_torpe.gd` | Insiste en todo y desordena la cocina |
@@ -35,7 +36,8 @@ Desde la carpeta del proyecto:
 
 ## ⚠️ Límites
 
-- No cubren el guardado (todavía incompleto). La paga y la alarma tenían errores sin detectar: ya tienen su prueba.
+- El guardado, la paga y la alarma tenían errores sin detectar: ya tienen su prueba. Las que duermen apagan el guardado
+  automático (`GameManager.autosave_enabled`) o usan otra ranura, para no pisar la partida del jugador.
 - Algunas dependen de posiciones exactas: mover un mueble obliga a actualizar la prueba.
 - Los diálogos solo reciben teclas con `Input.parse_input_event`.
 - Ninguna prueba un ejecutable exportado.

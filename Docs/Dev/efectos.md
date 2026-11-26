@@ -78,5 +78,6 @@ sueño, Insomnio) → se puede volver a dormir 12 h después.
 ## ⚠️ Pendiente
 
 - Desmayo por lugar, Desahogo, Suciedad en dos capas (cuerpo/boca) e ítems de medicina: diseñados, sin implementar.
-- Casi nada de este estado se **guarda** (ver [Guardado](guardado-hud-debug.md)).
+- Todo este estado se **guarda** al despertar (`get_save_data` / `load_save_data` de `PlayerManager`; mientras carga,
+  `_loading` impide que la energía ponga o quite efectos). Ver [Guardado](guardado-hud-debug.md).
 - Prueba: `Tools/probar_efectos.gd` (0 FALLA) y `Tools/simulacion_efectos.gd` si se cambia un número.

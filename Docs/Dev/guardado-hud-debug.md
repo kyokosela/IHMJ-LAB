@@ -1,33 +1,43 @@
 # Guardado, sonido, HUD y depuración
 
-Status: En progreso
+Status: En revisión
 Assign: Sela (hecho con IA)
 
 # 💾 `SaveManager` (cambios)
 
-Además de los `SaveComponent`, guarda economía, asistencia, relaciones, banderas y correos. Tolera entradas que no son
-`ComponentData`.
+Además de los `SaveComponent`, **cada manager guarda y carga lo suyo** (`get_save_data` / `load_save_data`); `SaveManager`
+solo los junta en un archivo (`user://saves/save_1.res`). Hecho el 2026-11-26; diseño y trampas en
+[`GUARDADO.md`](../Design/GUARDADO.md).
 
-## ⚠️ El guardado está incompleto
+## ⏯️ Cuándo se guarda y cómo se carga
 
-Comprobado guardando y cargando (2026-11-26):
+- **Solo al despertar de dormir** (`PlayerManager.sleep()` → `GameManager.autosave()`), también tras un desmayo.
+- Cargar: `Shift+L` → `GameManager.load_game()`: carga los datos y abre la zona guardada; Mayui aparece en el punto general
+  (en su cuarto, junto a la cama). **No hay menú «Continuar»:** abrir el juego empieza una partida nueva.
+- `GameManager.save_slot` (ranura) y `autosave_enabled` (las pruebas que duermen lo apagan).
 
-| Dato | ¿Se recupera? |
-|---|---|
-| Dinero | Sí |
-| Día y hora | **No** |
-| Cordura, energía y demás estadísticas | **No** |
-| Efectos | **No** |
-| Ropa | **No** |
-| Tareas, eventos en curso, cocina, zona | **No** (no hay código que los guarde) |
-| Manos y mochila | Tienen componente de guardado, pero solo escribe lo exportado: se perdería lo que lleva la olla, los usos y las condiciones (visto en el código, sin comprobar) |
+## 📦 Qué guarda cada uno (orden de carga)
 
-No existe botón de guardar ni guardado al dormir: solo las teclas de prueba.
+| Orden | Quién | Qué |
+|---|---|---|
+| 1 | `TimeManager` | Día, semana, mes, hora. Se pone **sin avisar** (`_loading`): cargar no cierra el día, ni paga, ni anota faltas |
+| 2 | `EventManager` | Si cada evento con hora ya ocurrió, cuáles están en curso y **todos los contadores** con lo que les falta |
+| 3 | `PlayerManager` | Estadísticas, efectos con nivel y días, cordura, hábitos del día, sueño, Insomnio, ropa, manos y mochila |
+| 4 | `ContainerManager` | La cocina (incluida la que está en pantalla) y si la estufa está cocinando |
+| 5 | `TaskManager` | Listas de tareas activas: hecha o no y su espera |
+| 6 | `ZoneManager` | Zona y costo creciente de la calle |
+| 7 | `NarrativeEventHandler` | Eventos con diálogo que esperan a Mayui y avisos de "Voy tarde" ya dichos |
+| 8 | Economía, asistencia, relaciones, banderas, correos | Como antes (asistencia: también falta/salida anticipada de hoy) |
 
-## 📝 Plan aprobado (sin programar)
+**Contadores:** lo que hace cada uno al cumplirse (una función) no se puede guardar. Al cargar se rehacen vacíos y su dueño
+se la devuelve con `EventManager.restore_lapse_callable` (`PlayerManager` y `GameManager`); las esperas de las acciones y
+la estufa se reenganchan solas al abrirse la escena.
 
-Ramiro lo aprobó el 2026-11-26 para programarlo con Opus: se guarda **solo al despertar de dormir** y se carga con
-`Shift+L`. Alcance, estado de cada manager y trampas: [`GUARDADO.md`](../Design/GUARDADO.md).
+## ⚠️ Límites conocidos
+
+- Las frases de la puerta del tutorial y las de cama, armario o nevera (`StringChain`) vuelven a la primera.
+- Los `SaveComponent` de `Player.tscn` siguen escribiendo sus datos (incompletos); `PlayerManager` los reemplaza al cargar.
+- Probado con `Tools/probar_guardado.gd` sin ventana; falta probarlo jugando.
 
 # 🔊 `AudioManager` (autoload)
 

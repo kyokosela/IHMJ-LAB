@@ -1,6 +1,7 @@
 # Guardado: plan aprobado y lo que hay que saber antes de programarlo
 
-**Estado (2026-11-26):** aprobado por Ramiro con la condición de programarlo **con Opus**. Sin empezar.
+**Estado (2026-11-26):** aprobado por Ramiro y **programado con Opus** (prueba `Tools/probar_guardado.gd`). Cómo quedó:
+[`Docs/Dev/guardado-hud-debug.md`](../Dev/guardado-hud-debug.md). Falta probarlo jugando.
 
 ## Qué pidió y aprobó Ramiro
 Se guarda **solo, al despertar de dormir** (`SISTEMA_GAMEPLAY.md` §2.3):

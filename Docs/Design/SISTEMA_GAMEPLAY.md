@@ -56,7 +56,7 @@
 | Lun–Vie | Inicio del trabajo (fichar en la PC, FJ11) | 08:00 | Oficina |
 | Lun–Vie | Pausa / Reanuda | 13:00 / 13:45 | Oficina |
 | Lun–Vie | Fin de la jornada | 17:00 | Oficina |
-| Miércoles | **Vence el alquiler** | 17:00 | Lobby (casero) 🔧 D6 |
+| Viernes | **Vence el alquiler** | 17:00 | Lobby (casero) 🔧 D6 |
 | Viernes | Servicios públicos | 13:00 | — |
 | Viernes | Tabla de resultados y **pago del salario** | 17:00 | Oficina 🔧 D7 |
 
@@ -170,7 +170,8 @@ Inventario: **2 manos** (2 slots); manos ocupadas bloquean ciertas interacciones
 | **Café** | 🟡 +10 si está frío | — | Hiperactividad 2 h | agua 25 min (estufa) o 35 min (nevera) + café + taza; dura 6 h |
 
 ### 5.5 Moverse entre zonas
-- **A pie** ✅ FJ5: cada escena recorrida cuesta energía y tiempo **crecientes**; el cálculo se reinicia al volver a la última escena recorrida. (Base 2 de energía y 5 min, valores del código.)
+- **Dentro de un establecimiento** ✅ (Ramiro, 2026-11-25): cambiar de zona (casa, pasillo y recepción; la empresa) **no cuesta tiempo ni energía** ni tiene riesgo de calle. Solo cuesta andar por la calle.
+- **A pie por la calle** ✅ FJ5: cada escena recorrida cuesta energía y tiempo **crecientes**; el cálculo se reinicia al volver a la última escena recorrida. (Base 2 de energía y 5 min, valores del código.)
 - **Bus** 🔧 D20: solo pasa a las 07:30 (Apto→Empresa) y 17:30 (Empresa→Apto); cuesta S/10 y ahorra tiempo y energía frente a caminar.
 - **Riesgo en la calle** 🟡: 10 % base de ser sorprendida (−5 Cordura, +10 min, Estrés); Atenta lo reduce 50 %, Hipersomnia lo duplica.
 
@@ -182,7 +183,7 @@ Inventario: **2 manos** (2 slots); manos ocupadas bloquean ciertas interacciones
 | Moneda | Savia (S/) | ✅ |
 | Dinero inicial | S/350 | 🟡 |
 | Salario | S/200 por día laborado (L–V) = S/1000/semana · se paga el viernes 17:00 | 🟡 monto (viene del Documento Maestro v2, que no está en el repo, P11) · ✅ viernes · 🔧 D7 |
-| Alquiler | S/230 · vence el miércoles 17:00 · se paga al casero en el Lobby | 🟡 / 🔧 D6 |
+| Alquiler | S/230 · vence el viernes 17:00 · se paga al casero en la recepción (Lobby) | 🟡 monto · viernes (Ramiro, 2026-11-25) / 🔧 D6 |
 | Bus | S/10 por viaje | 🟡 |
 | Servicios públicos | viernes 13:00 (monto 🔴 P8) · RootNet (internet) va dentro de las facturas | ✅ PR6 |
 
@@ -191,7 +192,7 @@ Inventario: **2 manos** (2 slots); manos ocupadas bloquean ciertas interacciones
 - **Llegar tarde** (después de 08:10; 🟡 tolerancia de 10 min porque tu Flujo dice que a las 8:05 "no vas tarde", D23) = llamado de atención acumulable (🟡 −S/20). **Irse antes sin permiso** = llamado + pérdida de parte del día (🟡 −S/50). **Faltas:** 1.ª y 2.ª avisos · 3.ª recorte de salario (🟡 −S/100) · 4.ª **despido** (PR49).
 - **Horas extra:** no se pagan; cumplen la meta del día pero añaden efectos negativos (PR52). **3 o más tareas extra al día** dan el token de ascensión (PR20).
 - **Evaluación del viernes:** pantalla de resultados + correo semanal (PR64–65). No cambia el salario; solo el progreso del token.
-- **Alquiler impago:** jueves 18:00 el casero avisa (si no pagaste) · domingo: aviso final o desalojo el lunes.
+- **Alquiler impago:** el sábado el casero avisa (si no pagaste) · domingo: aviso final o desalojo el lunes. (El jueves recuerda que vence al día siguiente.)
 
 ---
 
@@ -206,12 +207,13 @@ Inventario: **2 manos** (2 slots); manos ocupadas bloquean ciertas interacciones
 | Mar (2) | 09:00 | Email de Veda (solo bandera) | — |
 | Mar (2) | 13:20 | Madina, cafetería (solo en la pausa) | **Oficina** |
 | Mié (3) | 13:30 | Madina, tensión (solo en la pausa) | **Oficina** |
-| Mié (3) | 17:00 | **Vence el alquiler** | **Lobby** |
 | Jue (4) | 09:00 | Aviso de Veda (banderas de restricción nocturna y encuesta) | — |
 | Jue (4) | 13:15 | Madina, objeto M-88 (solo en la pausa) | **Oficina** |
 | Jue (4) | 15:30 | Mirada de Veda (bandera) | — |
-| Jue (4) | 18:00 | Casero: 1.ª advertencia (solo si no pagó) | **Lobby** |
+| Jue (4) | 18:00 | Casero: recordatorio, mañana vence el alquiler (solo si no pagó) | **Lobby** |
 | Vie (5) | 13:00 | Servicios públicos | — |
+| Vie (5) | 17:00 | **Vence el alquiler** | **Lobby** |
+| Sáb (6) | 18:00 | Casero: 1.ª advertencia (solo si no pagó) | **Lobby** |
 | Vie (5) | 17:00 | Tabla de resultados + salario | **Oficina** |
 | Vie (5) | 22:00 | Email M-88 (solo si hubo la nota de Madina) | — |
 | Sáb (6) | 10:00 / 14:00 | Mercado y Arcade abiertos | Comercial |

@@ -4,6 +4,7 @@
 ## 1. Cómo se usa la cocina
 - **Almacenamiento:** 2 alacenas (12 casillas), a temperatura ambiente. Todavía no hay una nevera que enfríe.
 - Los objetos se **arrastran**. **Clic derecho** (o doble clic) sobre un objeto en tus manos = usarlo (comer, beber).
+- **Cada estación acepta solo lo suyo** (2026-11-25): tabla de picar, la bolsa de ingredientes (útil "cuttable"); estufa, la olla con algo dentro ("cookware"); fregadero, la olla. El resultado de Combinar solo sale. Si algo no va, no se mueve y Mayui lo dice. En las estaciones no hay cuadro: se suelta sobre la hornilla, la pila o la tabla.
 - **Estaciones** (estufa, fregadero, tabla): reciben un objeto, su botón hace la receta y **el resultado se queda ahí**.
 - **Combinar:** dos casillas arriba y el resultado en la de abajo. No combina otra vez hasta que saques el resultado.
 - **Todo se queda donde lo dejas** al salir de la cocina, también lo que esté en Combinar.

@@ -13,16 +13,22 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 ## ESTADO (actualizar al cerrar cada sesión)
 - El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Baño, Balcón, Pasillo,
   Recepción (`Lobby`), Oficina y Comercial; cada una con cámara (zoom 5). Apartamento, Baño y Balcón son la casa
-  (`ZoneManager.is_home`): pasar entre ellos y salir al pasillo no cuesta tiempo ni energía (`_is_free_step`). Los eventos con
-  diálogo esperan a que Mayui esté en su zona (`narrative_event_handler.gd`, tabla `event_zones`). Z interactúa y avanza
-  diálogos. Reloj arriba al centro.
+  (`ZoneManager.is_home`). Dentro del edificio de Mayui (casa, pasillo y recepción, `HOME_BUILDING`) cambiar de zona no cuesta
+  tiempo ni energía: solo la calle (regla de Ramiro, 2026-11-25). Los eventos con diálogo esperan a que Mayui esté en su zona
+  (`narrative_event_handler.gd`, tabla `event_zones`). Z interactúa y avanza diálogos; puertas y escaleras se usan caminando
+  contra ellas (`push_to_use`). Reloj arriba al centro.
+- Segunda prueba de Ramiro (2026-11-25, tras el pasillo), hecho: estufa que se cancelaba al salir de la zona
+  (`ContainerManager` sostiene las estaciones, `get_live_resources`), calendario pegado en el escritorio, punto sobre lo
+  usable en vez del cartel, estornudo dentro de la ducha y salir mirando abajo, lavamanos coherente, escritorio, cocina
+  (estaciones por tipo, sin cuadros, alacenas más grandes), transición del armario, 4 puertas, recepción con rejilla. La
+  renta vence el viernes y el dinero inicial es 350. Pendientes de Ramiro: P83–P87. Sin subir a GitHub hasta que lo revise.
 - Pasos de caminar PROVISIONALES de casa/toalla/Outfit 1 (`Tools/pasos_provisionales.ps1`, desde el cuadro quieto; el arte
   real se pega en las mismas hojas, P54). El escritorio permite comer ahí (P27) y el fregadero vacía la olla (P81).
-- Pasillo y recepción (2026-11-25, según los planos de Ramiro, por revisar): `Hallway.tscn` (zona 6; escaleras y puerta M-21)
-  y `Lobby.tscn` (piso 1; recepción, casero, puerta a la calle en bus). La puerta de casa lleva al pasillo. Fondos
-  provisionales en `Assets/Building/` (P80). Los carteles al acercarte son pequeños (`interactable.gd`, P74); la puerta del
+- Pasillo y recepción (2026-11-25, según los planos de Ramiro): `Hallway.tscn` (zona 6; escaleras y puertas M-21 a M-24)
+  y `Lobby.tscn` (piso 1; recepción con rejilla, mantenimiento, casero, puerta a la calle en bus). La puerta de casa lleva al
+  pasillo. Fondos provisionales en `Assets/Building/` (P80); falta hablar/pagar en la recepción (P87). La puerta del
   tutorial repite el aviso en vez de quedarse muda (`task.gd`, P69); Z también elige en las preguntas
-  (`Dialogic.Choices.use_input_action`, P82); la estufa vacía tiene frases (`stove_empty_lines` en `KitchenMultiUI.tscn`); la ducha muestra la silueta tras la cortina (`UI/Shower/`, señal `ducha_fuera` en
+  (`Dialogic.Choices.use_input_action`, P82); la estufa vacía tiene frases (`stove_empty_lines` en `KitchenMultiUI.tscn`); la ducha muestra la silueta tras la cortina (`UI/Shower/`, señales `estornudo` y `ducha_fuera` en
   `ducha_tutorial.dtl`, P70).
 - Diseño unificado y pendiente de revisión de Ramiro: `Docs/Design/SISTEMA_GAMEPLAY.md`. Hoja de ruta F1–F5 en
   `DECISIONES_Y_PENDIENTES.md`; NO empezar una fase sin que Ramiro apruebe las decisiones D# que la tocan.
@@ -60,7 +66,7 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   Pendientes P71 (ropa sucia) y P72 (casual).
 - Ducha (2026-11-24): la primera vez en el tutorial suena `DialoguePlugin/TIMELINE/ducha_tutorial.dtl` (propiedad `dialog` del nodo
   `Shower`, la lanza `bathe.gd`); al insistir, las claves `_TAKE_BATH_*` en su `cooldown_timer_message` (`StringChain` ahora aplica
-  `tr()` y vuelve a la primera frase en cada enfriamiento). Faltan transición, silueta y sonido (P70). En las pruebas, pasar los
+  `tr()` y vuelve a la primera frase en cada enfriamiento). Falta sonido y el dibujo real (P70). En las pruebas, pasar los
   diálogos con Z: cerrarlos con `end_timeline` a media frase deja a Dialogic sin avanzar el siguiente.
 - Ropa (2026-11-22): `PlayerManager` guarda lo que lleva Mayui (`outfit`) y lo colgado (`wardrobe`); cada prenda es un `Item` tipo CLOTH con `cleanliness` y `wetness`; la ropa se ensucia/seca con el reloj y afecta Suciedad, Debilitamiento y Estrés (números propuestos, P45). La UI del armario es `UI/Containers/wardrobe_ui.tscn` (mouse, 1 s de cambio, 2 min) con el arte de `Assets/UI/Wardrobe/`. Bañarse deja la toalla. Espejo del lavamanos HECHO (`UI/Mirror/mirror_ui.tscn`: cepillo = Cepillarse una vez al día con tarea TEETH, espejo = verse la cara, llave = lavar ropa; el vaso, el tubo y el cepillo van DELANTE del marco, porque el espejo está pegado a la pared (recorte `CupFront`, P51); antes de comer en el tutorial Mayui lo impide; pendientes P49, P51-P53; `Tools/probar_espejo.gd` debe terminar en 0 FALLA). Sprites del mundo de la ropa de casa, la toalla y el Outfit 1 HECHOS (P48; solo cuadros quietos, `Tools/armar_hojas_mayui.ps1` arma las hojas de `Assets/Mayui` desde los `.aseprite` de `Docs`; faltan sus cuadros de caminar, P54, y la cabeza, P55). PENDIENTE: cesta (P47), prenda/ítem del Outfit 1, eventos que ensucian (P46). `Tools/probar_ropa.gd` debe terminar en 0 FALLA.
 - Flujo del juego (2026-11-22): `Tools/probar_flujo.gd` (debe terminar en 0 FALLA) cubre aparición por zona
@@ -70,7 +76,7 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   La traducción de Dialogic está desactivada (los ids de los `.dtl` se repiten entre archivos; no activarla sin ids únicos).
 - Cuarto de Mayui (2026-11-25, forma aprobada por Ramiro: **L invertida**): fondo provisional
   `Assets/Apartment/cuarto_provisional.png` (recortado de la captura del tileset), paredes en el nodo `Paredes`, muebles
-  provisionales de colores **sólidos**, puerta principal en un hueco de la pared (solo al caminar hacia ella) y cámara fija con
+  provisionales de colores **sólidos**, puerta principal en un hueco de la pared (caminando contra ella) y cámara fija con
   el cuarto entero en pantalla. Mayui despierta junto a la cama. Si se mueve un mueble, actualizar su plano en
   `Tools/probar_cuarto.gd` y correrla (P74).
 - Baño (2026-11-25): escena aparte `Scenes/World/Bathroom.tscn` (puerta `sceneChanger` a la izquierda de la entrada) con la

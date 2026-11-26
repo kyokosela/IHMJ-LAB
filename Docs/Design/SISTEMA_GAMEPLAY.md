@@ -227,7 +227,10 @@ Fuera de la demo: el evento del "Piso 2" (placeholder de IA, tu doc lo marca com
 
 ---
 
-## 8. Tutorial de la mañana ✅ (FJ + `Flow de juego.txt`)
+## 8. Tutorial: la primera mañana ✅ (FJ + `Flow de juego.txt`)
+El **tutorial es una semana jugable** que muestre lo que se podrá hacer (Ramiro, 2026-11-26); esta sección es solo su primera
+mañana (el bloque de la casa).
+
 Mayui despierta junto a la cama, temprano y a oscuras. Aparece la **lista de tareas** y los efectos iniciales **Maloliente** y **Hambre**; el jugador puede explorar toda la casa, pero Mayui siempre intenta redirigirlo.
 
 1. **Ducharse** — silueta tras la cortina; sin agua caliente ("Qué frío"): Estrés (prob.) y a veces Atenta breve (D4). Sale en toalla (cambia el sprite).

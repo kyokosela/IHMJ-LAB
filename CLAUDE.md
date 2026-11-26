@@ -22,6 +22,9 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   usable en vez del cartel, estornudo dentro de la ducha y salir mirando abajo, lavamanos coherente, escritorio, cocina
   (estaciones por tipo, sin cuadros, alacenas más grandes), transición del armario, 4 puertas, recepción con rejilla. La
   renta vence el viernes y el dinero inicial es 350. Pendientes de Ramiro: P83–P87. Sin subir a GitHub hasta que lo revise.
+- Tercera ronda (2026-11-25): puerta del baño sobre la esquina; puertas del edificio al fondo de su hueco; punto pequeño y
+  difuminado; frase del calendario; **comida instantánea** (`instant_box`/`instant_meal`, receta
+  `Crafts/Kitchen/InstantMeal`, estufa 5 min; P25, pendientes P88–P89).
 - Pasos de caminar PROVISIONALES de casa/toalla/Outfit 1 (`Tools/pasos_provisionales.ps1`, desde el cuadro quieto; el arte
   real se pega en las mismas hojas, P54). El escritorio permite comer ahí (P27) y el fregadero vacía la olla (P81).
 - Pasillo y recepción (2026-11-25, según los planos de Ramiro): `Hallway.tscn` (zona 6; escaleras y puertas M-21 a M-24)

@@ -39,7 +39,9 @@ Hoy solo se puede **llenar la olla y calentarla**. No se combina con nada: la co
 | Ingredientes picados **sin cocinar** | no se pueden comer | ni sueltos ni dentro de la olla |
 | Bolsa sin picar | no se puede | — |
 
-Con Inapetencia, comer puede fallar y da menos energía. El café (Hiperactividad; caliente: 1 de 6 veces −1 Estrés; frío: +10 de energía) está programado pero no se consigue. La comida instantánea todavía no existe (P25).
+Con Inapetencia, comer puede fallar y da menos energía. El café (Hiperactividad; caliente: 1 de 6 veces −1 Estrés; frío: +10 de energía) está programado pero no se consigue.
+
+**Comida instantánea** (2026-11-25): olla al fregadero → **Usar** (agua) → estufa **5 min** → **Combinar** la olla con agua caliente y la **caja** → sale la comida instantánea (la olla vuelve vacía). Comerla: +10 de energía, quita el Hambre, 50 % de Estrés y −1 de Calma; en el escritorio Mayui dice "No sabe a nada.".
 
 ## 6. Estados de los objetos
 | Estado | Valores | Para qué sirve | ¿Funciona? |

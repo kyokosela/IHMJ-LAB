@@ -1,62 +1,38 @@
-# Segunda ronda: solo lo que cambió con tu reporte (2026-11-25)
+# Tercera ronda: puertas, punto y comida instantánea (2026-11-25)
 
-**Antes:** cierra Godot y vuelve a abrirlo (si pregunta por archivos cambiados, elige **recargar desde disco**), luego **F5**.
-No pulses **H** ni **J**. **F3** muestra efectos y reloj.
-**Cómo responderme:** número + **OK**, **FALLA** o **DUDA** + qué viste. Foto: **Win + Shift + S**. Unos 15 minutos, en orden.
+**Antes:** cierra el juego y vuelve a abrirlo (**F5**). No pulses **H** ni **J**.
+**Cómo responderme:** número + **OK**, **FALLA** o **DUDA** + qué viste. Unos 10 minutos.
 
-**1. Puntos y puertas** (en el cuarto)
-- Debe pasar: al tener delante un mueble sale un **punto amarillo** (ya no hay cartel ni "Z: usar"; la ayuda lo explica
-  una vez arriba a la izquierda). Camina contra la puerta principal: "..." y Mayui **no se mete** en ella; otro empujón,
-  sin alejarte, da la frase siguiente; mantener la tecla la dice una sola vez; Z no hace nada.
-- Dime: ¿el tamaño del punto? ¿la puerta del baño ya cuadra con por dónde entras?
+**1. Baño** (puerta a la izquierda de la entrada)
+- Debe pasar: la puerta ya no baja hasta la esquina; se entra caminando contra ella, un paso más arriba que antes.
+- Dime: ¿ya cuadra? El lado de dentro del baño lo dejé igual porque ahí sí cuadraba.
 
-**2. Calendario y escritorio a lo loco** (Z y flechas rápido entre los dos)
-- Debe pasar: nunca habla el calendario estando en el escritorio ni se queda un punto fijo. El escritorio dice
-  "Aquí puedo comer cuando tenga algo listo." (frase mía, provisional).
+**2. Punto**
+- Debe pasar: sobre cada mueble que tienes delante, un punto pequeño, difuminado y de color suave.
+- Dime: ¿tamaño y color? ¿se ve en la oscuridad y sobre el piso claro?
 
-**3. Baño: lavamanos y ducha**
-- Lavamanos antes de ducharte: "Primero debería ducharme." → "Luego." → "Quiero bañarme primero."
-- Ducha: "Qué frío." y "¡Achuu!" **dentro** de la ducha (la silueta da un respingo); sales **mirando hacia abajo** y sigue
-  el resto. Para insistir en la ducha, gírate otra vez hacia ella.
+**3. Ducha, armario y comida instantánea**
+- Dúchate. En la cocina, abre la alacena derecha: hay **3 cajas** de comida instantánea.
+- Saca una a las manos: "Solo queda esta porquería." y dos frases más.
+- Olla al **fregadero** → **Usar** → olla a la **estufa** → **Cocinar** → **Esperar** (5 min).
+- En **Combinar objetos**: la olla con agua caliente y la caja → **Combinar**: "Al menos su etiqueta no miente." / "Realmente
+  es instantáneo.". La olla vuelve vacía.
+- Pasa la comida a las manos y llévala al **escritorio**: se oscurece, come y dice "No sabe a nada.".
+- Dime: ¿se entiende el orden sin ayuda? ¿te sirven los íconos provisionales?
 
-**4. Armario**
-- Debe pasar: oscurece un momento al entrar y al salir. Justo después de cambiarte, **Esc** espera 1 segundo (se ve la
-  ropa puesta).
+**4. Calendario** (segunda vez)
+- Debe pasar: "Tampoco puedo olvidarme del alquiler…" → "Quiero evitar problemas con el casero."
 
-**5. Cocina: cosas donde no van**
-- Haz: bolsa a la estufa, olla vacía a la estufa, olla a la tabla, bolsa al fregadero, algo al resultado de Combinar.
-- Debe pasar: no se mueve y Mayui dice "No tiene sentido." (olla vacía en la estufa: "Necesito algo para cocinar.").
-  Sin cuadros en estufa, fregadero y tabla; la olla se ve como dibujo; casillas de las alacenas más grandes.
-- Dime: ¿aciertas dónde soltar sin los cuadros? ¿quieres frases propias para tabla y fregadero?
-
-**6. Estufa y salir** (lo que se cancelaba)
-- Haz: cocina una olla (Cocinar), Esc, entra al baño, vuelve y abre la cocina.
-- Debe pasar: **sigue cocinando**; con **Esperar** termina.
-
-**7. Comer en el escritorio** (con la olla de comida en las manos)
-- Debe pasar: se oscurece más tiempo y **sin frase**; después, tus frases del escritorio.
-
-**8. Salir de casa**
-- Debe pasar: el cuarto **sigue a oscuras** mientras dice "Aquí vamos." y recién cambia con el fundido.
-
-**9. Pasillo** (piso 2)
-- Debe pasar: 4 puertas iguales (M-21 a M-24); las otras tres no abren; bajar las escaleras **no gasta tiempo ni energía**.
-
-**10. Recepción** (piso 1)
-- Debe pasar: 2 puertas arriba, solo el tramo de escaleras que sube y debajo la **recepción con rejilla**; la puerta de
-  mantenimiento (a la derecha) dice "Cuarto de mantenimiento."; el casero; la puerta de la calle lleva en bus.
-- Dime: ¿la recepción con rejilla es la idea?
+**5. Pasillo y recepción** (al salir de casa)
+- Debe pasar: apareces dentro del hueco de tu puerta. En las demás puertas entras en el hueco y caminas contra la del
+  fondo (las de los vecinos no abren; mantenimiento dice "Cuarto de mantenimiento."). La puerta de la calle, igual.
+- Dime: ¿así están bien las puertas de afuera?
 
 ## Preguntas (responde por letra)
-- **H.** El casero la trata de nueva, pero el calendario dice "Quiero evitar discutir con el casero **otra vez**". ¿Cambio solo
-  esa frase por "Quiero evitar problemas con el casero."?
-- **I.** ¿Hago ahora la **comida instantánea** (tu respuesta C)? Necesito tu OK de los números de tu diseño (+10 de energía,
-  50 % Estrés, 5 min en la estufa) y el dibujo puede ser provisional.
+- **J.** Tu guion dice que en el tutorial **solo** se puede la comida instantánea. Hoy valen las dos. ¿Bloqueo la casera en el
+  tutorial?
+- **K.** "Solo queda esta porquería." choca un poco con las bolsas de ingredientes. ¿La dejo así?
 
-## Sobre tu estrés (paso 20)
-Llegar tarde **no** da estrés (solo descuenta sueldo). En tu camino lo pudo dar la **ducha fría** (50 %, tu regla de *Flow de
-juego*) o un **imprevisto en la calle** (10 % por viaje: antes contaban las escaleras, ahora solo el bus).
-
-## No hace falta reportar (ya está anotado)
-No hay sonidos · muebles, fondos, silueta y pasos provisionales · luz por hora y clima, lavar platos, rediseño de la cocina
-con mini tutorial, tendedero y hablar o pagar en la recepción (anotados, P83–P87) · la oficina es la versión vieja.
+## Ya anotado (no hace falta reportar)
+Sin sonidos · dibujos provisionales · la comida instantánea todavía no deja el plato en el fregadero ni ensucia la boca ·
+calentar agua pasó de 25 a 5 min (el café pedirá decidirlo).

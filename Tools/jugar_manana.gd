@@ -220,7 +220,7 @@ func _jugar() -> void:
 	await _foto("2_a_oscuras")
 
 	print("1. Ducha")
-	await _cruzar(Vector2i(5, 1), Vector2i.LEFT, 4)
+	await _cruzar(Vector2i(5, 0), Vector2i.LEFT, 4)
 	await _ir(Vector2i(2, 0), Vector2i.LEFT, "la ducha")
 	await _z()
 	await create_timer(1.2).timeout
@@ -319,7 +319,7 @@ func _jugar() -> void:
 	_check("El escritorio habla despues de comer", oido == ["No puedo quedarme aquí."], str(oido))
 
 	print("5. Dientes (clic en el espejo)")
-	await _cruzar(Vector2i(5, 1), Vector2i.LEFT, 4)
+	await _cruzar(Vector2i(5, 0), Vector2i.LEFT, 4)
 	await _ir(Vector2i(3, 1), Vector2i.UP, "el lavamanos")
 	await _z()
 	await create_timer(0.5).timeout

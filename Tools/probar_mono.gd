@@ -14,8 +14,8 @@ const PLANOS := {
 	0: ["#####.....", "#####.....", "#####...##", "#####...##", "##......##", "........##", "........##", "##....####", "##....####"],
 	4: ["##.#.", "##...", ".....", "....."],
 	5: ["......", "......", "......"],
-	6: ["####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####"],
-	1: ["####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "#.....####", "#.....####", "#.....####", "##########"],
+	6: ["####..####", "###....###", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "###....###", "####..####"],
+	1: ["####..####", "###....###", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "#.....####", "#......###", "#.....####", "##.#######"],
 }
 ## Sitios junto a cada cosa: zona -> [baldosa (centro), hacia donde mira]
 const SITIOS := {
@@ -25,11 +25,11 @@ const SITIOS := {
 }
 ## Delante de cada puerta: zona -> [baldosa (centro), tecla que la cruza]
 const PUERTAS := {
-	0: [[Vector2(88, 24), "move_left"], [Vector2(120, 8), "move_up"], [Vector2(56, 136), "move_down"]],
+	0: [[Vector2(88, 8), "move_left"], [Vector2(120, 8), "move_up"], [Vector2(56, 136), "move_down"]],
 	4: [[Vector2(72, 40), "move_right"]],
 	5: [[Vector2(40, 8), "move_up"]],
-	6: [[Vector2(88, 24), "move_right"], [Vector2(72, 56), "move_left"]],
-	1: [[Vector2(72, 56), "move_left"], [Vector2(40, 168), "move_down"]],
+	6: [[Vector2(104, 24), "move_right"], [Vector2(72, 56), "move_left"]],
+	1: [[Vector2(72, 56), "move_left"], [Vector2(40, 184), "move_down"], [Vector2(104, 152), "move_right"]],
 }
 const MOVER := ["move_left", "move_right", "move_up", "move_down"]
 const TECLAS := [KEY_Z, KEY_Z, KEY_Z, KEY_ENTER, KEY_SPACE, KEY_ESCAPE, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_W, KEY_S]
@@ -246,8 +246,8 @@ func _pared() -> String:
 		return ""
 	var c := Vector2i((pm.player.global_position / T).floor())
 	var mapa : Array = PLANOS[zona]
-	var puertas := {0: [Vector2i(7, -1), Vector2i(4, 1), Vector2i(3, 9), Vector2i(4, 9)], 4: [Vector2i(5, 2)],
-		5: [Vector2i(2, -1), Vector2i(3, -1)], 6: [Vector2i(6, 1), Vector2i(3, 3), Vector2i(3, 4)], 1: [Vector2i(3, 3), Vector2i(3, 4), Vector2i(2, 11)]}
+	var puertas := {0: [Vector2i(7, -1), Vector2i(4, 0), Vector2i(3, 9), Vector2i(4, 9)], 4: [Vector2i(5, 2)],
+		5: [Vector2i(2, -1), Vector2i(3, -1)], 6: [Vector2i(7, 1), Vector2i(3, 3), Vector2i(3, 4)], 1: [Vector2i(3, 3), Vector2i(3, 4), Vector2i(7, 9), Vector2i(2, 12)]}
 	if c in puertas[zona]:
 		return ""
 	if c.y >= 0 and c.y < mapa.size() and c.x >= 0 and c.x < mapa[0].length() and mapa[c.y][c.x] == ".":

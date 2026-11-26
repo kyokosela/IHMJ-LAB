@@ -63,12 +63,12 @@ position = Vector2(144, 8)
 shape = SubResource("Muro6")
 
 [node name="M5" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(16, 24)
-shape = SubResource("Muro6")
+position = Vector2(8, 24)
+shape = SubResource("Muro5")
 
 [node name="M6" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(144, 24)
-shape = SubResource("Muro6")
+position = Vector2(152, 24)
+shape = SubResource("Muro5")
 
 [node name="M7" type="CollisionShape2D" parent="Paredes"]
 position = Vector2(16, 40)
@@ -131,8 +131,8 @@ position = Vector2(-8, 152)
 shape = SubResource("Muro3")
 
 [node name="M22" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(152, 152)
-shape = SubResource("Muro5")
+position = Vector2(160, 152)
+shape = SubResource("Muro4")
 
 [node name="M23" type="CollisionShape2D" parent="Paredes"]
 position = Vector2(-8, 168)
@@ -151,20 +151,28 @@ position = Vector2(120, 184)
 shape = SubResource("Muro9")
 
 [node name="M27" type="CollisionShape2D" parent="Paredes"]
-position = Vector2(80, 200)
-shape = SubResource("Muro14")
+position = Vector2(0, 200)
+shape = SubResource("Muro4")
 
 [node name="M28" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(120, 200)
+shape = SubResource("Muro9")
+
+[node name="M29" type="CollisionShape2D" parent="Paredes"]
 position = Vector2(80, 216)
+shape = SubResource("Muro14")
+
+[node name="M30" type="CollisionShape2D" parent="Paredes"]
+position = Vector2(80, 232)
 shape = SubResource("Muro14")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 process_callback = 0
 zoom = Vector2(5, 5)
 limit_left = -112
-limit_top = -16
+limit_top = -12
 limit_right = 272
-limit_bottom = 200
+limit_bottom = 204
 
 [node name="Stairs" type="Area2D" parent="."]
 position = Vector2(56, 64)
@@ -174,7 +182,7 @@ new_scene_id = 6
 push_to_use = true
 
 [node name="DoorToOffice" type="Area2D" parent="."]
-position = Vector2(40, 184)
+position = Vector2(40, 200)
 script = ExtResource("3")
 shape = SubResource("Puerta_DoorToOffice")
 new_scene_id = 2
@@ -193,7 +201,7 @@ entity = "Player"
 from_zone = 6
 
 [node name="SpawnFromOffice" type="Marker2D" parent="." groups=["spawn_point"]]
-position = Vector2(40, 168)
+position = Vector2(40, 184)
 script = ExtResource("2")
 entity = "Player"
 from_zone = 2
@@ -238,7 +246,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DoorMaintenance" type="Area2D" parent="."]
-position = Vector2(104, 152)
+position = Vector2(120, 152)
 script = ExtResource("5")
 shape = SubResource("Puerta_Mantenimiento")
 dialog = ExtResource("6")

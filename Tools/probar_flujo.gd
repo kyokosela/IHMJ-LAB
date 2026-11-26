@@ -69,13 +69,13 @@ func _soltar(escena: Node) -> void:
 func _t_zonas() -> void:
 	print("A. Puntos de aparicion por zona")
 	var casos := [
-		["res://Scenes/World/Lobby.tscn", 2, Vector2(40, 168), "Recepcion viniendo de la oficina: junto a la puerta de la calle"],
+		["res://Scenes/World/Lobby.tscn", 2, Vector2(40, 184), "Recepcion viniendo de la oficina: junto a la puerta de la calle"],
 		["res://Scenes/World/Lobby.tscn", 6, Vector2(72, 56), "Recepcion viniendo del pasillo: al pie de las escaleras"],
-		["res://Scenes/World/Hallway.tscn", 0, Vector2(88, 24), "Pasillo viniendo de casa: junto a M-21"],
+		["res://Scenes/World/Hallway.tscn", 0, Vector2(104, 24), "Pasillo viniendo de casa: junto a M-21"],
 		["res://Scenes/World/Hallway.tscn", 1, Vector2(72, 56), "Pasillo viniendo de la recepcion: junto a las escaleras"],
 		["res://Scenes/World/Apartment.tscn", 6, Vector2(120, 8), "Apartamento viniendo del pasillo: junto a la puerta"],
 		["res://Scenes/World/Apartment.tscn", -1, Vector2(88, 120), "Apartamento al empezar: junto a la cama"],
-		["res://Scenes/World/Apartment.tscn", 4, Vector2(88, 24), "Apartamento viniendo del bano: junto a la puerta del bano"],
+		["res://Scenes/World/Apartment.tscn", 4, Vector2(88, 8), "Apartamento viniendo del bano: junto a la puerta del bano"],
 		["res://Scenes/World/Bathroom.tscn", 0, Vector2(72, 40), "Bano: junto a su puerta"],
 		["res://Scenes/World/Apartment.tscn", 5, Vector2(56, 136), "Apartamento viniendo del balcon: junto a la puerta del balcon"],
 		["res://Scenes/World/Balcony.tscn", 0, Vector2(40, 8), "Balcon: junto a su puerta"],
@@ -240,11 +240,11 @@ func _t_transicion() -> void:
 	_check("Llega al bano sin gastar energia ni tiempo y puede moverse", current_scene.zone_id == 4 and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa and mov.can_move, "zona %d, energia %.1f, +%d min" % [current_scene.zone_id, pm.get_stat_value("ENERGY"), tm.minutes - hora_casa])
 	zm.change_zone(0)
 	await _esperar_zona(0)
-	_check("Vuelve al cuarto junto a la puerta del bano, tambien sin costo", current_scene.zone_id == 0 and pm.player.global_position.is_equal_approx(Vector2(88, 24)) and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, str(pm.player.global_position))
+	_check("Vuelve al cuarto junto a la puerta del bano, tambien sin costo", current_scene.zone_id == 0 and pm.player.global_position.is_equal_approx(Vector2(88, 8)) and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, str(pm.player.global_position))
 	# dentro del edificio nada es viajar: ni al pasillo ni a la recepcion
 	zm.change_zone(6)
 	await _esperar_zona(6)
-	_check("Al pasillo se sale sin gastar energia ni tiempo, junto a la puerta M-21", current_scene.zone_id == 6 and pm.player.global_position.is_equal_approx(Vector2(88, 24)) and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, str(pm.player.global_position))
+	_check("Al pasillo se sale sin gastar energia ni tiempo, junto a la puerta M-21", current_scene.zone_id == 6 and pm.player.global_position.is_equal_approx(Vector2(104, 24)) and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, str(pm.player.global_position))
 	var t0 := Time.get_ticks_msec()
 	zm.change_zone(1)
 	_check("Al tocar las escaleras Mayui queda quieta", not mov.can_move and gm.modal_count == 1)

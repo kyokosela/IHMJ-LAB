@@ -23,7 +23,7 @@ const PLANOS := {
 			"##....####",
 			"##....####",
 		],
-		"puertas": [Vector2i(7, -1), Vector2i(4, 1), Vector2i(3, 9), Vector2i(4, 9)],
+		"puertas": [Vector2i(7, -1), Vector2i(4, 0), Vector2i(3, 9), Vector2i(4, 9)],
 		"rango": Rect2i(-1, -3, 12, 13),
 	},
 	5: {
@@ -45,21 +45,21 @@ const PLANOS := {
 		"puertas": [Vector2i(5, 2)],
 		"rango": Rect2i(-1, -3, 7, 8),
 	},
-	6: {   # pasillo del piso 2: la puerta M-21 (6,1) y las escaleras (3,3 y 3,4)
+	6: {   # pasillo del piso 2: huecos de las 4 puertas (filas 1 y 10); la puerta M-21 (7,1) y las escaleras (3,3 y 3,4)
 		"mapa": [
-			"####..####", "####..####", "####..####", "####..####", "####..####", "####..####",
-			"####..####", "####..####", "####..####", "####..####", "####..####", "####..####",
+			"####..####", "###....###", "####..####", "####..####", "####..####", "####..####",
+			"####..####", "####..####", "####..####", "####..####", "###....###", "####..####",
 		],
-		"puertas": [Vector2i(6, 1), Vector2i(3, 3), Vector2i(3, 4)],
+		"puertas": [Vector2i(7, 1), Vector2i(3, 3), Vector2i(3, 4)],
 		"rango": Rect2i(-1, -1, 12, 14),
 	},
-	1: {   # recepcion (piso 1): las escaleras (3,3 y 3,4) y la puerta a la calle (2,11)
+	1: {   # recepcion (piso 1): huecos de las puertas, escaleras (3,3 y 3,4), mantenimiento (7,9) y puerta a la calle (2,12)
 		"mapa": [
-			"####..####", "####..####", "####..####", "####..####", "####..####", "####..####",
-			"####..####", "####..####", "#.....####", "#.....####", "#.....####", "##########",
+			"####..####", "###....###", "####..####", "####..####", "####..####", "####..####",
+			"####..####", "####..####", "#.....####", "#......###", "#.....####", "##.#######",
 		],
-		"puertas": [Vector2i(3, 3), Vector2i(3, 4), Vector2i(2, 11)],
-		"rango": Rect2i(-1, -1, 12, 14),
+		"puertas": [Vector2i(3, 3), Vector2i(3, 4), Vector2i(7, 9), Vector2i(2, 12)],
+		"rango": Rect2i(-1, -1, 12, 15),
 	},
 }
 const TECLAS := {Vector2i.LEFT: "move_left", Vector2i.RIGHT: "move_right", Vector2i.UP: "move_up", Vector2i.DOWN: "move_down"}
@@ -308,7 +308,7 @@ func _t_cuarto() -> void:
 	await create_timer(0.3).timeout
 	_check("Puerta: mantener la tecla la activa una sola vez", seguidas == 1, "%s -> %s" % [str(primera), str(dichos)])
 
-	_check("Bano: se llega caminando a su puerta", await _caminar_a(Vector2i(5, 1)), str(pm.player.global_position))
+	_check("Bano: se llega caminando a su puerta", await _caminar_a(Vector2i(5, 0)), str(pm.player.global_position))
 	var energia : float = pm.get_stat_value("ENERGY")
 	var hora : int = tm.minutes
 	_check("Bano: al caminar hacia su puerta se entra", await _cruzar(Vector2i.LEFT, 4))
@@ -326,7 +326,7 @@ func _t_bano() -> void:
 	_check("Ducha: Z banya a Mayui", pm.get_outfit_id() == "towel" and tk.get_task_list_res("TUTORIAL_DOOR").get_task_res("BATHE").task_done and oido.size() == 5, str(oido))
 	_check("Bano: se llega caminando a la salida", await _caminar_a(Vector2i(4, 2)), str(pm.player.global_position))
 	_check("Bano: al caminar hacia la puerta se vuelve al cuarto", await _cruzar(Vector2i.RIGHT, 0))
-	_check("Mayui aparece junto a la puerta del bano", pm.player.global_position.is_equal_approx(Vector2(88, 24)), str(pm.player.global_position))
+	_check("Mayui aparece junto a la puerta del bano", pm.player.global_position.is_equal_approx(Vector2(88, 8)), str(pm.player.global_position))
 
 # ------------------------------------------------------------------ cuarto, ya duchada
 func _t_despues_del_bano() -> void:
@@ -399,12 +399,12 @@ func _t_edificio() -> void:
 	var energia : float = pm.get_stat_value("ENERGY")
 	var hora : int = tm.minutes
 	_check("La puerta principal lleva al pasillo", await _cruzar(Vector2i.UP, 6))
-	_check("Pasillo: aparece junto a M-21 sin gastar energia ni tiempo", pm.player.global_position.is_equal_approx(Vector2(88, 24)) and pm.get_stat_value("ENERGY") == energia and tm.minutes == hora, str(pm.player.global_position))
+	_check("Pasillo: aparece junto a M-21, dentro de su hueco, sin gastar energia ni tiempo", pm.player.global_position.is_equal_approx(Vector2(104, 24)) and pm.get_stat_value("ENERGY") == energia and tm.minutes == hora, str(pm.player.global_position))
 	await _t_plano("H. Pasillo: paredes y piso")
 	_check("Pasillo: entero en pantalla", _camara_en(Vector2(80, 92)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
-	_check("Pasillo: se camina frente a M-22", await _caminar_a(Vector2i(4, 1)), str(pm.player.global_position))
+	_check("Pasillo: se entra en el hueco de M-22 hasta su puerta", await _caminar_a(Vector2i(3, 1)), str(pm.player.global_position))
 	var callada : Array = await _hablar(func() -> void: await _paso(Vector2i.LEFT))
-	_check("M-22 (de otro vecino) esta cerrada: no pasa nada", callada.is_empty() and casa.zone_id == 6 and pm.player.global_position.is_equal_approx(_centro(Vector2i(4, 1))), str(callada))
+	_check("M-22 (de otro vecino) esta cerrada: no pasa nada", callada.is_empty() and casa.zone_id == 6 and pm.player.global_position.is_equal_approx(_centro(Vector2i(3, 1))), str(callada))
 	_check("Pasillo: se camina hasta las escaleras", await _caminar_a(Vector2i(4, 4)), str(pm.player.global_position))
 	_check("Las escaleras bajan a la recepcion", await _cruzar(Vector2i.LEFT, 1))
 	_check("Recepcion: aparece al pie de las escaleras, sin gastar energia ni tiempo", pm.player.global_position.is_equal_approx(Vector2(72, 56)) and pm.get_stat_value("ENERGY") == energia and tm.minutes == hora, "%s %.1f +%d" % [str(pm.player.global_position), pm.get_stat_value("ENERGY"), tm.minutes - hora])
@@ -413,23 +413,23 @@ func _t_edificio() -> void:
 		dlg.end_timeline()
 	await create_timer(1.5).timeout
 	await _t_plano("I. Recepcion: paredes y piso")
-	_check("Recepcion: entera en pantalla", _camara_en(Vector2(80, 92)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
-	_check("Recepcion: se camina a la puerta de mantenimiento", await _caminar_a(Vector2i(5, 9)), str(pm.player.global_position))
+	_check("Recepcion: entera en pantalla", _camara_en(Vector2(80, 96)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
+	_check("Recepcion: se entra en el hueco de mantenimiento", await _caminar_a(Vector2i(6, 9)), str(pm.player.global_position))
 	var aviso : Array = await _hablar(func() -> void: await _paso(Vector2i.RIGHT))
-	_check("Puerta de mantenimiento: dice lo que es y no deja pasar", aviso == ["Cuarto de mantenimiento."] and casa.zone_id == 1 and pm.player.global_position.is_equal_approx(_centro(Vector2i(5, 9))), str(aviso))
+	_check("Puerta de mantenimiento: dice lo que es y no deja pasar", aviso == ["Cuarto de mantenimiento."] and casa.zone_id == 1 and pm.player.global_position.is_equal_approx(_centro(Vector2i(6, 9))), str(aviso))
 	var dinero : int = root.get_node("EconomyManager").money
-	_check("Recepcion: se camina hasta la puerta de la calle", await _caminar_a(Vector2i(2, 10)), str(pm.player.global_position))
+	_check("Recepcion: se camina hasta la puerta de la calle", await _caminar_a(Vector2i(2, 11)), str(pm.player.global_position))
 	_check("La puerta de la calle lleva en bus a la oficina (S/10)", await _cruzar(Vector2i.DOWN, 2) and root.get_node("EconomyManager").money == dinero - 10, "dinero %d -> %d" % [dinero, root.get_node("EconomyManager").money])
 	zm.change_zone(1)
 	await create_timer(3.0).timeout
 	casa = zm.zone_node
-	_check("De la oficina se vuelve a la puerta de la calle", casa.zone_id == 1 and pm.player.global_position.is_equal_approx(Vector2(40, 168)), str(pm.player.global_position))
+	_check("De la oficina se vuelve a la puerta de la calle", casa.zone_id == 1 and pm.player.global_position.is_equal_approx(Vector2(40, 184)), str(pm.player.global_position))
 	if dlg.current_timeline != null:
 		dlg.end_timeline()
 		await create_timer(1.5).timeout
 	_check("Se vuelve caminando a las escaleras", await _caminar_a(Vector2i(4, 4)), str(pm.player.global_position))
 	_check("Las escaleras suben al pasillo", await _cruzar(Vector2i.LEFT, 6))
 	_check("Pasillo: aparece junto a las escaleras", pm.player.global_position.is_equal_approx(Vector2(72, 56)), str(pm.player.global_position))
-	_check("Pasillo: se camina a M-21", await _caminar_a(Vector2i(5, 1)), str(pm.player.global_position))
+	_check("Pasillo: se entra en el hueco de M-21", await _caminar_a(Vector2i(6, 1)), str(pm.player.global_position))
 	_check("M-21 vuelve a casa", await _cruzar(Vector2i.RIGHT, 0))
 	_check("En casa aparece junto a la puerta principal", pm.player.global_position.is_equal_approx(Vector2(120, 8)), str(pm.player.global_position))

@@ -16,8 +16,10 @@ que el equipo se inspire mientras Ramiro avanza la historia. **Todavía no está
 - **Diseño en curso: la oficina y la savia** (2026-11-26, sin programar): `Docs/Design/OFICINA_BORRADOR.md` (P96).
 - **Documentación para los devs** en `Docs/Dev/` (formato de sus fichas del Notion; índice `00-cambios-ia.md`). Al cambiar
   un sistema, actualizar su ficha. Pendiente de publicar en Notion.
-- **Errores confirmados sin arreglar** (`Docs/Dev/escalabilidad.md`): el guardado solo recupera el dinero; la paga del
-  viernes se pierde (800 en vez de 1000); la alarma no despierta a la hora elegida.
+- **Errores confirmados** (`Docs/Dev/escalabilidad.md`): ✅ alarma (despierta a la hora elegida; toda partida nueva tiene
+  despertador; si despierta sola o a la hora puesta cuando es más tarde de lo necesario: P97, hoy sola) y ✅ paga del
+  viernes (una vez, 17:00, o al marcar la salida; P23). ❌ **El guardado solo recupera el dinero** (y asistencia,
+  relaciones, banderas y correos): plan presentado a Ramiro, sin programar hasta su OK.
 - El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Baño, Balcón, Pasillo,
   Recepción (`Lobby`), Oficina y Comercial; cada una con cámara (zoom 5). Apartamento, Baño y Balcón son la casa
   (`ZoneManager.is_home`). Dentro del edificio de Mayui (casa, pasillo y recepción, `HOME_BUILDING`) cambiar de zona no cuesta
@@ -169,6 +171,10 @@ que el equipo se inspire mientras Ramiro avanza la historia. **Todavía no está
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_tutorial.gd`
 - Prueba del "Voy tarde" (reloj pasadas las 7:30):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_voy_tarde.gd`
+- Pruebas del despertador de la cama (pantalla de la alarma y horas dormidas; ~20 s):
+  `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_alarma.gd`
+- Pruebas de la paga semanal (viernes 17:00, una sola vez, con la agenda real):
+  `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_paga.gd`
 - Prueba de la casa y el edificio (cuarto, baño, balcón, pasillo y recepción: paredes, muebles, puertas, frases y caminar
   con las teclas hasta cada cosa; ~2,5 min):
   `& "D:\Tools\Godot-4.6\Godot_v4.6-stable_win64_console.exe" --headless --path . -s res://Tools/probar_cuarto.gd`

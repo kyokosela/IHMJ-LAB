@@ -20,9 +20,15 @@ Comprobado guardando y cargando (2026-11-26):
 | Efectos | **No** |
 | Ropa | **No** |
 | Tareas, eventos en curso, cocina, zona | **No** (no hay código que los guarde) |
-| Manos y mochila | Tienen componente de guardado (sin comprobar) |
+| Manos y mochila | Tienen componente de guardado, pero solo escribe lo exportado: se perdería lo que lleva la olla, los usos y las condiciones (visto en el código, sin comprobar) |
 
 No existe botón de guardar ni guardado al dormir: solo las teclas de prueba.
+
+## 📝 Plan (esperando el OK de Ramiro; sin programar)
+
+Cada manager guarda lo suyo y se guarda **solo al despertar de dormir** (§2.3): reloj; Mayui (estadísticas, efectos con su
+nivel, sueño, ropa, manos y mochila); cocina; tareas, eventos y contadores en marcha; zona; y lo que ya se guarda. Cargar:
+por ahora con `Shift+L` (no hay menú «Continuar»).
 
 # 🔊 `AudioManager` (autoload)
 
@@ -35,7 +41,8 @@ Claves: `click`, `coin`, `coin_spend`, `sleep`, `alarm`, `correct`, `wrong`, `sh
 
 - `player_ui.gd`: hora desde el inicio, dinero y día; iconos de efectos por nivel.
 - `hands_hud.gd`: **Llevas** (arriba a la izquierda).
-- `UI/Sleep/alarm_ui.gd`: hora de la alarma, probabilidad de despertar con Insomnio, Cancelar/`Esc`.
+- `UI/Sleep/alarm_ui.gd`: hora de **despertar** (propone la primera en punto en la que ya habrá descansado y da la vuelta a
+  medianoche), probabilidad de despertar con Insomnio, Cancelar/`Esc`.
 
 # 🐞 Depuración (solo en builds de depuración salvo indicación)
 

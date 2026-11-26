@@ -58,21 +58,22 @@ var rng                              # azar; las pruebas lo sustituyen
 
 ## 😴 Dormir
 
-`request_sleep` → `AlarmUI` → `sleep(hora, cama)` → fundido → avanza el reloj → `_finish_sleep` (energía, Estrés, deuda de
+`request_sleep` → `AlarmUI` → `sleep(duración, cama)` → fundido → avanza el reloj → `_finish_sleep` (energía, Estrés, deuda de
 sueño, Insomnio) → se puede volver a dormir 12 h después.
+
+**Despertador** (D1 y P13; corregido el 2026-11-26):
+
+- Toda partida nueva tiene despertador (bandera `has_alarm_clock`, la pone `GameManager.new_game`).
+- La pantalla pregunta a qué **hora** despertar y le pasa a `sleep()` **cuánto** falta para esa hora (`"00:00"` = sin alarma).
+  Propone la primera hora en punto en la que Mayui ya habrá descansado (`PlayerManager.get_minimum_sleep(cama)`).
+- Menos del mínimo: noche mala e Insomnio. Más del mínimo: despierta sola al cumplirlo (pendiente P97).
+- Con Insomnio el despertador solo funciona con probabilidad según la energía y nunca pasa del tope del Insomnio.
+- Prueba: `Tools/probar_alarma.gd`.
 
 ## Efectos nuevos y cambios en recursos
 
 - Recursos nuevos: `atenta`, `calm`, `hipersomnia`, `inapetencia`, `insomnia`. El resto se ajustó.
 - `EffectLevel`: el nivel ahora empieza en 0, `time_cost_per_level`, `days_active` y `level_changed` solo al cambiar.
-
-## ⚠️ Error conocido: la alarma
-
-Comprobado acostándose a las 22:00 y eligiendo las 05:00:
-
-- Sin la bandera `has_alarm_clock` / `has_alarm_phone` (**nada en el juego la pone**), la hora elegida se ignora.
-- Con la bandera, la hora se toma como **duración**: duerme 5 h y despierta a las 03:00. Las horas mayores que el mínimo se
-  recortan al mínimo.
 
 ## ⚠️ Pendiente
 

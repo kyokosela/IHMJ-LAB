@@ -10,7 +10,7 @@ Amplía la ficha **Sistema de eventos lineal/rutas**. `EventManager` y `TimeMana
 La llama el apartamento la primera vez (`game_started`).
 
 1. Limpia el guardado en memoria y el motor de efectos.
-2. Reloj a las **06:00** y ropa inicial.
+2. Da el despertador (bandera `has_alarm_clock`, P13), reloj a las **06:00** y ropa inicial.
 3. Carga la lista de tareas `TUTORIAL_DOOR` y el evento `TUTORIAL`.
 4. Crea los eventos por tiempo: Maloliente (24 h), Hambre (6 h), Sueño por vigilia (16 h).
 5. Carga **todos** los `.tres` de `Resources/Events/Schedule/`.
@@ -64,3 +64,6 @@ Diccionario de banderas: `set_flag`, `has_flag`, `clear_flag`, `set_value`, `get
 
 28 eventos en `Resources/Events/Schedule/` (7 días de la semana: casero, Veda, Madina, renta, salario, horario laboral,
 mercado, arcade). La mayoría son **relleno** a la espera del guion.
+
+Casi todos usan `day` (día del mes), así que solo ocurren en la primera semana. La paga (`DAY5_SALARY`) usa `week_day`
+y `can_multiple_active` para repetirse cada viernes.

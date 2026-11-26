@@ -4,7 +4,7 @@ Status: Completado
 Assign: Sela (hecho con IA)
 
 Cada script abre el juego real, hace cosas y comprueba resultados. Imprime `FALLA` por cada error y el total al final.
-Última corrida completa (2026-11-26): **725 comprobaciones, 0 fallas**.
+Última corrida completa (2026-11-26): **759 comprobaciones, 0 fallas**.
 
 ## Cómo correr una
 
@@ -26,6 +26,8 @@ Desde la carpeta del proyecto:
 | `probar_espejo.gd` | Lavamanos y cepillado |
 | `probar_tutorial.gd` | La mañana completa |
 | `probar_voy_tarde.gd` | Avisos pasadas las 07:30 |
+| `probar_alarma.gd` | Despertador: pantalla, hora de despertar, Insomnio y deuda de sueño |
+| `probar_paga.gd` | Paga semanal: viernes 17:00, una sola vez, descuentos y casos límite |
 | `probar_cuarto.gd` | Paredes, muebles y puertas de casa y edificio |
 | `jugar_manana.gd` | Juega la mañana con teclas y ratón; puede guardar fotos |
 | `probar_torpe.gd` | Insiste en todo y desordena la cocina |
@@ -33,7 +35,7 @@ Desde la carpeta del proyecto:
 
 ## ⚠️ Límites
 
-- No cubren guardado, paga ni la alarma completa (ahí había errores sin detectar).
+- No cubren el guardado (todavía incompleto). La paga y la alarma tenían errores sin detectar: ya tienen su prueba.
 - Algunas dependen de posiciones exactas: mover un mueble obliga a actualizar la prueba.
 - Los diálogos solo reciben teclas con `Input.parse_input_event`.
 - Ninguna prueba un ejecutable exportado.

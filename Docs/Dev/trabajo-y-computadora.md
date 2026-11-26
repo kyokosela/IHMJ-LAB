@@ -10,7 +10,8 @@ Código de febrero y abril de 2026, **anterior al diseño actual de la oficina**
 
 `money` (inicial 350) · `DAILY_SALARY` 200 · `RENT_AMOUNT` 230 · `BUS_COST` 10.
 
-`add_money`, `spend_money`, `record_daily_earnings`, `pay_weekly_salary`, `pay_rent`, `check_rent_due`.
+`add_money`, `spend_money`, `record_daily_earnings`, `pay_weekly_salary` (solo una vez por semana:
+`salary_paid_this_week`), `pay_rent`, `check_rent_due`.
 Señales: `money_changed`, `salary_paid`, `rent_due`, `rent_paid`, `rent_overdue`, `insufficient_funds`.
 
 # 📘 `AttendanceManager` (autoload)
@@ -18,13 +19,22 @@ Señales: `money_changed`, `salary_paid`, `rent_due`, `rent_paid`, `rent_overdue
 `clock_in` / `clock_out`, tardanzas (−20), salida anticipada (−50), faltas (aviso, aviso, recorte −100, despido).
 Jornada 08:00–17:00, almuerzo 13:00–13:45.
 
+## 💵 Paga semanal (D7, corregida el 2026-11-26)
+
+- El evento `DAY5_SALARY` (`day5_salary.tres`, **cada viernes a las 17:00**) llama a `pay_week_salary()`.
+- Si Mayui sigue fichada, la paga espera (`salary_pending`) y llega **al marcar la salida**, contando el viernes.
+- Si nunca la marca, o el reloj salta las 17:00 (durmiendo), llega al acabar el viernes con los días completos.
+- Se paga lo anotado de lunes a viernes menos los descuentos; ya no se paga al cambiar de semana.
+- Prueba: `Tools/probar_paga.gd`. La paga futura (base + aciertos, P96) no está programada.
+
 ## ⚠️ Errores conocidos
 
 | Error | Detalle |
 |---|---|
-| **El viernes no se paga** | El pago salta el viernes a las 16:00 (`day5_salary.tres`), antes de fichar la salida. Comprobado: 5 días trabajados pagan **800** en vez de 1.000. El pago del cambio de semana llega con los ingresos ya en cero |
 | Tardanza | Cuenta desde las 08:00; el diseño dice 08:10 (D23) |
-| Renta | Nada en las escenas reales permite pagarla |
+| Entrar antes de las 08:00 | El evento de jornada de las 08:00 (días 2–5) borra `arrived_today`: a las 17:00 se anota una falta aunque haya ido (comprobado: martes 07:50, 1 falta; el día se paga igual) |
+| Renta | Nada en las escenas reales permite pagarla; el vencimiento salta a las 18:00 y el diseño dice 17:00 |
+| Cambio de mes | Al pasar el día 30 la semana vuelve a 1 a mitad de semana y se borran los ingresos acumulados (visto en el código, sin comprobar) |
 
 # 📘 Otros managers
 

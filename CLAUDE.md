@@ -13,6 +13,11 @@ que el equipo se inspire mientras Ramiro avanza la historia. **Todavía no está
   más (ni playground, ni minijuegos, ni ciudad, ni contenido narrativo nuevo).
 
 ## ESTADO (actualizar al cerrar cada sesión)
+- **Diseño en curso: la oficina y la savia** (2026-11-26, sin programar): `Docs/Design/OFICINA_BORRADOR.md` (P96).
+- **Documentación para los devs** en `Docs/Dev/` (formato de sus fichas del Notion; índice `00-cambios-ia.md`). Al cambiar
+  un sistema, actualizar su ficha. Pendiente de publicar en Notion.
+- **Errores confirmados sin arreglar** (`Docs/Dev/escalabilidad.md`): el guardado solo recupera el dinero; la paga del
+  viernes se pierde (800 en vez de 1000); la alarma no despierta a la hora elegida.
 - El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Baño, Balcón, Pasillo,
   Recepción (`Lobby`), Oficina y Comercial; cada una con cámara (zoom 5). Apartamento, Baño y Balcón son la casa
   (`ZoneManager.is_home`). Dentro del edificio de Mayui (casa, pasillo y recepción, `HOME_BUILDING`) cambiar de zona no cuesta

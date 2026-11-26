@@ -53,6 +53,10 @@ func _setup_slot_structure(): ## Calcula el tamaño total necesario
 		inventory.size = total_slots
 		inventory._initialize_slots()
 
+## Completado: las estaciones guardan si estan trabajando; ContainerManager las sostiene mientras esta escena no existe.
+func get_live_resources() -> Array:
+	return stations.duplicate()
+
 ## Completado (P31): las estaciones son recursos COMPARTIDOS: al salir de la zona con la estufa cocinando seguia "ocupada" y su
 ## evento apuntaba al nodo viejo (ya liberado), asi que la comida nunca terminaba. Al volver se retoma: si el evento sigue en
 ## marcha se rehace con este nodo y el tiempo que le queda; si ya se cumplio mientras no estabas, el crafteo termina ahora.

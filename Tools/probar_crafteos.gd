@@ -352,23 +352,25 @@ func _t_cocina() -> void:
 	var olla_guardada = inv.slots[kc.get_storage_indices()[10]].item
 	_check("La olla guardada con ingredientes los conserva al volver", olla_guardada != null and olla_guardada.held_item != null and olla_guardada.held_item.data.item_unique_name == "ingredients" and olla_guardada.held_item.has_state("prepared"))
 
-	# --- la estufa cocinando mientras sales a otra zona
+	# --- la estufa cocinando mientras sales a otra zona. La prueba NO se guarda la estacion mientras esta fuera: en el juego nadie
+	# la sostiene, y si la prueba la retiene, no se ve que al volver llega una estufa nueva, sin la comida en marcha.
+	estacion = null
 	estufa = kc.get_station_slot_index("stove")
-	estacion = kc.get_station("stove")
 	_reiniciar_estaciones(kc)
 	_vaciar_entradas(kc)
 	inv.slots[estufa].item = _olla_con_ingredientes()
 	inv.inventory_changed.emit()
-	_check("(prueba) se empieza a cocinar antes de salir", kc.start_manual_station_craft("stove") and estacion.is_locked)
+	_check("(prueba) se empieza a cocinar antes de salir", kc.start_manual_station_craft("stove") and kc.is_station_locked("stove"))
 	await _salir(escena)
 	tm.minutes_delta.emit(20)   # 20 min fuera
 	escena = await _entrar(1)
 	kc = escena.get_node("Kitchen").container
 	inv = kc.inventory
-	_check("Al volver (a los 20 min) la estufa sigue cocinando con su olla", estacion.is_locked and kc.get_station_item("stove") != null and kc.get_station_item("stove").held_item != null)
-	_check("El evento de la estufa se rehizo con la cocina nueva y le quedan unos 25 min", evm.get_event(estacion.active_craft_event) != null and evm.get_event(estacion.active_craft_event).time_lapse_value == "00:25", str(evm.get_event(estacion.active_craft_event)))
+	_check("Al volver (a los 20 min) la estufa sigue cocinando con su olla", kc.is_station_locked("stove") and kc.get_station_item("stove") != null and kc.get_station_item("stove").held_item != null)
+	var evento_estufa = evm.get_event(kc.get_station("stove").active_craft_event)
+	_check("El evento de la estufa se rehizo con la cocina nueva y le quedan unos 25 min", evento_estufa != null and evento_estufa.time_lapse_value == "00:25", str(evento_estufa))
 	tm.minutes_delta.emit(25)
-	_check("Pasados los 45 min la comida sale sola", not estacion.is_locked and _donde(kc, "cooking_pot") != -1 and inv.slots[_donde(kc, "cooking_pot")].item.held_item.data.item_unique_name == "home_meal")
+	_check("Pasados los 45 min la comida sale sola", not kc.is_station_locked("stove") and _donde(kc, "cooking_pot") != -1 and inv.slots[_donde(kc, "cooking_pot")].item.held_item.data.item_unique_name == "home_meal")
 	_vaciar_entradas(kc)
 	for i in kc.get_storage_indices():
 		if not inv.slots[i].is_empty() and inv.slots[i].item.data.item_unique_name == "cooking_pot":
@@ -376,13 +378,13 @@ func _t_cocina() -> void:
 	_reiniciar_estaciones(kc)
 	inv.slots[estufa].item = _olla_con_ingredientes()
 	inv.inventory_changed.emit()
-	_check("(prueba) se empieza a cocinar otra vez", kc.start_manual_station_craft("stove") and estacion.is_locked)
+	_check("(prueba) se empieza a cocinar otra vez", kc.start_manual_station_craft("stove") and kc.is_station_locked("stove"))
 	await _salir(escena)
 	tm.minutes_delta.emit(60)   # se pasa de los 45 min estando fuera
 	escena = await _entrar(1)
 	kc = escena.get_node("Kitchen").container
 	inv = kc.inventory
 	var d2 : int = _donde(kc, "cooking_pot")
-	_check("Si la comida se termino estando fuera, al volver ya esta lista y la estufa libre", not estacion.is_locked and d2 != -1 and inv.slots[d2].item.held_item != null and inv.slots[d2].item.held_item.data.item_unique_name == "home_meal", "olla en %d" % d2)
+	_check("Si la comida se termino estando fuera, al volver ya esta lista y la estufa libre", not kc.is_station_locked("stove") and d2 != -1 and inv.slots[d2].item.held_item != null and inv.slots[d2].item.held_item.data.item_unique_name == "home_meal", "olla en %d" % d2)
 	_check("Y no queda nada duplicado ni ingredientes sueltos", _contar(kc, "ingredients") == 1 and kc.get_station_item("stove") != null and kc.get_station_item("stove").held_item.data.item_unique_name == "home_meal", "ingredientes %d" % _contar(kc, "ingredients"))
 	await _salir(escena)

@@ -58,7 +58,13 @@ func save_container(container : InventoryContainer):
 		data["inventory"] = container.inventory.to_dict()
 	
 	data["timestamp_abs"] = _get_current_absolute_minutes()
-	
+
+	# Completado: recursos con estado propio que deben seguir vivos mientras la escena no existe (las estaciones de la cocina
+	# recuerdan si estan cocinando). Si nadie los sostiene, Godot los descarga al salir de la zona y al volver llegan nuevos:
+	# la comida en marcha se perdia.
+	if container.has_method("get_live_resources"):
+		data["live_resources"] = container.get_live_resources()
+
 	container_states[container.container_id] = data
 	# print("Saved state for container: " + container.container_id)
 

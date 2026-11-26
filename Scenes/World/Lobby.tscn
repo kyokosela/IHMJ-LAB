@@ -34,6 +34,9 @@ size = Vector2(14, 14)
 [sub_resource type="RectangleShape2D" id="Puerta_Mantenimiento"]
 size = Vector2(14, 14)
 
+[sub_resource type="RectangleShape2D" id="Frente_recepcion"]
+size = Vector2(30, 14)
+
 [node name="Lobby" type="Node2D" node_paths=PackedStringArray("optional_camera_node")]
 script = ExtResource("1")
 zone_id = 1
@@ -205,6 +208,12 @@ position = Vector2(40, 184)
 script = ExtResource("2")
 entity = "Player"
 from_zone = 2
+
+[node name="FrenteRecepcion" type="Area2D" parent="." groups=["frente_recepcion"]]
+position = Vector2(80, 104)
+
+[node name="Forma" type="CollisionShape2D" parent="FrenteRecepcion"]
+shape = SubResource("Frente_recepcion")
 
 [node name="LabelEscaleras" type="Label" parent="."]
 offset_left = 8.0

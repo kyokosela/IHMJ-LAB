@@ -18,6 +18,10 @@ var event_zones : Dictionary = {
 	"DAY7_WEEK_PREP": [ZoneManager.ZONES.APARTMENT],
 }
 var rent_overdue_zones : Array = [ZoneManager.ZONES.LOBBY] # advertencias del casero por renta vencida
+## Ademas de la zona, algunos eventos esperan a que Mayui pase por un punto de ella: un Area2D de ese grupo en la escena.
+var event_spots : Dictionary = {
+	"DAY1_CASERO_INTRO": "frente_recepcion",   # tu pedido (2026-11-26): la intercepta al pasar frente a la recepcion
+}
 
 ## Historia de relleno APAGADA hasta que Ramiro escriba el guion (pidio evitar cosas inventadas).
 ## Los eventos de `story_events` no se ejecutan y tampoco el despido; para encenderla: story_enabled = true.
@@ -62,16 +66,30 @@ func _current_zone() -> int:
 		return ZoneManager.zone_node.zone_id
 	return ZoneManager.current_zone
 
-## Ejecuta la accion ya si Mayui esta en una zona valida; si no, queda pendiente.
-func _deliver(key: String, zones: Array, action: Callable) -> void:
-	if zones.is_empty() or _current_zone() in zones:
+## Ejecuta la accion ya si Mayui esta en una zona valida (y no espera un punto); si no, queda pendiente.
+func _deliver(key: String, zones: Array, action: Callable, spot: String = "") -> void:
+	if spot == "" and (zones.is_empty() or _current_zone() in zones):
 		action.call()
 		return
-	_pending.append({"key": key, "zones": zones, "action": action})
-	print("[Eventos] '%s' pendiente: espera a que Mayui llegue a %s" % [key, zones])
+	_pending.append({"key": key, "zones": zones, "action": action, "spot": spot})
+	print("[Eventos] '%s' pendiente: espera a que Mayui llegue a %s %s" % [key, zones, spot])
+
+## Lo que espera un punto de la zona se entrega cuando Mayui pasa por el (sin dialogo, pantalla ni viaje en curso).
+func _physics_process(_delta: float) -> void:
+	if _pending.is_empty() or GameManager.is_input_blocked(): return
+	for p : Dictionary in _pending:
+		if p.spot != "" and _current_zone() in p.zones and _player_at(p.spot):
+			_pending.erase(p)
+			print("[Eventos] entregando '%s' en %s" % [p.key, p.spot])
+			p.action.call()
+			return
+
+func _player_at(spot: String) -> bool:
+	if not is_instance_valid(PlayerManager.player): return false
+	return get_tree().get_nodes_in_group(spot).any(func(node: Node) -> bool: return node is Area2D and node.overlaps_body(PlayerManager.player))
 
 func _on_zone_ready(zone_id: int) -> void:
-	var due : Array = _pending.filter(func(p : Dictionary) -> bool: return zone_id in p.zones)
+	var due : Array = _pending.filter(func(p : Dictionary) -> bool: return zone_id in p.zones and p.spot == "")
 	if due.is_empty():
 		return
 	await get_tree().create_timer(0.8).timeout # dejar que termine el fundido de entrada
@@ -96,7 +114,7 @@ func _on_event_activated(event_name: String) -> void:
 		print("[Eventos] '%s' es historia de relleno: apagada (story_enabled = false)" % event_name)
 		return
 	var zones : Array = event_zones.get(event_name, [])
-	_deliver(event_name, zones, _run_event.bind(event_name))
+	_deliver(event_name, zones, _run_event.bind(event_name), event_spots.get(event_name, ""))
 
 func _run_event(event_name: String) -> void:
 	match event_name:

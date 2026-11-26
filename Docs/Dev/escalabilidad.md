@@ -22,7 +22,7 @@ oficina se construye encima.
 
 - Se mantuvo la arquitectura del equipo (managers planos y Resources); `addons/` sin tocar.
 - Ítems, recetas, ropa, tareas y eventos se configuran con `.tres`.
-- 14 scripts de pruebas y una simulación (791 comprobaciones, 0 fallas) que avisan si algo se rompe.
+- 14 scripts de pruebas y una simulación (826 comprobaciones, 0 fallas) que avisan si algo se rompe.
 - Documentos de diseño y pendientes numerados; los cambios en clases del equipo están marcados con `Completado`.
 
 ## 🔴 Riesgos

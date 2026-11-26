@@ -4,7 +4,7 @@ Status: Completado
 Assign: Sela (hecho con IA)
 
 Cada script abre el juego real, hace cosas y comprueba resultados. Imprime `FALLA` por cada error y el total al final.
-Última corrida completa (2026-11-26): **791 comprobaciones, 0 fallas**.
+Última corrida completa (2026-11-26): **826 comprobaciones, 0 fallas**.
 
 ## Cómo correr una
 
@@ -28,7 +28,7 @@ Desde la carpeta del proyecto:
 | `probar_voy_tarde.gd` | Avisos pasadas las 07:30 |
 | `probar_alarma.gd` | Despertador: pantalla, hora de despertar, Insomnio y deuda de sueño |
 | `probar_paga.gd` | Paga semanal: viernes 17:00, una sola vez, descuentos y casos límite |
-| `probar_guardado.gd` | Guardar al despertar y cargar como al abrir el juego: todo vuelve igual, incluida la estufa cocinando |
+| `probar_guardado.gd` | Guardar al despertar y cargar: todo vuelve igual (también la estufa cocinando), tras ir a la oficina y volver, desde la oficina y tras cerrar y abrir el juego (segundo proceso) |
 | `probar_cuarto.gd` | Paredes, muebles y puertas de casa y edificio |
 | `jugar_manana.gd` | Juega la mañana con teclas y ratón; puede guardar fotos |
 | `probar_torpe.gd` | Insiste en todo y desordena la cocina |

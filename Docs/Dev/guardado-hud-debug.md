@@ -33,6 +33,14 @@ solo los junta en un archivo (`user://saves/save_1.res`). Hecho el 2026-11-26; d
 se la devuelve con `EventManager.restore_lapse_callable` (`PlayerManager` y `GameManager`); las esperas de las acciones y
 la estufa se reenganchan solas al abrirse la escena.
 
+## 🐞 Corregido tras la prueba de Ramiro (2026-11-26)
+
+Después de pasar por la oficina, `Shift+L` se cortaba: `SCRIPT ERROR: Trying to assign invalid previously freed instance`
+en `load_from_disk`. Un `SaveComponent` de la PC de la oficina seguía en la lista tras cerrarse la escena (solo se da de
+baja con `queue_free`) y el bucle con tipo abortaba toda la carga. Ahora la carga salta y quita los componentes liberados,
+como ya hacía `save_to_disk`. La prueba recorre ese camino con el cambio de zona real y también carga en un **segundo
+proceso** (como cerrar y abrir el juego).
+
 ## ⚠️ Límites conocidos
 
 - Las frases de la puerta del tutorial y las de cama, armario o nevera (`StringChain`) vuelven a la primera.

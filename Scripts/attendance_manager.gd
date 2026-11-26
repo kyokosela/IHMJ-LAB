@@ -133,7 +133,10 @@ func get_save_data() -> Dictionary:
 		"arrived_today": arrived_today,
 		"days_worked_this_week": days_worked_this_week,
 		"total_deductions_this_week": total_deductions_this_week,
-		"salary_pending": salary_pending
+		"salary_pending": salary_pending,
+		"absence_recorded_today": absence_recorded_today,
+		"left_early_today": left_early_today,
+		"current_day_on_time": current_day_on_time
 	}
 
 func load_save_data(data: Dictionary) -> void:
@@ -149,6 +152,9 @@ func load_save_data(data: Dictionary) -> void:
 	days_worked_this_week = data.get("days_worked_this_week", 0)
 	total_deductions_this_week = data.get("total_deductions_this_week", 0)
 	salary_pending = data.get("salary_pending", false)
+	absence_recorded_today = data.get("absence_recorded_today", false)
+	left_early_today = data.get("left_early_today", false)
+	current_day_on_time = data.get("current_day_on_time", true)
 
 func _check_absence_consequences() -> void:
 	match absence_count:

@@ -76,6 +76,14 @@ static func save_to_disk(slot: String = "auto") -> void:
 	for id in ids_to_remove:
 		_components.erase(id)
 
+	# Cada manager guarda lo suyo (Docs/Design/GUARDADO.md)
+	_save_data.entries["__time__"] = TimeManager.get_save_data()
+	_save_data.entries["__events__"] = EventManager.get_save_data()
+	_save_data.entries["__player__"] = PlayerManager.get_save_data()
+	_save_data.entries["__containers__"] = ContainerManager.get_save_data()
+	_save_data.entries["__tasks__"] = TaskManager.get_save_data()
+	_save_data.entries["__zone__"] = ZoneManager.get_save_data()
+	_save_data.entries["__story__"] = NarrativeEventHandler.get_save_data()
 	_save_data.entries["__economy__"] = EconomyManager.get_save_data()
 	_save_data.entries["__attendance__"] = AttendanceManager.get_save_data()
 	_save_data.entries["__relationships__"] = RelationshipManager.get_save_data()
@@ -99,7 +107,8 @@ static func load_from_disk(slot: String = "auto") -> void:
 		_get_instance().load_failed.emit(slot, "Save file not found")
 		return
 	
-	var loaded := load(path)
+	# sin cache: si no, se recibe el archivo que ya estaba en memoria y no lo que hay en disco
+	var loaded := ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE)
 	if not loaded is SaveData:
 		push_error("Corrupt save file: %s" % path)
 		_get_instance().load_failed.emit(slot, "Corrupt save file")
@@ -112,6 +121,22 @@ static func load_from_disk(slot: String = "auto") -> void:
 		if is_instance_valid(comp) and _save_data.entries.has(comp.uid):
 			comp.apply_data(_save_data.entries[comp.uid] as ComponentData)
 
+	# El orden importa: el reloj primero (sin disparar nada); los eventos antes que Mayui, que recupera sus contadores
+	if _save_data.entries.has("__time__"):
+		TimeManager.load_save_data(_save_data.entries["__time__"])
+	if _save_data.entries.has("__events__"):
+		EventManager.load_save_data(_save_data.entries["__events__"])
+	if _save_data.entries.has("__player__"):
+		PlayerManager.load_save_data(_save_data.entries["__player__"])
+	if _save_data.entries.has("__containers__"):
+		ContainerManager.load_save_data(_save_data.entries["__containers__"])
+	if _save_data.entries.has("__tasks__"):
+		TaskManager.load_save_data(_save_data.entries["__tasks__"])
+	if _save_data.entries.has("__zone__"):
+		ZoneManager.load_save_data(_save_data.entries["__zone__"])
+	if _save_data.entries.has("__story__"):
+		NarrativeEventHandler.load_save_data(_save_data.entries["__story__"])
+	GameManager.restore_need_timers()
 	if _save_data.entries.has("__economy__"):
 		EconomyManager.load_save_data(_save_data.entries["__economy__"])
 	if _save_data.entries.has("__attendance__"):

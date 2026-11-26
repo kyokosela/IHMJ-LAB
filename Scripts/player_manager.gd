@@ -218,6 +218,7 @@ func energy_spend_handler(stat : Stat, _decrease_value : float) -> void :
 			tired_actions = 0
 
 func auto_energy_effects(_new_value : float) -> void :
+	if _loading: return   # al cargar, los efectos vuelven tal como se guardaron
 	var nothing : bool = true
 	if _new_value >= 90 :
 		# Solo se agrega si no estaba activa: volver a agregarla en cada cambio de energia contaba como
@@ -574,6 +575,7 @@ func sleep(hour_deal : String = "00:00", bed_type: int = BED_TYPE.TYPE_C) -> voi
 	_finish_sleep(actual_sleep, minimun_hours, bed_type, slept_properly, worked_today, energy_deal)
 
 	await TransitionManager.transition_finished
+	GameManager.autosave()   # se guarda solo al despertar (SISTEMA_GAMEPLAY §2.3)
 
 ## Efectos del sueno ya consumado (separado de las transiciones para poder probarlo). SISTEMA_EFECTOS §6.4.
 func _finish_sleep(actual_sleep: String, minimun_hours: String, bed_type: int, slept_properly: bool, worked_today: bool, energy_deal: float) -> void:
@@ -1410,6 +1412,138 @@ func _roll_level_dependent_effects() -> void:
 	var stress_level : int = _stress_level()
 	if stress_level > 0 and rng.randf() < STRESS_HYPERACTIVE_ROLL[stress_level - 1]:
 		apply_timed_hyperactive("STRESS")
+#endregion
+
+#region Guardado (Docs/Design/GUARDADO.md)
+const EFFECTS_FOLDER_PATH : String = "res://Resources/Effects/Effects/"
+var _loading : bool = false ## true mientras se carga: la energia no pone ni quita efectos
+
+func get_save_data() -> Dictionary:
+	var stat_values := {}
+	for stat : Stat in stats:
+		stat_values[stat.stat_unique_name] = stat.value
+	var saved_effects : Array = []
+	for effect : Effect in effects:
+		var entry := {"name": effect.effect_unique_name}
+		if effect is EffectLevel:
+			entry["level"] = effect.level
+			entry["days"] = effect.days_active
+		if effect is EffectHourControl:
+			entry["time"] = effect.time
+		saved_effects.append(entry)
+	var data := {
+		"stats": stat_values, "effects": saved_effects,
+		"sanity": sanity_value, "sanity_floor": sanity_floor, "daily": daily.duplicate(true),
+		"internal_levels": internal_levels.duplicate(), "internal_days": _internal_days.duplicate(),
+		"primary_reached_lv3": primary_reached_lv3.duplicate(),
+		"insomnia_days_active": insomnia_days_active, "insomnia_bad_sleep_days": insomnia_bad_sleep_days,
+		"insomnia_proper_sleep_streak": insomnia_proper_sleep_streak, "slept_today": slept_today, "hour_debt": hour_debt,
+		"last_night_proper": last_night_proper, "last_routine_full": last_routine_full,
+		"proper_nights_in_row": proper_nights_in_row, "tired_actions": tired_actions, "hungry_energy_log": hungry_energy_log,
+		"hyperactive_stack_count": hyperactive_stack_count, "hyperactive_timed": hyperactive_timed,
+		"atenta_from_cold_water": atenta_from_cold_water, "wet_minutes": _wet_minutes,
+	}
+	# la ropa y lo que lleva en las manos se guardan con el formato del inventario del dev (condiciones y contenido incluidos)
+	if player != null and player.inventory != null:
+		var component : InventoryComponent = player.inventory.inventory
+		data["outfit"] = component._item_to_dict(outfit) if outfit != null else null
+		data["wardrobe"] = wardrobe.map(func(item: Item) -> Dictionary: return component._item_to_dict(item))
+		data["hands"] = component.to_dict()
+		data["bag_size"] = player.inventory.get_bag_size()
+	return data
+
+func load_save_data(data: Dictionary) -> void:
+	_loading = true
+	var stat_values : Dictionary = data.get("stats", {})
+	for stat : Stat in stats:
+		if stat_values.has(stat.stat_unique_name):
+			stat.value = float(stat_values[stat.stat_unique_name])
+	for effect : Effect in effects.duplicate():
+		remove_effect(effect.effect_unique_name)
+	var templates : Dictionary = _effect_templates()
+	for entry : Dictionary in data.get("effects", []):
+		var template : Effect = templates.get(entry.name)
+		if template == null:
+			push_warning("PlayerManager: el efecto guardado '%s' ya no existe" % entry.name)
+			continue
+		var effect : Effect = template.duplicate()
+		if effect is EffectLevel:
+			effect.level = int(entry.get("level", 0))
+			effect.days_active = int(entry.get("days", 0))
+		if effect is EffectHourControl:
+			effect.time = entry.get("time", effect.time)
+		effects.append(effect)
+		effect_added.emit(effect)
+
+	sanity_floor = float(data.get("sanity_floor", sanity_floor))
+	sanity_value = float(data.get("sanity", sanity_value))
+	daily = _new_daily()
+	daily.merge(data.get("daily", {}), true)
+	internal_levels = data.get("internal_levels", {}).duplicate()
+	_internal_days = data.get("internal_days", {}).duplicate()
+	var reached : Dictionary = data.get("primary_reached_lv3", {})
+	primary_reached_lv3 = {"STRESS": bool(reached.get("STRESS", false)), "CALM": bool(reached.get("CALM", false))}
+	insomnia_days_active = int(data.get("insomnia_days_active", 0))
+	insomnia_bad_sleep_days = int(data.get("insomnia_bad_sleep_days", 0))
+	insomnia_proper_sleep_streak = int(data.get("insomnia_proper_sleep_streak", 0))
+	slept_today = bool(data.get("slept_today", false))
+	hour_debt = data.get("hour_debt", "00:00")
+	last_night_proper = bool(data.get("last_night_proper", true))
+	last_routine_full = bool(data.get("last_routine_full", false))
+	proper_nights_in_row = int(data.get("proper_nights_in_row", 0))
+	tired_actions = int(data.get("tired_actions", 0))
+	hungry_energy_log = float(data.get("hungry_energy_log", 0.0))
+	hyperactive_stack_count = int(data.get("hyperactive_stack_count", 0))
+	hyperactive_timed = bool(data.get("hyperactive_timed", false))
+	atenta_from_cold_water = bool(data.get("atenta_from_cold_water", false))
+	_sleeping = false
+	_wake_checks_pending = false
+
+	if player != null and player.inventory != null and data.has("hands"):
+		var hands : PlayerInventoryContainer = player.inventory
+		var component : InventoryComponent = hands.inventory
+		var database : Dictionary = ContainerManager.item_database
+		if data.get("outfit") != null:
+			outfit = component._item_from_dict(data.outfit, database)
+		wardrobe.clear()
+		for entry : Dictionary in data.get("wardrobe", []):
+			var item : Item = component._item_from_dict(entry, database)
+			if item != null:
+				wardrobe.append(item)
+		hands._bag_size = int(data.get("bag_size", 0))
+		hands._setup_inventory()   # tamano de manos + mochila (vacia las casillas: se llenan ahora)
+		component.from_dict(data.hands, database)
+		component.inventory_changed.emit()
+		hands.hands_changed.emit()
+	_wet_minutes = int(data.get("wet_minutes", 0))
+	_loading = false
+
+	for event_name : String in _own_lapse_callables():
+		EventManager.restore_lapse_callable(event_name, _own_lapse_callables()[event_name])
+	_apply_outfit_sprite()
+	outfit_changed.emit(outfit)
+
+## Recurso de cada efecto por su nombre unico, para rehacer los guardados.
+func _effect_templates() -> Dictionary:
+	var templates := {}
+	for file_name in ResourceLoader.list_directory(EFFECTS_FOLDER_PATH):
+		var effect := load(EFFECTS_FOLDER_PATH + file_name) as Effect
+		if effect != null:
+			templates[effect.effect_unique_name] = effect
+	return templates
+
+## Contadores de tiempo que crea PlayerManager y lo que hacen al cumplirse.
+func _own_lapse_callables() -> Dictionary:
+	var temporal : String = ""
+	for effect : Effect in effects:
+		if effect is TemporalEffect:
+			temporal = effect.effect_unique_name
+	return {
+		"SLEPT_TODAY_RESET": _allow_sleep_again,
+		"REMOVE_WEAK_AUTOMATICALLY": remove_effect.bind(temporal),
+		"TIMED_ATENTA": _end_cold_water_atenta,
+		"TIMED_HYPERACTIVE": _end_timed_hyperactive,
+	}
 #endregion
 
 func _on_effect_removed(effect: Effect) -> void:

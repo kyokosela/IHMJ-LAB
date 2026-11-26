@@ -16,19 +16,30 @@ signal month_changed(month_value : int) ## se emite cada vez que el mes cambia, 
 var julian_day = 0
 var scheduled_times : Dictionary[ScheduleConfig, Callable] = {}
 
+## true mientras se carga una partida: el reloj se pone sin avisar a nadie (si no, cargar cerraria el dia, pagaria la
+## semana, anotaria faltas y haria correr los contadores).
+var _loading : bool = false
+
 var day : int = 1 :
-	set(_value) : 
+	set(_value) :
+		if _loading:
+			day = _value
+			return
 		day = day_set_handler(_value)
 
 var minutes : int = 0:
 	set(_value) :
+		if _loading:
+			minutes = _value
+			return
 		minutes = minutes_set_handler(_value)
 		time_changed.emit(month,week_day,day,minutes,week)
-	
+
 var week : int = 1:
 	set(_value):
 		week = _value
-		week_changed.emit(week)
+		if not _loading:
+			week_changed.emit(week)
 
 var week_day : TimeUtils.WEEKDAY = TimeUtils.WEEKDAY.LUNES:
 	get: return julian_day % 7 as TimeUtils.WEEKDAY
@@ -36,9 +47,27 @@ var week_day : TimeUtils.WEEKDAY = TimeUtils.WEEKDAY.LUNES:
 var month : TimeUtils.MONTHS = TimeUtils.MONTHS.JUNIO :
 	set(_value) :
 		month = _value
-		month_changed.emit(_value)
+		if not _loading:
+			month_changed.emit(_value)
 
 var year : int = 2026
+
+#region Guardado (Docs/Design/GUARDADO.md)
+func get_save_data() -> Dictionary:
+	return {"julian_day": julian_day, "day": day, "week": week, "month": month, "year": year, "minutes": minutes}
+
+## Pone el reloj tal como se guardo sin disparar nada; solo avisa a la pantalla de la hora nueva.
+func load_save_data(data: Dictionary) -> void:
+	_loading = true
+	julian_day = int(data.get("julian_day", julian_day))
+	year = int(data.get("year", year))
+	month = int(data.get("month", month)) as TimeUtils.MONTHS
+	week = int(data.get("week", week))
+	day = int(data.get("day", day))
+	minutes = int(data.get("minutes", minutes))
+	_loading = false
+	minutes_changed.emit(minutes)
+#endregion
 #region logic
 
 func _ready() -> void:

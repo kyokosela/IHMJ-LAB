@@ -102,6 +102,22 @@ func _on_zone_ready(zone_id: int) -> void:
 		print("[Eventos] entregando '%s' en la zona %d" % [p.key, zone_id])
 		await p.action.call()
 
+#region Guardado (Docs/Design/GUARDADO.md)
+func get_save_data() -> Dictionary:
+	return {"late_said": _late_said, "pending": _pending.map(func(p : Dictionary) -> String: return p.key)}
+
+## Los pendientes vuelven a esperar a Mayui en su zona (no se entregan al cargar).
+func load_save_data(data: Dictionary) -> void:
+	_late_said = int(data.get("late_said", 0))
+	_late_waiting = false
+	_pending.clear()
+	for key : String in data.get("pending", []):
+		if key.begins_with("RENT_OVERDUE_"):
+			_pending.append({"key": key, "zones": rent_overdue_zones, "action": _rent_overdue_now.bind(int(key.get_slice("_", 2))), "spot": ""})
+		else:
+			_pending.append({"key": key, "zones": event_zones.get(key, []), "action": _run_event.bind(key), "spot": event_spots.get(key, "")})
+#endregion
+
 ## Un evento pendiente que no se pudo entregar el mismo dia se descarta (ya paso su momento).
 func _on_day_changed(_day: int) -> void:
 	if not _pending.is_empty():

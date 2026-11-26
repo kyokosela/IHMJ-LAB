@@ -37,6 +37,7 @@ func _initialize() -> void:
 	evm = root.get_node("EventManager")
 	await create_timer(0.3).timeout
 	Engine.time_scale = 30.0   # los fundidos de dormir duran 3 + 3 s
+	gm.autosave_enabled = false   # no pisar la partida guardada del jugador
 
 	print("A. Partida nueva")
 	gm.new_game()

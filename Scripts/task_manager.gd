@@ -50,3 +50,32 @@ func get_task_list_res(_task_list_unique_name : String) -> TaskList :
 	return null
 
 #endregion
+
+#region Guardado (Docs/Design/GUARDADO.md)
+## Las listas activas (por su archivo .tres) y, de cada tarea, si esta hecha y su espera.
+func get_save_data() -> Dictionary :
+	var lists : Array = []
+	var seen : Array[String] = []
+	for task_list : TaskList in active_tasks :
+		if task_list.resource_path == "" or task_list.resource_path in seen : continue
+		seen.append(task_list.resource_path)
+		var tasks := {}
+		for task : Task in task_list.task_list :
+			tasks[task.task_unique_name] = {"done": task.task_done, "cooldown": task.cooldown, "is_cooldown": task.is_cooldown}
+		lists.append({"path": task_list.resource_path, "ready": task_list.ready_task, "tasks": tasks})
+	return {"lists": lists}
+
+func load_save_data(data : Dictionary) -> void :
+	active_tasks.clear()
+	for entry : Dictionary in data.get("lists", []) :
+		var task_list := load(entry.path) as TaskList
+		if task_list == null : continue
+		task_list.ready_task = entry.get("ready", false)
+		var tasks : Dictionary = entry.get("tasks", {})
+		for task : Task in task_list.task_list :
+			if not tasks.has(task.task_unique_name) : continue
+			task.task_done = tasks[task.task_unique_name].get("done", false)
+			task.cooldown = tasks[task.task_unique_name].get("cooldown", task.cooldown)
+			task.is_cooldown = tasks[task.task_unique_name].get("is_cooldown", false)
+		active_tasks.append(task_list)
+#endregion

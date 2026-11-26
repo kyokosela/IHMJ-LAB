@@ -15,7 +15,9 @@ func _ready() -> void:
 	if not GameManager.game_started:
 		GameManager.new_game()
 
-	if EventManager.is_event_active("TUTORIAL") and not NarrativeFlags.has_flag(FLAG_INTRO_SHOWN):
+	# (tras cargar una partida con la manana ya hecha, el arranque no se repite)
+	if EventManager.is_event_active("TUTORIAL") and not NarrativeFlags.has_flag(FLAG_INTRO_SHOWN) \
+			and not NarrativeFlags.has_flag("tutorial_door_done"):
 		NarrativeFlags.set_flag(FLAG_INTRO_SHOWN)
 		for effect : Effect in START_EFFECTS:
 			if not PlayerManager.has_effect(effect.effect_unique_name):

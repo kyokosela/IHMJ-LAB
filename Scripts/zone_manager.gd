@@ -148,6 +148,20 @@ func _guard_stuck_lock(id: int) -> void:
 		push_warning("ZoneManager: el cambio de zona no termino; se libera a Mayui")
 		_release_lock(id)
 
+#region Guardado (Docs/Design/GUARDADO.md)
+func get_save_data() -> Dictionary:
+	return {"zone": current_zone, "travel_origin": _travel_origin, "energy_incremental": energy_cost_incremental,
+		"time_incremental": time_cost_incremental}
+
+## Al cargar Mayui aparece en el punto general de la zona (en su cuarto, junto a la cama), no junto a una puerta.
+func load_save_data(data: Dictionary) -> void:
+	current_zone = int(data.get("zone", ZONES.APARTMENT))
+	previous_zone = -1
+	_travel_origin = int(data.get("travel_origin", -1))
+	energy_cost_incremental = float(data.get("energy_incremental", 0.0))
+	time_cost_incremental = data.get("time_incremental", time_cost_incremental)
+#endregion
+
 func _requires_transport(zone_id: ZONES) -> bool:
 	if current_zone in [ZONES.APARTMENT, ZONES.LOBBY]:
 		if zone_id in ZONES_REQUIRING_TRANSPORT:

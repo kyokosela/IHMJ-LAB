@@ -154,3 +154,67 @@ func reset_lapse_event(event_unique_name : String) -> void : ## Asegurate de que
 	event.reset_lapse()
 
 #endregion
+
+#region Guardado (Docs/Design/GUARDADO.md)
+## Contadores rehechos al cargar: lo que hacen al cumplirse (una funcion) no se puede guardar. Su dueno se la devuelve con
+## restore_lapse_callable; los de las escenas (esperas de las acciones, la estufa) se reenganchan solos al cargar la escena.
+var _restored_lapses : Dictionary = {}
+
+func get_save_data() -> Dictionary:
+	var states := {}
+	var lapses := {}
+	for event : Event in events:
+		var state := {"enabled": event.is_enabled, "checked": event.checked, "is_active": event.is_active}
+		if event is EventScheduled:
+			state["start"] = event.start.triggered if event.start != null else false
+			state["end"] = event.end.triggered if event.end != null else false
+		states[event.event_unique_name] = state
+		if event is LapseEvent:
+			lapses[event.event_unique_name] = {"lapse": event.time_lapse_value, "left": event.timer_count,
+				"restart": event.auto_restart, "display": event.event_name,
+				"destroy_end": event.destroy_at_end, "destroy_start": event.destroy_at_start}
+	var active : Array = []
+	for event : Event in stack_active_events:
+		active.append(event.event_unique_name)
+	return {"events": states, "lapses": lapses, "active": active}
+
+## Los contadores se rehacen todos desde lo guardado (los que habia ahora se quitan); los eventos con hora conservan si ya
+## ocurrieron hoy y cuales estan en curso.
+func load_save_data(data: Dictionary) -> void:
+	for event : Event in events.duplicate():
+		if event is LapseEvent:
+			remove_event(event.event_unique_name)
+	_restored_lapses.clear()
+	var lapses : Dictionary = data.get("lapses", {})
+	for event_name : String in lapses:
+		var lapse : Dictionary = lapses[event_name]
+		create_lapse_event(lapse.lapse, func() -> void: pass, event_name, lapse.display, lapse.restart, lapse.destroy_end, lapse.destroy_start)
+		(get_event(event_name) as LapseEvent).timer_count = lapse.left
+		_restored_lapses[event_name] = true
+
+	var states : Dictionary = data.get("events", {})
+	for event : Event in events:
+		if not states.has(event.event_unique_name):
+			continue
+		var state : Dictionary = states[event.event_unique_name]
+		event.is_enabled = state.get("enabled", true)
+		event.checked = state.get("checked", false)
+		event.is_active = state.get("is_active", false)
+		if event is EventScheduled:
+			if event.start != null: event.start.triggered = state.get("start", false)
+			if event.end != null: event.end.triggered = state.get("end", false)
+	stack_active_events.clear()
+	for event_name in data.get("active", []):
+		var event : Event = get_event(event_name)
+		if event != null:
+			stack_active_events.append(event)
+
+## El dueno de un contador rehecho al cargar le devuelve lo que hace al cumplirse (solo una vez).
+func restore_lapse_callable(event_unique_name : String, callable : Callable) -> void:
+	if not _restored_lapses.has(event_unique_name):
+		return
+	_restored_lapses.erase(event_unique_name)
+	var event : Event = get_event(event_unique_name)
+	if event != null:
+		event.event_executed.connect(callable)
+#endregion

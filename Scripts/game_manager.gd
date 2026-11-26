@@ -53,13 +53,20 @@ func new_game() -> void:
 
 	TaskManager.load_task_list(load("res://Resources/Task/Tutorial/TutorialDoor.tres"))
 	EventManager.load_event(load("res://Resources/Events/TutorialEvents/tutorial.tres"), true)
-	
-	EventManager.create_lapse_event("24:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/smelly.tres")), "AUTO_SMELLY_LAPSE", "SMELLY_TIMER", true)
-	EventManager.create_lapse_event("06:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/hunger.tres")), "AUTO_HUNGER_LAPSE", "HUNGER_TIMER", true)
-	EventManager.create_lapse_event("16:00", PlayerManager.apply_vigil_sleepy, "AUTO_SLEEPY_LAPSE", "SLEEPY_TIMER", true)
+
+	for timer : Array in _need_timers():
+		EventManager.create_lapse_event(timer[0], timer[1], timer[2], timer[3], true)
 
 	_load_schedule_events()
 	_skip_past_events()
+
+## Contadores de las necesidades: [duracion, que hace al cumplirse, nombre unico, nombre visible].
+func _need_timers() -> Array:
+	return [
+		["24:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/smelly.tres")), "AUTO_SMELLY_LAPSE", "SMELLY_TIMER"],
+		["06:00", PlayerManager.add_effect.bind(load("res://Resources/Effects/Effects/hunger.tres")), "AUTO_HUNGER_LAPSE", "HUNGER_TIMER"],
+		["16:00", PlayerManager.apply_vigil_sleepy, "AUTO_SLEEPY_LAPSE", "SLEEPY_TIMER"],
+	]
 
 ## Los eventos del dia actual cuya hora ya paso al iniciar la partida se marcan como ya
 ## ocurridos. Si no, se disparan todos juntos en el primer cambio de reloj (ej. al ducharse).
@@ -104,6 +111,32 @@ func save_file(slot_id : int) -> void:
 func load_file(slot_id : int) -> void :
 	var slot_name = "save_%d" % (slot_id + 1)
 	SaveManager.load_from_disk(slot_name)
+
+#region Guardado al dormir (Docs/Design/GUARDADO.md)
+var save_slot : int = 0 ## ranura del guardado al dormir y de Shift+S / Shift+L (las pruebas usan otra)
+var autosave_enabled : bool = true ## las pruebas que duermen lo apagan para no pisar la partida del jugador
+
+## Lo llama PlayerManager.sleep() al despertar: es el unico guardado del juego (SISTEMA_GAMEPLAY §2.3).
+func autosave() -> void:
+	if autosave_enabled and game_started:
+		save_file(save_slot)
+
+## Carga una partida y lleva a Mayui a la zona guardada. false si no hay partida en esa ranura.
+func load_game(slot_id : int = save_slot) -> bool:
+	if not SaveManager.has_save("save_%d" % (slot_id + 1)):
+		return false
+	load_file(slot_id)
+	game_started = true
+	if ZoneManager.zone_node != null and is_instance_valid(ZoneManager.zone_node):
+		ZoneManager.zone_node.release_player()   # antes de cerrar la escena (ver World.release_player)
+	get_tree().call_deferred("change_scene_to_file", ZoneManager.zone_paths[ZoneManager.current_zone])
+	return true
+
+## Los contadores de las necesidades rehechos al cargar recuperan lo que hacen al cumplirse.
+func restore_need_timers() -> void:
+	for timer : Array in _need_timers():
+		EventManager.restore_lapse_callable(timer[2], timer[1])
+#endregion
 #endregion
 
 #region DEBUG SYSTEM
@@ -165,12 +198,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("debug_save"):
 		print("saving...")
-		save_file(0)
+		save_file(save_slot)
 		
 	if event.is_action_pressed("debug_load"):
 		print("loading...")
-		load_file(0)
-		get_tree().reload_current_scene()
+		load_game(save_slot)
 		
 	if event.is_action_pressed("debug_print_save_runtime"):
 		print("printing...")

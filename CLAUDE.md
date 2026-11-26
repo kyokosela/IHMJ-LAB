@@ -5,10 +5,11 @@ Prototipo personal en Godot 4.6 / GDScript. Simulador de supervivencia laboral
 Todo el contenido del juego (UI, diálogos, emails) va en **español**.
 
 ## META ACTUAL (solo una)
-**Tutorial de la mañana jugable de principio a fin:**
-despertar -> asearse (ducha) -> uniforme (armario) -> cocinar/comer -> lavarse dientes -> salir.
-Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía nada más
-(ni playground, ni minijuegos, ni ciudad, ni contenido narrativo nuevo).
+**✅ CERRADA (Ramiro, 2026-11-26):** el tutorial de la mañana (despertar -> asearse -> uniforme -> cocinar/comer -> lavarse
+dientes -> salir) es un borrador jugable de principio a fin, para mostrar al equipo y que se inspire mientras Ramiro avanza
+la historia. Apartamento y edificio quedan cerrados. Diseño: `Docs/Design/Flow de juego.txt`.
+**Siguiente meta: sin definir** (el trabajo espera su guion, P68). Mientras no haya una, solo arreglos de lo ya hecho: no se
+amplía nada más (ni playground, ni minijuegos, ni ciudad, ni contenido narrativo nuevo).
 
 ## ESTADO (actualizar al cerrar cada sesión)
 - El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Baño, Balcón, Pasillo,
@@ -37,8 +38,8 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   izquierda sale **Llevas** (`UI/PLAYERUI/hands_hud.gd`: manos y mochila, de arriba hacia abajo, escondida con pantallas); el
   casero espera a que Mayui pase frente a la recepción (`NarrativeEventHandler.event_spots` + Area2D `FrenteRecepcion` en
   `Lobby.tscn`). P94–P95.
-- **Edificio:** propuesta a Ramiro (2026-11-26): se cierra cuando pruebe la sexta ronda y complete una mañana sin fallas; lo
-  que falte dentro es arte/sonido o fases posteriores. Lo siguiente (calle y trabajo) necesita su guion del Bloque 1-2 (P68).
+- **Edificio cerrado** (Ramiro, 2026-11-26): lo que falta dentro es arte/sonido o fases posteriores. Lo siguiente (calle y
+  trabajo) necesita su guion del Bloque 1-2 (P68).
 - Pasos de caminar PROVISIONALES de casa/toalla/Outfit 1 (`Tools/pasos_provisionales.ps1`, desde el cuadro quieto; el arte
   real se pega en las mismas hojas, P54). El escritorio permite comer ahí (P27) y el fregadero vacía la olla (P81).
 - Pasillo y recepción (2026-11-25, según los planos de Ramiro): `Hallway.tscn` (zona 6; escaleras y puertas M-21 a M-24)

@@ -1,19 +1,16 @@
-# Para Ramiro: sexta ronda (2026-11-26)
+# Para Ramiro: tutorial cerrado (2026-11-26)
 
-Todo en commits **locales** (sin subir). Pruebas automáticas sobre la versión final: **725 comprobaciones, 0 fallas**
-(incluida una mañana jugada con ratón y teclas). Prueban que funciona, no que se sienta bien: eso lo dices tú.
+**Meta cumplida:** un borrador jugable de la mañana, desde despertar hasta que el casero te intercepta en la recepción.
+Última versión del juego: **725 comprobaciones, 0 fallas**.
 
-## Hecho
-- La puerta del baño va en un hueco como las del pasillo (en el cuarto y en el baño).
-- **Llevas**, arriba a la izquierda: lo que tienes en las manos, de arriba hacia abajo.
-- El casero salta al pasar frente a la recepción.
+## Para mostrárselo al equipo
+- **Con Godot 4.6:** abren el proyecto en la rama `feat/efectos-en-playermanager` (cuando esté subida a GitHub) y pulsan F5.
+- **Sin Godot:** hace falta un ejecutable (.exe). Requiere bajar las plantillas oficiales de Godot (1,17 GB); sin tu OK.
+- **Avísales:** no pulsar **H**, **J** ni **F3** (teclas de prueba) · dibujos provisionales · todavía sin sonido.
 
-## ¿Cuándo salimos del apartamento y el edificio?
-Cuando juegues una mañana completa con esta versión y nada se trabe ([Docs/PRUEBA_TUTORIAL.md](Docs/PRUEBA_TUTORIAL.md)).
-Lo que queda dentro no frena:
-- Arte y sonido (artistas): dibujos reales, Mayui sentada, caminar, sonidos.
-- De tu guion de la mañana, sin hacer: el café, la ropa casual (falta su dibujo) y "Mierda, olvidé comprar…" (P89).
-- Fases posteriores: lavar ropa y platos, clima, pagar en la recepción.
+## Tu siguiente paso
+Escribir **una** escena del trabajo: la entrada a la empresa (quién habla y qué dice), con el formato de DIALOGOS
+(#1, #2, COOLDOWN).
 
-**Lo siguiente (calle y trabajo) necesita tu guion del Bloque 1-2** (P68): hoy solo tiene objetivos. Empieza por una sola
-escena: la llegada a la entrada de la empresa.
+## Quedó para después (ver DECISIONES_Y_PENDIENTES)
+Arte y sonido · café, ropa casual y "Mierda, olvidé comprar…" · lavar ropa y platos · clima · pagar en la recepción.

@@ -108,7 +108,7 @@ func change_zone(new_zone_id: ZONES) -> void:
 	tree.call_deferred("change_scene_to_file", zone_paths[new_zone_id])
 	_guard_stuck_lock(_change_id)
 
-## Salir de casa o moverse por fuera: cuesta tiempo, energia (a pie) y puede pasar algo en la calle.
+## Moverse por la calle (de un establecimiento a otro): cuesta tiempo, energia (a pie) y puede pasar algo.
 func _travel(new_zone_id: ZONES, by_bus: bool) -> void:
 	if new_zone_id == _travel_origin:
 		time_cost_incremental = time_cost_base

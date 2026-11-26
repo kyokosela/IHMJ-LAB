@@ -1,41 +1,24 @@
-# Para Ramiro: lo avanzado el 2026-11-25 y qué probar
+# Para Ramiro: tu reporte del 2026-11-25, resuelto
 
-Todo quedó en commits **locales** (sin subir). Pruebas automáticas sobre la versión final: **644 comprobaciones, 0 fallas**
-(las 8, la mañana entera con teclas y ratón, el "jugador torpe" y teclas al azar). Prueban que funciona, no que se sienta
-bien: eso lo dices tú.
+Todo quedó en commits **locales** (sin subir, como pediste: se sube cuando lo apruebes). Pruebas automáticas sobre la
+versión final: **673 comprobaciones, 0 fallas** (las 10 y la mañana entera con teclas y ratón). Prueban que funciona, no
+que se sienta bien: eso lo dices tú.
 
-## Nuevo en la tarde
-- **Pasillo y recepción** (según tus planos): sales de casa, bajas las escaleras y el casero te espera abajo (P80).
-- **Ducha** con tu escena: la silueta tras la cortina (P70).
-- **Carteles** pequeños al acercarte y sin la casilla "0" arriba (P74, P79).
-- **Casero**: con **Z** ya puedes elegir su respuesta (antes te quedabas trabado; P82).
-- **Puerta**: si insistes ya no se queda muda (P69).
-- **Estufa** vacía: salen tus frases.
-- **Fregadero**: "Usar" también vacía la olla con agua (P81).
-- **Escritorio**: lleva la olla y come en la mesa ("No sabe a nada.", P27).
-- Mayui **mueve las piernas** con pijama y toalla (pasos provisionales hasta que dibujen los reales, P54).
-- **Ayuda de la cocina**: ahora dice cómo comer (la olla en tus manos y clic derecho).
-- **Sonido** preparado: al copiar los archivos en `Audio/SFX/` suenan solos (hoy no hay ninguno).
-- Sin avisos en la consola al arrancar (salvo el de cierre).
-- Prueba nueva del "jugador torpe": desordenar la cocina no pierde ni duplica ingredientes.
-- Prueba de **teclas al azar** por casa, pasillo y recepción (1.200 acciones): sin atascos ni paredes atravesadas.
-
-De la mañana: cuarto en L, baño, balcón, frases de tu guion y arranque a oscuras (P74–P78).
+## Hecho
+- **Fallas:** la estufa ya no se cancela al salir de la zona · el calendario ya no habla desde el escritorio.
+- **Puertas y escaleras:** se usan caminando contra ellas, sin meterse en el dibujo; un punto marca lo que se usa; la puerta
+  del baño cuadra.
+- **Mañana:** estornudo dentro de la ducha y sale mirando abajo · lavamanos manda a la ducha primero · el escritorio dice
+  para qué sirve, la comida dura más a oscuras y "No sabe a nada." queda para la comida instantánea.
+- **Cocina:** cada estación acepta solo lo suyo, sin cuadros en estufa, fregadero y tabla, alacenas más grandes.
+- **Armario:** transición al entrar y salir, y pausa tras cambiarse.
+- **Edificio:** 4 puertas iguales · recepción con rejilla bajo las escaleras · mantenimiento solo puerta · la luz ya no
+  parpadea al salir · dentro del edificio nada cuesta tiempo ni energía.
+- **Tus respuestas:** renta el viernes y dinero 350 anotados; el estrés era la ducha fría o un imprevisto en la calle.
 
 ## Para probar
-Sigue el recorrido, paso a paso (qué hacer, qué debe pasar y qué necesito que me digas):
-[Docs/PRUEBA_TUTORIAL.md](Docs/PRUEBA_TUTORIAL.md). El juego no cambia hasta que reportes.
-El pedido de arte y sonido para el equipo está en `Docs/Para el equipo/pedido_de_arte_y_sonido.md` (no va en git).
+Segunda ronda, paso a paso: [Docs/PRUEBA_TUTORIAL.md](Docs/PRUEBA_TUTORIAL.md).
 
-## Preguntas (una a la vez, en este orden)
-1. ¿Subo los commits a GitHub?
-2. P80: ¿tu piso 2 es así (3 puertas, la tuya, M-21, arriba a la derecha)? ¿Qué hay en la recepción?
-3. P77 / P25: nevera y comida instantánea (tus documentos se contradicen).
-4. P67: ¿el alquiler es viernes (casero) o miércoles (tu diseño)?
-5. P78: ¿dinero inicial 1000 (Bloque 1-1) o 350? ¿Te gustan la oscuridad y las ayudas?
-6. P76: ¿qué hace el tendedero?
-
-## Necesita arte o texto (no lo inventé)
-Tileset y props reales (cuarto, baño, balcón, pasillo y recepción) · comida instantánea · Mayui sentada · los archivos de
-sonido · dibujo real de la ducha · renders de diálogo · cuadros de caminar (hoy provisionales) · la ropa casual colgada ·
-"¿apagué la estufa?" al salir.
+## Pendiente (anotado en DECISIONES_Y_PENDIENTES)
+Luz por hora y clima (P83) · lavar platos e ingredientes (P84) · rediseño de la cocina y mini tutorial, con tus imágenes
+(P85) · la frase del casero (P86) · hablar y pagar en la recepción (P87) · comida instantánea (P25) · tendedero (P76).

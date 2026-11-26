@@ -336,7 +336,8 @@ func _create_slot_ui(item: Item, slot_index: int) -> Control:
 
 	if slot_type == "station":
 		var station = kitchen.get_station_for_slot(slot_index)
-		if station and station.is_locked and slot_ui.has_method("set_locked"):
+		# Completado: tambien mientras se ve la estacion trabajando (el agua cayendo) la olla no se saca
+		if station and (station.is_locked or _showing.has(station.station_id)) and slot_ui.has_method("set_locked"):
 			slot_ui.set_locked(true)
 
 	return slot_ui
@@ -391,12 +392,19 @@ func _allow_drop(slot_ui: InventorySlotUI, from: InventoryComponent, from_index:
 ## Por que no se puede mover ("" si se puede): se mira lo que llega y, si se intercambian, lo que vuelve.
 func _drop_rejection(to: InventoryComponent, to_index: int, from: InventoryComponent, from_index: int) -> String:
 	if to == from and to_index == from_index: return ""
+	if _is_showing_slot(from, from_index) or _is_showing_slot(to, to_index): return "STATION_BUSY"
 	var arriving : Item = from.slots[from_index].item
 	var leaving : Item = to.slots[to_index].item
 	var reason : String = _slot_rejection(to, to_index, arriving)
 	if reason == "" and leaving != null:
 		reason = _slot_rejection(from, from_index, leaving)
 	return reason
+
+## La casilla de una estacion que se esta viendo trabajar (_show_active).
+func _is_showing_slot(inventory: InventoryComponent, index: int) -> bool:
+	if kitchen == null or inventory != kitchen.inventory: return false
+	var station : Station = kitchen.get_station_for_slot(index)
+	return station != null and _showing.has(station.station_id)
 
 ## Sacar la comida instantanea de la alacena (a las manos o a otra casilla que no sea de almacenamiento).
 func _notice_instant_box(slot_ui: InventorySlotUI, from: InventoryComponent, from_index: int) -> void:
@@ -475,7 +483,7 @@ func _on_station_craft_button_pressed(station_id: String):
 		print("KitchenUI: Could not start craft at ", station_id)
 
 ## Completado: una receta instantanea deja ver un momento el dibujo de la estacion trabajando (el agua cayendo, que aparece y
-## se va suave); mientras tanto su boton queda apagado.
+## se va suave); mientras tanto su boton queda apagado y su casilla bloqueada (no se saca la olla a medio llenar).
 func _show_active(station_id: String, seconds: float) -> void:
 	var prop : CanvasItem = station_active_props.get(station_id)
 	if prop == null: return

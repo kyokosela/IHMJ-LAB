@@ -296,6 +296,9 @@ func _jugar() -> void:
 	var grifo : Button = ui.station_craft_buttons["sink"]
 	await _clic(grifo)
 	_check("Clic en Usar: la olla se llena y se ve caer el agua", not inv.slots[fregadero].is_empty() and inv.slots[fregadero].item.held_item != null and ui.station_active_props["sink"].visible and ui.station_content_props["sink"].visible)
+	var otra_mano : int = manos.get_hands_indices()[1]
+	await _arrastrar(await _slot(rejilla_fregadero, fregadero), await _slot(rejilla_manos, otra_mano))
+	_check("Mientras cae el agua, arrastrar la olla a la mano no la saca", not inv.slots[fregadero].is_empty() and manos.inventory.slots[otra_mano].is_empty() and ui.station_active_props["sink"].visible, "en el fregadero %s, en la mano %s, cae %s" % [not inv.slots[fregadero].is_empty(), not manos.inventory.slots[otra_mano].is_empty(), ui.station_active_props["sink"].visible])
 	await _foto("5c_cae_el_agua")
 	await create_timer(1.1).timeout
 	_check("El agua deja de caer, se ve dentro de la olla y el boton dice 'Vaciar'", not ui.station_active_props["sink"].visible and ui.station_content_props["sink"].visible and grifo.text == "Vaciar" and not grifo.disabled, grifo.text)

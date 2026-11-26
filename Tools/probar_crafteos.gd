@@ -275,6 +275,7 @@ func _t_fregadero() -> void:
 	await _callar(root.get_node("Dialogic"))
 	var cocina = escena.get_node("Kitchen")
 	var ui = escena.get_node("UILayer/KitchenMultiUI")
+	pm.player.inventory.inventory.clear()   # manos libres: se prueba a sacar la olla
 	ui.open(cocina)
 	await create_timer(0.3).timeout
 	var kc = cocina.container
@@ -300,7 +301,13 @@ func _t_fregadero() -> void:
 	await create_timer(0.3).timeout
 	_check("Al usar: cae el agua, la olla ya la muestra dentro y el boton espera", chorro.visible and chorro.modulate.a > 0.9 and dibujo.call() == "pot_content_water.png" and boton.disabled and boton.text == "Usar", "chorro %s (%.2f), '%s', %s" % [chorro.visible, chorro.modulate.a, dibujo.call(), boton.text])
 	_check("El boton suelta el foco (Enter no vacia la olla sin querer)", not boton.has_focus())
+	var casilla : Control = ui.station_containers["sink"].get_children().filter(func(c: Node) -> bool: return not c.is_queued_for_deletion())[0]
+	var mano_libre : Control = ui.player_hands_grid.get_children().filter(func(c: Node) -> bool: return not c.is_queued_for_deletion() and c.item == null)[0]
+	_check("Mientras cae el agua la casilla del fregadero esta bloqueada y no admite sacar la olla", casilla.locked_overlay.visible and not ui._allow_drop(mano_libre, inv, fregadero), "bloqueo %s" % casilla.locked_overlay.visible)
 	await create_timer(1.1).timeout
+	casilla = ui.station_containers["sink"].get_children().filter(func(c: Node) -> bool: return not c.is_queued_for_deletion())[0]
+	mano_libre = ui.player_hands_grid.get_children().filter(func(c: Node) -> bool: return not c.is_queued_for_deletion() and c.item == null)[0]
+	_check("Cuando deja de caer, la olla se puede sacar", not casilla.locked_overlay.visible and ui._allow_drop(mano_libre, inv, fregadero), "bloqueo %s" % casilla.locked_overlay.visible)
 	_check("Despues del chorro: deja de caer, la olla sigue con agua y el boton se enciende diciendo 'Vaciar'", not chorro.visible and chorro.modulate.a == 1.0 and not boton.disabled and boton.text == "Vaciar" and dibujo.call() == "pot_content_water.png", "chorro %s, %s '%s'" % [chorro.visible, boton.text, dibujo.call()])
 	boton.pressed.emit()
 	await create_timer(0.2).timeout

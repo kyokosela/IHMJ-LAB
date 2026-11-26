@@ -33,6 +33,7 @@ var current_day_on_time: bool = true
 
 var days_worked_this_week: int = 0
 var total_deductions_this_week: int = 0
+var salary_pending: bool = false ## el viernes a las 17:00 Mayui seguia fichada: se paga cuando marque la salida
 
 func _ready() -> void:
 	TimeManager.day_changed.connect(_on_day_changed)
@@ -76,6 +77,15 @@ func clock_out(has_permission: bool = false) -> void:
 	days_worked_this_week += 1
 	EconomyManager.record_daily_earnings(TimeManager.week_day, EconomyManager.DAILY_SALARY)
 	left_work.emit(false)
+	if salary_pending:
+		pay_week_salary()
+
+## Paga de la semana (D7: viernes 17:00, una sola vez; la pide el evento DAY5_SALARY). Si Mayui sigue fichada, espera a
+## que marque la salida para contar tambien el viernes.
+func pay_week_salary() -> void:
+	salary_pending = is_at_work
+	if not is_at_work:
+		EconomyManager.pay_weekly_salary(total_deductions_this_week)
 
 func is_work_hours() -> bool:
 	var current := TimeManager.minutes
@@ -122,7 +132,8 @@ func get_save_data() -> Dictionary:
 		"is_at_work": is_at_work,
 		"arrived_today": arrived_today,
 		"days_worked_this_week": days_worked_this_week,
-		"total_deductions_this_week": total_deductions_this_week
+		"total_deductions_this_week": total_deductions_this_week,
+		"salary_pending": salary_pending
 	}
 
 func load_save_data(data: Dictionary) -> void:
@@ -137,6 +148,7 @@ func load_save_data(data: Dictionary) -> void:
 	arrived_today = data.get("arrived_today", false)
 	days_worked_this_week = data.get("days_worked_this_week", 0)
 	total_deductions_this_week = data.get("total_deductions_this_week", 0)
+	salary_pending = data.get("salary_pending", false)
 
 func _check_absence_consequences() -> void:
 	match absence_count:
@@ -181,7 +193,10 @@ func _on_day_changed(_day: int) -> void:
 	left_early_today = false
 	current_day_on_time = true
 
+	# Si la paga del viernes no llego (no marco la salida, o el reloj salto las 17:00 mientras dormia), llega al acabar el dia
+	if ended_week_day == TimeUtils.WEEKDAY.VIERNES:
+		pay_week_salary()
+
 func _on_week_changed(_week: int) -> void:
-	EconomyManager.pay_weekly_salary(total_deductions_this_week)
 	days_worked_this_week = 0
 	total_deductions_this_week = 0

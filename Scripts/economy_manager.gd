@@ -24,6 +24,7 @@ var transactions: Array[Dictionary] = []
 var daily_earnings: Array[int] = [0, 0, 0, 0, 0, 0, 0]
 var rent_paid_this_week: bool = false
 var rent_warnings: int = 0
+var salary_paid_this_week: bool = false
 
 func _ready() -> void:
 	TimeManager.week_changed.connect(_on_week_changed)
@@ -58,7 +59,12 @@ func calculate_weekly_gross() -> int:
 		total += daily_earnings[i]
 	return total
 
+## Paga lo ganado de lunes a viernes menos los descuentos. Una sola vez por semana (AttendanceManager.pay_week_salary).
 func pay_weekly_salary(deductions: int = 0) -> void:
+	if salary_paid_this_week:
+		return
+	salary_paid_this_week = true
+
 	var gross: int = calculate_weekly_gross()
 	var net: int = max(0, gross - deductions)
 	var details := {
@@ -105,7 +111,8 @@ func get_save_data() -> Dictionary:
 		"transactions": transactions.duplicate(true),
 		"daily_earnings": daily_earnings.duplicate(),
 		"rent_paid_this_week": rent_paid_this_week,
-		"rent_warnings": rent_warnings
+		"rent_warnings": rent_warnings,
+		"salary_paid_this_week": salary_paid_this_week
 	}
 
 func load_save_data(data: Dictionary) -> void:
@@ -121,6 +128,7 @@ func load_save_data(data: Dictionary) -> void:
 		daily_earnings[i] = int(saved_daily_earnings[i])
 	rent_paid_this_week = data.get("rent_paid_this_week", false)
 	rent_warnings = data.get("rent_warnings", 0)
+	salary_paid_this_week = data.get("salary_paid_this_week", false)
 
 func _count_days_worked() -> int:
 	var count: int = 0
@@ -143,4 +151,5 @@ func _log_transaction(amount: int, reason: String) -> void:
 
 func _on_week_changed(_week: int) -> void:
 	rent_paid_this_week = false
+	salary_paid_this_week = false
 	daily_earnings = [0, 0, 0, 0, 0, 0, 0]

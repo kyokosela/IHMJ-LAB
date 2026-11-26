@@ -160,10 +160,8 @@ func _run_event(event_name: String) -> void:
 			NarrativeFlags.set_flag("night_restriction")
 			NarrativeFlags.set_flag("survey_enabled")
 		"DAY5_SALARY":
-			var salary_flag := "salary_paid_week_%d" % TimeManager.week
-			if not NarrativeFlags.has_flag(salary_flag):
-				EconomyManager.pay_weekly_salary(AttendanceManager.get_weekly_deductions())
-				NarrativeFlags.set_flag(salary_flag)
+			# al final del instante: a las 17:00 tambien acaba la jornada y una falta anotada ahora entra en esta paga
+			AttendanceManager.pay_week_salary.call_deferred()
 		"WORK_HOURS_DAY2", "WORK_HOURS_DAY3", "WORK_HOURS_DAY4", "WORK_HOURS_DAY5":
 			AttendanceManager.arrived_today = false
 

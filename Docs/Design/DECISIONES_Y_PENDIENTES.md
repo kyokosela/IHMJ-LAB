@@ -71,7 +71,7 @@
 | **P20** | **Horarios de presencia** de personajes (X personaje está en X sitio durante una franja de tiempo); el casero ya funciona por zona (`event_zones`) | ampliar `event_zones` con franjas |
 | **P21** | **Fichaje con la recepcionista**: fichar la entrada activa lo que toca ese día (y sin fichar no abre el PC); fichar la salida antes de hora avisa "Aún te quedan X horas… no te pagarán lo trabajado sin permiso" mostrando S/ con permiso | F4 |
 | **P22** | **Renta y casero**: el alquiler vence el viernes (D6) y el casero da plazo hasta el domingo; todavía no cobra ni bloquea el apartamento | F4 |
-| **P23** | **Dinero sin trabajar**: el salario sube el viernes y al cambiar de semana aunque no hayas trabajado | F4 (#14) |
+| **P23** | ✅ **Paga del viernes corregida** (2026-11-26, D7): una sola vez por semana, el viernes a las 17:00, y solo por los días trabajados (antes saltaba a las 16:00: 5 días pagaban 800, y la de cada semana siguiente no llegaba). Decisión mía, reversible: si a las 17:00 Mayui sigue fichada, la paga llega **al marcar la salida** (así cuenta el viernes); si nunca la marca o el reloj salta las 17:00 durmiendo, llega al acabar el viernes. Prueba: `Tools/probar_paga.gd`. Base + aciertos sigue en P96 | tú: ¿te sirve que llegue al marcar la salida? |
 | **P24** | **Guía de cordura** de una página (qué la sube y qué la baja) | la preparo cuando la pidas |
 | **P36** | ✅ **Cerrado:** la segunda alacena (arriba de la estufa) también guarda cosas. El almacenamiento de la cocina pasó de 6 a 12 casillas: 1–6 en la alacena derecha y 7–12 en la izquierda | — |
 | **P37** | **Llenar la olla en el fregadero es instantáneo** (`needed_time` "00:00" en `sink_station.tres`), así que el agua del arte casi no se ve. El fuego y el humo sí salen (la estufa tarda 25 min de juego) | tú: ¿cuánto tarda llenarla? |
@@ -163,7 +163,7 @@
 | 11 | Hiperactividad solo por energía ≥90 y café; faltan Atenta y Estrés | `player_manager.gd` | ✅ Paso 1 |
 | 12 | Inapetencia es un efecto sin números (no reduce éxito ni energía al comer) | `Resources/Effects/Effects/inapetencia.tres` | ✅ Paso 1 |
 | 13 | El evento `RENT` (miércoles 17:00) no dispara nada; el cobro lo hacen eventos del jueves y viernes | `Resources/Events/` + `narrative_event_handler.gd` | F4 |
-| 14 | El salario se paga el viernes 16:00 **y** al cambiar de semana | `narrative_event_handler.gd` + `attendance_manager.gd` | F4 |
+| 14 | El salario se paga el viernes 16:00 **y** al cambiar de semana | `narrative_event_handler.gd` + `attendance_manager.gd` | ✅ una vez, viernes 17:00 (P23) |
 | 15 | Advertencias de renta suben por pagos fallidos, no por días; sin deudas invisibles (dinero nunca <0) | `economy_manager.gd` | F4 |
 | 16 | Bus siempre disponible a S/10, sin horarios 07:30 / 17:30 | `zone_manager.gd` | F4 |
 | 17 | Tolerancia de llegada (D23) | `attendance_manager.gd` | F4 |

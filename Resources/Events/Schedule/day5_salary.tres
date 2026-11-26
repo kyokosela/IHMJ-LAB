@@ -5,11 +5,12 @@
 
 [sub_resource type="Resource" id="start_config"]
 script = ExtResource("2")
-day = 5
-time = "16:00"
+week_day = Array[int]([4])
+time = "17:00"
 
 [resource]
 script = ExtResource("1")
 start = SubResource("start_config")
 event_name = "Pago Semanal"
 event_unique_name = "DAY5_SALARY"
+can_multiple_active = true

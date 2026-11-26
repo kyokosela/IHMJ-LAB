@@ -33,6 +33,12 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
   el agua 1 s (`Crafts.active_seconds`) y el botón dice **Vaciar** si hay algo dentro (`Crafts.button_text`; lo de dentro se
   bota). P92. En toalla la cocina no se abre en la mañana del tutorial (`home_kitchen.gd`, `towel_messages`: "Necesito
   ponerme algo.", la frase de la puerta; P93).
+- Sexta ronda (2026-11-26): la puerta del baño va en un hueco como las del pasillo, en el cuarto y en el baño; arriba a la
+  izquierda sale **Llevas** (`UI/PLAYERUI/hands_hud.gd`: manos y mochila, de arriba hacia abajo, escondida con pantallas); el
+  casero espera a que Mayui pase frente a la recepción (`NarrativeEventHandler.event_spots` + Area2D `FrenteRecepcion` en
+  `Lobby.tscn`). P94–P95.
+- **Edificio:** propuesta a Ramiro (2026-11-26): se cierra cuando pruebe la sexta ronda y complete una mañana sin fallas; lo
+  que falte dentro es arte/sonido o fases posteriores. Lo siguiente (calle y trabajo) necesita su guion del Bloque 1-2 (P68).
 - Pasos de caminar PROVISIONALES de casa/toalla/Outfit 1 (`Tools/pasos_provisionales.ps1`, desde el cuadro quieto; el arte
   real se pega en las mismas hojas, P54). El escritorio permite comer ahí (P27) y el fregadero vacía la olla (P81).
 - Pasillo y recepción (2026-11-25, según los planos de Ramiro): `Hallway.tscn` (zona 6; escaleras y puertas M-21 a M-24)

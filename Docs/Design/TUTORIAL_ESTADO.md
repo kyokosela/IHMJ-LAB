@@ -26,7 +26,7 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 | Balcón | frases | ✅ tus 3 frases; después de la mañana se sale (P76) |
 | Calendario | frases | ✅ (P77) |
 | Pasillo y escaleras | "recorre los pasillos, baja por las escaleras y llega al lobby" (`Flow de juego.txt`) | ✅ pasillo del piso 2 y recepción, según tus planos, con dibujos provisionales (P80) |
-| Casero en el lobby | explica el cobro | ✅ viernes (confirmado, D6) |
+| Casero en el lobby | explica el cobro | ✅ viernes (confirmado, D6); salta al pasar frente a la recepción (P95) |
 
 ## Detalles a decidir en los textos
 - Puerta sin cepillarse: DIALOGOS no trae esa frase. Usé la de `Flow de juego.txt` ("Me levare la boca antes de salir.") como "Me lavaré la boca antes de salir." (P53).

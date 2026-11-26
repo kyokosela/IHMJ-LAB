@@ -1,19 +1,19 @@
-# Para Ramiro: fregadero y toalla (2026-11-26)
+# Para Ramiro: sexta ronda (2026-11-26)
 
-Todo en commits **locales** (sin subir: se sube cuando lo apruebes). Pruebas automáticas sobre la versión final:
-**710 comprobaciones, 0 fallas** (incluida una mañana jugada con ratón y teclas). Prueban que funciona, no que se
-sienta bien: eso lo dices tú.
+Todo en commits **locales** (sin subir). Pruebas automáticas sobre la versión final: **725 comprobaciones, 0 fallas**
+(incluida una mañana jugada con ratón y teclas). Prueban que funciona, no que se sienta bien: eso lo dices tú.
 
 ## Hecho
-- La olla queda **dentro de la pila** (el frente es un recorte de tu propio dibujo) y se ve **lo que lleva** (provisional).
-- **Usar** vuelve a mostrar el agua cayendo; con algo dentro el botón dice **Vaciar**. Ya lo probaste: bien.
-- En toalla la cocina **no se abre**: "Necesito ponerme algo.".
+- La puerta del baño va en un hueco como las del pasillo (en el cuarto y en el baño).
+- **Llevas**, arriba a la izquierda: lo que tienes en las manos, de arriba hacia abajo.
+- El casero salta al pasar frente a la recepción.
 
-## Para probar
-[Docs/PRUEBA_TUTORIAL.md](Docs/PRUEBA_TUTORIAL.md): 1 paso (la toalla).
+## ¿Cuándo salimos del apartamento y el edificio?
+Cuando juegues una mañana completa con esta versión y nada se trabe ([Docs/PRUEBA_TUTORIAL.md](Docs/PRUEBA_TUTORIAL.md)).
+Lo que queda dentro no frena:
+- Arte y sonido (artistas): dibujos reales, Mayui sentada, caminar, sonidos.
+- De tu guion de la mañana, sin hacer: el café, la ropa casual (falta su dibujo) y "Mierda, olvidé comprar…" (P89).
+- Fases posteriores: lavar ropa y platos, clima, pagar en la recepción.
 
-## Pendiente (anotado en DECISIONES_Y_PENDIENTES)
-Luz por hora y clima (P83) · lavar platos e ingredientes (P84) · rediseño de la cocina y mini tutorial (P85) · hablar y
-pagar en la recepción (P87) · frase "olvidé comprar" (P89) · zona comercial (P90) · plato y olla (P91) · dibujos del
-contenido de la olla y confirmar al botar comida (P92) · frase propia para la toalla y el lavamanos (P93) · tendedero
-(P76) · café.
+**Lo siguiente (calle y trabajo) necesita tu guion del Bloque 1-2** (P68): hoy solo tiene objetivos. Empieza por una sola
+escena: la llegada a la entrada de la empresa.

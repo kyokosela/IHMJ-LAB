@@ -18,7 +18,7 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 | Puerta al terminar | "Aquí vamos." | ✅ la primera vez; después deja salir directo |
 | Ducha | primera vez, repetir, "Qué frío", silueta tras la cortina, estornudo | ✅ las frases y la escena de la silueta (provisional, con tu render; P70); el estornudo suena dentro de la ducha (tu prueba del 2026-11-25). ❌ sonido: no hay audio |
 | Armario | primero ducharse; frases para uniforme, pijama, casual y ropa sucia; ruge el estómago | ✅ antes de la ducha no se abre; la pijama no se pone; uniforme y estómago (como texto). La cesta habla si hay ropa sucia (en el tutorial aún no la hay, P71). ❌ casual (aún no se puede poner, P72) y sonido del estómago |
-| Nevera | frases (antes de ducharse, sin compras, comida instantánea) | ✅ antes de ducharse (no abre la cocina, P77) y al sacar la comida instantánea. ❌ "sin compras" (P89) |
+| Nevera | frases (antes de ducharse, sin compras, comida instantánea) | ✅ antes de ducharse (no abre la cocina, P77), en toalla tampoco (P93) y al sacar la comida instantánea. ❌ "sin compras" (P89) |
 | Comida | comida instantánea y café | ✅ una sola comida instantánea, la única comida de la casa (P25, P88). ❌ café |
 | Estufa y escritorio | frases; Mayui come sentada | ✅ estufa sin comida (botón "Cocinar" vacío), comer en el escritorio (sin frase: "No sabe a nada." es de la comida instantánea, P25/P27), frase provisional antes de comer y tus frases de después (P77). ❌ dibujo de Mayui sentada |
 | Lavamanos y espejo | todas | ✅ antes de ducharse manda a la ducha (tus frases de "antes de ducharse") |

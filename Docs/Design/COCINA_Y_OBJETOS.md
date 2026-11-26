@@ -6,6 +6,7 @@
 - Los objetos se **arrastran**. **Clic derecho** (o doble clic) sobre un objeto en tus manos = usarlo (comer, beber).
 - **Cada estación acepta solo lo suyo** (2026-11-25): tabla de picar, la bolsa de ingredientes (útil "cuttable"); estufa, la olla con algo dentro ("cookware"); fregadero, la olla. El resultado de Combinar solo sale. Si algo no va, no se mueve y Mayui lo dice. En las estaciones no hay cuadro: se suelta sobre la hornilla, la pila o la tabla.
 - **Estaciones** (estufa, fregadero, tabla): reciben un objeto, su botón hace la receta y **el resultado se queda ahí**.
+- **Fregadero** (2026-11-26): la olla queda **dentro de la pila** y se ve lo que lleva (agua, ingredientes o comida; dibujos provisionales). Con la olla vacía el botón dice **Usar** (cae el agua 1 segundo y se llena); si lleva algo, dice **Vaciar**: lo de dentro **se bota y no se recupera** (P92).
 - **Combinar:** dos casillas arriba y el resultado en la de abajo. No combina otra vez hasta que saques el resultado.
 - **Todo se queda donde lo dejas** al salir de la cocina, también lo que esté en Combinar.
 - **El reloj solo avanza cuando haces acciones.** Mientras una receta con tiempo corre, **Esperar** (en la estufa) avisa cuánto tiempo pasará y, si aceptas, adelanta el reloj hasta que termine.
@@ -29,7 +30,7 @@ Los dibujos son **provisionales** (en `Assets/Items`); la olla y la taza cambian
 | Fregadero | olla **vacía** | olla con agua | al instante |
 | Estufa | olla con agua que no esté caliente | olla con agua caliente | **5 min** (P28) |
 | Combinar | olla con agua **caliente** + caja de comida instantánea | comida instantánea (la olla vuelve vacía) | al instante |
-| Fregadero | olla con agua | olla vacía | al instante |
+| Fregadero (**Vaciar**) | olla con cualquier cosa dentro | olla vacía (lo de dentro se bota) | al instante |
 
 **Comida casera, paso a paso** (hoy sin bolsas en casa): bolsa → tabla de picar → Combinar (olla + ingredientes) → estufa (45 min) → pasa la olla a tus manos → clic derecho para comer.
 

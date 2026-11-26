@@ -28,6 +28,11 @@ Diseño: `Docs/Design/Flow de juego.txt`. Hasta cerrar esta meta, NO se amplía 
 - Cuarta ronda (2026-11-26): en casa queda **solo una comida instantánea** y la olla, **sin bolsas de ingredientes**
   (decisión de Ramiro; P88 cerrado). La comida casera sigue en el sistema; las pruebas ponen bolsas cuando las necesitan.
   Anotado para después: comprar comida en la zona comercial (P90) y plato contra olla (P91).
+- Quinta ronda (2026-11-26), fregadero: la olla queda dentro de la pila (`SinkFront`, recorte del fondo), se ve lo que lleva
+  (`station_content_props` / `content_textures`; PNG provisionales de `Tools/contenido_olla_provisional.ps1`), al usar cae
+  el agua 1 s (`Crafts.active_seconds`) y el botón dice **Vaciar** si hay algo dentro (`Crafts.button_text`; lo de dentro se
+  bota). P92. En toalla la cocina no se abre en la mañana del tutorial (`home_kitchen.gd`, `towel_messages`: "Necesito
+  ponerme algo.", la frase de la puerta; P93).
 - Pasos de caminar PROVISIONALES de casa/toalla/Outfit 1 (`Tools/pasos_provisionales.ps1`, desde el cuadro quieto; el arte
   real se pega en las mismas hojas, P54). El escritorio permite comer ahí (P27) y el fregadero vacía la olla (P81).
 - Pasillo y recepción (2026-11-25, según los planos de Ramiro): `Hallway.tscn` (zona 6; escaleras y puertas M-21 a M-24)

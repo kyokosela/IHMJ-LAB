@@ -24,11 +24,10 @@ Comprobado guardando y cargando (2026-11-26):
 
 No existe botón de guardar ni guardado al dormir: solo las teclas de prueba.
 
-## 📝 Plan (esperando el OK de Ramiro; sin programar)
+## 📝 Plan aprobado (sin programar)
 
-Cada manager guarda lo suyo y se guarda **solo al despertar de dormir** (§2.3): reloj; Mayui (estadísticas, efectos con su
-nivel, sueño, ropa, manos y mochila); cocina; tareas, eventos y contadores en marcha; zona; y lo que ya se guarda. Cargar:
-por ahora con `Shift+L` (no hay menú «Continuar»).
+Ramiro lo aprobó el 2026-11-26 para programarlo con Opus: se guarda **solo al despertar de dormir** y se carga con
+`Shift+L`. Alcance, estado de cada manager y trampas: [`GUARDADO.md`](../Design/GUARDADO.md).
 
 # 🔊 `AudioManager` (autoload)
 

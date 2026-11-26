@@ -19,7 +19,8 @@ que el equipo se inspire mientras Ramiro avanza la historia. **Todavía no está
 - **Errores confirmados** (`Docs/Dev/escalabilidad.md`): ✅ alarma (despierta a la hora elegida; toda partida nueva tiene
   despertador; si despierta sola o a la hora puesta cuando es más tarde de lo necesario: P97, hoy sola) y ✅ paga del
   viernes (una vez, 17:00, o al marcar la salida; P23). ❌ **El guardado solo recupera el dinero** (y asistencia,
-  relaciones, banderas y correos): plan presentado a Ramiro, sin programar hasta su OK.
+  relaciones, banderas y correos): plan **aprobado** por Ramiro para programarlo **con Opus**, sin empezar. Antes de
+  tocarlo leer `Docs/Design/GUARDADO.md`.
 - El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Baño, Balcón, Pasillo,
   Recepción (`Lobby`), Oficina y Comercial; cada una con cámara (zoom 5). Apartamento, Baño y Balcón son la casa
   (`ZoneManager.is_home`). Dentro del edificio de Mayui (casa, pasillo y recepción, `HOME_BUILDING`) cambiar de zona no cuesta

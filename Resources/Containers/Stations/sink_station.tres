@@ -43,4 +43,5 @@ station_id = "sink"
 station_name = "Fregadero"
 inherent_util = "water"
 available_crafts = Array[ExtResource("1_craft")]([SubResource("Resource_craft_fill_pot"), SubResource("Resource_craft_empty_pot")])
+required_provided_utils = Array[String](["cookware"])
 blocked_states = Array[String]([])

@@ -104,13 +104,17 @@ func _junto(pos: Vector2, mirando: Vector2) -> void:
 	for i in 6:
 		await physics_frame
 
-## Se aleja de la puerta y vuelve a pisarla.
+## Se pone al lado de la puerta y camina contra ella con la tecla.
 func _pisar(desde: Vector2, puerta: Vector2) -> void:
 	_poner(desde)
 	for i in 6:
 		await physics_frame
-	_poner(puerta)
-	for i in 6:
+	var tecla : String = {Vector2(0, -1): "move_up", Vector2(0, 1): "move_down", Vector2(-1, 0): "move_left", Vector2(1, 0): "move_right"}[(puerta - desde).normalized().round()]
+	Input.action_press(tecla)
+	for i in 10:
+		await physics_frame
+	Input.action_release(tecla)
+	for i in 4:
 		await physics_frame
 
 ## Cambia de zona desde un punto sin puertas debajo (como haria quien llega a otra puerta).

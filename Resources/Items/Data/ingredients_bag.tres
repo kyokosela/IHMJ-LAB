@@ -59,6 +59,7 @@ Contains ingredients to make home meal"
 item_type = 1
 behavior = ExtResource("1_6owe1")
 base_decay_time = 720
+provided_utils = Array[String](["cuttable"])
 modifiers = Array[ExtResource("2_bhtm1")]([SubResource("Resource_ml2ie")])
 custom_conditions = Array[ExtResource("1_xjoh8")]([SubResource("Resource_olawk"), ExtResource("9_pshjs")])
 metadata/_custom_type_script = "uid://b03xnf82gb26a"

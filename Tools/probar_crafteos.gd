@@ -44,6 +44,7 @@ func _initialize() -> void:
 	gm.game_started = true
 	_t_datos()
 	await _t_cocina()
+	await _t_casillas()
 	print("=== %d comprobaciones OK, %d con FALLA ===" % [passed, failed])
 	quit(1 if failed > 0 else 0)
 
@@ -124,6 +125,100 @@ func _salir(escena: Node) -> void:
 	escena.free()
 	zm.zone_node = null
 	await process_frame
+
+# ------------------------------------------------------------------ C. que acepta cada casilla (soltando en la pantalla)
+func _t_casillas() -> void:
+	print("C. Cada estacion acepta solo lo suyo al soltar cosas en la pantalla")
+	cm.container_states.clear()
+	gm.new_game()
+	pm.reset_engine_state(true)
+	var escena : Node = await _entrar(-1)
+	var cocina = escena.get_node("Kitchen")
+	var ui = escena.get_node("UILayer/KitchenMultiUI")
+	var dlg = root.get_node("Dialogic")
+	var dichos : Array = []
+	var escuchar := func(info) -> void: dichos.append(str(info.get("text", "")).strip_edges())
+	dlg.Text.text_started.connect(escuchar)
+	await _callar(dlg)
+	ui.open(cocina)
+	await create_timer(0.3).timeout
+	var kc = cocina.container
+	var inv = kc.inventory
+	var manos = pm.player.inventory
+	manos.inventory.clear()
+	for i in inv.slots.size():
+		inv.slots[i].clear()
+	var storage : Array = kc.get_storage_indices()
+	var bolsa : int = storage[0]
+	var olla : int = storage[1]
+	var estufa : int = kc.get_station_slot_index("stove")
+	var fregadero : int = kc.get_station_slot_index("sink")
+	var tabla : int = kc.get_station_slot_index("cutting")
+	inv.slots[bolsa].item = _item(RUTA_BOLSA)
+	inv.slots[olla].item = _item(RUTA_OLLA)
+	manos.add_to_hands(_item("res://Resources/Items/Data/KitchenUtils/mug.tres"))
+	inv.inventory_changed.emit()
+	await create_timer(0.2).timeout
+
+	for caso in [["la bolsa en la estufa", "stove", inv, bolsa, "No tiene sentido."], ["la olla vacia en la estufa", "stove", inv, olla, "Necesito algo para cocinar."], ["la olla en la tabla", "cutting", inv, olla, "No tiene sentido."], ["la bolsa en el fregadero", "sink", inv, bolsa, "No tiene sentido."], ["la taza (desde las manos) en el fregadero", "sink", manos.inventory, manos.get_hands_indices()[0], "No tiene sentido."]]:
+		var destino : int = kc.get_station_slot_index(caso[1])
+		var antes = caso[2].slots[caso[3]].item
+		dichos.clear()
+		_soltar_en(ui, ui.station_containers[caso[1]], caso[2], caso[3])
+		await _pasar(dlg)
+		_check("No se puede poner %s: no se mueve y Mayui lo dice" % caso[0], inv.slots[destino].is_empty() and caso[2].slots[caso[3]].item == antes and dichos == [caso[4]], "%s" % str(dichos))
+
+	_soltar_en(ui, ui.station_containers["cutting"], inv, bolsa)
+	await create_timer(0.2).timeout
+	_check("La bolsa si va a la tabla", inv.slots[tabla].item != null and inv.slots[tabla].item.data.item_unique_name == "ingredients_bag")
+	_soltar_en(ui, ui.station_containers["sink"], inv, olla)
+	await create_timer(0.2).timeout
+	_check("La olla si va al fregadero y se ve su dibujo (sin repetir el icono)", inv.slots[fregadero].item != null and ui.station_item_props["sink"].visible and not ui.station_containers["sink"].get_child(ui.station_containers["sink"].get_child_count() - 1).icon_rect.visible)
+	# intercambiar: sacar la olla del fregadero sobre una casilla con otra bolsa mandaria la bolsa al fregadero
+	inv.slots[storage[2]].item = _item(RUTA_BOLSA)
+	inv.inventory_changed.emit()
+	await create_timer(0.2).timeout
+	dichos.clear()
+	_soltar_en(ui, ui.storage_grid, inv, fregadero, 2)
+	await _pasar(dlg)
+	_check("Tampoco se cambia de sitio si eso manda la bolsa al fregadero", inv.slots[fregadero].item.data.item_unique_name == "cooking_pot" and inv.slots[storage[2]].item.data.item_unique_name == "ingredients_bag" and dichos == ["No tiene sentido."], str(dichos))
+	dichos.clear()
+	_soltar_en(ui, ui.simple_craft_result_grid, inv, storage[2])
+	await _pasar(dlg)
+	_check("En el resultado de Combinar no se puede dejar nada", kc.is_simple_craft_result_free() and dichos == ["No tiene sentido."], str(dichos))
+	inv.slots[storage[3]].item = _olla_con_ingredientes()
+	inv.inventory_changed.emit()
+	await create_timer(0.2).timeout
+	_check("La estufa sin nada no muestra olla", not ui.station_item_props["stove"].visible)
+	_soltar_en(ui, ui.station_containers["stove"], inv, storage[3])
+	await create_timer(0.2).timeout
+	_check("La olla con ingredientes si va a la estufa", inv.slots[estufa].item != null and ui.station_item_props["stove"].visible)
+	dlg.Text.text_started.disconnect(escuchar)
+	ui.close()
+	await _salir(escena)
+
+## Suelta en la casilla n de una rejilla de la pantalla lo que hay en (origen, indice), como al soltar con el raton.
+func _soltar_en(ui: Node, rejilla: Node, origen, indice: int, n: int = 0) -> void:
+	var casillas : Array = rejilla.get_children().filter(func(c) -> bool: return not c.is_queued_for_deletion())
+	casillas[n]._drop_data(Vector2.ZERO, {"inventory": origen, "index": indice})
+
+## Pasa con Z lo que se este diciendo.
+func _pasar(dlg: Node) -> void:
+	await create_timer(0.6).timeout
+	for i in 8:
+		if dlg.current_timeline == null:
+			break
+		for presionada in [true, false]:
+			var tecla := InputEventKey.new()
+			tecla.keycode = KEY_Z
+			tecla.physical_keycode = KEY_Z
+			tecla.pressed = presionada
+			Input.parse_input_event(tecla)
+			await process_frame
+		await create_timer(0.6).timeout
+
+func _callar(dlg: Node) -> void:
+	await _pasar(dlg)
 
 # ------------------------------------------------------------------ A. datos
 func _t_datos() -> void:

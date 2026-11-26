@@ -33,6 +33,11 @@ const STOVE_ID : String = "stove"
 ## resto a storage_grid_2 (si no hay segunda, todas van a la primera).
 @export var storage_grid_2: Container
 @export var storage_first_count: int = 6
+@export var storage_slot_size: Vector2 = Vector2(96, 96)
+
+## Completado: lo que dice Mayui al soltar algo donde no va (tus frases de la estufa; PROVISIONAL para las demas).
+const REJECT_LINE : String = "_STOVE_EMPTY_#1_"   ## "No tiene sentido."
+const REJECT_LINES : Dictionary = {"CONTAINER_EMPTY": "_STOVE_EMPTY_#2_"}   ## "Necesito algo para cocinar."
 
 @export_group("Player Inventory")
 @export var player_hands_grid: Container
@@ -159,13 +164,15 @@ func _update_stations_ui():
 		
 		var item = kitchen.get_station_item(station.station_id)
 		var slot_ui = _create_slot_ui(item, kitchen.get_station_slot_index(station.station_id))
+		# sin cuadro: la casilla ocupa el sitio del dibujo (el tamano de la rejilla en la escena)
+		slot_ui.custom_minimum_size = Vector2(container.offset_right - container.offset_left, container.offset_bottom - container.offset_top)
 		container.add_child(slot_ui)
 
-		# Completado (arte ilustrado, Assets/UI/Kitchen): la olla aparece cuando la estacion tiene un objeto
+		# Completado (arte ilustrado, Assets/UI/Kitchen): la olla aparece cuando la estacion tiene la olla
 		# y el fuego, el humo o el agua se ven mientras la estacion trabaja.
 		var item_prop = station_item_props.get(station.station_id)
 		if item_prop and is_instance_valid(item_prop):
-			item_prop.visible = item != null
+			item_prop.visible = item != null and item.data.has_util("cookware")
 		var active_prop = station_active_props.get(station.station_id)
 		if active_prop and is_instance_valid(active_prop):
 			active_prop.visible = station.is_locked
@@ -285,20 +292,28 @@ func _create_slot_ui(item: Item, slot_index: int) -> Control:
 		return _create_basic_slot(item, slot_index)
 	
 	var slot_ui = slot_scene.instantiate()
-	
+	var slot_type = kitchen.get_slot_type(slot_index)
+
 	if slot_ui is InventorySlotUI:
 		slot_ui.slot_index = slot_index
 		slot_ui.parent_inventory = kitchen.inventory
-	
+		slot_ui.drop_filter = _allow_drop
+		if slot_type == "station":
+			var station = kitchen.get_station_for_slot(slot_index)
+			slot_ui.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+			slot_ui.hide_icon = station != null and station_item_props.has(station.station_id)
+			slot_ui.dim_when_locked = false
+		elif slot_type == "storage":
+			slot_ui.custom_minimum_size = storage_slot_size
+
 	if slot_ui.has_method("set_item"):
 		slot_ui.set_item(item)
-	
-	var slot_type = kitchen.get_slot_type(slot_index)
+
 	if slot_type == "station":
 		var station = kitchen.get_station_for_slot(slot_index)
 		if station and station.is_locked and slot_ui.has_method("set_locked"):
 			slot_ui.set_locked(true)
-	
+
 	return slot_ui
 
 func _create_player_slot_ui(item: Item, slot_index: int) -> Control:
@@ -310,7 +325,8 @@ func _create_player_slot_ui(item: Item, slot_index: int) -> Control:
 	if slot_ui is InventorySlotUI:
 		slot_ui.slot_index = slot_index
 		slot_ui.parent_inventory = player_inventory.inventory
-	
+		slot_ui.drop_filter = _allow_drop
+
 	if slot_ui.has_method("set_item"):
 		slot_ui.set_item(item)
 	
@@ -333,6 +349,33 @@ func _clear_grid(grid: Container):
 	if not grid or not is_instance_valid(grid): return
 	for child in grid.get_children():
 		child.queue_free()
+#endregion
+
+#region Que acepta cada casilla
+## Completado: cada estacion acepta solo lo suyo (las reglas de tu Station) y el resultado de Combinar solo sale. Si no se
+## puede, no se mueve nada y Mayui lo dice.
+func _allow_drop(slot_ui: InventorySlotUI, from: InventoryComponent, from_index: int) -> bool:
+	var reason : String = _drop_rejection(slot_ui.parent_inventory, slot_ui.slot_index, from, from_index)
+	if reason == "": return true
+	if reason != "STATION_BUSY" and Dialogic.current_timeline == null:
+		Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], tr(REJECT_LINES.get(reason, REJECT_LINE)))
+	return false
+
+## Por que no se puede mover ("" si se puede): se mira lo que llega y, si se intercambian, lo que vuelve.
+func _drop_rejection(to: InventoryComponent, to_index: int, from: InventoryComponent, from_index: int) -> String:
+	if to == from and to_index == from_index: return ""
+	var arriving : Item = from.slots[from_index].item
+	var leaving : Item = to.slots[to_index].item
+	var reason : String = _slot_rejection(to, to_index, arriving)
+	if reason == "" and leaving != null:
+		reason = _slot_rejection(from, from_index, leaving)
+	return reason
+
+func _slot_rejection(inventory: InventoryComponent, index: int, item: Item) -> String:
+	if kitchen == null or inventory != kitchen.inventory or item == null: return ""
+	if index == kitchen.get_simple_craft_result_index(): return "OUTPUT_ONLY"
+	var station : Station = kitchen.get_station_for_slot(index)
+	return station.get_rejection_reason(item) if station != null else ""
 #endregion
 
 #region Event Handlers

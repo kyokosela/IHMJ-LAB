@@ -14,6 +14,12 @@ var _pending_update : bool = false
 var _pending_locked : bool = false
 var _has_pending_locked : bool = false
 
+## Completado: quien crea la casilla puede revisar lo que se suelta en ella (la cocina: cada estacion acepta solo lo suyo).
+## Se llama con (esta casilla, inventario de origen, casilla de origen); false = no se mueve nada.
+var drop_filter : Callable
+var hide_icon : bool = false ## la casilla no dibuja el objeto: la pantalla ya lo dibuja (la olla sobre la estufa)
+var dim_when_locked : bool = true ## oscurecerse mientras la estacion trabaja (en las estaciones no hay cuadro)
+
 func _ready():
 	if _pending_update:
 		_update_display()
@@ -37,6 +43,7 @@ func _on_item_changed() -> void:
 	if is_node_ready(): _update_display()
 
 func _update_display():
+	icon_rect.visible = not hide_icon
 	if item:
 		var item_texture : Texture2D = item.get_display_texture()
 		icon_rect.texture = item_texture if item_texture else PlaceholderTexture2D.new()
@@ -66,8 +73,10 @@ func set_locked(locked: bool):
 
 func _apply_locked(locked: bool):
 	if locked_overlay:
-		locked_overlay.visible = locked
-	modulate = Color(0.7, 0.7, 0.7, 1.0) if locked else Color.WHITE
+		locked_overlay.visible = locked   # tambien impide arrastrar o soltar mientras trabaja
+		if not dim_when_locked:
+			(locked_overlay as ColorRect).color = Color(0, 0, 0, 0)
+	modulate = Color(0.7, 0.7, 0.7, 1.0) if locked and dim_when_locked else Color.WHITE
 
 func display_item(p_item: Item):
 	set_item(p_item)
@@ -111,4 +120,6 @@ func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 
 func _drop_data(at_position: Vector2, data: Variant) -> void:
 	if parent_inventory:
+		if drop_filter.is_valid() and not drop_filter.call(self, data["inventory"], data["index"]):
+			return
 		parent_inventory.interact_inventory(slot_index, data["inventory"], data["index"])

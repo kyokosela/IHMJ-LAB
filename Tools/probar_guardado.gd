@@ -47,6 +47,9 @@ func _initialize() -> void:
 	Sm = load("res://Scripts/save_manager.gd")
 	ItemCls = load("res://Resources/Items/item.gd")
 	Engine.time_scale = 30.0   # los fundidos de dormir duran 3 + 3 s
+	if "reinicio" in OS.get_cmdline_user_args():
+		await _reinicio_hijo()
+		return
 	gm.new_game()
 	if "save_slot" in gm:
 		gm.save_slot = RANURA
@@ -55,6 +58,8 @@ func _initialize() -> void:
 	var antes : Dictionary = await _t_dormir_guarda()
 	await _t_cargar(antes)
 	await _t_cocina()
+	var guardado : Dictionary = await _t_paso_por_la_oficina()
+	_t_reiniciar(guardado)
 
 	Sm.delete_save(NOMBRE)
 	print("=== %d comprobaciones OK, %d con FALLA ===" % [passed, failed])
@@ -247,3 +252,57 @@ func _t_cocina() -> void:
 	tm.add_to_current_time("00:35")
 	var en_estufa = kc.get_station_item("stove")
 	_check("A su hora sale la comida casera", not kc.is_station_locked("stove") and en_estufa != null and en_estufa.held_item != null and en_estufa.held_item.data.item_unique_name == "home_meal")
+
+# ------------------------------------------------------------------ D. el recorrido de Ramiro: oficina, volver y cargar
+## Ramiro (2026-11-26): despues de pasar por la oficina, Shift+L se cortaba (un componente de guardado de la escena ya
+## cerrada) y no volvia nada. Se recorre con el cambio de zona REAL (bus, fundidos, escenas que se cierran).
+func _t_paso_por_la_oficina() -> Dictionary:
+	print("D. Ir a la oficina, volver y cargar")
+	gm.save_file(RANURA)
+	var guardado : Dictionary = _foto()
+	for destino in [zm.ZONES.OFFICE, zm.ZONES.APARTMENT, zm.ZONES.OFFICE, zm.ZONES.APARTMENT]:
+		zm.change_zone(destino)
+		var nombre : String = "Office" if destino == zm.ZONES.OFFICE else "Apartment"
+		await _esperar(func() -> bool: return current_scene != null and current_scene.name == nombre and not zm._changing_zone, 20.0)
+	_check("(prueba) fue dos veces a la oficina y volvio", current_scene != null and current_scene.name == "Apartment" and eco.money != int(guardado.dinero), "%s S/%d" % [current_scene.name if current_scene else "-", eco.money])
+	await _cargar()
+	_comparar(guardado, _foto())
+	_check("Tras cargar sigue en su cuarto y se puede mover", current_scene != null and current_scene.name == "Apartment" and gm.modal_count == 0)
+	# Shift+L estando en la oficina: vuelve a su cuarto con lo guardado
+	zm.change_zone(zm.ZONES.OFFICE)
+	await _esperar(func() -> bool: return current_scene != null and current_scene.name == "Office" and not zm._changing_zone, 20.0)
+	await _cargar()
+	_check("Cargar desde la oficina la lleva a su cuarto", current_scene != null and current_scene.name == "Apartment" and gm.modal_count == 0, current_scene.name if current_scene else "-")
+	_check("...con lo guardado (dinero, hora y manos)", str(_foto().dinero) == str(guardado.dinero) and _foto().reloj == guardado.reloj and _foto().manos == guardado.manos)
+	return guardado
+
+# ------------------------------------------------------------------ E. cargar tras cerrar y abrir el juego (otro proceso)
+func _t_reiniciar(guardado: Dictionary) -> void:
+	print("E. Cerrar el juego, abrirlo y cargar")
+	var salida : Array = []
+	var args : PackedStringArray = ["--headless", "--path", ProjectSettings.globalize_path("res://"), "-s", "res://Tools/probar_guardado.gd", "--", "reinicio"]
+	var codigo : int = OS.execute(OS.get_executable_path(), args, salida, true)
+	var texto : String = "\n".join(salida)
+	var foto := {}
+	for linea in texto.split("\n"):
+		if linea.begins_with("FOTO "):
+			foto = JSON.parse_string(linea.substr(5))
+	_check("El juego abierto de nuevo carga sin errores", codigo == 0 and not texto.contains("SCRIPT ERROR") and not foto.is_empty(), "codigo %d\n%s" % [codigo, texto.right(1500)])
+	if not foto.is_empty():
+		for k in guardado:
+			_check("Tras reiniciar vuelve igual: %s" % k, str(guardado[k]) == str(foto.get(k)), "\n      antes:   %s\n      despues: %s" % [guardado[k], foto.get(k)])
+
+## (proceso hijo) Arranca como el juego: la escena principal hace la partida nueva; luego Shift+L.
+func _reinicio_hijo() -> void:
+	gm.autosave_enabled = false
+	gm.save_slot = RANURA
+	change_scene_to_file("res://Scenes/World/Apartment.tscn")
+	await create_timer(1.5).timeout
+	var ok : bool = gm.load_game(RANURA)
+	await create_timer(1.5).timeout
+	var foto := {}
+	var f : Dictionary = _foto()
+	for k in f:
+		foto[k] = str(f[k])
+	print("FOTO " + JSON.stringify(foto))
+	quit(0 if ok else 1)

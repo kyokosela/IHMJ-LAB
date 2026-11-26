@@ -117,8 +117,15 @@ static func load_from_disk(slot: String = "auto") -> void:
 	_is_loading = true
 	_save_data = loaded
 	
-	for comp: SaveComponent in _components.values():
-		if is_instance_valid(comp) and _save_data.entries.has(comp.uid):
+	# Un componente de una escena ya cerrada (p. ej. la PC de la oficina) puede seguir en la lista: SaveComponent solo se da
+	# de baja con queue_free y las escenas se liberan de otra forma. Asignarlo a una variable con tipo cortaba toda la carga
+	# (Ramiro, 2026-11-26: tras pasar por la oficina, Shift+L no recuperaba nada). Se salta y se quita, como en save_to_disk.
+	for id in _components.keys():
+		var comp = _components.get(id)
+		if comp == null or not is_instance_valid(comp):
+			_components.erase(id)
+			continue
+		if _save_data.entries.has(comp.uid):
 			comp.apply_data(_save_data.entries[comp.uid] as ComponentData)
 
 	# El orden importa: el reloj primero (sin disparar nada); los eventos antes que Mayui, que recupera sus contadores

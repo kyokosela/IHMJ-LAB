@@ -45,6 +45,7 @@ func _initialize() -> void:
 	_t_datos()
 	await _t_cocina()
 	await _t_casillas()
+	await _t_instantanea()
 	print("=== %d comprobaciones OK, %d con FALLA ===" % [passed, failed])
 	quit(1 if failed > 0 else 0)
 
@@ -193,8 +194,74 @@ func _t_casillas() -> void:
 	_soltar_en(ui, ui.station_containers["stove"], inv, storage[3])
 	await create_timer(0.2).timeout
 	_check("La olla con ingredientes si va a la estufa", inv.slots[estufa].item != null and ui.station_item_props["stove"].visible)
+	# la comida instantanea: sus frases al sacarla de la alacena y al quedar lista (tu guion), una vez
+	var entradas : Array = kc.get_simple_craft_input_indices()
+	inv.slots[storage[4]].item = _item("res://Resources/Items/Data/instant_box.tres")
+	inv.slots[storage[5]].item = _item("res://Resources/Items/Data/instant_box.tres")
+	inv.inventory_changed.emit()
+	await create_timer(0.2).timeout
+	dichos.clear()
+	_soltar_en(ui, ui.storage_grid, inv, storage[4], 3)   # moverla dentro de la alacena no dice nada
+	await _pasar(dlg)
+	_check("Reordenar la alacena no dice nada", dichos.is_empty(), str(dichos))
+	dichos.clear()
+	_soltar_en(ui, ui.player_hands_grid, inv, storage[5], 1)
+	await _pasar(dlg)
+	_check("Sacar la comida instantanea: tus 3 frases", dichos == ["Solo queda esta porquería.", "Las compré porque estaban baratas.", "Su sabor es muy insípido."], str(dichos))
+	var estufa_receta = load("res://Resources/Containers/Stations/stove_station.tres").available_crafts[0]
+	inv.slots[entradas[0]].item = estufa_receta.create_result(Array([], TYPE_OBJECT, &"Resource", ItemCls))   # olla con agua caliente
+	inv.inventory_changed.emit()
+	await create_timer(0.2).timeout
+	var mano_caja : int = manos.get_hands_indices()[1]
+	_soltar_en(ui, ui.simple_craft_input_grid, manos.inventory, mano_caja, 1)
+	await create_timer(0.2).timeout
+	dichos.clear()
+	ui.craft_button.pressed.emit()
+	await _pasar(dlg)
+	_check("Al quedar lista (agua caliente + caja): tus 2 frases", dichos == ["Al menos su etiqueta no miente.", "Realmente es instantáneo."] and inv.slots[kc.get_simple_craft_result_index()].item != null and inv.slots[kc.get_simple_craft_result_index()].item.data.item_unique_name == "instant_meal", str(dichos))
 	dlg.Text.text_started.disconnect(escuchar)
 	ui.close()
+	await _salir(escena)
+
+# ------------------------------------------------------------------ D. comida instantanea
+func _t_instantanea() -> void:
+	print("D. Comida instantanea (tu diseno): olla con agua -> estufa 5 min -> Combinar con la caja -> comer")
+	cm.container_states.clear()
+	gm.new_game()
+	pm.reset_engine_state(true)
+	var tarea = root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR").get_task_res("COOK")
+	tarea.task_done = false
+	var escena : Node = await _entrar(-1)
+	await _callar(root.get_node("Dialogic"))
+	var kc = escena.get_node("Kitchen").container
+	var inv = kc.inventory
+	var manos = pm.player.inventory
+	manos.inventory.clear()
+	_reiniciar_estaciones(kc)
+	var fregadero : int = kc.get_station_slot_index("sink")
+	var estufa : int = kc.get_station_slot_index("stove")
+	var entradas : Array = kc.get_simple_craft_input_indices()
+	inv.interact_inventory(fregadero, inv, _donde(kc, "cooking_pot"))
+	_check("Se llena la olla en el fregadero", kc.start_manual_station_craft("sink") and inv.slots[fregadero].item.held_item.data.item_unique_name == "water")
+	inv.interact_inventory(entradas[0], inv, fregadero)
+	inv.interact_inventory(entradas[1], inv, _donde(kc, "instant_box"))
+	_check("Con el agua sin calentar no se puede preparar", kc.check_simple_craft() == null)
+	inv.interact_inventory(estufa, inv, entradas[0])
+	_check("Se calienta el agua", kc.start_manual_station_craft("stove"))
+	tm.minutes_delta.emit(5)
+	_check("A los 5 min el agua esta caliente", not kc.is_station_locked("stove") and inv.slots[estufa].item.held_item.has_state("hot"))
+	inv.interact_inventory(entradas[0], inv, estufa)
+	var salidas : Array = _combinar_spam(kc)
+	_check("Combinar da UNA comida instantanea cocinada y caliente", salidas.size() == 1 and salidas[0].data.item_unique_name == "instant_meal" and salidas[0].has_state("cooked") and salidas[0].has_state("hot"), "%d" % salidas.size())
+	_check("...gasta una sola caja y devuelve la olla vacia, sin duplicarla", _contar(kc, "instant_box") == 2 and inv.slots[entradas[0]].item != null and inv.slots[entradas[0]].item.held_item == null and _ollas(kc) == 1, "cajas %d, ollas %d" % [_contar(kc, "instant_box"), _ollas(kc)])
+	manos.add_item(salidas[0])
+	pm.add_effect(load("res://Resources/Effects/Effects/hunger.tres").duplicate())
+	pm.get_stat_res("ENERGY").value = 20.0
+	var caseras : int = pm.daily.home_meals
+	for i in manos.get_hands_indices():
+		manos.use_item_at(i)
+	_check("Comerla: +10 de energia, quita el Hambre, cuenta como instantanea y marca la tarea", pm.get_stat_value("ENERGY") == 30.0 and not pm.has_effect("HUNGER") and pm.daily.instant_meals == 1 and pm.daily.home_meals == caseras and tarea.task_done and manos.get_hands_items().is_empty(), "energia %.1f, instantaneas %d" % [pm.get_stat_value("ENERGY"), pm.daily.instant_meals])
+	await _callar(root.get_node("Dialogic"))
 	await _salir(escena)
 
 ## Suelta en la casilla n de una rejilla de la pantalla lo que hay en (origen, indice), como al soltar con el raton.
@@ -259,7 +326,7 @@ func _t_cocina() -> void:
 
 	# --- cocina inicial
 	_check("Hay 12 casillas de almacenamiento (dos alacenas de 6)", kc.get_storage_indices().size() == 12)
-	_check("Trae 2 bolsas de ingredientes y 1 olla", _contar(kc, "ingredients_bag") == 2 and _contar(kc, "cooking_pot") == 1, "bolsas %d, ollas %d" % [_contar(kc, "ingredients_bag"), _contar(kc, "cooking_pot")])
+	_check("Trae 2 bolsas de ingredientes, 1 olla y 3 comidas instantaneas", _contar(kc, "ingredients_bag") == 2 and _contar(kc, "cooking_pot") == 1 and _contar(kc, "instant_box") == 3, "bolsas %d, ollas %d, cajas %d" % [_contar(kc, "ingredients_bag"), _contar(kc, "cooking_pot"), _contar(kc, "instant_box")])
 	_check("La cocina acepta guardar ollas (objetos tipo contenedor)", kc.rules.can_store(load(RUTA_OLLA)))
 
 	# --- arrastrar no duplica ni pierde (ida y vuelta entre almacenamiento y tabla)
@@ -362,8 +429,8 @@ func _t_cocina() -> void:
 	_check("Se puede calentar", kc.start_manual_station_craft("stove"))
 	_check("La estufa queda ocupada mientras calienta", estacion.is_locked)
 	_check("No se puede empezar otra vez mientras trabaja", not kc.start_manual_station_craft("stove"))
-	tm.minutes_delta.emit(25)   # pasan los 25 min
-	_check("A los 25 min la estufa se libera sola y la olla se queda en ella", not estacion.is_locked and kc.get_station_item("stove") != null and kc.get_station_item("stove").data.item_unique_name == "cooking_pot")
+	tm.minutes_delta.emit(5)   # pasan los 5 min (tu diseno de la comida instantanea)
+	_check("A los 5 min la estufa se libera sola y la olla se queda en ella", not estacion.is_locked and kc.get_station_item("stove") != null and kc.get_station_item("stove").data.item_unique_name == "cooking_pot")
 	_check("Calentar no duplica ni pierde la olla", _ollas(kc) == 1, "ollas %d" % _ollas(kc))
 	donde = _donde(kc, "cooking_pot")
 	var caliente = inv.slots[donde].item if donde != -1 else null

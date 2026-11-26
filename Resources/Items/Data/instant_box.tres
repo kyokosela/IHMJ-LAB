@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Resource" uid="uid://c0u05pcpl4m8m" path="res://Resources/Items/Behaviors/ingredient_behavior.tres" id="1"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="2"]
+[ext_resource type="Resource" uid="uid://b5crwa3qm72eu" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_no_prep.tres" id="3"]
+[ext_resource type="Script" uid="uid://2ayeg7yj87f6" path="res://Resources/Items/Conditions/condition_threshold.gd" id="4"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="5"]
+[ext_resource type="Script" uid="uid://df2q5ei6ve3yq" path="res://Resources/Items/Conditions/threshold_entry.gd" id="6"]
+[ext_resource type="Resource" uid="uid://dm4jblotjlc1k" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_cooked.tres" id="7"]
+[ext_resource type="Texture2D" path="res://Assets/Items/instant_box.png" id="ico"]
+
+[sub_resource type="Resource" id="Entry_raw"]
+script = ExtResource("6")
+state = ExtResource("3")
+
+[sub_resource type="Resource" id="Entry_cooked"]
+script = ExtResource("6")
+max_value = 2.0
+state = ExtResource("7")
+
+[sub_resource type="Resource" id="Preparation_threshold"]
+script = ExtResource("4")
+thresholds = Array[ExtResource("6")]([SubResource("Entry_raw"), SubResource("Entry_cooked")])
+default_state = ExtResource("3")
+
+[sub_resource type="Resource" id="Preparation"]
+script = ExtResource("2")
+condition = "preparation"
+value = 0.0
+condition_threshold = SubResource("Preparation_threshold")
+
+[resource]
+script = ExtResource("5")
+texture = ExtResource("ico")
+item_name = "_INSTANT_BOX_"
+item_unique_name = "instant_box"
+item_description = "Instant food box: add hot water"
+item_type = 1
+behavior = ExtResource("1")
+base_decay_time = 43200
+custom_conditions = Array[ExtResource("2")]([SubResource("Preparation")])

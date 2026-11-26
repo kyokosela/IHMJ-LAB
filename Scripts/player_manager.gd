@@ -979,6 +979,8 @@ func register_meal(kind: String, hot: bool = false) -> void:
 			mitigate_stress(1, "HOT_MEAL")
 	else:
 		daily.instant_meals += 1
+		if has_effect("CALM"):   # la comida instantanea baja 1 nivel de Calma (SISTEMA_EFECTOS §3.1)
+			_reduce_or_remove_primary_effect(get_effect_res("CALM") as EffectLevel)
 		if rng.randf() < INSTANT_MEAL_STRESS_CHANCE:
 			add_stress_cause("INSTANT_MEAL")
 

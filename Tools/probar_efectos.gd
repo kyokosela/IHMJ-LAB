@@ -422,6 +422,8 @@ func _t_ganchos() -> void:
 	_check("Comida instantanea (50 %): causa Estres", pm.daily.instant_meals == 1 and _has("STRESS"))
 	_reset(0.99); pm.register_meal("INSTANT")
 	_check("...y no siempre", not _has("STRESS"))
+	_reset(0.99); _add(CALM, 1); pm.register_meal("INSTANT")
+	_check("Comida instantanea: -1 nivel de Calma", _lvl("CALM") == 0 and not _has("STRESS"), "calma %d" % _lvl("CALM"))
 	_reset(0.0); _add(STRESS, 1); pm.register_bath(false)
 	_check("Bano con agua caliente: -1 nivel de Estres", pm.daily.bathed and _lvl("STRESS") == 0)
 	_reset(0.0); pm.register_bath(true)

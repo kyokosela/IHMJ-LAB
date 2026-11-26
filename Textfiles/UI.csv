@@ -27,4 +27,6 @@ _TASK_TEETH_,Lavarse los dientes,Brush your teeth
 _TASK_LEAVE_,Salir a trabajar,Leave for work
 _HINT_MOVE_,"Muévete con las flechas o WASD. Usa con Z (o Enter) lo que tenga un punto; las puertas se abren caminando hacia ellas. Primero la ducha: el baño está a la izquierda de la puerta principal.","Move with the arrows or WASD. Use things with a dot with Z (or Enter); doors open when you walk into them. Shower first: the bathroom is left of the front door."
 _HINT_MOUSE_,"Usa el ratón: haz clic en lo que quieras usar. Esc: salir.","Use the mouse: click what you want to use. Esc: leave."
-_HINT_KITCHEN_,"Arrastra las cosas y usa los botones. Para comer: la olla en tus manos y clic derecho, o llévala al escritorio. Esc: salir.","Drag things and use the buttons. To eat: hold the pot and right-click it, or take it to the desk. Esc: leave."
+_HINT_KITCHEN_,"Arrastra las cosas y usa los botones. Para comer: la comida (o la olla con comida) en tus manos y clic derecho, o llévala al escritorio. Esc: salir.","Drag things and use the buttons. To eat: hold the food (or the pot with food) and right-click it, or take it to the desk. Esc: leave."
+_INSTANT_BOX_,Comida instantánea (caja),Instant food box
+_INSTANT_MEAL_,Comida instantánea,Instant meal

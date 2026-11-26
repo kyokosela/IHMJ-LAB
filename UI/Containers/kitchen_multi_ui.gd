@@ -35,6 +35,14 @@ const STOVE_ID : String = "stove"
 @export var storage_first_count: int = 6
 @export var storage_slot_size: Vector2 = Vector2(96, 96)
 
+## Completado (tu guion DIALOGOS, comida instantanea), en la manana del tutorial y una vez cada uno.
+@export_group("Frases de la comida instantanea")
+@export var instant_found_dialog: DialogicTimeline   ## al sacarla de la alacena
+@export var instant_ready_dialog: DialogicTimeline   ## cuando queda lista (al combinarla con agua caliente)
+const ExitDoor := preload("res://Scripts/HouseInteracts/exit_door.gd")
+const INSTANT_BOX : String = "instant_box"
+const INSTANT_MEAL : String = "instant_meal"
+
 ## Completado: lo que dice Mayui al soltar algo donde no va (tus frases de la estufa; PROVISIONAL para las demas).
 const REJECT_LINE : String = "_STOVE_EMPTY_#1_"   ## "No tiene sentido."
 const REJECT_LINES : Dictionary = {"CONTAINER_EMPTY": "_STOVE_EMPTY_#2_"}   ## "Necesito algo para cocinar."
@@ -356,7 +364,9 @@ func _clear_grid(grid: Container):
 ## puede, no se mueve nada y Mayui lo dice.
 func _allow_drop(slot_ui: InventorySlotUI, from: InventoryComponent, from_index: int) -> bool:
 	var reason : String = _drop_rejection(slot_ui.parent_inventory, slot_ui.slot_index, from, from_index)
-	if reason == "": return true
+	if reason == "":
+		_notice_instant_box(slot_ui, from, from_index)
+		return true
 	if reason != "STATION_BUSY" and Dialogic.current_timeline == null:
 		Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], tr(REJECT_LINES.get(reason, REJECT_LINE)))
 	return false
@@ -370,6 +380,20 @@ func _drop_rejection(to: InventoryComponent, to_index: int, from: InventoryCompo
 	if reason == "" and leaving != null:
 		reason = _slot_rejection(from, from_index, leaving)
 	return reason
+
+## Sacar la comida instantanea de la alacena (a las manos o a otra casilla que no sea de almacenamiento).
+func _notice_instant_box(slot_ui: InventorySlotUI, from: InventoryComponent, from_index: int) -> void:
+	if kitchen == null or from != kitchen.inventory or kitchen.get_slot_type(from_index) != "storage": return
+	var item : Item = from.slots[from_index].item
+	if item == null or item.data.item_unique_name != INSTANT_BOX: return
+	if slot_ui.parent_inventory == kitchen.inventory and kitchen.get_slot_type(slot_ui.slot_index) == "storage": return
+	_say_once("instant_found_said", instant_found_dialog)
+
+func _say_once(flag: String, timeline: DialogicTimeline) -> void:
+	if timeline == null or not ExitDoor.in_tutorial_morning() or NarrativeFlags.has_flag(flag): return
+	if Dialogic.current_timeline != null: return
+	NarrativeFlags.set_flag(flag)
+	Dialogic.start(timeline)
 
 func _slot_rejection(inventory: InventoryComponent, index: int, item: Item) -> String:
 	if kitchen == null or inventory != kitchen.inventory or item == null: return ""
@@ -404,6 +428,8 @@ func _on_craft_button_pressed():
 	var result = kitchen.execute_simple_craft()
 	if result:
 		kitchen.set_simple_craft_result(result)
+		if result.data.item_unique_name == INSTANT_MEAL:
+			_say_once("instant_ready_said", instant_ready_dialog)
 
 ## Completado: estufa sin nada encima y con frases para eso.
 func _stove_without_food(station_id: String) -> bool:

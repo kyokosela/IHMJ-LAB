@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://dmwsymscybeew" path="res://Assets/UI/Kitchen/fire.png" id="10_fire"]
 [ext_resource type="Texture2D" uid="uid://dgf88p7ar8olj" path="res://Assets/UI/Kitchen/smoke.png" id="11_smoke"]
 [ext_resource type="Texture2D" uid="uid://bjx0c83lfadrx" path="res://Assets/UI/Kitchen/shelf_open_left.png" id="12_shelf_open_left"]
+[ext_resource type="Resource" path="res://DialoguePlugin/TIMELINE/comida_instantanea.dtl" id="15_found"]
+[ext_resource type="Resource" path="res://DialoguePlugin/TIMELINE/comida_instantanea_lista.dtl" id="16_ready"]
 
 [sub_resource type="Resource" id="Lines_stove_empty"]
 script = ExtResource("14_lines")
@@ -98,6 +100,8 @@ overflow_items_grid = NodePath("OverflowDialog/Panel/VBox/OverflowItemsGrid")
 overflow_target_grid = NodePath("OverflowDialog/Panel/VBox/TargetGrid")
 slot_scene = ExtResource("2_slot")
 stove_empty_lines = SubResource("Chain_stove_empty")
+instant_found_dialog = ExtResource("15_found")
+instant_ready_dialog = ExtResource("16_ready")
 metadata/tutorial_hint = "_HINT_KITCHEN_"
 
 [node name="Panel" type="Panel" parent="."]

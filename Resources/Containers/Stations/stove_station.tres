@@ -90,7 +90,7 @@ metadata/_custom_type_script = "uid://b03xnf82gb26a"
 
 [sub_resource type="Resource" id="Resource_k6tcm"]
 script = ExtResource("1_8ipk4")
-needed_time = "00:25"
+needed_time = "00:05"
 needed_items = Array[ExtResource("2_j75hq")]([SubResource("Resource_xx8kx")])
 result_item = ExtResource("4_vt6tf")
 result_held_item = SubResource("Resource_ovpbm")

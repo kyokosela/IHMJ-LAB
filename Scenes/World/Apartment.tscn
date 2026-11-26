@@ -32,6 +32,8 @@
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/desk.gd" id="35"]
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/home_kitchen.gd" id="36"]
 [ext_resource type="Script" path="res://Scripts/HouseInteracts/morning_light.gd" id="37"]
+[ext_resource type="Resource" path="res://Resources/Items/Data/instant_box.tres" id="38"]
+[ext_resource type="Resource" path="res://Resources/Crafts/Kitchen/InstantMeal/prepare_instant_meal.tres" id="39"]
 
 [sub_resource type="Gradient" id="Light_gradient"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -526,7 +528,7 @@ vertical_alignment = 1
 position = Vector2(144, 64)
 script = ExtResource("36")
 before_bath_messages = SubResource("Chain_fridge_bath")
-initial_items = Array[ExtResource("20")]([ExtResource("21"), ExtResource("21"), ExtResource("19")])
+initial_items = Array[ExtResource("20")]([ExtResource("21"), ExtResource("21"), ExtResource("19"), ExtResource("38"), ExtResource("38"), ExtResource("38")])
 container_ui = NodePath("../UILayer/KitchenMultiUI")
 shape = SubResource("Shape_kitchen")
 display_text = "Cocina"
@@ -537,7 +539,7 @@ is_solid = true
 [node name="KitchenContainer" type="Node2D" parent="Kitchen"]
 script = ExtResource("9")
 stations = Array[ExtResource("11")]([ExtResource("12"), ExtResource("13"), ExtResource("14")])
-simple_craft_recipes = Array[ExtResource("15")]([ExtResource("16")])
+simple_craft_recipes = Array[ExtResource("15")]([ExtResource("16"), ExtResource("39")])
 storage_size = 12
 container_id = "kitchen_multi"
 rules = SubResource("Kitchen_rules")

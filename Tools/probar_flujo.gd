@@ -495,9 +495,10 @@ func _t_cocina() -> void:
 	var inv = kc.inventory
 	var ui = escena.get_node("UILayer/KitchenMultiUI")
 	var mov = pm.player.movement
-	# 1) la nevera: 2 bolsas de ingredientes en el ALMACENAMIENTO (no en las estaciones)
+	# 1) la nevera: 2 bolsas de ingredientes, la olla y 3 comidas instantaneas en el ALMACENAMIENTO (no en las estaciones)
 	var guardados : Array = kc.get_storage_indices().filter(func(i): return not inv.slots[i].is_empty())
-	_check("La nevera trae 2 bolsas de ingredientes y la olla en el almacenamiento", guardados.size() == 3 and inv.slots[guardados[0]].item.data.item_unique_name == "ingredients_bag" and inv.slots[guardados[1]].item.data.item_unique_name == "ingredients_bag" and inv.slots[guardados[2]].item.data.item_unique_name == "cooking_pot", str(guardados))
+	var nombres : Array = guardados.map(func(i): return inv.slots[i].item.data.item_unique_name)
+	_check("La nevera trae 2 bolsas, la olla y 3 comidas instantaneas en el almacenamiento", nombres == ["ingredients_bag", "ingredients_bag", "cooking_pot", "instant_box", "instant_box", "instant_box"], str(nombres))
 	_check("Las estaciones empiezan vacias", kc.get_station_item("cutting") == null and kc.get_station_item("stove") == null and kc.get_station_item("sink") == null)
 	# 2) abrir la cocina: la UI se ve y Mayui queda quieta
 	cocina.can_interact = true
@@ -666,7 +667,7 @@ func _t_cocina() -> void:
 	kc = escena.get_node("Kitchen").container
 	inv = kc.inventory
 	var quedan : int = kc.get_storage_indices().filter(func(i): return not inv.slots[i].is_empty()).size()
-	_check("Al volver queda 1 bolsa (no se rellena la nevera ni se borra) y la olla sigue en las manos", quedan == 1 and pm.player.inventory.get_hands_items().size() == 1, "objetos guardados: %d" % quedan)
+	_check("Al volver queda 1 bolsa y las 3 instantaneas (no se rellena la nevera ni se borra) y la olla sigue en las manos", quedan == 4 and pm.player.inventory.get_hands_items().size() == 1, "objetos guardados: %d" % quedan)
 	# 9) la segunda comida: los usos son de cada objeto, no del dato compartido
 	var olla2 = _cocinar_una(kc)
 	_check("Se puede cocinar una segunda comida con la misma olla", olla2 != null and olla2.held_item != null and olla2.held_item.data.item_unique_name == "home_meal")
@@ -721,5 +722,17 @@ func _t_escritorio() -> void:
 	_check("Despues de comer en la mesa Mayui puede moverse", gm.modal_count == 0 and pm.player.movement.can_move, "modal %d" % gm.modal_count)
 	dicho = await _ejecutar_y_oir(mesa)
 	_check("Despues de comer: tus frases del escritorio", dicho == ["No puedo quedarme aquí."], str(dicho))
+	await _esperar_calma()
+	manos.inventory.clear()
+	manos.add_to_hands(objeto.new(load("res://Resources/Items/Data/instant_meal.tres")))
+	tarea.task_done = false
+	var oido : Array = []
+	var escucha := func(info) -> void: oido.append(str(info.get("text", "")))
+	dlg.Text.text_started.connect(escucha)
+	mesa.can_interact = true
+	mesa.execute()
+	await create_timer(4.6).timeout
+	dlg.Text.text_started.disconnect(escucha)
+	_check("La comida instantanea en la mesa: se come y Mayui dice 'No sabe a nada.'", oido == ["No sabe a nada."] and manos.get_hands_items().is_empty() and tarea.task_done, str(oido))
 	await _esperar_calma()
 	await _soltar(escena)

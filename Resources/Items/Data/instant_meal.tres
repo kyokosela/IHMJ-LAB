@@ -1,0 +1,74 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://i1ah5yuictan" path="res://Resources/Items/Behaviors/ingredients.gd" id="1"]
+[ext_resource type="Script" uid="uid://dbp4u6dyakclb" path="res://Resources/Items/Conditions/custom_condition.gd" id="2"]
+[ext_resource type="Resource" uid="uid://dm4jblotjlc1k" path="res://Resources/Items/States/ConsumableStates/preparation/preparation_cooked.tres" id="3"]
+[ext_resource type="Script" uid="uid://2ayeg7yj87f6" path="res://Resources/Items/Conditions/condition_threshold.gd" id="4"]
+[ext_resource type="Script" uid="uid://b03xnf82gb26a" path="res://Resources/Items/Data/item_data.gd" id="5"]
+[ext_resource type="Script" uid="uid://df2q5ei6ve3yq" path="res://Resources/Items/Conditions/threshold_entry.gd" id="6"]
+[ext_resource type="Resource" uid="uid://c3gi4rg1obavi" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_fresh.tres" id="7"]
+[ext_resource type="Resource" uid="uid://otjo218bj3mf" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_hot.tres" id="8"]
+[ext_resource type="Resource" uid="uid://b18f3g76hqy6t" path="res://Resources/Items/States/ConsumableStates/coldness/coldness_cold.tres" id="9"]
+[ext_resource type="Texture2D" path="res://Assets/Items/instant_meal.png" id="ico"]
+
+[sub_resource type="Resource" id="Behavior"]
+script = ExtResource("1")
+meal_kind = "INSTANT"
+fixed_energy = 10.0
+
+[sub_resource type="Resource" id="Entry_cooked"]
+script = ExtResource("6")
+max_value = 2.0
+state = ExtResource("3")
+
+[sub_resource type="Resource" id="Preparation_threshold"]
+script = ExtResource("4")
+thresholds = Array[ExtResource("6")]([SubResource("Entry_cooked")])
+default_state = ExtResource("3")
+
+[sub_resource type="Resource" id="Preparation"]
+script = ExtResource("2")
+condition = "preparation"
+value = 2.0
+condition_threshold = SubResource("Preparation_threshold")
+
+[sub_resource type="Resource" id="Entry_hot"]
+script = ExtResource("6")
+max_value = 30.0
+state = ExtResource("8")
+
+[sub_resource type="Resource" id="Entry_fresh"]
+script = ExtResource("6")
+max_value = 75.0
+state = ExtResource("7")
+
+[sub_resource type="Resource" id="Entry_cold"]
+script = ExtResource("6")
+max_value = 100.0
+state = ExtResource("9")
+
+[sub_resource type="Resource" id="Coldness_threshold"]
+script = ExtResource("4")
+thresholds = Array[ExtResource("6")]([SubResource("Entry_hot"), SubResource("Entry_fresh"), SubResource("Entry_cold")])
+default_state = ExtResource("7")
+
+[sub_resource type="Resource" id="Coldness"]
+script = ExtResource("2")
+condition = "coldness"
+value = 10.0
+base_decay_time = 720
+enviroment_condition = "temperature"
+condition_threshold = SubResource("Coldness_threshold")
+can_decay = true
+
+[resource]
+script = ExtResource("5")
+texture = ExtResource("ico")
+item_name = "_INSTANT_MEAL_"
+item_unique_name = "instant_meal"
+item_description = "Ready instant meal"
+item_type = 1
+behavior = SubResource("Behavior")
+base_decay_time = 720
+consume_after_use = true
+custom_conditions = Array[ExtResource("2")]([SubResource("Preparation"), SubResource("Coldness")])

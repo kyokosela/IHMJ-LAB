@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="Crafts" format=3]
+
+[ext_resource type="Script" uid="uid://de0p0f0ihls31" path="res://Resources/Crafts/craft.gd" id="1"]
+[ext_resource type="Script" uid="uid://bh8urv85cwvl5" path="res://Resources/Crafts/craft_slot.gd" id="2"]
+[ext_resource type="Resource" uid="uid://bmt41wvyxm0ut" path="res://Resources/Items/Data/KitchenUtils/cooking_pot.tres" id="3"]
+[ext_resource type="Resource" path="res://Resources/Items/Data/instant_meal.tres" id="4"]
+
+[sub_resource type="Resource" id="Slot_pot_hot_water"]
+script = ExtResource("2")
+item_id = "cooking_pot"
+requires_held_item = true
+required_held_item_id = "water"
+required_held_item_states = Array[String](["hot"])
+item_return = ExtResource("3")
+
+[sub_resource type="Resource" id="Slot_box"]
+script = ExtResource("2")
+item_id = "instant_box"
+required_states = Array[String](["no_prepared"])
+
+[resource]
+script = ExtResource("1")
+needed_items = Array[ExtResource("2")]([SubResource("Slot_pot_hot_water"), SubResource("Slot_box")])
+result_item = ExtResource("4")

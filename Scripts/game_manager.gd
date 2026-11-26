@@ -47,6 +47,7 @@ func new_game() -> void:
 
 	SaveManager.clear()
 	PlayerManager.reset_engine_state()
+	NarrativeFlags.set_flag("has_alarm_clock")  # P13: todo jugador empieza con cama C y despertador
 	TimeManager.minutes = 360  # 06:00 (tu guion: la manana en casa va de 6:00 a 8:00)
 	PlayerManager.reset_outfits()   # ropa inicial: ropa de casa puesta y el uniforme colgado (despues del reloj: nace limpia)
 

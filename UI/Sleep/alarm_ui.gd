@@ -34,20 +34,27 @@ func _ready() -> void:
 
 func setup(bed_type: int) -> void:
 	_bed_type = bed_type
-	var current_hour : int = TimeUtils.get_minutes(TimeManager.get_current_time()) / 60
-	_alarm_hours = clampi(current_hour + 8, current_hour + 1, 23)
+	# propone la primera hora en punto en la que ya habra dormido lo que necesita
+	var rested_at : int = TimeManager.minutes + TimeUtils.get_minutes(PlayerManager.get_minimum_sleep(bed_type))
+	_alarm_hours = ceili(rested_at / 60.0) % 24
 	_refresh_hour_display()
 	_refresh_wake_chance()
 
+## La hora da la vuelta: despues de las 23:00 vienen las 00:00.
 func _on_hour_up() -> void:
-	_alarm_hours = clampi(_alarm_hours + 1, 0, 23)
+	_alarm_hours = posmod(_alarm_hours + 1, 24)
 	_refresh_hour_display()
 	_refresh_wake_chance()
 
 func _on_hour_down() -> void:
-	_alarm_hours = clampi(_alarm_hours - 1, 0, 23)
+	_alarm_hours = posmod(_alarm_hours - 1, 24)
 	_refresh_hour_display()
 	_refresh_wake_chance()
+
+## Cuanto falta desde ahora hasta que el reloj marque la hora elegida ("00:01" a "24:00"): eso es lo que duerme.
+func _time_until_alarm() -> String:
+	var left : int = posmod(_alarm_hours * 60 - TimeManager.minutes, TimeManager.DAY_MINUTES)
+	return TimeManager.format_minutes(left if left > 0 else TimeManager.DAY_MINUTES)
 
 func _refresh_hour_display() -> void:
 	hour_label.text = "%02d:00" % _alarm_hours
@@ -77,12 +84,12 @@ func _get_wake_chance(energy: float) -> float:
 	return 0.95
 
 func _on_confirm() -> void:
-	var hour_deal : String = "%02d:00" % _alarm_hours
+	var hour_deal : String = _time_until_alarm()
 	var insomnia : EffectLevel = PlayerManager.get_effect_res("INSOMNIA") as EffectLevel
 	if insomnia != null:
 		var energy : float = PlayerManager.get_stat_value("ENERGY")
 		var chance : float = _get_wake_chance(energy)
-		if randf() > chance:
+		if PlayerManager.rng.randf() > chance:
 			hour_deal = "00:00"
 	sleep_confirmed.emit(hour_deal, _bed_type)
 	queue_free()

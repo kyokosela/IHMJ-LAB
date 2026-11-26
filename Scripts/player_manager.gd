@@ -510,24 +510,24 @@ func request_sleep(bed_type: int = BED_TYPE.TYPE_C) -> void:
 	if not slept_today:
 		Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], "No tengo sueño todavía.")
 
+## Horas minimas que Mayui necesita dormir ahora ("HH:MM"), segun su energia y la cama. "00:00" si no hay tramo.
+func get_minimum_sleep(bed_type: int = BED_TYPE.TYPE_C) -> String:
+	var current_energy : float = get_stat_value("ENERGY")
+	for r in minimun_hours_ranges:
+		if current_energy <= r.energy:
+			return _get_adjusted_minimum_sleep(r.hours, bed_type)
+	return "00:00"
+
+## hour_deal = CUANTO quiere dormir ("HH:MM"), no la hora de despertar (la pantalla de la alarma hace la cuenta);
+## "00:00" = sin alarma: duerme su minimo.
 func sleep(hour_deal : String = "00:00", bed_type: int = BED_TYPE.TYPE_C) -> void :
 	if slept_today:
 		return
 	AudioManager.play_sleep()
 
-	var minimun_hours : String = "00:00"
-
-	var current_energy : float = get_stat_value("ENERGY")
-
-	for r in minimun_hours_ranges:
-		if current_energy <= r.energy:
-			minimun_hours = r.hours
-			break
-	
+	var minimun_hours : String = get_minimum_sleep(bed_type)
 	if minimun_hours == "00:00" :
 		return
-
-	minimun_hours = _get_adjusted_minimum_sleep(minimun_hours, bed_type)
 
 	var requested_sleep : String = hour_deal
 	if requested_sleep == "00:00" and _can_use_alarm_override():
@@ -541,11 +541,9 @@ func sleep(hour_deal : String = "00:00", bed_type: int = BED_TYPE.TYPE_C) -> voi
 	if requested_sleep == "00:00":
 		requested_sleep = minimun_hours
 
+	# El despertador solo sirve para madrugar (D1): pidiendo mas, se despierta sola al cumplir su minimo (P97).
+	# La deuda de sueno se paga solo con lo que duerme (_pay_sleep_debt).
 	if TimeUtils.is_greater_or_equal(minimun_hours, requested_sleep) :
-		
-		var debt_pay = TimeUtils.decrease_time(requested_sleep, minimun_hours)
-		decrease_control_effect_hour("SLEEPY", debt_pay)
-		
 		requested_sleep = minimun_hours
 
 	var actual_sleep : String = requested_sleep

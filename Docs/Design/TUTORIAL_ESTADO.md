@@ -19,18 +19,18 @@ Revisado el 2026-11-24. Fuentes: Notion → *Guión por bloques* (Bloque 1-1 y s
 | Ducha | primera vez, repetir, "Qué frío", silueta tras la cortina, estornudo | ✅ las frases y la escena de la silueta (provisional, con tu render; P70); el estornudo suena dentro de la ducha (tu prueba del 2026-11-25). ❌ sonido: no hay audio |
 | Armario | primero ducharse; frases para uniforme, pijama, casual y ropa sucia; ruge el estómago | ✅ antes de la ducha no se abre; la pijama no se pone; uniforme y estómago (como texto). La cesta habla si hay ropa sucia (en el tutorial aún no la hay, P71). ❌ casual (aún no se puede poner, P72) y sonido del estómago |
 | Nevera | frases (antes de ducharse, sin compras, comida instantánea) | ✅ antes de ducharse (no abre la cocina, P77) y al sacar la comida instantánea. ❌ "sin compras" (P89) |
-| Comida | comida instantánea y café | ✅ comida instantánea (P25) además de la casera (P88). ❌ café |
+| Comida | comida instantánea y café | ✅ una sola comida instantánea, la única comida de la casa (P25, P88). ❌ café |
 | Estufa y escritorio | frases; Mayui come sentada | ✅ estufa sin comida (botón "Cocinar" vacío), comer en el escritorio (sin frase: "No sabe a nada." es de la comida instantánea, P25/P27), frase provisional antes de comer y tus frases de después (P77). ❌ dibujo de Mayui sentada |
 | Lavamanos y espejo | todas | ✅ antes de ducharse manda a la ducha (tus frases de "antes de ducharse") |
 | "Voy tarde" (hacia las 7:30) | si se alarga en el cuarto: 3 frases | ✅ a las 07:30, 07:40 y 07:50, una por vez, sin interrumpir diálogos ni pantallas (P73) |
 | Balcón | frases | ✅ tus 3 frases; después de la mañana se sale (P76) |
 | Calendario | frases | ✅ (P77) |
 | Pasillo y escaleras | "recorre los pasillos, baja por las escaleras y llega al lobby" (`Flow de juego.txt`) | ✅ pasillo del piso 2 y recepción, según tus planos, con dibujos provisionales (P80) |
-| Casero en el lobby | explica el cobro | ✅ viernes (confirmado, D6). Su presentación la trata de nueva y el calendario dice "otra vez" (P86) |
+| Casero en el lobby | explica el cobro | ✅ viernes (confirmado, D6) |
 
 ## Detalles a decidir en los textos
 - Puerta sin cepillarse: DIALOGOS no trae esa frase. Usé la de `Flow de juego.txt` ("Me levare la boca antes de salir.") como "Me lavaré la boca antes de salir." (P53).
-- Nevera: ✅ Ramiro (2026-11-25): comida instantánea e ingredientes pueden estar los dos (P25).
+- Nevera: ✅ Ramiro (2026-11-26): en casa solo la comida instantánea, una; sin bolsas (P25, P88).
 
 ## Orden que recomiendo
 1. ✅ Empezar a las 6:00.

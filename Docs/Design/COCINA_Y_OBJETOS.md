@@ -13,10 +13,12 @@
 ## 2. Con qué empiezas
 | Objeto | Cantidad | Para qué |
 |---|---|---|
-| Bolsa de ingredientes | 2 | se pica en la tabla; así como está no se come |
+| Comida instantánea (caja) | **1** | con agua caliente se prepara; así como está no se come |
 | Olla | 1 | guarda ingredientes, comida o agua |
 
-Los dibujos son **provisionales** (imágenes de Gemini, en `Assets/Items`); la olla y la taza cambian según lo que llevan. El nombre de cada objeto sale al pasar el cursor. El cuadro rosa y negro es "sin imagen": quedan la cafetera, el café y el agua sueltos (P38).
+En casa **no hay bolsas de ingredientes** (Ramiro, 2026-11-26): gastada la instantánea, la comida se comprará en la zona comercial (P90). La receta de la comida casera sigue en el sistema.
+
+Los dibujos son **provisionales** (en `Assets/Items`); la olla y la taza cambian según lo que llevan. El nombre de cada objeto sale al pasar el cursor. El cuadro rosa y negro es "sin imagen": quedan la cafetera, el café y el agua sueltos (P38).
 
 ## 3. Recetas conectadas
 | Dónde | Pones | Sale | Tiempo |
@@ -25,12 +27,14 @@ Los dibujos son **provisionales** (imágenes de Gemini, en `Assets/Items`); la o
 | Combinar | olla **vacía** + ingredientes picados | olla con ingredientes | al instante |
 | Estufa | olla con ingredientes picados | olla con **comida casera caliente** | 45 min |
 | Fregadero | olla **vacía** | olla con agua | al instante |
-| Estufa | olla con agua que no esté caliente | olla con agua caliente | 25 min |
+| Estufa | olla con agua que no esté caliente | olla con agua caliente | **5 min** (P28) |
+| Combinar | olla con agua **caliente** + caja de comida instantánea | comida instantánea (la olla vuelve vacía) | al instante |
+| Fregadero | olla con agua | olla vacía | al instante |
 
-**Comida casera, paso a paso:** bolsa → tabla de picar → Combinar (olla + ingredientes) → estufa (45 min) → pasa la olla a tus manos → clic derecho para comer.
+**Comida casera, paso a paso** (hoy sin bolsas en casa): bolsa → tabla de picar → Combinar (olla + ingredientes) → estufa (45 min) → pasa la olla a tus manos → clic derecho para comer.
 
 ## 4. ¿Y el agua?
-Hoy solo se puede **llenar la olla y calentarla**. No se combina con nada: la comida casera pide la olla vacía, y el **café** de tu dev (agua + bolsa de café → cafetera → taza) existe en archivos pero **no está conectado** a esta cocina (usa un objeto antiguo "olla con agua", y no hay bolsa de café ni taza). Beber el agua no hace nada (P43).
+Sirve para la **comida instantánea** (agua caliente + caja). La comida casera pide la olla vacía, y el **café** de tu dev (agua + bolsa de café → cafetera → taza) existe en archivos pero **no está conectado** a esta cocina (usa un objeto antiguo "olla con agua", y no hay bolsa de café ni taza). Beber el agua no hace nada (P43).
 
 ## 5. Qué pasa al comer
 | Comes | Energía | Además |
@@ -42,6 +46,8 @@ Hoy solo se puede **llenar la olla y calentarla**. No se combina con nada: la co
 Con Inapetencia, comer puede fallar y da menos energía. El café (Hiperactividad; caliente: 1 de 6 veces −1 Estrés; frío: +10 de energía) está programado pero no se consigue.
 
 **Comida instantánea** (2026-11-25): olla al fregadero → **Usar** (agua) → estufa **5 min** → **Combinar** la olla con agua caliente y la **caja** → sale la comida instantánea (la olla vuelve vacía). Comerla: +10 de energía, quita el Hambre, 50 % de Estrés y −1 de Calma; en el escritorio Mayui dice "No sabe a nada.".
+
+**Pendiente (P91, idea de Ramiro):** la instantánea sale ya en un plato sin pedirlo. Más adelante: comer desde la olla podrá ensuciar la ropa y a Mayui; en plato limpio no; en plato sucio sí.
 
 ## 6. Estados de los objetos
 | Estado | Valores | Para qué sirve | ¿Funciona? |

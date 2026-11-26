@@ -232,6 +232,6 @@ Mayui despierta junto a la cama, temprano y a oscuras. Aparece la **lista de tar
 
 1. **Ducharse** — silueta tras la cortina; sin agua caliente ("Qué frío"): Estrés (prob.) y a veces Atenta breve (D4). Sale en toalla (cambia el sprite).
 2. **Armario** — debe elegir el **uniforme**; otras prendas → diálogo que la redirige. Ruge el estómago: la manda a la cocina.
-3. **Cocina y nevera** — hay café ya hecho en la cafetera (se calienta); en la nevera: 3 comidas instantáneas, café y 2 bolsas de ingredientes. Cualquier ítem que no sea la comida instantánea → diálogo que la redirige. Se prepara en la cocina (agua caliente 5 min) y se come con el café.
+3. **Cocina y nevera** — hay café ya hecho en la cafetera (se calienta); en la nevera: **1 comida instantánea** y café, sin bolsas de ingredientes (Ramiro, 2026-11-26: después la comida se compra en la zona comercial). Cualquier ítem que no sea la comida instantánea → diálogo que la redirige. Se prepara en la cocina (agua caliente 5 min) y se come con el café. El café y esa redirección aún no están.
 4. **Cepillarse** (lavamanos) — porque la comida instantánea deja la boca sucia (D5). El espejo permite "revisar" la cordura solo de forma narrativa/visual, nunca con un medidor.
 5. **Salir** — solo se permite con los 4 pasos cumplidos. Al bajar al **Lobby**, el casero la intercepta y explica cuánto y cuándo se cobra. Luego va al trabajo (bus 07:30 o a pie): llegar a las 8:05 todavía no es tarde (D23).

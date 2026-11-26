@@ -1,6 +1,7 @@
 # Para Ramiro: tu segunda ronda, resuelta (2026-11-25)
 
-Todo en commits **locales** (sin subir: se sube cuando lo apruebes).
+Todo en commits **locales** (sin subir: se sube cuando lo apruebes). Pruebas automáticas sobre la versión final:
+**685 comprobaciones, 0 fallas**. Prueban que funciona, no que se sienta bien: eso lo dices tú.
 
 ## Hecho
 - **Puerta del baño:** sobre la esquina, con su entrada.

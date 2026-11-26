@@ -391,6 +391,16 @@ func _t_balcon() -> void:
 	_check("Balcon: entero y centrado en pantalla", _camara_en(Vector2(48, 8)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
 	_check("Balcon: se vuelve al cuarto", await _cruzar(Vector2i.UP, 0))
 	_check("Mayui aparece junto a la puerta del balcon", pm.player.global_position.is_equal_approx(Vector2(56, 136)), str(pm.player.global_position))
+	# pasada la manana, el escritorio y el calendario siguen vivos
+	_check("Tras el tutorial: se llega al escritorio y al calendario", await _caminar_a(Vector2i(2, 4)), str(pm.player.global_position))
+	await _empujar(Vector2i.LEFT)
+	var tras : Array = await _hablar(_pulsar_z)
+	_check("Escritorio tras el tutorial, sin comida: Z dice para que sirve", tras == ["Aquí puedo comer cuando tenga algo listo."], str(tras))
+	await _empujar(Vector2i.UP)
+	tras = []
+	for i in 3:
+		tras.append_array(await _hablar(_pulsar_z))
+	_check("Calendario tras el tutorial: Z repite tus textos, uno cada vez", tras == ["El viernes pagan.", "Tengo que asegurarme de ir al supermercado con tiempo.", "Tampoco puedo olvidarme del alquiler…", "Quiero evitar problemas con el casero.", "El viernes pagan.", "Tengo que asegurarme de ir al supermercado con tiempo."], str(tras))
 
 # ------------------------------------------------------------------ pasillo y recepcion
 func _t_edificio() -> void:

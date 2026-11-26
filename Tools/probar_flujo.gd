@@ -46,6 +46,7 @@ func _initialize() -> void:
 	await _t_cocina()
 	await _t_escritorio()
 	await _t_llevas()
+	await _t_casa_tras_tutorial()
 	print("=== %d comprobaciones OK, %d con FALLA ===" % [passed, failed])
 	quit(1 if failed > 0 else 0)
 
@@ -683,6 +684,52 @@ func _t_cocina() -> void:
 			manos.use_item_at(i)
 	_check("La segunda comida tambien se puede comer", pm.get_stat_value("ENERGY") > energia1 and pm.daily.home_meals == 2, "energia %.1f -> %.1f, comidas %d" % [energia1, pm.get_stat_value("ENERGY"), pm.daily.home_meals])
 	await _esperar_calma()
+	await _soltar(escena)
+
+# ------------------------------------------------------------------ la casa tras el tutorial
+## Prueba de Ramiro (2026-11-26): pasada la manana del tutorial el escritorio y el calendario quedaban muertos.
+func _t_casa_tras_tutorial() -> void:
+	print("K. Tras el tutorial: se come en el escritorio y el calendario sigue hablando")
+	root.get_node("ContainerManager").container_states.clear()
+	gm.new_game()
+	pm.reset_engine_state(true)
+	var banderas = root.get_node("NarrativeFlags")
+	banderas.set_flag("tutorial_door_done")
+	banderas.clear_flag("calendar_read_0")   # nunca miro el calendario en la manana
+	banderas.clear_flag("calendar_read_1")
+	var tarea = root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR").get_task_res("COOK")
+	tarea.task_done = true   # la rutina de la manana ya se hizo
+	var escena = await _cargar("res://Scenes/World/Apartment.tscn", -1)
+	await _esperar_calma()
+	var mesa = escena.get_node("Escritorio")
+	var manos = pm.player.inventory
+	manos.inventory.clear()
+	var dicho : Array = await _ejecutar_y_oir(mesa)
+	_check("Escritorio sin comida: dice para que sirve (no tus frases de la manana)", dicho == ["Aquí puedo comer cuando tenga algo listo."], str(dicho))
+	await _esperar_calma()
+	_check("...y se puede volver a usar", mesa.can_interact and gm.modal_count == 0, "modal %d" % gm.modal_count)
+	var objeto = load("res://Resources/Items/item.gd")
+	var olla = objeto.new(load("res://Resources/Items/Data/KitchenUtils/cooking_pot.tres"))
+	olla.held_item = objeto.new(load("res://Resources/Items/Data/home_meal.tres"))
+	olla.held_item.update_states()
+	manos.add_to_hands(olla)
+	pm.add_effect(load("res://Resources/Effects/Effects/hunger.tres").duplicate())
+	pm.get_stat_res("ENERGY").value = 20.0
+	mesa.can_interact = true
+	var inicio : int = Time.get_ticks_msec()
+	mesa.execute()
+	while Time.get_ticks_msec() - inicio < 8000 and (gm.modal_count > 0 or olla.held_item != null):
+		await create_timer(0.1).timeout
+	await _esperar_calma()
+	_check("Escritorio con la olla de comida: se come en la mesa", olla.held_item == null and not pm.has_effect("HUNGER") and pm.get_stat_value("ENERGY") > 20.0 and manos.get_hands_items() == [olla], "energia %.1f" % pm.get_stat_value("ENERGY"))
+	_check("...y despues Mayui puede moverse y volver a usarlo", mesa.can_interact and gm.modal_count == 0 and pm.player.movement.can_move, "modal %d" % gm.modal_count)
+	var calendario = escena.get_node("Calendario")
+	var primeras : Array = []
+	for i in 3:
+		primeras.append_array(await _ejecutar_y_oir(calendario))
+	_check("Calendario: repite tus textos, uno cada vez (pago, alquiler y otra vez pago)", primeras == ["El viernes pagan.", "Tampoco puedo olvidarme del alquiler…", "El viernes pagan."], str(primeras))
+	await _esperar_calma()
+	manos.inventory.clear()
 	await _soltar(escena)
 
 # ------------------------------------------------------------------ escritorio

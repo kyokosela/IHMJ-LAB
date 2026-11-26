@@ -1,13 +1,12 @@
 @tool
 extends InteractableAction
-## Escritorio, en la manana del tutorial:
-## - "Mientras come": si Mayui llega con comida cocinada en las manos (la olla o la instantanea), come ahi: la pantalla se
-##   oscurece un buen momento (la secuencia; falta su dibujo sentada) y come con tu sistema de objetos (Hambre, energia, tarea
-##   de comer). Con la comida instantanea dice tu "No sabe a nada.". Tambien se puede seguir comiendo en la cocina (clic
-##   derecho).
-## - Antes de comer, sin comida: una frase que dice para que sirve (PROVISIONAL, _DESK_HINT_).
-## - "Despues de comer": tus frases (event_messages).
-## Despues del tutorial no hay textos.
+## Escritorio:
+## - "Mientras come" (cualquier dia): si Mayui llega con comida cocinada en las manos (la olla o la instantanea), come ahi: la
+##   pantalla se oscurece un buen momento (la secuencia; falta su dibujo sentada) y come con tu sistema de objetos (Hambre,
+##   energia, tarea de comer). Con la comida instantanea dice tu "No sabe a nada.". Tambien se puede seguir comiendo en la
+##   cocina (clic derecho).
+## - Sin comida: una frase que dice para que sirve (PROVISIONAL, _DESK_HINT_).
+## - Solo en la manana del tutorial, "despues de comer": tus frases (event_messages), que hablan de salir ya.
 
 const ExitDoor := preload("res://Scripts/HouseInteracts/exit_door.gd")
 const HINT_LINE : String = "_DESK_HINT_"
@@ -18,12 +17,12 @@ const EATING_SECONDS : float = 1.5 ## cuanto se queda oscuro mientras come
 var _eating : bool = false
 
 func execute() -> void:
-	if Engine.is_editor_hint() or _eating or not ExitDoor.in_tutorial_morning(): return
+	if Engine.is_editor_hint() or _eating: return
 	var hand : int = _cooked_food_in_hands()
 	if hand >= 0:
 		_eat(hand)
 		return
-	if not _has_eaten():
+	if not ExitDoor.in_tutorial_morning() or not _has_eaten():
 		can_interact = false
 		Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], tr(HINT_LINE))
 		Dialogic.timeline_ended.connect(_on_ended_message, CONNECT_ONE_SHOT)

@@ -267,7 +267,7 @@ func _t_cuarto() -> void:
 
 	await _ir_a("Escritorio", Vector2i(2, 4), Vector2i.LEFT)
 	oido = await _hablar(_pulsar_z)
-	_check("Escritorio antes de comer: no dice nada", oido.is_empty(), str(oido))
+	_check("Escritorio antes de comer: dice para que sirve", oido == ["Aquí puedo comer cuando tenga algo listo."], str(oido))
 	await _empujar(Vector2i.UP)
 	_check("Calendario: desde la misma baldosa, mirando a la pared", _delante() == ["Calendario"], str(_delante()))
 	frases = await _hablar(_pulsar_z)
@@ -282,7 +282,7 @@ func _t_cuarto() -> void:
 	calendario.can_interact = true
 	_check("Apartarse de algo ocupado lo suelta: delante queda solo el escritorio", _delante() == ["Escritorio"], str(_delante()))
 	oido = await _hablar(_pulsar_z)
-	_check("...y Z en el escritorio no hace hablar al calendario", oido.is_empty(), str(oido))
+	_check("...y Z en el escritorio no hace hablar al calendario", oido == ["Aquí puedo comer cuando tenga algo listo."], str(oido))
 
 	dichos.clear()
 	var recorrido : bool = await _caminar_a(Vector2i(6, 0)) and await _caminar_a(Vector2i(9, 0)) and await _caminar_a(Vector2i(7, 0))
@@ -320,7 +320,7 @@ func _t_bano() -> void:
 	_check("Bano: entero y centrado en pantalla", _camara_en(Vector2(40, 16)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
 	await _ir_a("Sink", Vector2i(3, 1), Vector2i.UP)
 	var oido : Array = await _hablar(_pulsar_z)
-	_check("Lavamanos antes de comer: Z avisa", oido.size() == 1 and (oido[0].contains("comer") or oido[0] == "Luego."), str(oido))
+	_check("Lavamanos antes de ducharse: Z manda a la ducha", oido == ["Primero debería ducharme."], str(oido))
 	await _ir_a("Shower", Vector2i(2, 0), Vector2i.LEFT)
 	oido = await _hablar(_pulsar_z)
 	_check("Ducha: Z banya a Mayui", pm.get_outfit_id() == "towel" and tk.get_task_list_res("TUTORIAL_DOOR").get_task_res("BATHE").task_done and oido.size() == 5, str(oido))

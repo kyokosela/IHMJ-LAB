@@ -70,6 +70,17 @@ string_list = Array[ExtResource("7")]([SubResource("Lines_sink_eat_first")])
 apply_times = false
 apply_energy = false
 
+[sub_resource type="Resource" id="Lines_sink_bath_first"]
+script = ExtResource("7")
+string_list = Array[String](["_WARDROBE_BATH_#1_", "_FRIDGE_BATH_#2_", "_FRIDGE_BATH_COOLDOWN_"])
+behaviour = 2
+
+[sub_resource type="Resource" id="Chain_sink_bath_first"]
+script = ExtResource("6")
+string_list = Array[ExtResource("7")]([SubResource("Lines_sink_bath_first")])
+apply_times = false
+apply_energy = false
+
 [node name="Bathroom" type="Node2D" node_paths=PackedStringArray("optional_camera_node")]
 script = ExtResource("10")
 zone_id = 4
@@ -195,6 +206,7 @@ script = ExtResource("3")
 action_type = 50
 interaction_name = "APT_SINK"
 event_messages = SubResource("Chain_sink_eat_first")
+before_bath_messages = SubResource("Chain_sink_bath_first")
 shape = SubResource("Shape_sink")
 display_text = "Lavamanos"
 reusable = true

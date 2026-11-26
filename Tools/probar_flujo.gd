@@ -383,6 +383,11 @@ func _t_apartamento() -> void:
 	cocinar.task_done = false
 	dicho = await _ejecutar_y_oir(lavamanos)
 	_check("Lavamanos antes de comer (tutorial): no abre el espejo y Mayui avisa que primero debe comer", usos_lav[0] == 0 and not espejo.visible and dicho.size() > 0 and dicho[0].contains("comer"), str(dicho))
+	var banarse = root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR").get_task_res("BATHE")
+	banarse.task_done = false
+	dicho = await _ejecutar_y_oir(lavamanos)
+	_check("Lavamanos sin ducharse: manda a la ducha, no a comer", usos_lav[0] == 0 and not espejo.visible and dicho == ["Primero debería ducharme."], str(dicho))
+	banarse.task_done = true
 	cocinar.task_done = true
 	await _ejecutar_y_oir(lavamanos)
 	_check("Lavamanos despues de comer: abre la pantalla del espejo y Mayui queda quieta", usos_lav[0] == 1 and espejo.visible and gm.modal_count == 1)
@@ -698,13 +703,20 @@ func _t_escritorio() -> void:
 	olla.update_states()
 	manos.add_to_hands(olla)
 	var dicho : Array = await _ejecutar_y_oir(mesa)
-	_check("Antes de comer, con la comida cruda, el escritorio calla y no se come", dicho.is_empty() and olla.held_item != null and not tarea.task_done, str(dicho))
+	_check("Antes de comer, con la comida cruda, el escritorio dice para que sirve y no se come", dicho == ["Aquí puedo comer cuando tenga algo listo."] and olla.held_item != null and not tarea.task_done, str(dicho))
 	olla.held_item = objeto.new(load("res://Resources/Items/Data/home_meal.tres"))
 	olla.held_item.update_states()
 	pm.add_effect(load("res://Resources/Effects/Effects/hunger.tres").duplicate())
 	pm.get_stat_res("ENERGY").value = 20.0
-	dicho = await _ejecutar_y_oir(mesa)
-	_check("Con la olla de comida en la mano, Mayui come en la mesa y dice 'No sabe a nada.'", dicho == ["No sabe a nada."], str(dicho))
+	await _esperar_calma()
+	var transicion = root.get_node("TransitionManager")
+	var inicio : int = Time.get_ticks_msec()
+	dicho = await _ejecutar_y_oir(mesa)   # no dice nada (su frase es de la comida instantanea): espera 2 s
+	_check("Con la olla de comida en la mano, Mayui come en la mesa a oscuras y sin frases", dicho.is_empty() and transicion.color_rect.color.a > 0.9, "alfa %.2f, dijo %s" % [transicion.color_rect.color.a, str(dicho)])
+	while gm.modal_count > 0 and Time.get_ticks_msec() - inicio < 8000:
+		await create_timer(0.1).timeout
+	var duro : float = (Time.get_ticks_msec() - inicio) / 1000.0
+	_check("La secuencia de comer dura lo bastante para verse (3 a 5 s) y aclara", duro >= 3.0 and duro < 5.0 and transicion.color_rect.color.a < 0.05 and mesa.can_interact, "%.1f s" % duro)
 	_check("...quita el Hambre, sube la energia, marca la tarea y deja la olla vacia en la mano", not pm.has_effect("HUNGER") and pm.get_stat_value("ENERGY") > 20.0 and tarea.task_done and olla.held_item == null and manos.get_hands_items() == [olla], "energia %.1f, tarea %s" % [pm.get_stat_value("ENERGY"), tarea.task_done])
 	await _esperar_calma()
 	_check("Despues de comer en la mesa Mayui puede moverse", gm.modal_count == 0 and pm.player.movement.can_move, "modal %d" % gm.modal_count)

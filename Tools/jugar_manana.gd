@@ -312,12 +312,10 @@ func _jugar() -> void:
 	await _ir(Vector2i(2, 4), Vector2i.LEFT, "el escritorio")
 	dichos.clear()
 	await _z()
-	await create_timer(1.7).timeout   # se oscurece, come, aclara y lo comenta
+	await create_timer(4.0).timeout   # se oscurece, come un momento y aclara
 	await _foto("7_come_en_la_mesa")
-	var oido : Array = dichos.duplicate()
-	oido.append_array(await _hablar(func() -> void: await create_timer(0.1).timeout))
-	_check("Come en la mesa: 'No sabe a nada.', tarea de comer y sin Hambre", oido.has("No sabe a nada.") and _tarea("COOK") and not pm.has_effect("HUNGER"), str(oido))
-	oido = await _hablar()
+	_check("Come en la mesa sin frases, con tarea de comer y sin Hambre", dichos.is_empty() and gm.modal_count == 0 and _tarea("COOK") and not pm.has_effect("HUNGER"), str(dichos))
+	var oido : Array = await _hablar()
 	_check("El escritorio habla despues de comer", oido == ["No puedo quedarme aquí."], str(oido))
 
 	print("5. Dientes (clic en el espejo)")

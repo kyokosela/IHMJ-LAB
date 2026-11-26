@@ -96,6 +96,9 @@ enum ActionType {
 @export var event_name: String = ""
 @export var flag_name: String = ""
 @export var bed_type: int = PlayerManager.BED_TYPE.TYPE_C
+## Completado (lavamanos): en la manana del tutorial, antes de ducharse, Mayui dice estas frases en vez de event_messages.
+@export var before_bath_messages : StringChain
+var _usual_messages : StringChain ## event_messages de la escena, mientras se usan las de antes de ducharse
 
 func custom_execute() -> void:
 	super()
@@ -254,10 +257,18 @@ func custom_execute() -> void:
 			else:
 				_show_feedback("El mercado no está disponible hoy")
 
-## Completado: durante el tutorial el lavamanos no se abre antes de comer ("Primero deberia comer algo.", en event_messages),
-## el armario no se abre antes de ducharse ("Primero deberia ducharme.") y en esa manana no se vuelve a la cama.
-## check_events() es el gancho del dev para bloquear una accion y mostrar sus mensajes.
+## Completado: durante el tutorial el lavamanos no se abre antes de comer ("Primero deberia comer algo.", en event_messages;
+## antes de ducharse manda a la ducha, before_bath_messages), el armario no se abre antes de ducharse ("Primero deberia
+## ducharme.") y en esa manana no se vuelve a la cama. check_events() es el gancho del dev para bloquear una accion y mostrar
+## sus mensajes.
 func check_events() -> bool:
+	if action_type == ActionType.OPEN_MIRROR and before_bath_messages != null:
+		if _usual_messages == null:
+			_usual_messages = event_messages
+		var unwashed : bool = _tutorial_needs_bath()
+		event_messages = before_bath_messages if unwashed else _usual_messages
+		if unwashed:
+			return false
 	if action_type == ActionType.OPEN_MIRROR and _tutorial_needs_meal():
 		return false
 	if action_type == ActionType.CHANGE_CLOTHES and _tutorial_needs_bath():

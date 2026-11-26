@@ -19,8 +19,18 @@ func custom_execute() -> void :
 	var ducha = get_tree().get_first_node_in_group("shower_scene")
 	if ducha != null:
 		ducha.play(first_tutorial_bath and dialog != null)
+	_step_out(ducha.fade_seconds if ducha != null else 0.0)
 	if first_tutorial_bath and dialog != null:
 		Dialogic.start(dialog)
+
+## Sale de la ducha mirando hacia abajo (no se quedo quieta mientras pasaba la escena): se gira cuando la escena ya la tapa.
+func _step_out(covered_after: float) -> void:
+	if covered_after > 0.0:
+		await get_tree().create_timer(covered_after).timeout
+	var mayui = PlayerManager.player
+	if mayui != null and is_instance_valid(mayui):
+		mayui.set_facing_direction(Vector2.DOWN)
+		mayui.set_animation_direction(Vector2.DOWN)
 
 func _is_bath_task_done() -> bool :
 	var tasks : TaskList = TaskManager.get_task_list_res("TUTORIAL_DOOR")

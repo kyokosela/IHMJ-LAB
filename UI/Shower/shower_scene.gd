@@ -3,12 +3,14 @@ class_name ShowerScene
 ## La escena de la ducha (Flow de juego.txt: "aparece una transicion, dibujo de la silueta de Mayui a traves de las cortinas").
 ## PROVISIONAL hasta que haya arte: la silueta es su render con la toalla oscurecido y los azulejos, la cortina y el agua se
 ## dibujan por codigo (nodos Wall y Curtain). El agua suena cuando exista Audio/SFX/shower.ogg.
-## La abre bathe.gd. En el tutorial se va con la senal "ducha_fuera" de ducha_tutorial.dtl (despues de "Que frio."); sin
-## dialogo, sola a los scene_seconds segundos. Mientras se ve, Mayui queda quieta (GameManager.modal_count).
+## La abre bathe.gd. En el tutorial dice "Que frio." y estornuda dentro (senal "estornudo": la silueta da un respingo) y se va
+## con la senal "ducha_fuera" de ducha_tutorial.dtl; sin dialogo, sola a los scene_seconds segundos. Mientras se ve, Mayui
+## queda quieta (GameManager.modal_count).
 
 signal closed
 
 const OUT_SIGNAL : String = "ducha_fuera"
+const SNEEZE_SIGNAL : String = "estornudo"
 const STALL := Rect2(560, 90, 800, 950)   ## el hueco de la ducha, en el lienzo de 1920x1080
 const FOLDS : int = 10                    ## pliegues de la cortina
 const DROPS : int = 70
@@ -82,6 +84,18 @@ func _fade(alpha: float) -> void:
 func _on_dialogic_signal(argument: Variant) -> void:
 	if str(argument) == OUT_SIGNAL:
 		close()
+	elif str(argument) == SNEEZE_SIGNAL and visible:
+		_sneeze()
+
+## El respingo del estornudo: la silueta baja de golpe, rebota y vuelve a su sitio.
+func _sneeze() -> void:
+	var silhouette : Control = $Canvas/Silhouette
+	var home : Vector2 = silhouette.position
+	var jolt := create_tween()
+	jolt.tween_interval(0.15)
+	jolt.tween_property(silhouette, "position", home + Vector2(0, 34), 0.07)
+	jolt.tween_property(silhouette, "position", home + Vector2(0, -14), 0.09)
+	jolt.tween_property(silhouette, "position", home, 0.14)
 
 func _process(delta: float) -> void:
 	for i in _drops.size():

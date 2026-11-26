@@ -1,15 +1,18 @@
 @tool
 extends InteractableAction
-## Escritorio (tus textos de DIALOGOS), en la manana del tutorial:
-## - "Mientras come": si Mayui llega con comida cocinada en las manos (la olla), come ahi: la pantalla se oscurece un momento
-##   (la secuencia; falta su dibujo sentada), come con tu sistema de objetos (Hambre, energia, tarea de comer) y dice
-##   "No sabe a nada.". Tambien se puede seguir comiendo en la cocina (clic derecho).
+## Escritorio, en la manana del tutorial:
+## - "Mientras come": si Mayui llega con comida cocinada en las manos (la olla), come ahi: la pantalla se oscurece un buen
+##   momento (la secuencia; falta su dibujo sentada) y come con tu sistema de objetos (Hambre, energia, tarea de comer).
+##   Tambien se puede seguir comiendo en la cocina (clic derecho). Tu "No sabe a nada." es solo para la comida instantanea,
+##   que todavia no existe (clave _DESK_EATING_ guardada).
+## - Antes de comer, sin comida: una frase que dice para que sirve (PROVISIONAL, _DESK_HINT_).
 ## - "Despues de comer": tus frases (event_messages).
-## Sin comida en las manos antes de comer, y despues del tutorial, no hay textos.
+## Despues del tutorial no hay textos.
 
 const ExitDoor := preload("res://Scripts/HouseInteracts/exit_door.gd")
-const EATING_LINE : String = "_DESK_EATING_"
-const SEQUENCE_SECONDS : float = 0.5 ## cuanto tarda en oscurecer y en aclarar al sentarse a comer
+const HINT_LINE : String = "_DESK_HINT_"
+const FADE_SECONDS : float = 1.0 ## cuanto tarda en oscurecer y en aclarar al sentarse a comer
+const EATING_SECONDS : float = 1.5 ## cuanto se queda oscuro mientras come
 
 var _eating : bool = false
 
@@ -19,7 +22,11 @@ func execute() -> void:
 	if hand >= 0:
 		_eat(hand)
 		return
-	if not _has_eaten(): return
+	if not _has_eaten():
+		can_interact = false
+		Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], tr(HINT_LINE))
+		Dialogic.timeline_ended.connect(_on_ended_message, CONNECT_ONE_SHOT)
+		return
 	super()
 
 func check_events() -> bool:
@@ -41,15 +48,15 @@ func _eat(hand: int) -> void:
 	_eating = true
 	can_interact = false
 	GameManager.modal_count += 1   # quieta mientras come
-	TransitionManager.fadeIn(SEQUENCE_SECONDS)
+	TransitionManager.fadeIn(FADE_SECONDS)
 	await TransitionManager.transition_finished
 	PlayerManager.player.inventory.use_item_at(hand)
-	TransitionManager.fadeOut(SEQUENCE_SECONDS)
+	await get_tree().create_timer(EATING_SECONDS).timeout
+	TransitionManager.fadeOut(FADE_SECONDS)
 	await TransitionManager.transition_finished
 	GameManager.modal_count -= 1
 	_eating = false
-	Dialogic.create_quick_dialog(Dialogic.characters_path["Mayui"], tr(EATING_LINE))
-	Dialogic.timeline_ended.connect(_on_ended_message, CONNECT_ONE_SHOT)
+	_on_ended_message()
 
 func _has_eaten() -> bool:
 	var meal : Task = TaskManager.get_task_list_res(ExitDoor.TUTORIAL_LIST).get_task_res("COOK")

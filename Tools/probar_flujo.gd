@@ -45,6 +45,7 @@ func _initialize() -> void:
 	await _t_apartamento()
 	await _t_cocina()
 	await _t_escritorio()
+	await _t_llevas()
 	print("=== %d comprobaciones OK, %d con FALLA ===" % [passed, failed])
 	quit(1 if failed > 0 else 0)
 
@@ -75,8 +76,8 @@ func _t_zonas() -> void:
 		["res://Scenes/World/Hallway.tscn", 1, Vector2(72, 56), "Pasillo viniendo de la recepcion: junto a las escaleras"],
 		["res://Scenes/World/Apartment.tscn", 6, Vector2(120, 8), "Apartamento viniendo del pasillo: junto a la puerta"],
 		["res://Scenes/World/Apartment.tscn", -1, Vector2(88, 120), "Apartamento al empezar: junto a la cama"],
-		["res://Scenes/World/Apartment.tscn", 4, Vector2(88, 8), "Apartamento viniendo del bano: junto a la puerta del bano"],
-		["res://Scenes/World/Bathroom.tscn", 0, Vector2(72, 40), "Bano: junto a su puerta"],
+		["res://Scenes/World/Apartment.tscn", 4, Vector2(72, 8), "Apartamento viniendo del bano: dentro del hueco de la puerta del bano"],
+		["res://Scenes/World/Bathroom.tscn", 0, Vector2(88, 40), "Bano: dentro del hueco de su puerta"],
 		["res://Scenes/World/Apartment.tscn", 5, Vector2(56, 136), "Apartamento viniendo del balcon: junto a la puerta del balcon"],
 		["res://Scenes/World/Balcony.tscn", 0, Vector2(40, 8), "Balcon: junto a su puerta"],
 		["res://Scenes/World/Office.tscn", 1, Vector2(100, 160), "Oficina: su unico punto"],
@@ -160,7 +161,7 @@ func _t_historia() -> void:
 	neh._pending.clear()
 	neh.story_enabled = false
 	neh._on_event_activated("DAY1_CASERO_INTRO")
-	_check("El casero NO es relleno: sigue su camino (espera el lobby)", neh._pending.size() == 1)
+	_check("El casero NO es relleno: sigue su camino (espera la ventanilla de la recepcion)", neh._pending.size() == 1 and neh._pending[0].spot == "frente_recepcion")
 	neh._pending.clear()
 	neh.story_enabled = antes
 
@@ -240,7 +241,7 @@ func _t_transicion() -> void:
 	_check("Llega al bano sin gastar energia ni tiempo y puede moverse", current_scene.zone_id == 4 and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa and mov.can_move, "zona %d, energia %.1f, +%d min" % [current_scene.zone_id, pm.get_stat_value("ENERGY"), tm.minutes - hora_casa])
 	zm.change_zone(0)
 	await _esperar_zona(0)
-	_check("Vuelve al cuarto junto a la puerta del bano, tambien sin costo", current_scene.zone_id == 0 and pm.player.global_position.is_equal_approx(Vector2(88, 8)) and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, str(pm.player.global_position))
+	_check("Vuelve al cuarto junto a la puerta del bano, tambien sin costo", current_scene.zone_id == 0 and pm.player.global_position.is_equal_approx(Vector2(72, 8)) and pm.get_stat_value("ENERGY") == energia_casa and tm.minutes == hora_casa, str(pm.player.global_position))
 	# dentro del edificio nada es viajar: ni al pasillo ni a la recepcion
 	zm.change_zone(6)
 	await _esperar_zona(6)
@@ -685,6 +686,51 @@ func _t_cocina() -> void:
 	await _soltar(escena)
 
 # ------------------------------------------------------------------ escritorio
+## Arriba a la izquierda: las filas de "Llevas", de arriba hacia abajo.
+func _t_llevas() -> void:
+	print("J. Lo que llevas, arriba a la izquierda")
+	root.get_node("ContainerManager").container_states.clear()
+	gm.new_game()
+	pm.reset_engine_state(true)
+	var escena = await _cargar("res://Scenes/World/Apartment.tscn", -1)
+	await _esperar_calma()
+	var panel : Control = root.get_node("PlayerUI/Control/MarginContainer/HandsHud")
+	var filas := func() -> Array: return panel.get_node("VBox/CarriedRows").get_children().map(func(f: Node) -> String: return f.get_child(1).text)
+	var manos = pm.player.inventory
+	manos.inventory.clear()
+	await create_timer(0.2).timeout
+	_check("Con las manos vacias no se ve nada", not panel.visible)
+	var objeto = load("res://Resources/Items/item.gd")
+	var olla = objeto.new(load("res://Resources/Items/Data/KitchenUtils/cooking_pot.tres"))
+	olla.hold(objeto.new(load("res://Resources/Items/Data/Liquids/water.tres")))
+	manos.add_to_hands(olla)
+	manos.add_to_hands(objeto.new(load("res://Resources/Items/Data/instant_box.tres")))
+	await create_timer(0.2).timeout
+	var esquina : Vector2 = panel.get_global_rect().position
+	_check("Con las dos manos llenas: arriba a la izquierda, de arriba hacia abajo, con lo que lleva la olla", panel.visible and esquina.x < 60 and esquina.y < 60 and filas.call() == ["Olla\ncon agua", "Comida instantánea (caja)"], "%s %s" % [str(esquina), str(filas.call())])
+	var dibujo : Texture2D = panel.get_node("VBox/CarriedRows").get_child(0).get_child(0).texture
+	_check("...cada una con su dibujo (la olla con agua se ve con agua)", dibujo != null and dibujo.resource_path.get_file() == "water_pot.png", dibujo.resource_path if dibujo else "sin dibujo")
+	olla.release_held_item()
+	await create_timer(0.2).timeout
+	_check("Si la olla se vacia, la lista cambia", filas.call() == ["Olla", "Comida instantánea (caja)"], str(filas.call()))
+	root.get_node("TaskManager").get_task_list_res("TUTORIAL_DOOR").get_task_res("BATHE").task_done = true
+	var cocina = escena.get_node("Kitchen")
+	var ui = escena.get_node("UILayer/KitchenMultiUI")
+	cocina.can_interact = true
+	cocina.execute()
+	await create_timer(0.2).timeout
+	_check("Con la cocina abierta se esconde (ella ya muestra las manos)", ui.visible and not panel.visible)
+	var esc := InputEventAction.new()
+	esc.action = "ui_cancel"
+	esc.pressed = true
+	ui._unhandled_input(esc)
+	await create_timer(0.2).timeout
+	_check("Al cerrarla vuelve a verse", not ui.visible and panel.visible)
+	manos.inventory.clear()
+	await create_timer(0.2).timeout
+	_check("Sin nada en las manos desaparece", not panel.visible)
+	await _soltar(escena)
+
 func _t_escritorio() -> void:
 	print("I. Escritorio: comer en la mesa (tu guion)")
 	root.get_node("ContainerManager").container_states.clear()

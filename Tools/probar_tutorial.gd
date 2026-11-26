@@ -372,13 +372,20 @@ func _t_manana() -> void:
 	_check("Fuera de casa se apagan las ayudas del tutorial", not ayudas.tasks_panel.visible and not ayudas.walk_panel.visible and not ayudas.mouse_panel.visible)
 	_check("Sale antes de la hora de entrada al trabajo (08:00)", tm.minutes < 8 * 60, "salio a las " + hora_salida)
 	_check("Las escaleras bajan a la recepcion", await _cruzar(zm.zone_node.get_node("Stairs"), Vector2.LEFT, 1))
+	await create_timer(2.0).timeout
+	_junto(Vector2(72, 88), Vector2.DOWN)   # un paso antes de la ventanilla de la recepcion
+	await create_timer(0.5).timeout
+	_check("Al llegar a la recepcion el casero todavia no salta", dlg.current_timeline == null)
+	Input.action_press("move_down")
+	await create_timer(0.2).timeout
+	Input.action_release("move_down")
 	var casero := false
 	for i in 40:
 		await create_timer(0.1).timeout
 		if dlg.current_timeline != null and str(dlg.current_timeline.resource_path).contains("casero_intro"):
 			casero = true
 			break
-	_check("En el lobby el casero la intercepta", casero)
+	_check("Al pasar frente a la recepcion el casero la intercepta", casero)
 	await _calma()
 	print("   (hora de salida: %s)" % hora_salida)
 

@@ -11,9 +11,10 @@ extends SceneTree
 const T := 16
 ## Planos del cuarto (0), el bano (4) y el pasillo (6), como en probar_cuarto.gd: "." se puede pisar.
 const PLANOS := {
-	0: ["#####.....", "#####.....", "#####...##", "#####...##", "##......##", "........##", "........##", "##....####", "##....####"],
-	4: ["##.#.", "##...", ".....", "....."],
+	0: ["####......", "#####.....", "#####...##", "#####...##", "##......##", "........##", "........##", "##....####", "##....####"],
+	4: ["##.#.#", "##...#", "......", ".....#"],
 	6: ["####..####", "####...###", "####..####", "###...####", "###...####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####"],
+	1: ["####..####", "###....###", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "#.....####", "#......###", "#.....####", "##.#######"],
 }
 const TECLAS := {Vector2i.LEFT: "move_left", Vector2i.RIGHT: "move_right", Vector2i.UP: "move_up", Vector2i.DOWN: "move_down"}
 
@@ -149,6 +150,9 @@ func _cruzar(desde: Vector2i, dir: Vector2i, zona: int) -> void:
 			break
 	await create_timer(0.4).timeout
 	_check("Cruza la puerta hacia la zona %d" % zona, llego and _zona() == zona, "zona %d" % _zona())
+	if _zona() != zona:
+		var col = pm.player.movement.collision_raycast.get_collider()
+		print("  detalle: llego=%s pos=%s empujon=%s contra=%s dialogo=%s pantallas=%d puede_moverse=%s" % [llego, str(pm.player.global_position), str(pm.player.movement._pushed_direction), str(col.get_parent().name) if col else "-", str(dlg.current_timeline != null), gm.modal_count, pm.player.movement.can_move])
 
 func _raton(posicion: Vector2, boton: MouseButton, presionado: bool) -> void:
 	var clic := InputEventMouseButton.new()
@@ -220,14 +224,14 @@ func _jugar() -> void:
 	await _foto("2_a_oscuras")
 
 	print("1. Ducha")
-	await _cruzar(Vector2i(5, 0), Vector2i.LEFT, 4)
+	await _cruzar(Vector2i(4, 0), Vector2i.LEFT, 4)
 	await _ir(Vector2i(2, 0), Vector2i.LEFT, "la ducha")
 	await _z()
 	await create_timer(1.2).timeout
 	await _foto("3_ducha")
 	await _hablar(func() -> void: await create_timer(0.1).timeout)
 	_check("Se ducha y sale en toalla", _tarea("BATHE") and pm.get_outfit_id() == "towel")
-	await _cruzar(Vector2i(4, 2), Vector2i.RIGHT, 0)
+	await _cruzar(Vector2i(5, 2), Vector2i.RIGHT, 0)
 
 	print("1b. En toalla, directo a la cocina (como en tu prueba)")
 	await _ir(Vector2i(7, 3), Vector2i.RIGHT, "la cocina en toalla")
@@ -321,20 +325,28 @@ func _jugar() -> void:
 	await _tecla(KEY_ESCAPE)
 	await create_timer(0.3).timeout
 	_check("Esc cierra la cocina", not ui.visible and gm.modal_count == 0)
+	var llevas : Control = root.get_node("PlayerUI/Control/MarginContainer/HandsHud")
+	_check("Arriba a la izquierda se ve lo que lleva: la comida", llevas.visible and llevas.get_node("VBox/CarriedRows").get_child_count() == 1 and llevas.get_node("VBox/CarriedRows").get_child(0).get_child(1).text == "Comida instantánea", str(llevas.visible))
+	await _foto("6c_llevas_la_comida")
 
 	print("4. Comer en el escritorio (tu guion)")
 	await _ir(Vector2i(2, 4), Vector2i.LEFT, "el escritorio")
 	dichos.clear()
 	await _z()
-	await create_timer(4.0).timeout   # se oscurece, come un momento y aclara
+	for i in 80:   # se oscurece, come un momento, aclara y habla
+		await create_timer(0.1).timeout
+		if not dichos.is_empty() and gm.modal_count == 0:
+			break
+	await create_timer(0.5).timeout
 	await _foto("7_come_en_la_mesa")
 	_check("Come en la mesa, con tarea de comer y sin Hambre, y dice 'No sabe a nada.'", dichos == ["No sabe a nada."] and gm.modal_count == 0 and _tarea("COOK") and not pm.has_effect("HUNGER"), str(dichos))
 	await _hablar(func() -> void: await create_timer(0.1).timeout)   # pasa la frase
 	var oido : Array = await _hablar()
 	_check("El escritorio habla despues de comer", oido == ["No puedo quedarme aquí."], str(oido))
+	_check("Comida: las manos quedan libres y la lista desaparece", not llevas.visible)
 
 	print("5. Dientes (clic en el espejo)")
-	await _cruzar(Vector2i(5, 0), Vector2i.LEFT, 4)
+	await _cruzar(Vector2i(4, 0), Vector2i.LEFT, 4)
 	await _ir(Vector2i(3, 1), Vector2i.UP, "el lavamanos")
 	await _z()
 	await create_timer(0.5).timeout
@@ -349,7 +361,7 @@ func _jugar() -> void:
 	await _tecla(KEY_ESCAPE)
 	await create_timer(0.3).timeout
 	_check("Esc cierra el espejo", not espejo.visible and gm.modal_count == 0)
-	await _cruzar(Vector2i(4, 2), Vector2i.RIGHT, 0)
+	await _cruzar(Vector2i(5, 2), Vector2i.RIGHT, 0)
 	await _foto("9_todo_listo")
 
 	print("6. Salir")
@@ -365,6 +377,10 @@ func _jugar() -> void:
 	_check("Sale al pasillo", _zona() == 6, "zona %d" % _zona())
 	await _foto("10_pasillo")
 	await _cruzar(Vector2i(4, 3), Vector2i.LEFT, 1)   # baja las escaleras a la recepcion
+	await create_timer(1.5).timeout
+	await _caminar_a(Vector2i(4, 5))   # camina hacia la calle
+	_check("Hasta la ventanilla el casero no salta", dlg.current_timeline == null)
+	await _paso(Vector2i.DOWN)         # pasa frente a la recepcion
 	var casero := false
 	for i in 50:
 		await create_timer(0.1).timeout

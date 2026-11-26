@@ -13,7 +13,7 @@ const T := 16
 const PLANOS := {
 	0: {
 		"mapa": [
-			"#####.....",
+			"####......",
 			"#####.....",
 			"#####...##",
 			"#####...##",
@@ -23,7 +23,7 @@ const PLANOS := {
 			"##....####",
 			"##....####",
 		],
-		"puertas": [Vector2i(7, -1), Vector2i(4, 0), Vector2i(3, 9), Vector2i(4, 9)],
+		"puertas": [Vector2i(7, -1), Vector2i(3, 0), Vector2i(3, 9), Vector2i(4, 9)],
 		"rango": Rect2i(-1, -3, 12, 13),
 	},
 	5: {
@@ -35,15 +35,15 @@ const PLANOS := {
 		"puertas": [Vector2i(2, -1), Vector2i(3, -1)],
 		"rango": Rect2i(-1, -2, 8, 6),
 	},
-	4: {
+	4: {   # bano: la columna 5 es el hueco de la puerta (como en el pasillo); la puerta esta en (6,2)
 		"mapa": [
-			"##.#.",
-			"##...",
-			".....",
-			".....",
+			"##.#.#",
+			"##...#",
+			"......",
+			".....#",
 		],
-		"puertas": [Vector2i(5, 2)],
-		"rango": Rect2i(-1, -3, 7, 8),
+		"puertas": [Vector2i(6, 2)],
+		"rango": Rect2i(-1, -3, 8, 8),
 	},
 	6: {   # pasillo del piso 2: huecos de las 4 puertas (filas 1 y 10); la puerta M-21 (7,1) y las escaleras (3,3 y 3,4)
 		"mapa": [
@@ -308,11 +308,11 @@ func _t_cuarto() -> void:
 	await create_timer(0.3).timeout
 	_check("Puerta: mantener la tecla la activa una sola vez", seguidas == 1, "%s -> %s" % [str(primera), str(dichos)])
 
-	_check("Bano: se llega caminando a su puerta", await _caminar_a(Vector2i(5, 0)), str(pm.player.global_position))
+	_check("Bano: se entra en el hueco de su puerta", await _caminar_a(Vector2i(4, 0)), str(pm.player.global_position))
 	var energia : float = pm.get_stat_value("ENERGY")
 	var hora : int = tm.minutes
 	_check("Bano: al caminar hacia su puerta se entra", await _cruzar(Vector2i.LEFT, 4))
-	_check("Bano: Mayui aparece junto a la puerta, sin gastar energia ni tiempo", pm.player.global_position.is_equal_approx(Vector2(72, 40)) and pm.get_stat_value("ENERGY") == energia and tm.minutes == hora, str(pm.player.global_position))
+	_check("Bano: Mayui aparece dentro del hueco de la puerta, sin gastar energia ni tiempo", pm.player.global_position.is_equal_approx(Vector2(88, 40)) and pm.get_stat_value("ENERGY") == energia and tm.minutes == hora, str(pm.player.global_position))
 
 # ------------------------------------------------------------------ bano
 func _t_bano() -> void:
@@ -324,9 +324,9 @@ func _t_bano() -> void:
 	await _ir_a("Shower", Vector2i(2, 0), Vector2i.LEFT)
 	oido = await _hablar(_pulsar_z)
 	_check("Ducha: Z banya a Mayui", pm.get_outfit_id() == "towel" and tk.get_task_list_res("TUTORIAL_DOOR").get_task_res("BATHE").task_done and oido.size() == 5, str(oido))
-	_check("Bano: se llega caminando a la salida", await _caminar_a(Vector2i(4, 2)), str(pm.player.global_position))
+	_check("Bano: se entra en el hueco de la salida", await _caminar_a(Vector2i(5, 2)), str(pm.player.global_position))
 	_check("Bano: al caminar hacia la puerta se vuelve al cuarto", await _cruzar(Vector2i.RIGHT, 0))
-	_check("Mayui aparece junto a la puerta del bano", pm.player.global_position.is_equal_approx(Vector2(88, 8)), str(pm.player.global_position))
+	_check("Mayui aparece dentro del hueco de la puerta del bano", pm.player.global_position.is_equal_approx(Vector2(72, 8)), str(pm.player.global_position))
 
 # ------------------------------------------------------------------ cuarto, ya duchada
 func _t_despues_del_bano() -> void:
@@ -411,12 +411,20 @@ func _t_edificio() -> void:
 	_check("Pasillo: se camina hasta las escaleras", await _caminar_a(Vector2i(4, 4)), str(pm.player.global_position))
 	_check("Las escaleras bajan a la recepcion", await _cruzar(Vector2i.LEFT, 1))
 	_check("Recepcion: aparece al pie de las escaleras, sin gastar energia ni tiempo", pm.player.global_position.is_equal_approx(Vector2(72, 56)) and pm.get_stat_value("ENERGY") == energia and tm.minutes == hora, "%s %.1f +%d" % [str(pm.player.global_position), pm.get_stat_value("ENERGY"), tm.minutes - hora])
-	await create_timer(1.0).timeout
-	if dlg.current_timeline != null:   # el casero la intercepta (su dialogo tiene opciones: aqui se corta)
-		dlg.end_timeline()
 	await create_timer(1.5).timeout
+	_check("Recepcion: al llegar el casero todavia no la intercepta", dlg.current_timeline == null)
 	await _t_plano("I. Recepcion: paredes y piso")
 	_check("Recepcion: entera en pantalla", _camara_en(Vector2(80, 96)), str(root.get_viewport().get_camera_2d().get_screen_center_position()))
+	_check("Recepcion: camina hacia la ventanilla sin que salte", await _caminar_a(Vector2i(4, 5)) and dlg.current_timeline == null)
+	await _paso(Vector2i.DOWN)
+	await create_timer(1.0).timeout
+	_check("Frente a la recepcion el casero la intercepta", dlg.current_timeline != null and str(dlg.current_timeline.resource_path).contains("casero_intro"))
+	for i in 40:   # se le contesta con Z, como el jugador
+		if dlg.current_timeline == null:
+			break
+		await _pulsar_z()
+		await create_timer(0.6).timeout
+	_check("...y al terminar Mayui puede seguir", dlg.current_timeline == null and gm.modal_count == 0 and pm.player.movement.can_move)
 	_check("Recepcion: se entra en el hueco de mantenimiento", await _caminar_a(Vector2i(6, 9)), str(pm.player.global_position))
 	var aviso : Array = await _hablar(func() -> void: await _paso(Vector2i.RIGHT))
 	_check("Puerta de mantenimiento: dice lo que es y no deja pasar", aviso == ["Cuarto de mantenimiento."] and casa.zone_id == 1 and pm.player.global_position.is_equal_approx(_centro(Vector2i(6, 9))), str(aviso))

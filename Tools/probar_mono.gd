@@ -11,8 +11,8 @@ extends SceneTree
 const T := 16
 ## Planos de las zonas de la casa y el edificio (como en probar_cuarto.gd): "." se puede pisar. Las puertas se cruzan solas.
 const PLANOS := {
-	0: ["#####.....", "#####.....", "#####...##", "#####...##", "##......##", "........##", "........##", "##....####", "##....####"],
-	4: ["##.#.", "##...", ".....", "....."],
+	0: ["####......", "#####.....", "#####...##", "#####...##", "##......##", "........##", "........##", "##....####", "##....####"],
+	4: ["##.#.#", "##...#", "......", ".....#"],
 	5: ["......", "......", "......"],
 	6: ["####..####", "###....###", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "###....###", "####..####"],
 	1: ["####..####", "###....###", "####..####", "####..####", "####..####", "####..####", "####..####", "####..####", "#.....####", "#......###", "#.....####", "##.#######"],
@@ -25,8 +25,8 @@ const SITIOS := {
 }
 ## Delante de cada puerta: zona -> [baldosa (centro), tecla que la cruza]
 const PUERTAS := {
-	0: [[Vector2(88, 8), "move_left"], [Vector2(120, 8), "move_up"], [Vector2(56, 136), "move_down"]],
-	4: [[Vector2(72, 40), "move_right"]],
+	0: [[Vector2(72, 8), "move_left"], [Vector2(120, 8), "move_up"], [Vector2(56, 136), "move_down"]],
+	4: [[Vector2(88, 40), "move_right"]],
 	5: [[Vector2(40, 8), "move_up"]],
 	6: [[Vector2(104, 24), "move_right"], [Vector2(72, 56), "move_left"]],
 	1: [[Vector2(72, 56), "move_left"], [Vector2(40, 184), "move_down"], [Vector2(104, 152), "move_right"]],
@@ -246,7 +246,7 @@ func _pared() -> String:
 		return ""
 	var c := Vector2i((pm.player.global_position / T).floor())
 	var mapa : Array = PLANOS[zona]
-	var puertas := {0: [Vector2i(7, -1), Vector2i(4, 0), Vector2i(3, 9), Vector2i(4, 9)], 4: [Vector2i(5, 2)],
+	var puertas := {0: [Vector2i(7, -1), Vector2i(3, 0), Vector2i(3, 9), Vector2i(4, 9)], 4: [Vector2i(6, 2)],
 		5: [Vector2i(2, -1), Vector2i(3, -1)], 6: [Vector2i(7, 1), Vector2i(3, 3), Vector2i(3, 4)], 1: [Vector2i(3, 3), Vector2i(3, 4), Vector2i(7, 9), Vector2i(2, 12)]}
 	if c in puertas[zona]:
 		return ""

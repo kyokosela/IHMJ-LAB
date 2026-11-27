@@ -211,7 +211,9 @@ func _t_cargar(antes: Dictionary) -> void:
 	var cordura : float = pm.sanity_value
 	await process_frame
 	_check("Cargar no paga, no anota faltas ni cierra el dia", eco.money == dinero and att.absence_count == faltas and is_equal_approx(pm.sanity_value, cordura))
-	_check("...ni dispara la Hiperactividad o el Cansancio por la energia", not pm.has_effect("HYPERACTIVE") and not pm.has_effect("TIRED"))
+	# (la Hiperactividad puede haber salido ya al dormir, al azar, por el Estres: lo que no puede es aparecer al cargar)
+	var guardados : String = antes.get("efectos", "")
+	_check("...ni dispara la Hiperactividad o el Cansancio por la energia", ["HYPERACTIVE", "TIRED"].all(func(n: String) -> bool: return pm.has_effect(n) == (n in guardados)), "\n      al guardar: %s\n      ahora: %s" % [guardados, _foto().get("efectos")])
 	pm.remove_effect("HUNGER")
 	tm.add_to_current_time("12:00")   # martes 17:00: 12 h despues de despertar
 	_check("12 h despues puede volver a dormir (su contador sigue vivo)", not pm.slept_today)

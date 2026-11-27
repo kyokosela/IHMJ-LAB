@@ -43,6 +43,8 @@ El resultado se queda en la estación (o en la casilla de Combinar) hasta que se
 - Dos alacenas (`storage_grid_2`, `storage_first_count`).
 - Botón **Esperar** con confirmación (adelanta el reloj hasta que termine).
 - `_allow_drop`: cada estación acepta solo lo suyo (`Station.get_rejection_reason`) y Mayui lo dice.
+- Mientras se ve trabajar una estación (`_show_active`, el agua), su botón queda apagado y su casilla bloqueada: no se
+  saca ni se pone nada.
 - Estufa vacía: frases `stove_empty_lines`. Frases de la comida instantánea en el tutorial.
 
 ## `ContainerUI` / `InventorySlotUI`

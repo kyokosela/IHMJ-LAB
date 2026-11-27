@@ -45,7 +45,7 @@ proceso** (como cerrar y abrir el juego).
 
 - Las frases de la puerta del tutorial y las de cama, armario o nevera (`StringChain`) vuelven a la primera.
 - Los `SaveComponent` de `Player.tscn` siguen escribiendo sus datos (incompletos); `PlayerManager` los reemplaza al cargar.
-- Probado con `Tools/probar_guardado.gd` sin ventana; falta probarlo jugando.
+- Probado con `Tools/probar_guardado.gd` sin ventana y jugando (Ramiro, 2026-11-26).
 
 # 🔊 `AudioManager` (autoload)
 

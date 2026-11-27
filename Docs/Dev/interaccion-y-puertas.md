@@ -41,10 +41,13 @@ Todas heredan de `InteractableAction` y usan `check_events()` para bloquear y `c
 | `balcony_door.gd` | En la mañana del tutorial solo habla; después lleva al balcón |
 | `bathe.gd` | Ducha (ver [Ropa y ducha](ropa-ducha-espejo.md)) |
 | `bed.gd` | `PlayerManager.request_sleep` |
-| `calendar.gd` | Lee en orden los diálogos de `readings` |
-| `desk.gd` | Comer sentada en el escritorio |
+| `calendar.gd` | Lee en orden los diálogos de `readings`; pasada la mañana del tutorial los repite, uno cada vez |
+| `desk.gd` | Comer en el escritorio (cualquier día); sin comida dice para qué sirve. Las frases de después de comer son solo de la mañana del tutorial |
 | `home_kitchen.gd` | La cocina no se abre antes de ducharse ni en toalla |
 | `morning_light.gd` | Oscuridad de la primera mañana (es un `Node2D`, no una acción) |
+
+⚠️ Una acción que se comporta distinto en el tutorial debe **seguir funcionando después**: no cortar `execute()` con
+`in_tutorial_morning()` (así quedaron muertos el escritorio y el calendario, corregido el 2026-11-26).
 
 # ⚠️ `integration_action.gd` (provisional)
 

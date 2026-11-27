@@ -11,7 +11,7 @@ independiente. Revisado el 2026-11-26 sobre `6b5c8ba`: lectura de los cambios de
 equipo que no cambió.
 
 **Actualización (2026-11-26):** la alarma, la paga del viernes y el guardado están **corregidos, con prueba** (el
-guardado, sin probar todavía jugando).
+guardado, probado también jugando).
 
 ## 🚦 Veredicto
 
@@ -22,14 +22,14 @@ oficina se construye encima.
 
 - Se mantuvo la arquitectura del equipo (managers planos y Resources); `addons/` sin tocar.
 - Ítems, recetas, ropa, tareas y eventos se configuran con `.tres`.
-- 14 scripts de pruebas y una simulación (826 comprobaciones, 0 fallas) que avisan si algo se rompe.
+- 14 scripts de pruebas y una simulación (837 comprobaciones, 0 fallas) que avisan si algo se rompe.
 - Documentos de diseño y pendientes numerados; los cambios en clases del equipo están marcados con `Completado`.
 
 ## 🔴 Riesgos
 
 | # | Riesgo | Gravedad | Evidencia | Arreglo | Tamaño |
 |---|---|---|---|---|---|
-| 1 | ✅ **El guardado no servía para una semana de juego** | Alta → resuelta | Solo volvía el dinero. Ahora cada sistema guarda lo suyo, al despertar, con prueba (`probar_guardado.gd`). Falta un menú «Continuar» y probarlo jugando | — | — |
+| 1 | ✅ **El guardado no servía para una semana de juego** | Alta → resuelta | Solo volvía el dinero. Ahora cada sistema guarda lo suyo, al despertar, con prueba (`probar_guardado.gd`). Falta un menú «Continuar» | — | — |
 | 2 | **`player_manager.gd` lo hace todo** | Alta a futuro | 1.470 líneas, 110 funciones: efectos, sueño, cordura, hábitos y ropa | Partirlo en varios archivos sin cambiar lo que hace | Mediano |
 | 3 | **Errores que las pruebas no vieron** | Media | ✅ Corregidos con prueba: la paga del viernes (800 en vez de 1.000) y la alarma. Quedan en el prototipo de trabajo ([Trabajo](trabajo-y-computadora.md)): tardanza distinta al diseño, entrar antes de las 08:00 anota falta, 27 correos fijos en la evaluación, dos managers huérfanos y casi toda la agenda ocurre solo la primera semana | Corregirlos con prueba y decidir qué se conserva antes de construir la oficina | Mediano |
 | 4 | **Un ejecutable podría fallar** | Media | Estadísticas, eventos, ítems y correos se cargan listando carpetas con `DirAccess`, que en juegos exportados ve archivos `.remap` ([foro de Godot](https://forum.godotengine.org/t/a-proper-way-to-grab-a-list-of-directory-files-that-wont-break-on-export-file-remapping/91983)). El patrón viene del código original y se repitió. **Sin comprobar** | `ResourceLoader.list_directory()` y exportar una vez | Pequeño |

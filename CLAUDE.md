@@ -15,13 +15,16 @@ que el equipo se inspire mientras Ramiro avanza la historia. **Todavía no está
 ## ESTADO (actualizar al cerrar cada sesión)
 - **Diseño en curso: la oficina y la savia** (2026-11-26, sin programar): `Docs/Design/OFICINA_BORRADOR.md` (P96).
 - **Documentación para los devs** en `Docs/Dev/` (formato de sus fichas del Notion; índice `00-cambios-ia.md`). Al cambiar
-  un sistema, actualizar su ficha. Pendiente de publicar en Notion.
+  un sistema, actualizar su ficha. Publicada en Notion el 2026-11-26 («Cambios con IA»); no tiene los cambios posteriores.
 - **Errores confirmados** (`Docs/Dev/escalabilidad.md`): ✅ alarma (despierta a la hora elegida; toda partida nueva tiene
   despertador; si despierta sola o a la hora puesta cuando es más tarde de lo necesario: P97, hoy sola) y ✅ paga del
   viernes (una vez, 17:00, o al marcar la salida; P23) y ✅ **guardado** (programado con Opus, 2026-11-26): se guarda
   solo al despertar y `Shift+L` carga; cada manager guarda lo suyo (`get_save_data`/`load_save_data`; diseño y trampas en
-  `Docs/Design/GUARDADO.md`). Falta probarlo jugando y un menú «Continuar». Al añadir estado nuevo a un manager,
+  `Docs/Design/GUARDADO.md`). Ramiro lo probó jugando; falta un menú (P99). Al añadir estado nuevo a un manager,
   guardarlo también y ampliar `Tools/probar_guardado.gd`.
+- Prueba de Ramiro (2026-11-26, tras el guardado): ✅ escritorio y calendario quedaban muertos tras el tutorial (P98) y
+  ✅ la olla se podía sacar mientras caía el agua. **Propuesto y sin visto bueno:** menú de inicio, ranuras, video, pausa e
+  inventario (P99); no programarlo hasta que Ramiro lo apruebe.
 - El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Baño, Balcón, Pasillo,
   Recepción (`Lobby`), Oficina y Comercial; cada una con cámara (zoom 5). Apartamento, Baño y Balcón son la casa
   (`ZoneManager.is_home`). Dentro del edificio de Mayui (casa, pasillo y recepción, `HOME_BUILDING`) cambiar de zona no cuesta

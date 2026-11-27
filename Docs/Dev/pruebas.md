@@ -4,7 +4,8 @@ Status: Completado
 Assign: Sela (hecho con IA)
 
 Cada script abre el juego real, hace cosas y comprueba resultados. Imprime `FALLA` por cada error y el total al final.
-Última corrida completa (2026-11-26): **826 comprobaciones, 0 fallas**.
+Última corrida completa (2026-11-26): **837 comprobaciones, 0 fallas** (una de `probar_guardado.gd` fallaba a veces
+porque no contaba con una Hiperactividad al azar por Estrés al dormir; corregida y repetida).
 
 ## Cómo correr una
 

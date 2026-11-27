@@ -23,8 +23,8 @@ que el equipo se inspire mientras Ramiro avanza la historia. **Todavía no está
   `Docs/Design/GUARDADO.md`). Ramiro lo probó jugando; falta un menú (P99). Al añadir estado nuevo a un manager,
   guardarlo también y ampliar `Tools/probar_guardado.gd`.
 - Prueba de Ramiro (2026-11-26, tras el guardado): ✅ escritorio y calendario quedaban muertos tras el tutorial (P98) y
-  ✅ la olla se podía sacar mientras caía el agua. **Propuesto y sin visto bueno:** menú de inicio, ranuras, video, pausa e
-  inventario (P99); no programarlo hasta que Ramiro lo apruebe.
+  ✅ la olla se podía sacar mientras caía el agua (arreglos probados por Ramiro). **En pausa:** un chat por tarea; retomar
+  desde `NEXT.md`. Menú, ranuras, video, pausa e inventario (P99): propuesto, no programar sin el OK de Ramiro.
 - El juego arranca en `Scenes/World/Apartment.tscn` (tutorial de la mañana). Zonas: Apartamento, Baño, Balcón, Pasillo,
   Recepción (`Lobby`), Oficina y Comercial; cada una con cámara (zoom 5). Apartamento, Baño y Balcón son la casa
   (`ZoneManager.is_home`). Dentro del edificio de Mayui (casa, pasillo y recepción, `HOME_BUILDING`) cambiar de zona no cuesta
